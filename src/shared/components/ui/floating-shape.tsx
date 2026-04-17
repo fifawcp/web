@@ -5,6 +5,7 @@ const colorMap: Record<ColorVariant, string> = {
   red: "bg-wc-red",
   orange: "bg-wc-orange",
   purple: "bg-wc-purple",
+  "red-light": "bg-wc-red-light",
 };
 
 const blurMap: Record<BlurType, string> = {

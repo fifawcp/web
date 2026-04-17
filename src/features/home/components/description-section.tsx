@@ -142,7 +142,7 @@ export function DescriptionSection() {
   return (
     <section
       ref={ref}
-      className="min-h-[calc(100dvh-4rem)] relative flex items-center justify-center py-20 bg-linear-to-b from-white to-zinc-300 dark:from-zinc-950 dark:to-zinc-700 "
+      className="min-h-[calc(100dvh-var(--header-height))] relative flex items-center justify-center py-20 bg-linear-to-b from-white to-zinc-300 dark:from-zinc-950 dark:to-zinc-700 "
     >
       {/* Decorative shapes for How It Works section */}
       {floatingShapes.map((shape, index) => (

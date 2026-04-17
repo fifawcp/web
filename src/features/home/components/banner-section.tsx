@@ -58,7 +58,7 @@ export function BannerSection() {
       <FloatingShape color="orange" size={88} opacity={12} darkOpacity={6} blur="3xl" position={{ top: "40%", right: "8%" }} animation="wave" animationDelay={1.2} />
       {/* End of colorful geometric shapes */}
 
-      <div className="container relative z-10 flex items-center justify-center mx-auto min-h-[calc(100dvh-4rem)]">
+      <div className="container relative z-10 flex items-center justify-center mx-auto min-h-[calc(100dvh-var(--header-height))]">
         <div className={`text-center max-w-3xl mx-2 sm:mx-auto ${isVisible ? "animate-appear-from-bottom" : "opacity-0"}`}>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-zinc-900 dark:text-zinc-100 transition-all mb-6">
             {t("hero.title")} <span className="bg-gradient-secondary bg-clip-text text-transparent">{t("hero.titleHighlight")}</span>
