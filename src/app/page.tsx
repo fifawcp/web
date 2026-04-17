@@ -1,4 +1,4 @@
-import { BannerSection, DescriptionSection, FinalSection } from "@/components/home";
+import { BannerSection, DescriptionSection, FinalSection } from "@features/home";
 
 export default function Home() {
   return (

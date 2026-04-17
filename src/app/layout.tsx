@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getLocale, getMessages } from "next-intl/server";
-import { Header } from "@/components/layout/header";
+import { Header } from "@/shared/layout/header";
 import "./globals.css";
-import { Providers } from "@/components/providers/layout-provider";
+import { Providers } from "@/shared/providers/layout-provider";
 
 export const metadata: Metadata = {
   title: "WCP",

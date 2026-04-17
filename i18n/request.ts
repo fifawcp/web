@@ -5,8 +5,14 @@ export default getRequestConfig(async () => {
   const cookieStore = await cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
 
+  const [authMessages, homeMessages] = await Promise.all([import(`./messages/auth/${locale}.json`), import(`./messages/home/${locale}.json`)]);
+
   return {
     locale,
-    messages: (await import(`../messages/${locale}.json`)).default,
+    messages: {
+      ...authMessages.default,
+      ...homeMessages.default,
+    },
+    timeZone: "UTC",
   };
 });

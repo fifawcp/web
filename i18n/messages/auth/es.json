@@ -1,0 +1,36 @@
+{
+  "auth": {
+    "login": {
+      "title": "Bienvenido de Nuevo",
+      "subtitle": "Inicia sesión para continuar tus predicciones",
+      "email": "Correo Electrónico",
+      "submit": "Iniciar Sesión",
+      "noAccount": "¿No tienes una cuenta?",
+      "createOne": "Crea una ahora"
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "subtitle": "Únete a la competencia y comienza a predecir",
+      "fullName": "Nombre Completo",
+      "email": "Correo Electrónico",
+      "agreeToTerms": "Acepto los",
+      "termsOfService": "Términos de Servicio",
+      "and": "y la",
+      "privacyPolicy": "Política de Privacidad",
+      "submit": "Crear Cuenta",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Iniciar sesión"
+    },
+    "legal": {
+      "bySigningIn": "Al iniciar sesión, aceptas nuestros",
+      "termsOfService": "Términos de Servicio",
+      "and": "y",
+      "privacyPolicy": "Política de Privacidad"
+    },
+    "errors": {
+      "invalidEmail": "Correo electrónico inválido",
+      "nameRequired": "El nombre es requerido",
+      "termsRequired": "Debes aceptar los términos y condiciones"
+    }
+  }
+}
