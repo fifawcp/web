@@ -43,7 +43,6 @@ const floatingShapes: FloatingShapeConfig[] = [
 ];
 
 export default function AuthPagesLayout({ children }: { children: ReactNode }) {
-  console.log("AuthPagesLayout rendered");
   return (
     <div className="min-h-[calc(100vh-4rem)] relative flex items-center justify-center bg-linear-to-b from-emerald-50/30 to-white dark:from-zinc-950 dark:to-zinc-900 px-4 py-12 overflow-hidden">
       {floatingShapes.map((shape, index) => (

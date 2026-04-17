@@ -10,7 +10,7 @@ export default function LoginPage() {
   const t = useTranslations("auth.login");
   const tLegal = useTranslations("auth.legal");
   const { formData, isLoading, handleChange, handleSubmit } = useLogin();
-  console.log("LoginPage rendered");
+
   return (
     <AuthCard title={t("title")} subtitle={t("subtitle")}>
       <form onSubmit={handleSubmit} className="space-y-6">
