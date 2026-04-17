@@ -1,21 +1,32 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
+import { getLocale, getMessages } from "next-intl/server";
+import { Header } from "@/components/layout/header";
 import "./globals.css";
+import { Providers } from "@/components/providers/layout-provider";
 
 export const metadata: Metadata = {
-  title: "FIFA WCP",
-  description: "FIFA World Cup Pick'em",
+  title: "WCP",
+  description: "Predict match scores and compete with friends in the 2026 World Cup pick'em game",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
+  messages: Record<string, unknown>;
 }>) {
+  const messages = await getMessages();
+  const locale = await getLocale();
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
-      <body>
-        <ThemeProvider attribute="class">{children}</ThemeProvider>
+      <body className="min-h-full flex flex-col">
+        <Providers messages={messages} locale={locale}>
+          <Header />
+          <main className="flex-1">{children}</main>
+        </Providers>
       </body>
     </html>
   );

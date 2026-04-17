@@ -33,10 +33,11 @@ This document serves as the source of truth for AI instructions and developer st
 
 ## 4. Design & UI Standards
 
-- **Theme:** Maintain a professional sports-dashboard aesthetic.
+- **Theme:** Maintain a professional sports-dashboard aesthetic, always define dark and light modes.
 - **Responsiveness:** The "Pick'em Grid" must be highly optimized for mobile devices (touch-friendly targets).
 - **States:** Always implement Loading (Suspense), skeleton loaders, and Error Boundary states for match data.
 - **Feedback:** Use `sonner` or shadcn `Toast` for successful pick submissions.
+- **Language:** Ensure all text is in English and spanish, dont forget tu use i18n.
 
 ## 5. Coding Standards
 
@@ -47,6 +48,8 @@ This document serves as the source of truth for AI instructions and developer st
 - **Tailwind:** Avoid arbitrary values; use the theme's spacing and color tokens.
 - **Performance:** Use `useMemo` and `useCallback` for expensive calculations. Implement proper loading states.
 - **Accessibility:** Ensure all interactive elements are keyboard navigable and have proper ARIA labels.
+
+- Instead of "bg-gradient-to-r" use "bg-linear-to-r"
 
 ## 6. Git & Workflow
 
