@@ -43,14 +43,14 @@ fifawcp/
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/fifawcp/web.git
    cd fifawcp
    ```
 
 2. **Install dependencies**
 
    ```bash
-   npm install
+   npm ci
    ```
 
 3. **Run the development server**

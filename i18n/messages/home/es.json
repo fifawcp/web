@@ -1,0 +1,55 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "leaderboard": "Clasificación",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse"
+  },
+  "home": {
+    "badge": "Predicciones Copa Mundial 2026",
+    "hero": {
+      "title": "Predice. Compite.",
+      "titleHighlight": "Gana.",
+      "subtitle": "Únete al juego definitivo de predicciones de la Copa Mundial. Elige los marcadores, compite con amigos y escala la clasificación para convertirte en el oráculo definitivo del fútbol."
+    },
+    "cta": {
+      "getStarted": "Comenzar",
+      "signIn": "Iniciar Sesión"
+    },
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "subtitle": "Simple, divertido y competitivo. Comienza a predecir en minutos.",
+      "steps": {
+        "pickScores": {
+          "title": "Elige Marcadores",
+          "description": "Predice el marcador exacto de cada partido antes de que suene el silbato inicial."
+        },
+        "earnPoints": {
+          "title": "Suma Puntos",
+          "description": "Obtén 3 puntos por resultados exactos y 1 punto por acertar al ganador o empate."
+        },
+        "compete": {
+          "title": "Compite Globalmente",
+          "description": "Mide tus conocimientos contra usuarios de todo el mundo en el ranking general."
+        },
+        "joinLeague": {
+          "title": "Ligas Privadas",
+          "description": "Crea o únete a ligas con amigos y familia para competir por el derecho de presumir."
+        },
+        "matchLock": {
+          "title": "Cierre de Pronósticos",
+          "description": "Tu predicción se bloquea 5 minutos antes del partido. ¡Analiza bien antes de guardar!"
+        },
+        "masterTheBracket": {
+          "title": "Domina el Cuadro",
+          "description": "A medida que el torneo avanza, completa las fases eliminatorias hasta la gran final."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "¿Listo para Comenzar a Predecir?",
+      "subtitle": "Únete a miles de fanáticos del fútbol compitiendo para ser el oráculo definitivo de la Copa Mundial.",
+      "button": "Crea Tu Cuenta"
+    }
+  }
+}

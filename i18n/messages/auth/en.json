@@ -1,0 +1,37 @@
+{
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to continue your predictions",
+      "email": "Email Address",
+      "submit": "Sign In",
+      "noAccount": "Don't have an account?",
+      "createOne": "Create one now"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Join the competition and start predicting",
+      "fullName": "Full Name",
+      "email": "Email Address",
+
+      "agreeToTerms": "I agree to the",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy",
+      "submit": "Create Account",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "legal": {
+      "bySigningIn": "By signing in, you agree to our",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "errors": {
+      "invalidEmail": "Invalid email address",
+      "nameRequired": "Name is required",
+      "termsRequired": "You must accept the terms and conditions"
+    }
+  }
+}

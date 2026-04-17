@@ -1,26 +1,52 @@
 @import "tailwindcss";
+@import "./animations.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Primary Color System - Change "emerald" to any Tailwind color */
+@theme {
+  --color-primary-*: initial;
+  --color-primary-50: theme(colors.emerald.50);
+  --color-primary-100: theme(colors.emerald.100);
+  --color-primary-200: theme(colors.emerald.200);
+  --color-primary-300: theme(colors.emerald.300);
+  --color-primary-400: theme(colors.emerald.400);
+  --color-primary-500: theme(colors.emerald.500);
+  --color-primary-600: theme(colors.emerald.600);
+  --color-primary-700: theme(colors.emerald.700);
+  --color-primary-800: theme(colors.emerald.800);
+  --color-primary-900: theme(colors.emerald.900);
+  --color-primary-950: theme(colors.emerald.950);
+
+  /* --color-wc-red: #d40100; */
+  --color-wc-red: #731312;
+  --color-wc-purple: #4b2c87;
+  --color-wc-orange: #ff6e3f;
+
+  /* Gradient definitions for light and dark modes */
+  --gradient-secondary: linear-gradient(to right, #731312, #ff6e3f, #4b2c87);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Override dark variant to use class selector for manual toggle */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Dark mode opacity for floating shapes */
+:where(.dark, .dark *) [style*="--dark-opacity"] {
+  opacity: var(--dark-opacity) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Gradient utility classes */
+.bg-gradient-secondary {
+  background-image: var(--gradient-secondary);
+}
+
+.text-gradient-secondary {
+  background-image: var(--gradient-secondary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
