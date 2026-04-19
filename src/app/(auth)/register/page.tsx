@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Mail, User, UserPlus, AtSign } from "lucide-react";
-import { Button } from "@shared/components/ui/button";
-import { AuthCard, FormInput, useRegister } from "@features/auth";
+import { Button } from "@/shared/components/ui/button";
+import { AuthCard, FormInput, useRegister } from "@/features/auth";
 
 export default function RegisterPage() {
   const t = useTranslations("auth.register");
