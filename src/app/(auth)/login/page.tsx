@@ -9,21 +9,12 @@ import { AuthCard, FormInput, useLogin } from "@features/auth";
 export default function LoginPage() {
   const t = useTranslations("auth.login");
   const tLegal = useTranslations("auth.legal");
-  const { formData, isLoading, handleChange, handleSubmit } = useLogin();
+  const { register, handleSubmit, errors, isLoading } = useLogin();
 
   return (
     <AuthCard title={t("title")} subtitle={t("subtitle")}>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <FormInput
-          id="email"
-          label={t("email")}
-          type="email"
-          icon={Mail}
-          value={formData.email}
-          onChange={(e) => handleChange("email", e.target.value)}
-          placeholder="you@example.com"
-          required
-        />
+        <FormInput id="email" label={t("email")} type="email" icon={Mail} placeholder="you@example.com" error={errors.email} {...register("email")} />
 
         <Button type="submit" className="w-full" disabled={isLoading}>
           <LogIn className="h-5 w-5" />

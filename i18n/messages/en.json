@@ -57,9 +57,6 @@
       "title": "Welcome Back",
       "subtitle": "Sign in to continue your predictions",
       "email": "Email Address",
-      "password": "Password",
-      "rememberMe": "Remember me",
-      "forgotPassword": "Forgot password?",
       "submit": "Sign In",
       "noAccount": "Don't have an account?",
       "createOne": "Create one now"
@@ -69,9 +66,6 @@
       "subtitle": "Join the competition and start predicting",
       "fullName": "Full Name",
       "email": "Email Address",
-      "password": "Password",
-      "confirmPassword": "Confirm Password",
-      "passwordHint": "Must be at least 8 characters",
       "agreeToTerms": "I agree to the",
       "termsOfService": "Terms of Service",
       "and": "and",
@@ -88,9 +82,7 @@
     },
     "errors": {
       "invalidEmail": "Invalid email address",
-      "passwordTooShort": "Password must be at least 8 characters",
       "nameRequired": "Name is required",
-      "passwordsDoNotMatch": "Passwords do not match",
       "termsRequired": "You must accept the terms and conditions"
     }
   }

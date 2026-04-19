@@ -1,57 +1,41 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { LoginFormData, AuthFormErrors } from "../types/auth.types";
-import { validateLoginForm } from "../schemas/auth.schema";
+import { loginSchema, LoginFormData } from "../schemas/auth.schema";
 
 export function useLogin() {
   const t = useTranslations();
-  const [formData, setFormData] = useState<LoginFormData>({
-    email: "",
-    rememberMe: false,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+    },
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof LoginFormData, string>>>({});
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (field: keyof LoginFormData, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const validation = validateLoginForm(formData);
-
-    if (!validation.isValid) {
-      const translatedErrors: AuthFormErrors<LoginFormData> = {};
-      Object.entries(validation.errors).forEach(([key, value]) => {
-        if (value) {
-          translatedErrors[key as keyof LoginFormData] = t(value);
-        }
-      });
-      setErrors(translatedErrors);
-      setIsLoading(false);
-      return;
-    }
-
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      console.log("Login attempt:", formData);
+      console.log("Login attempt:", data);
       await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
       console.error("Login error:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
+  const getErrorMessage = (field: keyof LoginFormData) => {
+    const error = errors[field];
+    return error?.message ? t(error.message) : undefined;
+  };
+
   return {
-    formData,
-    errors,
-    isLoading,
-    handleChange,
-    handleSubmit,
+    register,
+    handleSubmit: handleSubmit(onSubmit),
+    errors: {
+      email: getErrorMessage("email"),
+    },
+    isLoading: isSubmitting,
   };
 }

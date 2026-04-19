@@ -57,9 +57,6 @@
       "title": "Bienvenido de Nuevo",
       "subtitle": "Inicia sesión para continuar tus predicciones",
       "email": "Correo Electrónico",
-      "password": "Contraseña",
-      "rememberMe": "Recuérdame",
-      "forgotPassword": "¿Olvidaste tu contraseña?",
       "submit": "Iniciar Sesión",
       "noAccount": "¿No tienes una cuenta?",
       "createOne": "Crea una ahora"
@@ -69,9 +66,6 @@
       "subtitle": "Únete a la competencia y comienza a predecir",
       "fullName": "Nombre Completo",
       "email": "Correo Electrónico",
-      "password": "Contraseña",
-      "confirmPassword": "Confirmar Contraseña",
-      "passwordHint": "Debe tener al menos 8 caracteres",
       "agreeToTerms": "Acepto los",
       "termsOfService": "Términos de Servicio",
       "and": "y la",
@@ -88,9 +82,7 @@
     },
     "errors": {
       "invalidEmail": "Correo electrónico inválido",
-      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
       "nameRequired": "El nombre es requerido",
-      "passwordsDoNotMatch": "Las contraseñas no coinciden",
       "termsRequired": "Debes aceptar los términos y condiciones"
     }
   }
