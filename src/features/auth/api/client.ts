@@ -1,17 +1,18 @@
-import { ApiResponse, OtpRequestResponse, OtpVerifyResponse, OtpPurpose } from "../types/auth.types";
+import { ApiResponse, OtpRequestResponse, OtpVerifyResponse, OtpPurpose, RefreshTokenResponse } from "../types/auth.types";
 import { clientEnv } from "@/lib/env";
+import { fetchWithAuth } from "../utils/fetch-with-auth";
 
 export const requestOtp = async ({ identifier, purpose }: { identifier: string; purpose: OtpPurpose }): Promise<ApiResponse<OtpRequestResponse>> => {
   try {
     const url = `${clientEnv.NEXT_PUBLIC_BACKEND_API_URL}/auth/otp/request`;
 
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ identifier, purpose }),
-      credentials: "include",
+      skipRefresh: true,
     });
 
     if (!response.ok) {
@@ -37,12 +38,12 @@ export const requestOtp = async ({ identifier, purpose }: { identifier: string; 
 
 const getBedugOTP = async (identifier: string) => {
   try {
-    const debugResponse = await fetch(`${clientEnv.NEXT_PUBLIC_BACKEND_API_URL}/debug/totp/${identifier}`, {
+    const debugResponse = await fetchWithAuth(`${clientEnv.NEXT_PUBLIC_BACKEND_API_URL}/debug/totp/${identifier}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      skipRefresh: true,
     });
     if (debugResponse.ok) {
       const debugData = await debugResponse.json();
@@ -101,13 +102,13 @@ export const verifyOtp = async ({
 
     const url = `${clientEnv.NEXT_PUBLIC_BACKEND_API_URL}/auth/token`;
 
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
-      credentials: "include",
+      skipRefresh: true,
     });
 
     const data = await response.json();
@@ -127,6 +128,81 @@ export const verifyOtp = async ({
     };
   } catch (error) {
     console.error("OTP Verify Error:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Network error occurred",
+    };
+  }
+};
+
+export const refreshToken = async (): Promise<ApiResponse<RefreshTokenResponse>> => {
+  try {
+    const url = `${clientEnv.NEXT_PUBLIC_BACKEND_API_URL}/auth/token/refresh`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || "Failed to refresh token",
+        message: data.error,
+      };
+    }
+
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    console.error("Token Refresh Error:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Network error occurred",
+    };
+  }
+};
+
+export const logout = async (): Promise<ApiResponse<void>> => {
+  try {
+    const url = `${clientEnv.NEXT_PUBLIC_BACKEND_API_URL}/auth/logout`;
+
+    const response = await fetchWithAuth(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      skipRefresh: true,
+    });
+
+    if (response.status === 204) {
+      return {
+        success: true,
+      };
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || "Failed to logout",
+        message: data.error,
+      };
+    }
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Logout Error:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Network error occurred",

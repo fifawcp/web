@@ -33,17 +33,17 @@ export function useVerifyOtp() {
 
     if (!registrationData) {
       console.error("No registration data found");
-      router.push("/register");
+      router.push("/login");
       return;
     }
 
     const response = await verifyOtp({
       identifier: registrationData.email,
       code: data.code,
-      purpose: "registration",
-      username: registrationData.username,
-      first_name: registrationData.first_name,
-      last_name: registrationData.last_name,
+      purpose: registrationData.purpose,
+      username: registrationData.purpose === "registration" ? registrationData.username : undefined,
+      first_name: registrationData.purpose === "registration" ? registrationData.first_name : undefined,
+      last_name: registrationData.purpose === "registration" ? registrationData.last_name : undefined,
     });
 
     if (response.success && response.data) {

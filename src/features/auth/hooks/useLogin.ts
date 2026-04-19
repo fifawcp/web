@@ -1,10 +1,16 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { loginSchema, LoginFormData } from "../schemas/auth.schema";
+import { requestOtp } from "../api/client";
+import { OtpPurpose } from "../types/auth.types";
+import { useRegistrationStore } from "../store/registration.store";
 
 export function useLogin() {
   const t = useTranslations();
+  const router = useRouter();
+  const setRegistrationData = useRegistrationStore((state) => state.setRegistrationData);
   const {
     register,
     handleSubmit,
@@ -17,11 +23,18 @@ export function useLogin() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    try {
-      console.log("Login attempt:", data);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch (error) {
-      console.error("Login error:", error);
+    const response = await requestOtp({ identifier: data.email, purpose: "login" } as { identifier: string; purpose: OtpPurpose });
+    if (response.success) {
+      setRegistrationData({
+        email: data.email,
+        username: "",
+        first_name: "",
+        last_name: "",
+        purpose: "login",
+      });
+      router.push("/verify");
+    } else {
+      console.error("Failed to send OTP:", response.error);
     }
   };
 

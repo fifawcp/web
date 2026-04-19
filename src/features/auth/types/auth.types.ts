@@ -10,13 +10,19 @@ export type OtpRequestResponse = {
   expiresAt: string;
 };
 
+export interface AuthData {
+  access_token: string;
+  expires_at: string;
+}
+
+export type RefreshTokenResponse = {
+  data: AuthData;
+};
+
 export type OtpVerifyResponse = {
   data: {
     message: string;
-    auth: {
-      access_token: string;
-      expires_at: string;
-    };
+    auth: AuthData;
     user: {
       id: string;
       email: string;

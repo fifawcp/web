@@ -34,6 +34,7 @@ export function useRegister() {
         first_name: data.first_name,
         last_name: data.last_name,
         email: data.email,
+        purpose: "registration",
       });
       router.push("/verify");
     } else {

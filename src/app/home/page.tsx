@@ -8,17 +8,17 @@ import { Button } from "@shared/components/ui/button";
 
 export default function HomePage() {
   const router = useRouter();
-  const { user, isAuthenticated, clearAuth } = useAuthStore();
+  const { user, isAuthenticated, logout } = useAuthStore();
 
   useEffect(() => {
     if (!isAuthenticated()) {
-      router.push("/login");
+      router.push("/");
     }
   }, [isAuthenticated, router]);
 
-  const handleLogout = () => {
-    clearAuth();
-    router.push("/login");
+  const handleLogout = async () => {
+    await logout();
+    router.push("/");
   };
 
   if (!user) {

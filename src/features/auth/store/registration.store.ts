@@ -1,10 +1,12 @@
 import { create } from "zustand";
+import { OtpPurpose } from "../types/auth.types";
 
 interface RegistrationData {
   username: string;
   first_name: string;
   last_name: string;
   email: string;
+  purpose: OtpPurpose;
 }
 
 interface RegistrationStore {
