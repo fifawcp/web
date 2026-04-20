@@ -52,9 +52,10 @@ export function useVerifyOtp() {
       clearRegistrationData();
       router.push("/home");
     } else {
-      if (response.error === "wrong_code") {
+      console.log(data.code);
+      if (response.error === "wrong_code" || response.error === "otp is invalid or expired, try again") {
         setErrorType("wrong_code");
-      } else if (response.error === "too_many_attempts") {
+      } else if (response.error === "too_many_attempts" || response.error === "too many attempts, try again later") {
         setErrorType("too_many_attempts");
       }
       console.error("Failed to verify OTP:", response.error);

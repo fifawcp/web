@@ -1,6 +1,7 @@
 {
   "nav": {
     "home": "Home",
+    "boards": "Boards",
     "leaderboard": "Leaderboard",
     "login": "Login",
     "register": "Register"

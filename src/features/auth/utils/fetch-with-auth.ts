@@ -7,10 +7,19 @@ interface FetchWithAuthOptions extends RequestInit {
 
 export async function fetchWithAuth(url: string, options: FetchWithAuthOptions = {}): Promise<Response> {
   const { skipRefresh = false, ...fetchOptions } = options;
-  const { accessToken, setAuth, clearAuth, user } = useAuthStore.getState();
+  const { accessToken, expiresAt, setAuth, clearAuth, user, isTokenExpired } = useAuthStore.getState();
+  // Check if token is expired before making request
+  // If expired, it means refresh token is also expired -> logout
+  if (accessToken && expiresAt && isTokenExpired()) {
+    clearAuth();
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
+    throw new Error("Session expired. Please log in again.");
+  }
 
   const headers = new Headers(fetchOptions.headers);
-  
+
   if (accessToken && !headers.has("Authorization")) {
     headers.set("Authorization", `Bearer ${accessToken}`);
   }

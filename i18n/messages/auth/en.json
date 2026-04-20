@@ -46,7 +46,11 @@
       "lastNameRequired": "Last name must be at least 2 characters",
       "termsRequired": "You must accept the terms and conditions",
       "otpLength": "Code must be exactly 6 digits",
-      "otpDigitsOnly": "Code must contain only digits"
+      "otpDigitsOnly": "Code must contain only digits",
+      "validationError": "Invalid request. Please check your information.",
+      "userExists": "An account with this email already exists.",
+      "tooManyAttempts": "Too many attempts. Please try again later.",
+      "invalidCredentials": "Invalid credentials. Please check your email."
     }
   }
 }

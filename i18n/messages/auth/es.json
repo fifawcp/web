@@ -46,7 +46,11 @@
       "lastNameRequired": "El apellido debe tener al menos 2 caracteres",
       "termsRequired": "Debes aceptar los términos y condiciones",
       "otpLength": "El código debe tener exactamente 6 dígitos",
-      "otpDigitsOnly": "El código debe contener solo dígitos"
+      "otpDigitsOnly": "El código debe contener solo dígitos",
+      "validationError": "Solicitud inválida. Por favor verifica tu información.",
+      "userExists": "Ya existe una cuenta con este correo electrónico.",
+      "tooManyAttempts": "Demasiados intentos. Por favor intenta más tarde.",
+      "invalidCredentials": "Credenciales inválidas. Por favor verifica tu correo."
     }
   }
 }

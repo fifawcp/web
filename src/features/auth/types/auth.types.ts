@@ -1,9 +1,4 @@
-export type ApiResponse<T> = {
-  success: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
-};
+import { User } from "@/shared/types/interfaces";
 
 export type OtpRequestResponse = {
   message: string;
@@ -23,15 +18,7 @@ export type OtpVerifyResponse = {
   data: {
     message: string;
     auth: AuthData;
-    user: {
-      id: string;
-      email: string;
-      username: string;
-      first_name: string;
-      last_name: string;
-      created_at: string;
-      updated_at: string;
-    };
+    user: User;
   };
 };
 

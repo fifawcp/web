@@ -1,16 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { logout as logoutApi } from "../api/client";
-
-interface User {
-  id: string;
-  email: string;
-  username: string;
-  first_name: string;
-  last_name: string;
-  created_at: string;
-  updated_at: string;
-}
+import { User } from "@/shared/types/interfaces";
 
 interface AuthState {
   accessToken: string | null;

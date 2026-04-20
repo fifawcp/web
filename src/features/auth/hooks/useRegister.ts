@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { registerSchema, RegisterFormData } from "../schemas/auth.schema";
 import { requestOtp } from "../api/client";
 import { OtpPurpose } from "../types/auth.types";
@@ -11,6 +12,7 @@ export function useRegister() {
   const t = useTranslations();
   const router = useRouter();
   const setRegistrationData = useRegistrationStore((state) => state.setRegistrationData);
+  const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -27,6 +29,7 @@ export function useRegister() {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
+    setServerError(null);
     const response = await requestOtp({ identifier: data.email, purpose: "registration" } as { identifier: string; purpose: OtpPurpose });
     if (response.success) {
       setRegistrationData({
@@ -38,6 +41,16 @@ export function useRegister() {
       });
       router.push("/verify");
     } else {
+      const errorCode = response.error;
+      if (errorCode === "400" || errorCode?.includes("validation")) {
+        setServerError(t("auth.errors.validationError"));
+      } else if (errorCode === "409" || errorCode?.includes("exists")) {
+        setServerError(t("auth.errors.userExists"));
+      } else if (errorCode === "429" || errorCode?.includes("many")) {
+        setServerError(t("auth.errors.tooManyAttempts"));
+      } else {
+        setServerError(t("auth.errors.validationError"));
+      }
       console.error("Failed to send OTP:", response.error);
     }
   };
@@ -57,6 +70,7 @@ export function useRegister() {
       email: getErrorMessage("email"),
       acceptTerms: getErrorMessage("acceptTerms"),
     },
+    serverError,
     isLoading: isSubmitting,
   };
 }

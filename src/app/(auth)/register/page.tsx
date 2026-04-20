@@ -2,17 +2,23 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Mail, User, UserPlus, AtSign } from "lucide-react";
+import { Mail, User, UserPlus, AtSign, AlertCircle } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { AuthCard, FormInput, useRegister } from "@/features/auth";
 
 export default function RegisterPage() {
   const t = useTranslations("auth.register");
-  const { register, handleSubmit, errors, isLoading } = useRegister();
+  const { register, handleSubmit, errors, serverError, isLoading } = useRegister();
 
   return (
     <AuthCard title={t("title")} subtitle={t("subtitle")}>
       <form onSubmit={handleSubmit} className="space-y-5">
+        {serverError && (
+          <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 shrink-0" />
+            <p className="text-sm text-red-600 dark:text-red-400">{serverError}</p>
+          </div>
+        )}
         <FormInput id="username" label={t("username")} type="text" icon={AtSign} placeholder="johndoe" error={errors.username} {...register("username")} />
 
         <div className="grid grid-cols-2 gap-4">
