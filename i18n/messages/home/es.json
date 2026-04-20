@@ -2,6 +2,7 @@
   "nav": {
     "home": "Inicio",
     "leaderboard": "Clasificación",
+    "boards": "Tableros",
     "login": "Iniciar Sesión",
     "register": "Registrarse"
   },

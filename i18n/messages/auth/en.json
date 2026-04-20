@@ -11,9 +11,10 @@
     "register": {
       "title": "Create Account",
       "subtitle": "Join the competition and start predicting",
-      "fullName": "Full Name",
+      "username": "Username",
+      "firstName": "First Name",
+      "lastName": "Last Name",
       "email": "Email Address",
-
       "agreeToTerms": "I agree to the",
       "termsOfService": "Terms of Service",
       "and": "and",
@@ -21,6 +22,15 @@
       "submit": "Create Account",
       "haveAccount": "Already have an account?",
       "signIn": "Sign in"
+    },
+    "verifyOtp": {
+      "title": "Verify Your Email",
+      "subtitle": "Enter the 6-digit code sent to your email",
+      "code": "Verification Code",
+      "submit": "Verify & Complete Registration",
+      "resend": "Resend Code",
+      "wrongCode": "Wrong code. Please try again.",
+      "tooManyAttempts": "Too many attempts. Please request a new code."
     },
     "legal": {
       "bySigningIn": "By signing in, you agree to our",
@@ -30,8 +40,17 @@
     },
     "errors": {
       "invalidEmail": "Invalid email address",
-      "nameRequired": "Name is required",
-      "termsRequired": "You must accept the terms and conditions"
+      "usernameMinLength": "Username must be at least 3 characters",
+      "usernameMaxLength": "Username must be at most 20 characters",
+      "firstNameRequired": "First name must be at least 2 characters",
+      "lastNameRequired": "Last name must be at least 2 characters",
+      "termsRequired": "You must accept the terms and conditions",
+      "otpLength": "Code must be exactly 6 digits",
+      "otpDigitsOnly": "Code must contain only digits",
+      "validationError": "Invalid request. Please check your information.",
+      "userExists": "An account with this email already exists.",
+      "tooManyAttempts": "Too many attempts. Please try again later.",
+      "invalidCredentials": "Invalid credentials. Please check your email."
     }
   }
 }

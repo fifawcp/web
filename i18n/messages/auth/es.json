@@ -11,7 +11,9 @@
     "register": {
       "title": "Crear Cuenta",
       "subtitle": "Únete a la competencia y comienza a predecir",
-      "fullName": "Nombre Completo",
+      "username": "Nombre de Usuario",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
       "email": "Correo Electrónico",
       "agreeToTerms": "Acepto los",
       "termsOfService": "Términos de Servicio",
@@ -21,6 +23,15 @@
       "haveAccount": "¿Ya tienes una cuenta?",
       "signIn": "Iniciar sesión"
     },
+    "verifyOtp": {
+      "title": "Verifica tu Correo",
+      "subtitle": "Ingresa el código de 6 dígitos enviado a tu correo",
+      "code": "Código de Verificación",
+      "submit": "Verificar y Completar Registro",
+      "resend": "Reenviar Código",
+      "wrongCode": "Código incorrecto. Inténtalo de nuevo.",
+      "tooManyAttempts": "Demasiados intentos. Solicita un nuevo código."
+    },
     "legal": {
       "bySigningIn": "Al iniciar sesión, aceptas nuestros",
       "termsOfService": "Términos de Servicio",
@@ -29,8 +40,17 @@
     },
     "errors": {
       "invalidEmail": "Correo electrónico inválido",
-      "nameRequired": "El nombre es requerido",
-      "termsRequired": "Debes aceptar los términos y condiciones"
+      "usernameMinLength": "El nombre de usuario debe tener al menos 3 caracteres",
+      "usernameMaxLength": "El nombre de usuario debe tener como máximo 20 caracteres",
+      "firstNameRequired": "El nombre debe tener al menos 2 caracteres",
+      "lastNameRequired": "El apellido debe tener al menos 2 caracteres",
+      "termsRequired": "Debes aceptar los términos y condiciones",
+      "otpLength": "El código debe tener exactamente 6 dígitos",
+      "otpDigitsOnly": "El código debe contener solo dígitos",
+      "validationError": "Solicitud inválida. Por favor verifica tu información.",
+      "userExists": "Ya existe una cuenta con este correo electrónico.",
+      "tooManyAttempts": "Demasiados intentos. Por favor intenta más tarde.",
+      "invalidCredentials": "Credenciales inválidas. Por favor verifica tu correo."
     }
   }
 }

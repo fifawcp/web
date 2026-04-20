@@ -2,5 +2,6 @@ export { AuthCard } from "./components/auth-card";
 export { FormInput } from "./components/form-input";
 export { useLogin } from "./hooks/useLogin";
 export { useRegister } from "./hooks/useRegister";
-export * from "./schemas/auth.schema";
-export * from "./types/auth.types";
+export { useVerifyOtp } from "./hooks/useVerifyOtp";
+export { loginSchema, registerSchema, otpVerifySchema } from "./schemas/auth.schema";
+export type { LoginFormData, RegisterFormData, OtpVerifyFormData } from "./schemas/auth.schema";

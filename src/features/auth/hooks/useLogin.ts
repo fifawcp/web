@@ -1,57 +1,71 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { LoginFormData, AuthFormErrors } from "../types/auth.types";
-import { validateLoginForm } from "../schemas/auth.schema";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { loginSchema, LoginFormData } from "../schemas/auth.schema";
+import { requestOtp } from "../api/client";
+import { OtpPurpose } from "../types/auth.types";
+import { useRegistrationStore } from "../store/registration.store";
+import { ApiErrorType } from "@/shared/lib/api/client";
+import { logger } from "@/shared/lib/logger";
 
 export function useLogin() {
   const t = useTranslations();
-  const [formData, setFormData] = useState<LoginFormData>({
-    email: "",
-    rememberMe: false,
+  const router = useRouter();
+  const setRegistrationData = useRegistrationStore((state) => state.setRegistrationData);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+    },
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof LoginFormData, string>>>({});
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (field: keyof LoginFormData, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
+  const onSubmit = async (data: LoginFormData) => {
+    setServerError(null);
+    const response = await requestOtp({ identifier: data.email, purpose: "login" } as { identifier: string; purpose: OtpPurpose });
+    if (response.success) {
+      setRegistrationData({
+        email: data.email,
+        username: "",
+        first_name: "",
+        last_name: "",
+        purpose: "login",
+      });
+      router.push("/verify");
+    } else {
+      switch (response.errorType) {
+        case ApiErrorType.RATE_LIMIT:
+          setServerError(t("auth.errors.tooManyAttempts"));
+          break;
+        case ApiErrorType.INVALID_CREDENTIALS:
+        case ApiErrorType.UNAUTHORIZED:
+          setServerError(t("auth.errors.invalidCredentials"));
+          break;
+        default:
+          setServerError(t("auth.errors.invalidCredentials"));
+      }
+      logger.error("Failed to send OTP:", response.error);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const validation = validateLoginForm(formData);
-
-    if (!validation.isValid) {
-      const translatedErrors: AuthFormErrors<LoginFormData> = {};
-      Object.entries(validation.errors).forEach(([key, value]) => {
-        if (value) {
-          translatedErrors[key as keyof LoginFormData] = t(value);
-        }
-      });
-      setErrors(translatedErrors);
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      console.log("Login attempt:", formData);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch (error) {
-      console.error("Login error:", error);
-    } finally {
-      setIsLoading(false);
-    }
+  const getErrorMessage = (field: keyof LoginFormData) => {
+    const error = errors[field];
+    return error?.message ? t(error.message) : undefined;
   };
 
   return {
-    formData,
-    errors,
-    isLoading,
-    handleChange,
-    handleSubmit,
+    register,
+    handleSubmit: handleSubmit(onSubmit),
+    errors: {
+      email: getErrorMessage("email"),
+    },
+    serverError,
+    isLoading: isSubmitting,
   };
 }

@@ -16,10 +16,16 @@
   --color-primary-900: theme(colors.emerald.900);
   --color-primary-950: theme(colors.emerald.950);
 
-  /* --color-wc-red: #d40100; */
+  /* Primary Ones  */
   --color-wc-red: #731312;
   --color-wc-purple: #4b2c87;
   --color-wc-orange: #ff6e3f;
+
+  /* Secondary Ones */
+  --color-wc-red-light: #d40100;
+
+  /* Layout dimensions */
+  --header-height: 65px;
 
   /* Gradient definitions for light and dark modes */
   --gradient-secondary: linear-gradient(to right, #731312, #ff6e3f, #4b2c87);
@@ -44,6 +50,7 @@
   -webkit-text-fill-color: transparent;
 }
 
+html,
 body {
   font-family:
     system-ui,

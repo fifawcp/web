@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getLocale, getMessages } from "next-intl/server";
 import { Header } from "@/shared/layout/header";
 import "./globals.css";
-import { Providers } from "@/shared/providers/layout-provider";
+import { Providers } from "@/providers/layout-provider";
 
 export const metadata: Metadata = {
   title: "WCP",
@@ -24,7 +24,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <Providers messages={messages} locale={locale}>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 overflow-x-hidden">{children}</main>
         </Providers>
       </body>
     </html>

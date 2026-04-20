@@ -44,7 +44,7 @@ export function FinalSection() {
   return (
     <section
       ref={ref}
-      className="min-h-[calc(100dvh-4rem)] flex items-center justify-center relative py-20 bg-linear-to-b from-zinc-300 to-white dark:from-zinc-700 dark:to-zinc-950"
+      className="min-h-[calc(100dvh-var(--header-height))] flex items-center justify-center relative py-20 bg-linear-to-b from-zinc-300 to-white dark:from-zinc-700 dark:to-zinc-950"
     >
       {floatingShapes.map((shape, index) => (
         <FloatingShape key={index} {...shape} />

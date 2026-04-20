@@ -1,17 +1,25 @@
-export type LoginFormData = {
-  email: string;
-  rememberMe?: boolean;
+import { User } from "@/shared/types/interfaces";
+
+export type OtpRequestResponse = {
+  message: string;
+  expiresAt: string;
 };
 
-export type RegisterFormData = {
-  name: string;
-  email: string;
-  acceptTerms: boolean;
+export interface AuthData {
+  access_token: string;
+  expires_at: string;
+}
+
+export type RefreshTokenResponse = {
+  data: AuthData;
 };
 
-export type AuthFormErrors<T> = Partial<Record<keyof T, string>>;
-
-export type ValidationResult<T> = {
-  isValid: boolean;
-  errors: AuthFormErrors<T>;
+export type OtpVerifyResponse = {
+  data: {
+    message: string;
+    auth: AuthData;
+    user: User;
+  };
 };
+
+export type OtpPurpose = "login" | "registration";

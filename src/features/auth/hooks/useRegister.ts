@@ -1,58 +1,82 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { RegisterFormData, AuthFormErrors } from "../types/auth.types";
-import { validateRegisterForm } from "../schemas/auth.schema";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { registerSchema, RegisterFormData } from "../schemas/auth.schema";
+import { requestOtp } from "../api/client";
+import { OtpPurpose } from "../types/auth.types";
+import { useRegistrationStore } from "../store/registration.store";
+import { ApiErrorType } from "@/shared/lib/api/client";
+import { logger } from "@/shared/lib/logger";
 
 export function useRegister() {
   const t = useTranslations();
-  const [formData, setFormData] = useState<RegisterFormData>({
-    name: "",
-    email: "",
-    acceptTerms: false,
+  const router = useRouter();
+  const setRegistrationData = useRegistrationStore((state) => state.setRegistrationData);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      username: "",
+      first_name: "",
+      last_name: "",
+      email: "",
+      acceptTerms: false,
+    },
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof RegisterFormData, string>>>({});
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (field: keyof RegisterFormData, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
+  const onSubmit = async (data: RegisterFormData) => {
+    setServerError(null);
+    const response = await requestOtp({ identifier: data.email, purpose: "registration" } as { identifier: string; purpose: OtpPurpose });
+    if (response.success) {
+      setRegistrationData({
+        username: data.username,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        email: data.email,
+        purpose: "registration",
+      });
+      router.push("/verify");
+    } else {
+      switch (response.errorType) {
+        case ApiErrorType.VALIDATION_ERROR:
+          setServerError(t("auth.errors.validationError"));
+          break;
+        case ApiErrorType.USER_EXISTS:
+        case ApiErrorType.USERNAME_TAKEN:
+          setServerError(t("auth.errors.userExists"));
+          break;
+        case ApiErrorType.RATE_LIMIT:
+          setServerError(t("auth.errors.tooManyAttempts"));
+          break;
+        default:
+          setServerError(t("auth.errors.validationError"));
+      }
+      logger.error("Failed to send OTP:", response.error);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const validation = validateRegisterForm(formData);
-
-    if (!validation.isValid) {
-      const translatedErrors: AuthFormErrors<RegisterFormData> = {};
-      Object.entries(validation.errors).forEach(([key, value]) => {
-        if (value) {
-          translatedErrors[key as keyof RegisterFormData] = t(value);
-        }
-      });
-      setErrors(translatedErrors);
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      console.log("Register attempt:", formData);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch (error) {
-      console.error("Register error:", error);
-    } finally {
-      setIsLoading(false);
-    }
+  const getErrorMessage = (field: keyof RegisterFormData) => {
+    const error = errors[field];
+    return error?.message ? t(error.message) : undefined;
   };
 
   return {
-    formData,
-    errors,
-    isLoading,
-    handleChange,
-    handleSubmit,
+    register,
+    handleSubmit: handleSubmit(onSubmit),
+    errors: {
+      username: getErrorMessage("username"),
+      first_name: getErrorMessage("first_name"),
+      last_name: getErrorMessage("last_name"),
+      email: getErrorMessage("email"),
+      acceptTerms: getErrorMessage("acceptTerms"),
+    },
+    serverError,
+    isLoading: isSubmitting,
   };
 }

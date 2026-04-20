@@ -40,11 +40,13 @@ const floatingShapes: FloatingShapeConfig[] = [
     animation: "zigzag",
     animationDelay: 2,
   },
+  { color: "red-light", size: 96, opacity: 15, darkOpacity: 8, blur: "none", position: "random", animation: "float", animationDelay: 0 },
+  { color: "red-light", size: 128, opacity: 15, darkOpacity: 8, blur: "none", position: "random", animation: "drift", animationDelay: 1 },
 ];
 
 export default function AuthPagesLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-[calc(100vh-4rem)] relative flex items-center justify-center bg-linear-to-b from-emerald-50/30 to-white dark:from-zinc-950 dark:to-zinc-900 px-4 py-12 overflow-hidden">
+    <div className="min-h-[calc(100vh-var(--header-height))] relative flex items-center justify-center bg-linear-to-b from-emerald-50/30 to-white dark:from-zinc-950 dark:to-zinc-900 px-4 py-12 overflow-hidden">
       {floatingShapes.map((shape, index) => (
         <FloatingShape key={index} {...shape} />
       ))}

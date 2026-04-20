@@ -1,4 +1,4 @@
-export type ColorVariant = "red" | "orange" | "purple";
+export type ColorVariant = "red" | "orange" | "purple" | "red-light";
 export type ShapeType = "circle" | "square" | "diamond";
 export type AnimationType = "float" | "bounce" | "drift" | "pulse" | "rotate" | "wave" | "zigzag" | "none";
 export type BlurType = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
