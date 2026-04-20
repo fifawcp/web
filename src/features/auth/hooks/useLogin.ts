@@ -7,6 +7,8 @@ import { loginSchema, LoginFormData } from "../schemas/auth.schema";
 import { requestOtp } from "../api/client";
 import { OtpPurpose } from "../types/auth.types";
 import { useRegistrationStore } from "../store/registration.store";
+import { ApiErrorType } from "@/shared/lib/api/client";
+import { logger } from "@/shared/lib/logger";
 
 export function useLogin() {
   const t = useTranslations();
@@ -37,15 +39,18 @@ export function useLogin() {
       });
       router.push("/verify");
     } else {
-      const errorCode = response.error;
-      if (errorCode === "401" || errorCode?.includes("Invalid") || errorCode?.includes("credentials")) {
-        setServerError(t("auth.errors.invalidCredentials"));
-      } else if (errorCode === "429" || errorCode?.includes("many")) {
-        setServerError(t("auth.errors.tooManyAttempts"));
-      } else {
-        setServerError(t("auth.errors.invalidCredentials"));
+      switch (response.errorType) {
+        case ApiErrorType.RATE_LIMIT:
+          setServerError(t("auth.errors.tooManyAttempts"));
+          break;
+        case ApiErrorType.INVALID_CREDENTIALS:
+        case ApiErrorType.UNAUTHORIZED:
+          setServerError(t("auth.errors.invalidCredentials"));
+          break;
+        default:
+          setServerError(t("auth.errors.invalidCredentials"));
       }
-      console.error("Failed to send OTP:", response.error);
+      logger.error("Failed to send OTP:", response.error);
     }
   };
 

@@ -7,6 +7,8 @@ import { otpVerifySchema, OtpVerifyFormData } from "../schemas/auth.schema";
 import { verifyOtp } from "../api/client";
 import { useRegistrationStore } from "../store/registration.store";
 import { useAuthStore } from "../store/auth.store";
+import { ApiErrorType } from "@/shared/lib/api/client";
+import { logger } from "@/shared/lib/logger";
 
 export function useVerifyOtp() {
   const t = useTranslations();
@@ -32,7 +34,7 @@ export function useVerifyOtp() {
     setErrorType(null);
 
     if (!registrationData) {
-      console.error("No registration data found");
+      logger.error("No registration data found");
       router.push("/login");
       return;
     }
@@ -52,12 +54,18 @@ export function useVerifyOtp() {
       clearRegistrationData();
       router.push("/home");
     } else {
-      if (response.error === "wrong_code" || response.error === "otp is invalid or expired, try again") {
-        setErrorType("wrong_code");
-      } else if (response.error === "too_many_attempts" || response.error === "too many attempts, try again later") {
-        setErrorType("too_many_attempts");
+      switch (response.errorType) {
+        case ApiErrorType.OTP_INVALID:
+        case ApiErrorType.INVALID_CREDENTIALS:
+          setErrorType("wrong_code");
+          break;
+        case ApiErrorType.RATE_LIMIT:
+          setErrorType("too_many_attempts");
+          break;
+        default:
+          setErrorType("wrong_code");
       }
-      console.error("Failed to verify OTP:", response.error);
+      logger.error("Failed to verify OTP:", response.error);
     }
   };
 

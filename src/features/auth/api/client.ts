@@ -1,6 +1,7 @@
 import { OtpRequestResponse, OtpVerifyResponse, OtpPurpose, RefreshTokenResponse } from "../types/auth.types";
 import { clientEnv } from "@/lib/env";
 import { api, ApiResponse } from "@/shared/lib/api/client";
+import { logger } from "@/shared/lib/logger";
 
 export const requestOtp = async ({ identifier, purpose }: { identifier: string; purpose: OtpPurpose }): Promise<ApiResponse<OtpRequestResponse>> => {
   return api.post<OtpRequestResponse>("/api/auth/otp/request", { identifier, purpose }, { skipRefresh: true });
@@ -13,7 +14,7 @@ const getBedugOTP = async (identifier: string) => {
       return response.data.data.otp;
     }
   } catch (error) {
-    console.error("Failed to fetch debug OTP:", error);
+    logger.error("Failed to fetch debug OTP:", error);
   }
   return null;
 };
@@ -42,7 +43,7 @@ export const verifyOtp = async ({
         otpCode = debugOtp;
       }
     } catch (error) {
-      console.error("Failed to fetch debug OTP:", error);
+      logger.error("Failed to fetch debug OTP:", error);
     }
   }
 

@@ -7,6 +7,8 @@ import { registerSchema, RegisterFormData } from "../schemas/auth.schema";
 import { requestOtp } from "../api/client";
 import { OtpPurpose } from "../types/auth.types";
 import { useRegistrationStore } from "../store/registration.store";
+import { ApiErrorType } from "@/shared/lib/api/client";
+import { logger } from "@/shared/lib/logger";
 
 export function useRegister() {
   const t = useTranslations();
@@ -41,17 +43,21 @@ export function useRegister() {
       });
       router.push("/verify");
     } else {
-      const errorCode = response.error;
-      if (errorCode === "400" || errorCode?.includes("validation")) {
-        setServerError(t("auth.errors.validationError"));
-      } else if (errorCode === "409" || errorCode?.includes("exists")) {
-        setServerError(t("auth.errors.userExists"));
-      } else if (errorCode === "429" || errorCode?.includes("many")) {
-        setServerError(t("auth.errors.tooManyAttempts"));
-      } else {
-        setServerError(t("auth.errors.validationError"));
+      switch (response.errorType) {
+        case ApiErrorType.VALIDATION_ERROR:
+          setServerError(t("auth.errors.validationError"));
+          break;
+        case ApiErrorType.USER_EXISTS:
+        case ApiErrorType.USERNAME_TAKEN:
+          setServerError(t("auth.errors.userExists"));
+          break;
+        case ApiErrorType.RATE_LIMIT:
+          setServerError(t("auth.errors.tooManyAttempts"));
+          break;
+        default:
+          setServerError(t("auth.errors.validationError"));
       }
-      console.error("Failed to send OTP:", response.error);
+      logger.error("Failed to send OTP:", response.error);
     }
   };
 

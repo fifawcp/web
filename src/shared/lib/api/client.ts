@@ -1,15 +1,14 @@
 import { clientEnv } from "@/lib/env";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { refreshToken as refreshAuthToken } from "@/features/auth/api/client";
+import { ApiResponse, ApiErrorType, getErrorType } from "./types";
+import { logger } from "../logger";
 
 const BASE_API_URL = clientEnv.NEXT_PUBLIC_BACKEND_API_URL;
 
-export type ApiResponse<T> = {
-  success: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
-};
+// Re-export types for convenience
+export type { ApiResponse } from "./types";
+export { ApiErrorType } from "./types";
 
 interface FetchWithAuthOptions extends RequestInit {
   skipRefresh?: boolean;
@@ -102,23 +101,26 @@ async function request<T>(endpoint: string, options: RequestOptions & { method: 
     const data = await response.json();
 
     if (!response.ok) {
+      const errorMessage = data.error || "Something went wrong";
+      const errorType = getErrorType(response.status, errorMessage);
+
       return {
         success: false,
-        error: data.error || data.message || "Something went wrong",
-        message: data.message,
+        error: errorMessage,
+        errorType,
       };
     }
 
     return {
       success: true,
       data,
-      message: data.message,
     };
   } catch (error) {
-    console.error("API Request Error:", error);
+    logger.error("API Request Error:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Network error occurred",
+      errorType: ApiErrorType.NETWORK_ERROR,
     };
   }
 }
@@ -154,23 +156,27 @@ async function requestWithoutAuth<T>(endpoint: string, options: RequestOptions &
     const data = await response.json();
 
     if (!response.ok) {
+      const errorMessage = data.error || data.message || "Something went wrong";
+      const errorType = getErrorType(response.status, errorMessage);
+
       return {
         success: false,
-        error: data.error || data.message || "Something went wrong",
-        message: data.message,
+        error: errorMessage,
+        errorType,
+        statusCode: response.status,
       };
     }
 
     return {
       success: true,
       data,
-      message: data.message,
     };
   } catch (error) {
-    console.error("API Request Error:", error);
+    logger.error("API Request Error:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Network error occurred",
+      errorType: ApiErrorType.NETWORK_ERROR,
     };
   }
 }
