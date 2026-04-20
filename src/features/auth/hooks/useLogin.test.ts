@@ -4,6 +4,16 @@ import { useLogin } from "./useLogin";
 import * as client from "../api/client";
 import { useRouter } from "next/navigation";
 
+vi.mock("@/lib/env", () => ({
+  env: {
+    NODE_ENV: "test" as const,
+  },
+  clientEnv: {
+    NEXT_PUBLIC_BACKEND_API_URL: "http://localhost:3001",
+    NEXT_PUBLIC_ENABLE_OTP_DEBUG: "true",
+  },
+}));
+
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),
 }));
@@ -68,8 +78,6 @@ describe("useLogin", () => {
   });
 
   it("should handle OTP request errors", async () => {
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
     vi.spyOn(client, "requestOtp").mockResolvedValue({
       success: false,
       error: "Failed to send OTP",
@@ -78,7 +86,5 @@ describe("useLogin", () => {
     const { result } = renderHook(() => useLogin());
 
     expect(result.current.handleSubmit).toBeDefined();
-
-    consoleErrorSpy.mockRestore();
   });
 });
