@@ -9,7 +9,6 @@ export const requestOtp = async ({ identifier, purpose }: { identifier: string; 
 const getBedugOTP = async (identifier: string) => {
   try {
     const response = await api.get<{ data: { otp: string } }>(`/api/debug/totp/${identifier}`, { skipRefresh: true });
-    console.log("Debug OTP response:", response);
     if (response.success && response.data) {
       return response.data.data.otp;
     }
@@ -39,7 +38,6 @@ export const verifyOtp = async ({
   if (clientEnv.NEXT_PUBLIC_ENABLE_OTP_DEBUG) {
     try {
       const debugOtp = await getBedugOTP(identifier);
-      console.log("Debug OTP:", debugOtp);
       if (debugOtp) {
         otpCode = debugOtp;
       }
@@ -64,7 +62,6 @@ export const verifyOtp = async ({
       : {}),
   };
 
-  console.log(payload);
   return api.post<OtpVerifyResponse>("/api/auth/token", payload, { skipRefresh: true });
 };
 
