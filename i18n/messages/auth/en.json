@@ -51,6 +51,9 @@
       "userExists": "An account with this email already exists.",
       "tooManyAttempts": "Too many attempts. Please try again later.",
       "invalidCredentials": "Invalid credentials. Please check your email."
+    },
+    "common": {
+      "loading": "Loading..."
     }
   }
 }

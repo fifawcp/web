@@ -39,7 +39,7 @@
       "privacyPolicy": "Política de Privacidad"
     },
     "errors": {
-      "invalidEmail": "Correo electrónico inválido",
+      "invalidEmail": "Dirección de correo electrónico no válida",
       "usernameMinLength": "El nombre de usuario debe tener al menos 3 caracteres",
       "usernameMaxLength": "El nombre de usuario debe tener como máximo 20 caracteres",
       "firstNameRequired": "El nombre debe tener al menos 2 caracteres",
@@ -47,10 +47,13 @@
       "termsRequired": "Debes aceptar los términos y condiciones",
       "otpLength": "El código debe tener exactamente 6 dígitos",
       "otpDigitsOnly": "El código debe contener solo dígitos",
-      "validationError": "Solicitud inválida. Por favor verifica tu información.",
+      "validationError": "Solicitud no válida. Por favor, verifica tu información.",
       "userExists": "Ya existe una cuenta con este correo electrónico.",
-      "tooManyAttempts": "Demasiados intentos. Por favor intenta más tarde.",
-      "invalidCredentials": "Credenciales inválidas. Por favor verifica tu correo."
+      "tooManyAttempts": "Demasiados intentos. Por favor, inténtalo de nuevo más tarde.",
+      "invalidCredentials": "Credenciales no válidas. Por favor, verifica tu correo electrónico."
+    },
+    "common": {
+      "loading": "Cargando..."
     }
   }
 }

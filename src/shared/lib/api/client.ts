@@ -1,10 +1,7 @@
-import { clientEnv } from "@/lib/env";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { refreshToken as refreshAuthToken } from "@/features/auth/api/client";
 import { ApiResponse, ApiErrorType, getErrorType } from "./types";
 import { logger } from "../logger";
-
-const BASE_API_URL = clientEnv.NEXT_PUBLIC_BACKEND_API_URL;
 
 // Re-export types for convenience
 export type { ApiResponse } from "./types";
@@ -73,7 +70,8 @@ type RequestOptions = Omit<RequestInit, "method" | "body"> & {
 
 async function request<T>(endpoint: string, options: RequestOptions & { method: string; body?: unknown } = { method: "GET" }): Promise<ApiResponse<T>> {
   try {
-    const url = endpoint.startsWith("http") ? endpoint : `${BASE_API_URL}${endpoint}`;
+    // Use relative URL to leverage Next.js proxy for same-origin cookies
+    const url = endpoint;
 
     const fetchOptions: FetchWithAuthOptions = {
       method: options.method,
@@ -128,7 +126,8 @@ async function request<T>(endpoint: string, options: RequestOptions & { method: 
 // Special request function that bypasses fetchWithAuth (uses plain fetch)
 async function requestWithoutAuth<T>(endpoint: string, options: RequestOptions & { method: string; body?: unknown } = { method: "GET" }): Promise<ApiResponse<T>> {
   try {
-    const url = endpoint.startsWith("http") ? endpoint : `${BASE_API_URL}${endpoint}`;
+    // Use relative URL to leverage Next.js proxy for same-origin cookies
+    const url = endpoint;
 
     const fetchOptions: RequestInit = {
       method: options.method,

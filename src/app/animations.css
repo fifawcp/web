@@ -119,8 +119,21 @@
   }
 }
 
+@keyframes fade-in-fast {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .animate-appear {
   animation: appear 1s ease-in forwards;
+}
+
+.animate-fade-in-fast {
+  animation: fade-in-fast 0.2s ease-in forwards;
 }
 
 .animate-appear-banner {

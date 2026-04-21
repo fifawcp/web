@@ -9,7 +9,7 @@ import { UserCard } from "@/shared/components/ui/user-card";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 
 import { Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { WCPIcon } from "@/shared/icons/wcp-icon";
 import { Button } from "@/shared/components/ui/button";
 
@@ -17,15 +17,10 @@ export function Header() {
   const pathname = usePathname();
   const t = useTranslations("nav");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, accessToken, isInitializing } = useAuthStore();
 
   const isActive = (path: string) => pathname === path;
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    setIsLoggedIn(isAuthenticated());
-  }, [isAuthenticated]);
+  const isLoggedIn = !!user && !!accessToken && !isInitializing;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
@@ -73,19 +68,23 @@ export function Header() {
             <LanguageToggle />
             <ThemeToggle />
 
-            {isLoggedIn && user ? (
-              <div className="hidden md:flex items-center ml-2">
-                <UserCard username={user.username} points={0} firstName={user.first_name} lastName={user.last_name} />
-              </div>
-            ) : (
-              <div className="hidden md:flex items-center gap-2 ml-2">
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/login">{t("login")}</Link>
-                </Button>
-                <Button asChild size="sm">
-                  <Link href="/register">{t("register")}</Link>
-                </Button>
-              </div>
+            {!isInitializing && (
+              <>
+                {isLoggedIn ? (
+                  <div className="hidden md:flex items-center ml-2 animate-fade-in-fast">
+                    <UserCard username={user.username} points={0} firstName={user.first_name} lastName={user.last_name} />
+                  </div>
+                ) : (
+                  <div className="hidden md:flex items-center gap-2 ml-2 animate-fade-in-fast">
+                    <Button asChild variant="ghost" size="sm">
+                      <Link href="/login">{t("login")}</Link>
+                    </Button>
+                    <Button asChild size="sm">
+                      <Link href="/register">{t("register")}</Link>
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
 
             <button
@@ -98,8 +97,8 @@ export function Header() {
           </div>
         </div>
 
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-zinc-200 dark:border-zinc-800 py-4">
+        {mobileMenuOpen && !isInitializing && (
+          <div className="md:hidden border-t border-zinc-200 dark:border-zinc-800 py-4 animate-fade-in-fast">
             <nav className="flex flex-col gap-4">
               {isLoggedIn ? (
                 <>
