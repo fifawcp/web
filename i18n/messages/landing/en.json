@@ -5,6 +5,7 @@
     "email": "Email",
     "userId": "User ID",
     "memberSince": "Member Since",
-    "sessionActive": "Your session is active and secure."
+    "sessionActive": "Your session is active and secure.",
+    "loading": "Loading..."
   }
 }

@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useSession } from "next-auth/react";
 import { ThemeToggle } from "@/shared/components/ui/theme-toggle";
 import { LanguageToggle } from "@/shared/components/ui/language-toggle";
 import { UserCard } from "@/shared/components/ui/user-card";
-import { useAuthStore } from "@/features/auth/store/auth.store";
 
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
@@ -17,10 +17,12 @@ export function Header() {
   const pathname = usePathname();
   const t = useTranslations("nav");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, accessToken, isInitializing } = useAuthStore();
+  const { data: session, status } = useSession();
 
   const isActive = (path: string) => pathname === path;
-  const isLoggedIn = !!user && !!accessToken && !isInitializing;
+  const isLoggedIn = status === "authenticated" && !!session?.user;
+  const isLoading = status === "loading";
+  const user = session?.user;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
@@ -68,9 +70,9 @@ export function Header() {
             <LanguageToggle />
             <ThemeToggle />
 
-            {!isInitializing && (
+            {!isLoading && (
               <>
-                {isLoggedIn ? (
+                {isLoggedIn && user ? (
                   <div className="hidden md:flex items-center ml-2 animate-fade-in-fast">
                     <UserCard username={user.username} points={0} firstName={user.first_name} lastName={user.last_name} />
                   </div>
@@ -97,7 +99,7 @@ export function Header() {
           </div>
         </div>
 
-        {mobileMenuOpen && !isInitializing && (
+        {mobileMenuOpen && !isLoading && (
           <div className="md:hidden border-t border-zinc-200 dark:border-zinc-800 py-4 animate-fade-in-fast">
             <nav className="flex flex-col gap-4">
               {isLoggedIn ? (

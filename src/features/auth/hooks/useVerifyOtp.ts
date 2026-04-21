@@ -3,10 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { otpVerifySchema, OtpVerifyFormData } from "../schemas/auth.schema";
 import { verifyOtp } from "../api/client";
 import { useRegistrationStore } from "../store/registration.store";
-import { useAuthStore } from "../store/auth.store";
 import { ApiErrorType } from "@/shared/lib/api/client";
 import { logger } from "@/shared/lib/logger";
 
@@ -15,7 +15,6 @@ export function useVerifyOtp() {
   const router = useRouter();
   const registrationData = useRegistrationStore((state) => state.registrationData);
   const clearRegistrationData = useRegistrationStore((state) => state.clearRegistrationData);
-  const setAuth = useAuthStore((state) => state.setAuth);
   const [errorType, setErrorType] = useState<"wrong_code" | "too_many_attempts" | null>(null);
 
   const {
@@ -50,9 +49,25 @@ export function useVerifyOtp() {
 
     if (response.success && response.data) {
       const { auth, user } = response.data.data;
-      setAuth(auth.access_token, auth.expires_at, user);
-      clearRegistrationData();
-      router.push("/home");
+
+      // Backend has verified OTP and returned auth tokens
+      // Use NextAuth signIn with special credentials to create session
+      const result = await signIn("credentials", {
+        email: user.email,
+        accessToken: auth.access_token,
+        expiresAt: auth.expires_at,
+        userData: JSON.stringify(user),
+        redirect: false,
+      });
+
+      if (result?.ok) {
+        clearRegistrationData();
+        router.push("/home");
+        router.refresh();
+      } else {
+        logger.error("Failed to create NextAuth session after OTP verification");
+        setErrorType("wrong_code");
+      }
     } else {
       switch (response.errorType) {
         case ApiErrorType.OTP_INVALID:

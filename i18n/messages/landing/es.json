@@ -5,6 +5,7 @@
     "email": "Correo Electrónico",
     "userId": "ID de Usuario",
     "memberSince": "Miembro Desde",
-    "sessionActive": "Tu sesión está activa y segura."
+    "sessionActive": "Tu sesión está activa y segura.",
+    "loading": "Cargando..."
   }
 }

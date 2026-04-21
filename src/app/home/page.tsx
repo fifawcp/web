@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { User, LogOut, Calendar, Mail } from "lucide-react";
@@ -8,18 +8,32 @@ import { Button } from "@shared/components/ui/button";
 
 export default function HomePage() {
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const { data: session, status } = useSession();
   const t = useTranslations("dashboard");
 
   const handleLogout = async () => {
-    await logout();
+    await signOut({ redirect: false });
     router.push("/");
   };
 
-  if (!user) {
+  if (status === "loading") {
+    return (
+      <div className="flex h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-900">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-wc-red border-t-transparent" />
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">{t("loading")}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session?.user) {
     return null;
   }
 
+  const user = session.user;
+
+  console.log(user);
   return (
     <div className="min-h-[calc(100vh-var(--header-height))] bg-linear-to-br from-wc-red/10 via-white to-wc-orange/10 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900">
       <div className="container mx-auto px-4 py-8">

@@ -1,5 +1,4 @@
-import { useAuthStore } from "@/features/auth/store/auth.store";
-import { refreshToken as refreshAuthToken } from "@/features/auth/api/client";
+import { getSession } from "next-auth/react";
 import { ApiResponse, ApiErrorType, getErrorType } from "./types";
 import { logger } from "../logger";
 
@@ -13,21 +12,17 @@ interface FetchWithAuthOptions extends RequestInit {
 
 export async function fetchWithAuth(url: string, options: FetchWithAuthOptions = {}): Promise<Response> {
   const { skipRefresh = false, ...fetchOptions } = options;
-  const { accessToken, expiresAt, setAuth, clearAuth, user, isTokenExpired } = useAuthStore.getState();
-  // Check if token is expired before making request
-  // If expired, it means refresh token is also expired -> logout
-  if (accessToken && expiresAt && isTokenExpired()) {
-    clearAuth();
-    if (typeof window !== "undefined") {
-      window.location.href = "/";
-    }
-    throw new Error("Session expired. Please log in again.");
+
+  // Get session from NextAuth (only works on client side)
+  let session = null;
+  if (typeof window !== "undefined") {
+    session = await getSession();
   }
 
   const headers = new Headers(fetchOptions.headers);
 
-  if (accessToken && !headers.has("Authorization")) {
-    headers.set("Authorization", `Bearer ${accessToken}`);
+  if (session?.access_token && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${session.access_token}`);
   }
 
   const requestOptions: RequestInit = {
@@ -36,29 +31,15 @@ export async function fetchWithAuth(url: string, options: FetchWithAuthOptions =
     credentials: "include",
   };
 
-  let response = await fetch(url, requestOptions);
+  const response = await fetch(url, requestOptions);
 
+  // NextAuth handles token refresh automatically
   if (response.status === 401 && !skipRefresh) {
-    const refreshResponse = await refreshAuthToken();
-
-    if (refreshResponse.success && refreshResponse.data && user) {
-      const { access_token, expires_at } = refreshResponse.data.data;
-      setAuth(access_token, expires_at, user);
-
-      headers.set("Authorization", `Bearer ${access_token}`);
-      const retryOptions: RequestInit = {
-        ...fetchOptions,
-        headers,
-        credentials: "include",
-      };
-
-      response = await fetch(url, retryOptions);
-    } else {
-      clearAuth();
-      if (typeof window !== "undefined") {
-        window.location.href = "/";
-      }
+    // Session expired, redirect to login
+    if (typeof window !== "undefined") {
+      window.location.href = "/login";
     }
+    throw new Error("Session expired. Please log in again.");
   }
 
   return response;
@@ -70,23 +51,24 @@ type RequestOptions = Omit<RequestInit, "method" | "body"> & {
 
 async function request<T>(endpoint: string, options: RequestOptions & { method: string; body?: unknown } = { method: "GET" }): Promise<ApiResponse<T>> {
   try {
-    // Use relative URL to leverage Next.js proxy for same-origin cookies
-    const url = endpoint;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}${endpoint}`;
 
-    const fetchOptions: FetchWithAuthOptions = {
+    const fetchOptions: RequestInit = {
       method: options.method,
       headers: {
         "Content-Type": "application/json",
         ...options.headers,
       },
-      skipRefresh: options.skipRefresh ?? false,
+      credentials: "include",
     };
 
     if (options.body !== undefined) {
       fetchOptions.body = JSON.stringify(options.body);
     }
 
-    const response = await fetchWithAuth(url, fetchOptions);
+    // For skipRefresh requests (like OTP), use plain fetch
+    // For authenticated requests, use fetchWithAuth
+    const response = options.skipRefresh ? await fetch(url, fetchOptions) : await fetchWithAuth(url, { ...fetchOptions, skipRefresh: false });
 
     // Handle 204 No Content
     if (response.status === 204) {
@@ -126,8 +108,7 @@ async function request<T>(endpoint: string, options: RequestOptions & { method: 
 // Special request function that bypasses fetchWithAuth (uses plain fetch)
 async function requestWithoutAuth<T>(endpoint: string, options: RequestOptions & { method: string; body?: unknown } = { method: "GET" }): Promise<ApiResponse<T>> {
   try {
-    // Use relative URL to leverage Next.js proxy for same-origin cookies
-    const url = endpoint;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}${endpoint}`;
 
     const fetchOptions: RequestInit = {
       method: options.method,

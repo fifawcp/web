@@ -133,7 +133,7 @@
 }
 
 .animate-fade-in-fast {
-  animation: fade-in-fast 0.2s ease-in forwards;
+  animation: fade-in-fast 0.5s ease-in forwards;
 }
 
 .animate-appear-banner {
