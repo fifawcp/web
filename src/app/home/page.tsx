@@ -33,7 +33,6 @@ export default function HomePage() {
 
   const user = session.user;
 
-  console.log(user);
   return (
     <div className="min-h-[calc(100vh-var(--header-height))] bg-linear-to-br from-wc-red/10 via-white to-wc-orange/10 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900">
       <div className="container mx-auto px-4 py-8">
