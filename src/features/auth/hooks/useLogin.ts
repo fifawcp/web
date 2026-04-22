@@ -5,15 +5,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { loginSchema, LoginFormData } from "../schemas/auth.schema";
 import { requestOtp } from "../api/client";
-import { OtpPurpose } from "../types/auth.types";
 import { useRegistrationStore } from "../store/registration.store";
-import { ApiErrorType } from "@/shared/lib/api/client";
+import { ApiErrorType } from "@/shared/lib/api/types";
 import { logger } from "@/shared/lib/logger";
 
 export function useLogin() {
   const t = useTranslations();
   const router = useRouter();
-  const setRegistrationData = useRegistrationStore((state) => state.setRegistrationData);
+  const { setRegistrationData } = useRegistrationStore();
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
@@ -28,30 +27,41 @@ export function useLogin() {
 
   const onSubmit = async (data: LoginFormData) => {
     setServerError(null);
-    const response = await requestOtp({ identifier: data.email, purpose: "login" } as { identifier: string; purpose: OtpPurpose });
-    if (response.success) {
-      setRegistrationData({
-        email: data.email,
-        username: "",
-        first_name: "",
-        last_name: "",
-        purpose: "login",
-      });
-      router.push("/verify");
-    } else {
+    const response = await requestOtp({ identifier: data.email, purpose: "login" });
+
+    if (!response.success) {
       switch (response.errorType) {
+        case ApiErrorType.RATE_LIMIT_WAIT:
+          setServerError(t("auth.errors.otpCooldown"));
+          break;
         case ApiErrorType.RATE_LIMIT:
-          setServerError(t("auth.errors.tooManyAttempts"));
+          setServerError(t("auth.errors.rateLimitExceeded"));
           break;
         case ApiErrorType.INVALID_CREDENTIALS:
         case ApiErrorType.UNAUTHORIZED:
           setServerError(t("auth.errors.invalidCredentials"));
           break;
+        case ApiErrorType.SERVER_ERROR:
+          setServerError(t("auth.errors.serverError"));
+          break;
+        case ApiErrorType.NETWORK_ERROR:
+          setServerError(t("auth.errors.networkError"));
+          break;
         default:
-          setServerError(t("auth.errors.invalidCredentials"));
+          setServerError(t("auth.errors.unknownError"));
       }
       logger.error("Failed to send OTP:", response.error);
+      return;
     }
+
+    setRegistrationData({
+      email: data.email,
+      username: "",
+      first_name: "",
+      last_name: "",
+      purpose: "login",
+    });
+    router.push("/verify");
   };
 
   const getErrorMessage = (field: keyof LoginFormData) => {

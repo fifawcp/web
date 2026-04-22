@@ -29,8 +29,7 @@
       "code": "Verification Code",
       "submit": "Verify & Complete Registration",
       "resend": "Resend Code",
-      "wrongCode": "Wrong code. Please try again.",
-      "tooManyAttempts": "Too many attempts. Please request a new code."
+      "wrongCode": "Wrong code. Please try again."
     },
     "legal": {
       "bySigningIn": "By signing in, you agree to our",
@@ -49,8 +48,15 @@
       "otpDigitsOnly": "Code must contain only digits",
       "validationError": "Invalid request. Please check your information.",
       "userExists": "An account with this email already exists.",
-      "tooManyAttempts": "Too many attempts. Please try again later.",
-      "invalidCredentials": "Invalid credentials. Please check your email."
+      "invalidCredentials": "Invalid credentials. Please check your email.",
+      "serverError": "Server error. Please try again later.",
+      "rateLimitExceeded": "Too many requests. Please try again later.",
+      "otpCooldown": "Please wait 30 seconds before requesting a new code.",
+      "otpInvalid": "Invalid verification code. Please try again.",
+      "otpExpired": "Verification code has expired. Please request a new one.",
+      "usernameTaken": "This username is already taken.",
+      "networkError": "Network error. Please check your connection.",
+      "unknownError": "An error occurred. Please try again."
     },
     "common": {
       "loading": "Loading..."

@@ -29,8 +29,7 @@
       "code": "Código de Verificación",
       "submit": "Verificar y Completar Registro",
       "resend": "Reenviar Código",
-      "wrongCode": "Código incorrecto. Inténtalo de nuevo.",
-      "tooManyAttempts": "Demasiados intentos. Solicita un nuevo código."
+      "wrongCode": "Código incorrecto. Inténtalo de nuevo."
     },
     "legal": {
       "bySigningIn": "Al iniciar sesión, aceptas nuestros",
@@ -49,8 +48,15 @@
       "otpDigitsOnly": "El código debe contener solo dígitos",
       "validationError": "Solicitud no válida. Por favor, verifica tu información.",
       "userExists": "Ya existe una cuenta con este correo electrónico.",
-      "tooManyAttempts": "Demasiados intentos. Por favor, inténtalo de nuevo más tarde.",
-      "invalidCredentials": "Credenciales no válidas. Por favor, verifica tu correo electrónico."
+      "invalidCredentials": "Credenciales no válidas. Por favor, verifica tu correo electrónico.",
+      "serverError": "Error del servidor. Por favor, inténtalo de nuevo más tarde.",
+      "rateLimitExceeded": "Demasiadas solicitudes. Por favor, inténtalo de nuevo más tarde.",
+      "otpCooldown": "Por favor, espera 30 segundos antes de solicitar un nuevo código.",
+      "otpInvalid": "Código de verificación no válido. Por favor, inténtalo de nuevo.",
+      "otpExpired": "El código de verificación ha expirado. Por favor, solicita uno nuevo.",
+      "usernameTaken": "Este nombre de usuario ya está en uso.",
+      "networkError": "Error de red. Por favor, verifica tu conexión.",
+      "unknownError": "Ocurrió un error. Por favor, inténtalo de nuevo."
     },
     "common": {
       "loading": "Cargando..."

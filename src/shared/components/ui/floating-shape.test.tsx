@@ -1,6 +1,31 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { FloatingShape } from "./floating-shape";
+import { FloatingShape, getRandomPosition } from "./floating-shape";
+
+describe("getRandomPosition", () => {
+  it("returns an object with top and left properties", () => {
+    const position = getRandomPosition();
+    expect(position).toHaveProperty("top");
+    expect(position).toHaveProperty("left");
+  });
+
+  it("returns percentage values", () => {
+    const position = getRandomPosition();
+    expect(position.top).toMatch(/%$/);
+    expect(position.left).toMatch(/%$/);
+  });
+
+  it("returns values between 0% and 100%", () => {
+    const position = getRandomPosition();
+    const topValue = parseInt(position.top);
+    const leftValue = parseInt(position.left);
+
+    expect(topValue).toBeGreaterThanOrEqual(0);
+    expect(topValue).toBeLessThanOrEqual(100);
+    expect(leftValue).toBeGreaterThanOrEqual(0);
+    expect(leftValue).toBeLessThanOrEqual(100);
+  });
+});
 
 describe("FloatingShape", () => {
   it("renders without crashing", () => {

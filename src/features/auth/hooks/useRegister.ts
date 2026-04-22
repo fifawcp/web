@@ -7,7 +7,7 @@ import { registerSchema, RegisterFormData } from "../schemas/auth.schema";
 import { requestOtp } from "../api/client";
 import { OtpPurpose } from "../types/auth.types";
 import { useRegistrationStore } from "../store/registration.store";
-import { ApiErrorType } from "@/shared/lib/api/client";
+import { ApiErrorType } from "@/shared/lib/api/types";
 import { logger } from "@/shared/lib/logger";
 
 export function useRegister() {
@@ -44,6 +44,12 @@ export function useRegister() {
       router.push("/verify");
     } else {
       switch (response.errorType) {
+        case ApiErrorType.RATE_LIMIT_WAIT:
+          setServerError(t("auth.errors.otpCooldown"));
+          break;
+        case ApiErrorType.RATE_LIMIT:
+          setServerError(t("auth.errors.rateLimitExceeded"));
+          break;
         case ApiErrorType.VALIDATION_ERROR:
           setServerError(t("auth.errors.validationError"));
           break;
@@ -51,11 +57,11 @@ export function useRegister() {
         case ApiErrorType.USERNAME_TAKEN:
           setServerError(t("auth.errors.userExists"));
           break;
-        case ApiErrorType.RATE_LIMIT:
-          setServerError(t("auth.errors.tooManyAttempts"));
+        case ApiErrorType.NETWORK_ERROR:
+          setServerError(t("auth.errors.networkError"));
           break;
         default:
-          setServerError(t("auth.errors.validationError"));
+          setServerError(t("auth.errors.unknownError"));
       }
       logger.error("Failed to send OTP:", response.error);
     }

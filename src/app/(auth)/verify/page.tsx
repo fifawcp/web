@@ -9,7 +9,7 @@ import { OtpInput } from "@features/auth/components/otp-input";
 
 export default function VerifyOtpPage() {
   const t = useTranslations("auth.verifyOtp");
-  const { setValue, handleSubmit, errors, errorType, isLoading } = useVerifyOtp();
+  const { setValue, handleSubmit, errors, serverError, isLoading } = useVerifyOtp();
 
   return (
     <AuthCard title={t("title")} subtitle={t("subtitle")}>
@@ -19,17 +19,10 @@ export default function VerifyOtpPage() {
           <OtpInput onChange={(value) => setValue("code", value)} error={errors.code} />
         </div>
 
-        {errorType === "wrong_code" && (
+        {serverError && (
           <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
             <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
-            <p className="text-sm text-red-600 dark:text-red-400">{t("wrongCode")}</p>
-          </div>
-        )}
-
-        {errorType === "too_many_attempts" && (
-          <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-            <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
-            <p className="text-sm text-red-600 dark:text-red-400">{t("tooManyAttempts")}</p>
+            <p className="text-sm text-red-600 dark:text-red-400">{serverError}</p>
           </div>
         )}
 

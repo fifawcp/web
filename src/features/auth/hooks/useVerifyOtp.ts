@@ -7,15 +7,15 @@ import { signIn } from "next-auth/react";
 import { otpVerifySchema, OtpVerifyFormData } from "../schemas/auth.schema";
 import { verifyOtp } from "../api/client";
 import { useRegistrationStore } from "../store/registration.store";
-import { ApiErrorType } from "@/shared/lib/api/client";
+
 import { logger } from "@/shared/lib/logger";
+import { ApiErrorType } from "@/shared/lib/api/types";
 
 export function useVerifyOtp() {
   const t = useTranslations();
   const router = useRouter();
-  const registrationData = useRegistrationStore((state) => state.registrationData);
-  const clearRegistrationData = useRegistrationStore((state) => state.clearRegistrationData);
-  const [errorType, setErrorType] = useState<"wrong_code" | "too_many_attempts" | null>(null);
+  const { registrationData, clearRegistrationData } = useRegistrationStore();
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -30,7 +30,7 @@ export function useVerifyOtp() {
   });
 
   const onSubmit = async (data: OtpVerifyFormData) => {
-    setErrorType(null);
+    setServerError(null);
 
     if (!registrationData) {
       logger.error("No registration data found");
@@ -53,10 +53,9 @@ export function useVerifyOtp() {
       // Backend has verified OTP and returned auth tokens
       // Use NextAuth signIn with special credentials to create session
       const result = await signIn("credentials", {
-        email: user.email,
-        accessToken: auth.access_token,
-        expiresAt: auth.expires_at,
-        userData: JSON.stringify(user),
+        access_token: auth.access_token,
+        expires_at: auth.expires_at,
+        user: JSON.stringify(user),
         redirect: false,
       });
 
@@ -66,19 +65,25 @@ export function useVerifyOtp() {
         router.refresh();
       } else {
         logger.error("Failed to create NextAuth session after OTP verification");
-        setErrorType("wrong_code");
+        setServerError(t("auth.errors.unknownError"));
       }
     } else {
       switch (response.errorType) {
         case ApiErrorType.OTP_INVALID:
         case ApiErrorType.INVALID_CREDENTIALS:
-          setErrorType("wrong_code");
+          setServerError(t("auth.errors.otpInvalid"));
+          break;
+        case ApiErrorType.RATE_LIMIT_WAIT:
+          setServerError(t("auth.errors.otpCooldown"));
           break;
         case ApiErrorType.RATE_LIMIT:
-          setErrorType("too_many_attempts");
+          setServerError(t("auth.errors.rateLimitExceeded"));
+          break;
+        case ApiErrorType.NETWORK_ERROR:
+          setServerError(t("auth.errors.networkError"));
           break;
         default:
-          setErrorType("wrong_code");
+          setServerError(t("auth.errors.unknownError"));
       }
       logger.error("Failed to verify OTP:", response.error);
     }
@@ -96,7 +101,7 @@ export function useVerifyOtp() {
     errors: {
       code: getErrorMessage("code"),
     },
-    errorType,
+    serverError,
     isLoading: isSubmitting,
   };
 }
