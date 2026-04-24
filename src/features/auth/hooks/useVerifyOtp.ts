@@ -7,15 +7,15 @@ import { signIn } from "next-auth/react";
 import { otpVerifySchema, OtpVerifyFormData } from "../schemas/auth.schema";
 import { verifyOtp } from "../api/client";
 import { useRegistrationStore } from "../store/registration.store";
-
+import { useApiError } from "./useApiError";
 import { logger } from "@/shared/lib/logger";
-import { ApiErrorType } from "@/shared/lib/api/types";
 
 export function useVerifyOtp() {
   const t = useTranslations();
   const router = useRouter();
   const { registrationData, clearRegistrationData } = useRegistrationStore();
   const [serverError, setServerError] = useState<string | null>(null);
+  const handleApiError = useApiError();
 
   const {
     register,
@@ -65,26 +65,10 @@ export function useVerifyOtp() {
         router.refresh();
       } else {
         logger.error("Failed to create NextAuth session after OTP verification");
-        setServerError(t("auth.errors.unknownError"));
+        setServerError(handleApiError(undefined));
       }
     } else {
-      switch (response.errorType) {
-        case ApiErrorType.OTP_INVALID:
-        case ApiErrorType.INVALID_CREDENTIALS:
-          setServerError(t("auth.errors.otpInvalid"));
-          break;
-        case ApiErrorType.RATE_LIMIT_WAIT:
-          setServerError(t("auth.errors.otpCooldown"));
-          break;
-        case ApiErrorType.RATE_LIMIT:
-          setServerError(t("auth.errors.rateLimitExceeded"));
-          break;
-        case ApiErrorType.NETWORK_ERROR:
-          setServerError(t("auth.errors.networkError"));
-          break;
-        default:
-          setServerError(t("auth.errors.unknownError"));
-      }
+      setServerError(handleApiError(response.errorType));
       logger.error("Failed to verify OTP:", response.error);
     }
   };

@@ -96,7 +96,7 @@ async function request<T>(endpoint: string, options: RequestOptions & { method: 
       credentials: "include",
     };
 
-    if (options.body !== undefined) {
+    if (options.body != null) {
       fetchOptions.body = JSON.stringify(options.body);
     }
 

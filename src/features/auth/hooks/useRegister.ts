@@ -7,7 +7,7 @@ import { registerSchema, RegisterFormData } from "../schemas/auth.schema";
 import { requestOtp } from "../api/client";
 import { OtpPurpose } from "../types/auth.types";
 import { useRegistrationStore } from "../store/registration.store";
-import { ApiErrorType } from "@/shared/lib/api/types";
+import { useApiError } from "./useApiError";
 import { logger } from "@/shared/lib/logger";
 
 export function useRegister() {
@@ -15,6 +15,7 @@ export function useRegister() {
   const router = useRouter();
   const setRegistrationData = useRegistrationStore((state) => state.setRegistrationData);
   const [serverError, setServerError] = useState<string | null>(null);
+  const handleApiError = useApiError();
   const {
     register,
     handleSubmit,
@@ -43,26 +44,7 @@ export function useRegister() {
       });
       router.push("/verify");
     } else {
-      switch (response.errorType) {
-        case ApiErrorType.RATE_LIMIT_WAIT:
-          setServerError(t("auth.errors.otpCooldown"));
-          break;
-        case ApiErrorType.RATE_LIMIT:
-          setServerError(t("auth.errors.rateLimitExceeded"));
-          break;
-        case ApiErrorType.VALIDATION_ERROR:
-          setServerError(t("auth.errors.validationError"));
-          break;
-        case ApiErrorType.USER_EXISTS:
-        case ApiErrorType.USERNAME_TAKEN:
-          setServerError(t("auth.errors.userExists"));
-          break;
-        case ApiErrorType.NETWORK_ERROR:
-          setServerError(t("auth.errors.networkError"));
-          break;
-        default:
-          setServerError(t("auth.errors.unknownError"));
-      }
+      setServerError(handleApiError(response.errorType));
       logger.error("Failed to send OTP:", response.error);
     }
   };

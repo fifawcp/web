@@ -6,7 +6,7 @@ import { useState } from "react";
 import { loginSchema, LoginFormData } from "../schemas/auth.schema";
 import { requestOtp } from "../api/client";
 import { useRegistrationStore } from "../store/registration.store";
-import { ApiErrorType } from "@/shared/lib/api/types";
+import { useApiError } from "./useApiError";
 import { logger } from "@/shared/lib/logger";
 
 export function useLogin() {
@@ -14,6 +14,7 @@ export function useLogin() {
   const router = useRouter();
   const { setRegistrationData } = useRegistrationStore();
   const [serverError, setServerError] = useState<string | null>(null);
+  const handleApiError = useApiError();
   const {
     register,
     handleSubmit,
@@ -30,26 +31,7 @@ export function useLogin() {
     const response = await requestOtp({ identifier: data.email, purpose: "login" });
 
     if (!response.success) {
-      switch (response.errorType) {
-        case ApiErrorType.RATE_LIMIT_WAIT:
-          setServerError(t("auth.errors.otpCooldown"));
-          break;
-        case ApiErrorType.RATE_LIMIT:
-          setServerError(t("auth.errors.rateLimitExceeded"));
-          break;
-        case ApiErrorType.INVALID_CREDENTIALS:
-        case ApiErrorType.UNAUTHORIZED:
-          setServerError(t("auth.errors.invalidCredentials"));
-          break;
-        case ApiErrorType.SERVER_ERROR:
-          setServerError(t("auth.errors.serverError"));
-          break;
-        case ApiErrorType.NETWORK_ERROR:
-          setServerError(t("auth.errors.networkError"));
-          break;
-        default:
-          setServerError(t("auth.errors.unknownError"));
-      }
+      setServerError(handleApiError(response.errorType));
       logger.error("Failed to send OTP:", response.error);
       return;
     }
