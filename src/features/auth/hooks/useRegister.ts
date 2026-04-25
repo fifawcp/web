@@ -13,7 +13,7 @@ import { logger } from "@/shared/lib/logger";
 export function useRegister() {
   const t = useTranslations();
   const router = useRouter();
-  const setRegistrationData = useRegistrationStore((state) => state.setRegistrationData);
+  const { setRegistrationData } = useRegistrationStore();
   const [serverError, setServerError] = useState<string | null>(null);
   const handleApiError = useApiError();
   const {
