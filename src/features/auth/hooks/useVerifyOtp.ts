@@ -3,20 +3,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { otpVerifySchema, OtpVerifyFormData } from "../schemas/auth.schema";
 import { verifyOtp } from "../api/client";
 import { useRegistrationStore } from "../store/registration.store";
-import { useAuthStore } from "../store/auth.store";
-import { ApiErrorType } from "@/shared/lib/api/client";
+import { useApiError } from "./useApiError";
 import { logger } from "@/shared/lib/logger";
 
 export function useVerifyOtp() {
   const t = useTranslations();
   const router = useRouter();
-  const registrationData = useRegistrationStore((state) => state.registrationData);
-  const clearRegistrationData = useRegistrationStore((state) => state.clearRegistrationData);
-  const setAuth = useAuthStore((state) => state.setAuth);
-  const [errorType, setErrorType] = useState<"wrong_code" | "too_many_attempts" | null>(null);
+  const { registrationData, clearRegistrationData } = useRegistrationStore();
+  const [serverError, setServerError] = useState<string | null>(null);
+  const handleApiError = useApiError();
 
   const {
     register,
@@ -31,7 +30,7 @@ export function useVerifyOtp() {
   });
 
   const onSubmit = async (data: OtpVerifyFormData) => {
-    setErrorType(null);
+    setServerError(null);
 
     if (!registrationData) {
       logger.error("No registration data found");
@@ -50,21 +49,26 @@ export function useVerifyOtp() {
 
     if (response.success && response.data) {
       const { auth, user } = response.data.data;
-      setAuth(auth.access_token, auth.expires_at, user);
-      clearRegistrationData();
-      router.push("/home");
-    } else {
-      switch (response.errorType) {
-        case ApiErrorType.OTP_INVALID:
-        case ApiErrorType.INVALID_CREDENTIALS:
-          setErrorType("wrong_code");
-          break;
-        case ApiErrorType.RATE_LIMIT:
-          setErrorType("too_many_attempts");
-          break;
-        default:
-          setErrorType("wrong_code");
+
+      // Backend has verified OTP and returned auth tokens
+      // Use NextAuth signIn with special credentials to create session
+      const result = await signIn("credentials", {
+        access_token: auth.access_token,
+        expires_at: auth.expires_at,
+        user: JSON.stringify(user),
+        redirect: false,
+      });
+
+      if (result?.ok) {
+        clearRegistrationData();
+        router.push("/home");
+        router.refresh();
+      } else {
+        logger.error("Failed to create NextAuth session after OTP verification");
+        setServerError(handleApiError(undefined));
       }
+    } else {
+      setServerError(handleApiError(response.errorType));
       logger.error("Failed to verify OTP:", response.error);
     }
   };
@@ -81,7 +85,7 @@ export function useVerifyOtp() {
     errors: {
       code: getErrorMessage("code"),
     },
-    errorType,
+    serverError,
     isLoading: isSubmitting,
   };
 }

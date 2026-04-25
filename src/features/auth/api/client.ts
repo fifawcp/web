@@ -1,6 +1,7 @@
-import { OtpRequestResponse, OtpVerifyResponse, OtpPurpose, RefreshTokenResponse } from "../types/auth.types";
+import { OtpRequestResponse, OtpVerifyResponse, OtpPurpose } from "../types/auth.types";
 import { clientEnv } from "@/lib/env";
-import { api, ApiResponse } from "@/shared/lib/api/client";
+import { api } from "@/shared/lib/api/client";
+import { ApiResponse } from "@/shared/lib/api/types";
 import { logger } from "@/shared/lib/logger";
 
 export const requestOtp = async ({ identifier, purpose }: { identifier: string; purpose: OtpPurpose }): Promise<ApiResponse<OtpRequestResponse>> => {
@@ -64,10 +65,6 @@ export const verifyOtp = async ({
   };
 
   return api.post<OtpVerifyResponse>("/api/auth/token", payload, { skipRefresh: true });
-};
-
-export const refreshToken = async (): Promise<ApiResponse<RefreshTokenResponse>> => {
-  return api.refreshToken<RefreshTokenResponse>("/api/auth/token/refresh");
 };
 
 export const logout = async (): Promise<ApiResponse<void>> => {

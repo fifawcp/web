@@ -5,13 +5,9 @@ export type OtpRequestResponse = {
   expiresAt: string;
 };
 
-export interface AuthData {
+export type AuthData = {
   access_token: string;
   expires_at: string;
-}
-
-export type RefreshTokenResponse = {
-  data: AuthData;
 };
 
 export type OtpVerifyResponse = {

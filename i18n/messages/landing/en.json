@@ -1,0 +1,11 @@
+{
+  "dashboard": {
+    "welcomeBack": "Welcome Back!",
+    "logout": "Logout",
+    "email": "Email",
+    "userId": "User ID",
+    "memberSince": "Member Since",
+    "sessionActive": "Your session is active and secure.",
+    "loading": "Loading..."
+  }
+}

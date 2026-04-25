@@ -5,16 +5,16 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { loginSchema, LoginFormData } from "../schemas/auth.schema";
 import { requestOtp } from "../api/client";
-import { OtpPurpose } from "../types/auth.types";
 import { useRegistrationStore } from "../store/registration.store";
-import { ApiErrorType } from "@/shared/lib/api/client";
+import { useApiError } from "./useApiError";
 import { logger } from "@/shared/lib/logger";
 
 export function useLogin() {
   const t = useTranslations();
   const router = useRouter();
-  const setRegistrationData = useRegistrationStore((state) => state.setRegistrationData);
+  const { setRegistrationData } = useRegistrationStore();
   const [serverError, setServerError] = useState<string | null>(null);
+  const handleApiError = useApiError();
   const {
     register,
     handleSubmit,
@@ -28,30 +28,22 @@ export function useLogin() {
 
   const onSubmit = async (data: LoginFormData) => {
     setServerError(null);
-    const response = await requestOtp({ identifier: data.email, purpose: "login" } as { identifier: string; purpose: OtpPurpose });
-    if (response.success) {
-      setRegistrationData({
-        email: data.email,
-        username: "",
-        first_name: "",
-        last_name: "",
-        purpose: "login",
-      });
-      router.push("/verify");
-    } else {
-      switch (response.errorType) {
-        case ApiErrorType.RATE_LIMIT:
-          setServerError(t("auth.errors.tooManyAttempts"));
-          break;
-        case ApiErrorType.INVALID_CREDENTIALS:
-        case ApiErrorType.UNAUTHORIZED:
-          setServerError(t("auth.errors.invalidCredentials"));
-          break;
-        default:
-          setServerError(t("auth.errors.invalidCredentials"));
-      }
+    const response = await requestOtp({ identifier: data.email, purpose: "login" });
+
+    if (!response.success) {
+      setServerError(handleApiError(response.errorType));
       logger.error("Failed to send OTP:", response.error);
+      return;
     }
+
+    setRegistrationData({
+      email: data.email,
+      username: "",
+      first_name: "",
+      last_name: "",
+      purpose: "login",
+    });
+    router.push("/verify");
   };
 
   const getErrorMessage = (field: keyof LoginFormData) => {

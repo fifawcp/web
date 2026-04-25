@@ -7,14 +7,15 @@ import { registerSchema, RegisterFormData } from "../schemas/auth.schema";
 import { requestOtp } from "../api/client";
 import { OtpPurpose } from "../types/auth.types";
 import { useRegistrationStore } from "../store/registration.store";
-import { ApiErrorType } from "@/shared/lib/api/client";
+import { useApiError } from "./useApiError";
 import { logger } from "@/shared/lib/logger";
 
 export function useRegister() {
   const t = useTranslations();
   const router = useRouter();
-  const setRegistrationData = useRegistrationStore((state) => state.setRegistrationData);
+  const { setRegistrationData } = useRegistrationStore();
   const [serverError, setServerError] = useState<string | null>(null);
+  const handleApiError = useApiError();
   const {
     register,
     handleSubmit,
@@ -43,20 +44,7 @@ export function useRegister() {
       });
       router.push("/verify");
     } else {
-      switch (response.errorType) {
-        case ApiErrorType.VALIDATION_ERROR:
-          setServerError(t("auth.errors.validationError"));
-          break;
-        case ApiErrorType.USER_EXISTS:
-        case ApiErrorType.USERNAME_TAKEN:
-          setServerError(t("auth.errors.userExists"));
-          break;
-        case ApiErrorType.RATE_LIMIT:
-          setServerError(t("auth.errors.tooManyAttempts"));
-          break;
-        default:
-          setServerError(t("auth.errors.validationError"));
-      }
+      setServerError(handleApiError(response.errorType));
       logger.error("Failed to send OTP:", response.error);
     }
   };

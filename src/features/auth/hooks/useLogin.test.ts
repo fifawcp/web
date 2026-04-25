@@ -26,10 +26,6 @@ vi.mock("../api/client", () => ({
   requestOtp: vi.fn(),
 }));
 
-vi.mock("../store/registration.store", () => ({
-  useRegistrationStore: vi.fn((selector) => selector({ setRegistrationData: vi.fn() })),
-}));
-
 describe("useLogin", () => {
   const mockPush = vi.fn();
 

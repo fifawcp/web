@@ -1,5 +1,14 @@
-import { cn, getRandomPosition } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib/utils/ui";
 import { FloatingShapeProps, ColorVariant, ShapeType, AnimationType, BlurType } from "@/shared/types/ui";
+
+export function getRandomPosition(): { top: string; left: string } {
+  const top = Math.floor(Math.random() * 101);
+  const left = Math.floor(Math.random() * 101);
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+  };
+}
 
 const colorMap: Record<ColorVariant, string> = {
   red: "bg-wc-red",

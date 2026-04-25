@@ -1,5 +1,6 @@
 export enum ApiErrorType {
   RATE_LIMIT = "RATE_LIMIT", // 429
+  RATE_LIMIT_WAIT = "RATE_LIMIT_WAIT", // 429 with "wait" in message
   INVALID_CREDENTIALS = "INVALID_CREDENTIALS", // 401
   OTP_INVALID = "OTP_INVALID", // 401
   USER_EXISTS = "USER_EXISTS", // 409
@@ -21,34 +22,38 @@ export type ApiResponse<T> = {
   statusCode?: number;
 };
 
-// Map HTTP status codes to error types based on context
-export function getErrorType(statusCode: number, errorMessage?: string): ApiErrorType {
-  switch (statusCode) {
-    case 400:
-      return ApiErrorType.VALIDATION_ERROR;
-    case 401:
-      if (errorMessage?.toLowerCase().includes("otp")) {
-        return ApiErrorType.OTP_INVALID;
-      }
-      return ApiErrorType.INVALID_CREDENTIALS;
-    case 403:
-      return ApiErrorType.FORBIDDEN;
-    case 404:
-      return ApiErrorType.NOT_FOUND;
-    case 409:
-      if (errorMessage?.toLowerCase().includes("username")) {
-        return ApiErrorType.USERNAME_TAKEN;
-      }
+type ErrorResolver = (message?: string) => ApiErrorType;
 
-      return ApiErrorType.USER_EXISTS;
-    case 429:
-      return ApiErrorType.RATE_LIMIT;
-    case 500:
-    case 502:
-    case 503:
-    case 504:
-      return ApiErrorType.SERVER_ERROR;
-    default:
-      return ApiErrorType.UNKNOWN_ERROR;
+const errorResolvers: Record<number, ErrorResolver> = {
+  400: () => ApiErrorType.VALIDATION_ERROR,
+
+  401: (msg) => (msg?.toLowerCase().includes("otp") ? ApiErrorType.OTP_INVALID : ApiErrorType.INVALID_CREDENTIALS),
+
+  403: () => ApiErrorType.FORBIDDEN,
+
+  404: () => ApiErrorType.NOT_FOUND,
+
+  409: (msg) => {
+    const lowerMsg = msg?.toLowerCase() || "";
+    return lowerMsg.includes("username") || lowerMsg.includes("taken") ? ApiErrorType.USERNAME_TAKEN : ApiErrorType.USER_EXISTS;
+  },
+
+  429: (msg) => {
+    const lowerMsg = msg?.toLowerCase() || "";
+    return lowerMsg.includes("wait") ? ApiErrorType.RATE_LIMIT_WAIT : ApiErrorType.RATE_LIMIT;
+  },
+
+  500: () => ApiErrorType.SERVER_ERROR,
+  502: () => ApiErrorType.SERVER_ERROR,
+  503: () => ApiErrorType.SERVER_ERROR,
+  504: () => ApiErrorType.SERVER_ERROR,
+};
+
+export function getErrorType(statusCode: number, errorMessage?: string): ApiErrorType {
+  const resolver = errorResolvers[statusCode];
+  if (!resolver) {
+    return ApiErrorType.UNKNOWN_ERROR;
   }
+  const result = resolver(errorMessage);
+  return result;
 }
