@@ -23,7 +23,7 @@ export function useCountdown(initialSeconds: number = 30): UseCountdownResult {
     (nextSeconds?: number) => {
       setSeconds(nextSeconds ?? initialSeconds);
     },
-    [initialSeconds],
+    [initialSeconds]
   );
 
   return {

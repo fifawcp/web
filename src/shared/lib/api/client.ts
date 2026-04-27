@@ -1,6 +1,8 @@
 import { getSession, signOut } from "next-auth/react";
-import { ApiError, ApiResponse } from "./types";
+
 import { logger } from "../logger";
+
+import { ApiError, ApiResponse } from "./types";
 
 const BASE_API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
@@ -56,7 +58,7 @@ export async function fetchWithAuth(url: string, options: FetchWithAuthOptions):
     const retryHeaders = new Headers(fetchOptions.headers);
     retryHeaders.set("Authorization", `Bearer ${authData.access_token}`);
 
-    return fetch(url, {...fetchOptions, headers: retryHeaders, credentials: "include" });
+    return fetch(url, { ...fetchOptions, headers: retryHeaders, credentials: "include" });
   }
 
   return response;
@@ -64,17 +66,14 @@ export async function fetchWithAuth(url: string, options: FetchWithAuthOptions):
 
 type RequestOptions = Omit<RequestInit, "method" | "body"> & {
   authenticated?: boolean;
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH"
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: unknown;
   update?: (data: AuthData) => Promise<unknown>;
 };
 
 type FetchWithAuthOptions = RequestInit & { update?: (data: AuthData) => Promise<unknown> };
 
-async function request<T>(
-  endpoint: string,
-  options: RequestOptions = { method: "GET" }
-): Promise<ApiResponse<T>> {
+async function request<T>(endpoint: string, options: RequestOptions = { method: "GET" }): Promise<ApiResponse<T>> {
   try {
     const url = `${BASE_API_URL}${endpoint}`;
     const fetchOptions: FetchWithAuthOptions = {
@@ -86,9 +85,7 @@ async function request<T>(
 
     if (options.body != null) fetchOptions.body = JSON.stringify(options.body);
 
-    const response = options.authenticated
-      ? await fetchWithAuth(url, fetchOptions)
-      : await fetch(url, fetchOptions);
+    const response = options.authenticated ? await fetchWithAuth(url, fetchOptions) : await fetch(url, fetchOptions);
 
     // No-content responses
     if (response.status === 204) {
@@ -97,7 +94,7 @@ async function request<T>(
 
     const body = await response.json();
 
-    if (!response.ok) {      
+    if (!response.ok) {
       const { code, message, requestId, fields } = body.error as ApiError;
       return {
         success: false,

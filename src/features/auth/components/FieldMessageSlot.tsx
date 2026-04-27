@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { cn } from "@/shared/lib/utils";
 
 function hasRenderableMessage(node: React.ReactNode): boolean {
@@ -31,15 +32,8 @@ export function FieldMessageSlot({
 
   return (
     <div className={cn(minHeightClass, className)} {...rest}>
-      <div
-        className={cn("text-sm", scrollClass, contentClassName)}
-        aria-live="polite"
-      >
-        {showMessage ? (
-          children
-        ) : label != null && label !== false ? (
-          <span className={cn("block", labelClassName)}>{label}</span>
-        ) : null}
+      <div className={cn("text-sm", scrollClass, contentClassName)} aria-live="polite">
+        {showMessage ? children : label != null && label !== false ? <span className={cn("block", labelClassName)}>{label}</span> : null}
       </div>
     </div>
   );

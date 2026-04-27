@@ -1,10 +1,12 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+
 import { FloatingShape } from "@shared/components/ui/floating-shape";
 import { useScrollAnimation } from "@shared/hooks/useScrollAnimation";
-import { cards, floatingShapes } from "./description-section-data";
+
 import { DescriptionCard } from "./description-section-card";
+import { cards, floatingShapes } from "./description-section-data";
 
 export function DescriptionSection() {
   const t = useTranslations("home");

@@ -3,11 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+
 import { requestOtp } from "@/features/auth/api/client";
-import {
-  registerEmailSchema,
-  type RegisterEmailFormData,
-} from "@/features/auth/schemas/auth.schema";
+import { registerEmailSchema, type RegisterEmailFormData } from "@/features/auth/schemas/auth.schema";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useApiError } from "@/shared/hooks/useApiError";
 

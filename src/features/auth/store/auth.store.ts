@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage, type StateStorage } from "zustand/middleware";
+
 import { OtpPurpose } from "../types/auth.types";
 
 /** Avoids `createJSONStorage(() => sessionStorage)` failing during SSR (no `sessionStorage`), which would drop `persist` from the store API entirely. */
@@ -53,6 +54,6 @@ export const useAuthStore = create<AuthStoreState>()(
         identifier: state.identifier,
         purpose: state.purpose,
       }),
-    },
-  ),
+    }
+  )
 );

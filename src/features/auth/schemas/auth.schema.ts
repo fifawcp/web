@@ -7,7 +7,7 @@ export const loginIdentifierSchema = z.object({
   identifier: z
     .string()
     .trim()
-      .min(1, "errors.identifierRequired")
+    .min(1, "errors.identifierRequired")
     .superRefine((val, ctx) => {
       if (val.includes("@")) {
         const result = loginEmailSchema.safeParse(val);
@@ -52,4 +52,3 @@ export type LoginIdentifierFormData = z.infer<typeof loginIdentifierSchema>;
 export type RegisterEmailFormData = z.infer<typeof registerEmailSchema>;
 export type OtpFormData = z.infer<typeof otpSchema>;
 export type ProfileFormData = z.infer<typeof profileSchema>;
-

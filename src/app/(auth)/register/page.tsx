@@ -1,36 +1,30 @@
 "use client";
 
 import { useEffect } from "react";
+import { Mail, MoveLeft, ShieldCheck, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Controller } from "react-hook-form";
-import { Mail, MoveLeft, ShieldCheck, User } from "lucide-react";
-import { StepGuard } from "@/features/auth/components/StepGuard";
-import { StepIndicator } from "@/features/auth/components/StepIndicator";
-import { GoogleButton } from "@/features/auth/components/GoogleButton";
+
+import { AuthActionLink } from "@/features/auth/components/AuthActionLink";
+import { AuthStepHeaderIcon } from "@/features/auth/components/AuthStepHeaderIcon";
 import { ErrorAlert } from "@/features/auth/components/ErrorAlert";
 import { FieldMessageSlot } from "@/features/auth/components/FieldMessageSlot";
-import { AuthStepHeaderIcon } from "@/features/auth/components/AuthStepHeaderIcon";
-import { AuthActionLink } from "@/features/auth/components/AuthActionLink";
+import { GoogleButton } from "@/features/auth/components/GoogleButton";
 import { OtpDevTotpFill } from "@/features/auth/components/OtpDevTotpFill";
+import { StepGuard } from "@/features/auth/components/StepGuard";
+import { StepIndicator } from "@/features/auth/components/StepIndicator";
 import { useRegisterEmailStep } from "@/features/auth/hooks/useRegisterEmailStep";
 import { useRegisterOtpStep } from "@/features/auth/hooks/useRegisterOtpStep";
 import { useRegisterProfileStep } from "@/features/auth/hooks/useRegisterProfileStep";
+import { formatCountdown } from "@/features/auth/utils";
 import { Button } from "@/shared/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/shared/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/shared/components/ui/input-otp";
 import { Separator } from "@/shared/components/ui/separator";
-import { formatCountdown } from "@/features/auth/utils";
 
 type RegisterStep = "email" | "otp" | "profile";
 
@@ -40,10 +34,7 @@ export default function RegisterPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const stepParam = searchParams.get("step");
-  const step: RegisterStep =
-    stepParam === "email" || stepParam === "otp" || stepParam === "profile"
-      ? stepParam
-      : "email";
+  const step: RegisterStep = stepParam === "email" || stepParam === "otp" || stepParam === "profile" ? stepParam : "email";
   const stepIndex = step === "otp" ? 1 : step === "profile" ? 2 : 0;
 
   useEffect(() => {
@@ -51,11 +42,7 @@ export default function RegisterPage() {
     router.replace(`?step=${step}`);
   }, [router, step, stepParam]);
 
-  const pageContent = (
-    <RegisterPageShell stepIndex={stepIndex}>
-      {step === "profile" ? <ProfileStep /> : step === "otp" ? <OtpStep /> : <EmailStep />}
-    </RegisterPageShell>
-  );
+  const pageContent = <RegisterPageShell stepIndex={stepIndex}>{step === "profile" ? <ProfileStep /> : step === "otp" ? <OtpStep /> : <EmailStep />}</RegisterPageShell>;
 
   if (step === "profile") {
     return (
@@ -72,13 +59,7 @@ export default function RegisterPage() {
   return pageContent;
 }
 
-function RegisterPageShell({
-  stepIndex,
-  children,
-}: {
-  stepIndex: number;
-  children: React.ReactNode;
-}) {
+function RegisterPageShell({ stepIndex, children }: { stepIndex: number; children: React.ReactNode }) {
   const t = useTranslations("auth.register");
 
   return (
@@ -86,7 +67,10 @@ function RegisterPageShell({
       <StepIndicator steps={STEPS.map((s) => t(s))} currentStep={stepIndex} />
       <Card className="bg-card">{children}</Card>
       <p className="mt-6 text-center text-sm text-muted-foreground">
-        {t("haveAccount")} <Link href="/login" className="font-medium text-foreground hover:underline">{t("signIn")}</Link>
+        {t("haveAccount")}{" "}
+        <Link href="/login" className="font-medium text-foreground hover:underline">
+          {t("signIn")}
+        </Link>
       </p>
     </div>
   );
@@ -122,9 +106,7 @@ function EmailStep() {
                     autoComplete="email"
                   />
                   <FieldMessageSlot>
-                    {fieldState.invalid && fieldState.error?.message ? (
-                      <FieldError errors={[{ message: t(fieldState.error.message) }]} />
-                    ) : null}
+                    {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: t(fieldState.error.message) }]} /> : null}
                   </FieldMessageSlot>
                 </Field>
               )}
@@ -149,15 +131,7 @@ function EmailStep() {
 
 function OtpStep() {
   const t = useTranslations("auth");
-  const {
-    form,
-    apiError,
-    identifier,
-    countdown,
-    onSubmit,
-    handleResend,
-    handleUseDifferentIdentifier,
-  } = useRegisterOtpStep();
+  const { form, apiError, identifier, countdown, onSubmit, handleResend, handleUseDifferentIdentifier } = useRegisterOtpStep();
   const otpValue = form.watch("code");
 
   return (
@@ -165,9 +139,7 @@ function OtpStep() {
       <CardHeader className="relative space-y-1 text-center">
         <OtpDevTotpFill
           identifier={identifier}
-          setOtpCode={(code) =>
-            form.setValue("code", code, { shouldDirty: true, shouldValidate: true })
-          }
+          setOtpCode={(code) => form.setValue("code", code, { shouldDirty: true, shouldValidate: true })}
           onApiError={(err) => apiError.set(err ?? undefined)}
         />
         <AuthStepHeaderIcon icon={ShieldCheck} />
@@ -204,9 +176,7 @@ function OtpStep() {
                     </InputOTP>
                   </div>
                   <FieldMessageSlot>
-                    {fieldState.invalid && fieldState.error?.message ? (
-                      <FieldError errors={[{ message: t(fieldState.error.message) }]} />
-                    ) : null}
+                    {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: t(fieldState.error.message) }]} /> : null}
                   </FieldMessageSlot>
                 </Field>
               )}
@@ -214,23 +184,14 @@ function OtpStep() {
           </FieldGroup>
         </form>
 
-        <Button
-          type="submit"
-          form="register-otp-form"
-          className="w-full"
-          disabled={form.formState.isSubmitting || otpValue.length !== 6}
-        >
+        <Button type="submit" form="register-otp-form" className="w-full" disabled={form.formState.isSubmitting || otpValue.length !== 6}>
           {t("otp.verifyCode")}
         </Button>
 
         <div className="flex flex-col items-center gap-1 text-center text-sm text-muted-foreground">
           <span>{t("otp.resend")}</span>
           <AuthActionLink
-            label={
-              countdown.isActive
-                ? t("otp.resendIn", { time: formatCountdown(countdown.seconds) })
-                : t("otp.resendCode")
-            }
+            label={countdown.isActive ? t("otp.resendIn", { time: formatCountdown(countdown.seconds) }) : t("otp.resendCode")}
             onClick={handleResend}
             disabled={countdown.isActive}
             className="h-auto disabled:cursor-not-allowed disabled:opacity-50"
@@ -244,12 +205,7 @@ function OtpStep() {
         </div>
 
         <div className="text-center">
-          <AuthActionLink
-            href="/register?step=email"
-            onClick={handleUseDifferentIdentifier}
-            icon={MoveLeft}
-            label={t("otp.useDifferentEmail")}
-          />
+          <AuthActionLink href="/register?step=email" onClick={handleUseDifferentIdentifier} icon={MoveLeft} label={t("otp.useDifferentEmail")} />
         </div>
       </CardContent>
     </>
@@ -285,9 +241,7 @@ function ProfileStep() {
                     autoComplete="given-name"
                   />
                   <FieldMessageSlot>
-                    {fieldState.invalid && fieldState.error?.message ? (
-                      <FieldError errors={[{ message: t(fieldState.error.message) }]} />
-                    ) : null}
+                    {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: t(fieldState.error.message) }]} /> : null}
                   </FieldMessageSlot>
                 </Field>
               )}
@@ -298,17 +252,9 @@ function ProfileStep() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="register-last-name">{t("profile.lastName")}</FieldLabel>
-                  <Input
-                    {...field}
-                    id="register-last-name"
-                    aria-invalid={fieldState.invalid}
-                    placeholder={t("profile.lastNamePlaceholder")}
-                    autoComplete="family-name"
-                  />
+                  <Input {...field} id="register-last-name" aria-invalid={fieldState.invalid} placeholder={t("profile.lastNamePlaceholder")} autoComplete="family-name" />
                   <FieldMessageSlot>
-                    {fieldState.invalid && fieldState.error?.message ? (
-                      <FieldError errors={[{ message: t(fieldState.error.message) }]} />
-                    ) : null}
+                    {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: t(fieldState.error.message) }]} /> : null}
                   </FieldMessageSlot>
                 </Field>
               )}
@@ -320,17 +266,9 @@ function ProfileStep() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="register-username">{t("profile.username")}</FieldLabel>
-                <Input
-                  {...field}
-                  id="register-username"
-                  aria-invalid={fieldState.invalid}
-                  placeholder={t("profile.usernamePlaceholder")}
-                  autoComplete="username"
-                />
+                <Input {...field} id="register-username" aria-invalid={fieldState.invalid} placeholder={t("profile.usernamePlaceholder")} autoComplete="username" />
                 <FieldMessageSlot>
-                  {fieldState.invalid && fieldState.error?.message ? (
-                    <FieldError errors={[{ message: t(fieldState.error.message) }]} />
-                  ) : null}
+                  {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: t(fieldState.error.message) }]} /> : null}
                 </FieldMessageSlot>
               </Field>
             )}
@@ -339,19 +277,8 @@ function ProfileStep() {
       </CardContent>
       <CardFooter>
         <div className="grid w-full grid-cols-12 gap-3">
-          <AuthActionLink
-            href="/register?step=otp"
-            onClick={handleBack}
-            icon={MoveLeft}
-            label={t("profile.back")}
-            className="col-span-4 justify-center"
-          />
-          <Button
-            type="submit"
-            form="register-profile-form"
-            className="col-span-8 font-semibold"
-            disabled={form.formState.isSubmitting}
-          >
+          <AuthActionLink href="/register?step=otp" onClick={handleBack} icon={MoveLeft} label={t("profile.back")} className="col-span-4 justify-center" />
+          <Button type="submit" form="register-profile-form" className="col-span-8 font-semibold" disabled={form.formState.isSubmitting}>
             {t("profile.createAccount")}
           </Button>
         </div>

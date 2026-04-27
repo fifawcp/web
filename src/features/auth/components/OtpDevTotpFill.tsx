@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+
 import { getDevTotp } from "@/features/auth/api/client";
+import { isProd } from "@/lib/env";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
-import { isProd } from "@/lib/env";
 import { ApiError } from "@/shared/lib/api/types";
 import { cn } from "@/shared/lib/utils";
 

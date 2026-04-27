@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
+
 import { refreshToken } from "../api/client";
 
 const CHECK_INTERVAL_MS = 30_000; // lightweight heartbeat to evaluate token freshness

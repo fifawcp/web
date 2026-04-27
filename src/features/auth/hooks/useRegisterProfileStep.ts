@@ -1,9 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
+
 import { exchangeToken } from "@/features/auth/api/client";
 import { profileSchema, type ProfileFormData } from "@/features/auth/schemas/auth.schema";
 import { useAuthStore } from "@/features/auth/store/auth.store";

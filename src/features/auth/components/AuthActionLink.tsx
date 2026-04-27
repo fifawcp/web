@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { LucideIcon } from "lucide-react";
+import Link from "next/link";
+
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
 
@@ -30,10 +31,7 @@ export function AuthActionLink({ label, icon: Icon, className, ...props }: AuthA
     </>
   );
 
-  const classes = cn(
-    "gap-1.5 px-0 text-sm font-semibold text-foreground underline-offset-4 hover:underline",
-    className,
-  );
+  const classes = cn("gap-1.5 px-0 text-sm font-semibold text-foreground underline-offset-4 hover:underline", className);
 
   if ("href" in props && typeof props.href === "string") {
     const { href, onClick } = props;

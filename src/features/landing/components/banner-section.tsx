@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Button } from "@shared/components/ui/old-button";
+
 import { FloatingShape } from "@shared/components/ui/floating-shape";
+import { Button } from "@shared/components/ui/old-button";
 import { useScrollAnimation } from "@shared/hooks/useScrollAnimation";
 
 export function BannerSection() {

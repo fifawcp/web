@@ -1,9 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
+
 import { exchangeToken, requestOtp } from "@/features/auth/api/client";
 import { useCountdown } from "@/features/auth/hooks/useCountdown";
 import { otpSchema, type OtpFormData } from "@/features/auth/schemas/auth.schema";
@@ -31,7 +32,7 @@ export function useLoginOtpStep() {
     }
 
     const { access_token, expires_at, user } = res.data!;
-    
+
     const result = await signIn("credentials", {
       access_token,
       expires_at,

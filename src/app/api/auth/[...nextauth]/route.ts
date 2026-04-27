@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials) return null;
-        
+
         const creds = credentials as Record<string, string>;
 
         // OTP was already verified by backend, just create session

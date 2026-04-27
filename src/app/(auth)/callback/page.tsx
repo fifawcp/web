@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
+import { MoveLeft } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
+
+import { getProfile, refreshToken } from "@/features/auth/api/client";
+import { ErrorAlert } from "@/features/auth/components/ErrorAlert";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
-import { getProfile, refreshToken } from "@/features/auth/api/client";
 import { useApiError } from "@/shared/hooks/useApiError";
-import { ErrorAlert } from "@/features/auth/components/ErrorAlert";
-import { MoveLeft } from "lucide-react";
 
 export default function CallbackPage() {
   const t = useTranslations("auth");
@@ -53,7 +54,7 @@ export default function CallbackPage() {
     };
 
     bootstrap();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [from, router]);
 
   if (apiError.message) {

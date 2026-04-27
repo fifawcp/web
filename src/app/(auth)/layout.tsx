@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+
 import { FloatingShape } from "@/shared/components/ui/floating-shape";
 import { FloatingShapeConfig } from "@/shared/types/ui";
 

@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import { getLocale, getMessages } from "next-intl/server";
-import { Header } from "@/shared/layout/header";
-import "./globals.css";
-import { Providers } from "@/providers/layout-provider";
 import { Inter } from "next/font/google";
+import { getLocale, getMessages } from "next-intl/server";
+
+import { Providers } from "@/providers/layout-provider";
+import { Header } from "@/shared/layout/header";
 import { cn } from "@/shared/lib/utils";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "WCP",

@@ -1,4 +1,5 @@
 import { Check } from "lucide-react";
+
 import { cn } from "@/shared/lib/utils";
 
 interface StepIndicatorProps {
@@ -25,31 +26,14 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
                   isMuted && "border border-muted-foreground/40 text-muted-foreground"
                 )}
               >
-                {isCompleted ? (
-                  <Check className="w-4 h-4" aria-label="completed" />
-                ) : (
-                  <span className="text-base font-medium">{index + 1}</span>
-                )}
+                {isCompleted ? <Check className="w-4 h-4" aria-label="completed" /> : <span className="text-base font-medium">{index + 1}</span>}
               </div>
-              <span
-                className={cn(
-                  "text-sm whitespace-nowrap transition-all",
-                  isActive && "font-bold text-foreground",
-                  isMuted && "text-muted-foreground opacity-60"
-                )}
-              >
+              <span className={cn("text-sm whitespace-nowrap transition-all", isActive && "font-bold text-foreground", isMuted && "text-muted-foreground opacity-60")}>
                 {label}
               </span>
             </div>
 
-            {index < steps.length - 1 && (
-              <div
-                className={cn(
-                  "flex-1 h-px mx-3 transition-all",
-                  isCompleted ? "bg-foreground" : "bg-border"
-                )}
-              />
-            )}
+            {index < steps.length - 1 && <div className={cn("flex-1 h-px mx-3 transition-all", isCompleted ? "bg-foreground" : "bg-border")} />}
           </div>
         );
       })}

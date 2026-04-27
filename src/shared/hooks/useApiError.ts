@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+
 import { ApiError } from "@/shared/lib/api/types";
 
 const UNKNOWN_API_ERROR_CODE = "UNKNOWN_ERROR";

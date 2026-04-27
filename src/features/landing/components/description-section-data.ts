@@ -1,6 +1,7 @@
+import { Target, Users, Award, UserPlus, Lock, Trophy } from "lucide-react";
+
 import { CardConfig } from "@/features/types/landing.types";
 import { FloatingShapeConfig } from "@/shared/types/ui";
-import { Target, Users, Award, UserPlus, Lock, Trophy } from "lucide-react";
 
 export const cards: CardConfig[] = [
   {

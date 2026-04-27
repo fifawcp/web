@@ -15,4 +15,4 @@ export type ApiErrorField = {
   code: string;
   message: string;
   params: Record<string, unknown>;
-}
+};

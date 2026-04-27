@@ -2,6 +2,7 @@
  * Development-only logger utility
  * Only logs in development mode, silent in production
  */
+/* eslint-disable no-console -- intentional console sink for dev-only logger */
 
 import { env } from "@/lib/env";
 
