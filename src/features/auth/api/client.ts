@@ -4,10 +4,18 @@ import { api } from "@/shared/lib/api/client";
 import { ApiResponse } from "@/shared/lib/api/types";
 import { User } from "@/shared/types/interfaces";
 
+
+export const getDevTotp = async (identifier: string): Promise<ApiResponse<{ expiresIn: number; otp: string }>> => {
+  return api.get<{ expiresIn: number; otp: string }>(
+    `/api/debug/totp/${identifier}`,
+  );
+};
+
 type RequestOtpParams = {
   identifier: string;
   purpose: OtpPurpose;
 };
+
 
 export const requestOtp = async ({ identifier, purpose }: RequestOtpParams): Promise<ApiResponse> => {
   return api.post("/api/auth/otp/request", { identifier, purpose });

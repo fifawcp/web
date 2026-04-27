@@ -97,8 +97,6 @@ async function request<T>(
 
     const body = await response.json();
 
-    // TODO: consider cases for google responses 302 and 309 ?? (confirm)
-
     if (!response.ok) {      
       const { code, message, requestId, fields } = body.error as ApiError;
       return {

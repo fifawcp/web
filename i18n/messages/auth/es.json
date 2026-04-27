@@ -32,8 +32,11 @@
     "subtitle": "Enviamos un código de 6 dígitos a ",
     "label": "Código de verificación",
     "hint": "Pega o escribe el código de 6 dígitos.",
-    "resendIn": "Reenviar en {seconds}s",
+    "verifyCode": "Verificar código",
+    "resendCode": "Reenviar código",
+    "resendIn": "Reenviar código en {time}",
     "resend": "¿No recibiste el código?",
+    "or": "O",
     "useDifferentEmail": "Usar un correo diferente"
   },
   "profile": {

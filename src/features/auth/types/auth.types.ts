@@ -12,4 +12,3 @@ export type RefreshTokenResponse = {
   access_token: string;
   expires_at: string;
 };
-

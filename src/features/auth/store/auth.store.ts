@@ -1,6 +1,18 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist, createJSONStorage, type StateStorage } from "zustand/middleware";
 import { OtpPurpose } from "../types/auth.types";
+
+/** Avoids `createJSONStorage(() => sessionStorage)` failing during SSR (no `sessionStorage`), which would drop `persist` from the store API entirely. */
+const sessionStorageOrNoop: StateStorage = {
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {},
+};
+
+function getSessionStorage(): StateStorage {
+  if (typeof window === "undefined") return sessionStorageOrNoop;
+  return window.sessionStorage;
+}
 
 interface AuthStoreState {
   identifier: string;
@@ -36,7 +48,7 @@ export const useAuthStore = create<AuthStoreState>()(
     {
       name: "wcp-auth-flow", // storage key
       // TODO: consider adding cosmetic encryption to the storage
-      storage: createJSONStorage(() => sessionStorage), // tab-scoped
+      storage: createJSONStorage(getSessionStorage),
       partialize: (state) => ({
         identifier: state.identifier,
         purpose: state.purpose,

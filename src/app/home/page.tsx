@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { User, LogOut, Calendar, Mail } from "lucide-react";
 import { Button } from "@shared/components/ui/old-button";
+import { logout } from "@/features/auth";
 
 export default function HomePage() {
   const router = useRouter();
@@ -12,7 +13,8 @@ export default function HomePage() {
   const t = useTranslations("dashboard");
 
   const handleLogout = async () => {
-    await signOut({ redirect: false });
+    logout(); // sign out from server (delete refresh token and access token)
+    await signOut({ redirect: false }); // sign out from client (delete session cookie) // TODO: review if refresh token is deleted too
     router.push("/");
   };
 

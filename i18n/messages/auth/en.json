@@ -31,8 +31,11 @@
     "subtitle": "We sent a 6-digit code to ",
     "label": "Verification code",
     "hint": "Paste or type the 6-digit code.",
-    "resendIn": "Resend in {seconds}s",
+    "verifyCode": "Verify code",
+    "resendCode": "Resend code",
+    "resendIn": "Resend code in {time}",
     "resend": "Didn't get a code?",
+    "or": "Or",
     "useDifferentEmail": "Use a different email"
   },
   "profile": {

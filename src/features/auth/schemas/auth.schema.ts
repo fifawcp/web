@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const loginEmailSchema = z.email("errors.invalidEmail");
 
+// TODO: review if schema match api constraints
 export const loginIdentifierSchema = z.object({
   identifier: z
     .string()
