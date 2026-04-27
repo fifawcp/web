@@ -1,0 +1,11 @@
+{
+  "INVALID_CREDENTIALS": "Credenciales inválidas. Por favor verifica tu información.",
+  "RATE_LIMIT_EXCEEDED": "Demasiadas solicitudes. Por favor intenta más tarde.",
+  "OTP_COOLDOWN": "Por favor espera 30 segundos antes de solicitar un nuevo código.",
+  "USER_ALREADY_EXISTS": "Ya existe una cuenta con este correo electrónico.",
+  "OTP_INVALID_OR_EXPIRED": "El código OTP es inválido o ha expirado.",
+  "OTP_TOO_MANY_ATTEMPTS": "Demasiados intentos. Por favor intenta más tarde.",
+  "USERNAME_ALREADY_EXISTS": "Este nombre de usuario ya está en uso.",
+  "MISSING_AUTH_HEADER": "Falta el header de autenticación.",
+  "UNKNOWN_ERROR": "Ocurrió un error. Por favor intenta de nuevo."
+}

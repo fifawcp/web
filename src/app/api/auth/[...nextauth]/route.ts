@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials) return null;
-
+        
         const creds = credentials as Record<string, string>;
 
         // OTP was already verified by backend, just create session
@@ -37,8 +37,7 @@ export const authOptions: NextAuthOptions = {
     maxAge: 7 * 24 * 60 * 60, // 7 days
   },
   callbacks: {
-    async jwt({ token, user }) {
-      // Initial sign in - add user data to token
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.username = user.username;
@@ -50,11 +49,13 @@ export const authOptions: NextAuthOptions = {
         token.access_token = user.access_token;
         token.expires_at = user.expires_at;
       }
-
+      if (trigger === "update" && session?.access_token) {
+        token.access_token = session.access_token;
+        token.expires_at = session.expires_at;
+      }
       return token;
     },
     async session({ session, token }) {
-      // Add custom fields to session
       if (token) {
         session.user.id = token.id as string;
         session.user.username = token.username as string;

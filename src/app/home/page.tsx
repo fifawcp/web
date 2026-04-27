@@ -4,7 +4,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { User, LogOut, Calendar, Mail } from "lucide-react";
-import { Button } from "@shared/components/ui/button";
+import { Button } from "@shared/components/ui/old-button";
 
 export default function HomePage() {
   const router = useRouter();

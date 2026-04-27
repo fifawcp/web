@@ -1,7 +1,19 @@
-export { AuthCard } from "./components/auth-card";
-export { FormInput } from "./components/form-input";
-export { useLogin } from "./hooks/useLogin";
-export { useRegister } from "./hooks/useRegister";
-export { useVerifyOtp } from "./hooks/useVerifyOtp";
-export { loginSchema, registerSchema, otpVerifySchema } from "./schemas/auth.schema";
-export type { LoginFormData, RegisterFormData, OtpVerifyFormData } from "./schemas/auth.schema";
+export { StepIndicator } from "./components/StepIndicator";
+export { GoogleButton } from "./components/GoogleButton";
+export { StepGuard } from "./components/StepGuard";
+export { SessionMonitor } from "./components/SessionMonitor";
+export { useApiError } from "../../shared/hooks/useApiError";
+export { requestOtp, verifyOtpCode, exchangeToken, getGoogleOAuthUrl, logout } from "./api/client";
+export { useAuthStore } from "./store/auth.store";
+export {
+  loginIdentifierSchema,
+  registerEmailSchema,
+  otpSchema,
+  profileSchema,
+} from "./schemas/auth.schema";
+export type {
+  LoginIdentifierFormData,
+  RegisterEmailFormData,
+  OtpFormData,
+  ProfileFormData,
+} from "./schemas/auth.schema";

@@ -3,14 +3,14 @@ import { FloatingShape } from "@/shared/components/ui/floating-shape";
 import { FloatingShapeConfig } from "@/shared/types/ui";
 
 const floatingShapes: FloatingShapeConfig[] = [
-  { color: "red", size: 96, opacity: 15, darkOpacity: 8, blur: "none", position: "random", animation: "float", animationDelay: 0 },
-  { color: "orange", size: 128, opacity: 15, darkOpacity: 8, blur: "none", position: "random", animation: "drift", animationDelay: 1 },
+  { color: "red", size: 96, opacity: 8, darkOpacity: 4, blur: "none", position: "random", animation: "float", animationDelay: 0 },
+  { color: "orange", size: 128, opacity: 8, darkOpacity: 4, blur: "none", position: "random", animation: "drift", animationDelay: 1 },
   {
     color: "purple",
     shape: "diamond",
     size: 72,
-    opacity: 18,
-    darkOpacity: 10,
+    opacity: 9,
+    darkOpacity: 5,
     blur: "none",
     position: "random",
     animation: "pulse",
@@ -20,33 +20,33 @@ const floatingShapes: FloatingShapeConfig[] = [
     color: "red",
     shape: "square",
     size: 64,
-    opacity: 12,
-    darkOpacity: 6,
+    opacity: 6,
+    darkOpacity: 3,
     blur: "none",
     position: "random",
     rotation: 15,
     animation: "rotate",
     animationDuration: 20,
   },
-  { color: "orange", size: 88, opacity: 20, darkOpacity: 10, blur: "none", position: "random", animation: "wave", animationDelay: 1.5 },
+  { color: "orange", size: 88, opacity: 10, darkOpacity: 5, blur: "none", position: "random", animation: "wave", animationDelay: 1.5 },
   {
     color: "purple",
     shape: "diamond",
     size: 56,
-    opacity: 16,
-    darkOpacity: 8,
+    opacity: 8,
+    darkOpacity: 4,
     blur: "none",
     position: "random",
     animation: "zigzag",
     animationDelay: 2,
   },
-  { color: "red-light", size: 96, opacity: 15, darkOpacity: 8, blur: "none", position: "random", animation: "float", animationDelay: 0 },
-  { color: "red-light", size: 128, opacity: 15, darkOpacity: 8, blur: "none", position: "random", animation: "drift", animationDelay: 1 },
+  { color: "red-light", size: 96, opacity: 8, darkOpacity: 4, blur: "none", position: "random", animation: "float", animationDelay: 0 },
+  { color: "red-light", size: 128, opacity: 8, darkOpacity: 4, blur: "none", position: "random", animation: "drift", animationDelay: 1 },
 ];
 
 export default function AuthPagesLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-[calc(100vh-var(--header-height))] relative flex items-center justify-center bg-linear-to-b from-emerald-50/30 to-white dark:from-zinc-950 dark:to-zinc-900 px-4 py-12 overflow-hidden">
+    <div className="min-h-[calc(100dvh-var(--header-height))] relative flex items-center justify-center bg-background px-4 pt-8 pb-[15vh] overflow-hidden">
       {floatingShapes.map((shape, index) => (
         <FloatingShape key={index} {...shape} />
       ))}

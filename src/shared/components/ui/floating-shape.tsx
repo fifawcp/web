@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib/utils/ui";
+import { cn } from "@/shared/lib/utils";
 import { FloatingShapeProps, ColorVariant, ShapeType, AnimationType, BlurType } from "@/shared/types/ui";
 
 export function getRandomPosition(): { top: string; left: string } {

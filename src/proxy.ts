@@ -1,7 +1,7 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
-const guestOnlyRoutes = ["/", "/login", "/register", "/verify"];
+const guestOnlyRoutes = ["/", "/login", "/register", "/auth/callback"];
 
 export default withAuth(
   function middleware(req) {
@@ -9,21 +9,26 @@ export default withAuth(
     const path = req.nextUrl.pathname;
 
     // Guest-only routes - redirect authenticated users to /home
-
     if (token && token.access_token && guestOnlyRoutes.includes(path)) {
       return NextResponse.redirect(new URL("/home", req.url));
     }
 
-    // Protected routes - check for valid backend token
+    // Protected routes - check for valid token
     if (!guestOnlyRoutes.includes(path)) {
       if (!token || !token.access_token) {
         return NextResponse.redirect(new URL("/login", req.url));
+      }
+
+      if (token.expires_at) {
+        const expiresAt = new Date(token.expires_at as string).getTime();
+        if (Date.now() > expiresAt) {
+          return NextResponse.redirect(new URL("/login", req.url));
+        }
       }
     }
 
     return NextResponse.next();
   },
-
   {
     callbacks: {
       authorized: ({ token, req }) => {
@@ -42,5 +47,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/", "/home/:path*", "/login", "/register", "/verify"],
+  matcher: ["/", "/home/:path*", "/login", "/register", "/auth/callback"],
 };

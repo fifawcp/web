@@ -1,21 +1,15 @@
 import { User } from "@/shared/types/interfaces";
 
-export type OtpRequestResponse = {
-  message: string;
-  expiresAt: string;
+export type OtpPurpose = "login" | "registration";
+
+export type TokenResponse = {
+  access_token: string;
+  expires_at: string;
+  user: User;
 };
 
-export type AuthData = {
+export type RefreshTokenResponse = {
   access_token: string;
   expires_at: string;
 };
 
-export type OtpVerifyResponse = {
-  data: {
-    message: string;
-    auth: AuthData;
-    user: User;
-  };
-};
-
-export type OtpPurpose = "login" | "registration";

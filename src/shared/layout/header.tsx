@@ -11,7 +11,7 @@ import { UserCard } from "@/shared/components/ui/user-card";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { WCPIcon } from "@/shared/icons/wcp-icon";
-import { Button } from "@/shared/components/ui/button";
+import { Button } from "@/shared/components/ui/old-button";
 
 export function Header() {
   const pathname = usePathname();
