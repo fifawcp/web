@@ -1,8 +1,9 @@
 "use client";
 
-import { Globe } from "lucide-react";
 import { useState, useTransition } from "react";
+import { Globe } from "lucide-react";
 import { useLocale } from "next-intl";
+
 import { IconButton } from "@/shared/components/ui/icon-button";
 
 const LANGUAGES = [

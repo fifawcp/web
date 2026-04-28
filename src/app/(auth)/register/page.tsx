@@ -1,69 +1,222 @@
 "use client";
 
+import { useEffect } from "react";
+import { Mail, MoveLeft, User } from "lucide-react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Mail, User, UserPlus, AtSign, AlertCircle } from "lucide-react";
+import { Controller } from "react-hook-form";
+
+import { AuthActionLink } from "@/features/auth/components/AuthActionLink";
+import { AuthOtpStep } from "@/features/auth/components/AuthOtpStepCard";
+import { AuthStepHeaderIcon } from "@/features/auth/components/AuthStepHeaderIcon";
+import { ErrorAlert } from "@/features/auth/components/ErrorAlert";
+import { FieldMessageSlot } from "@/features/auth/components/FieldMessageSlot";
+import { GoogleButton } from "@/features/auth/components/GoogleButton";
+import { StepGuard } from "@/features/auth/components/StepGuard";
+import { StepIndicator } from "@/features/auth/components/StepIndicator";
+import { useRegisterEmailStep } from "@/features/auth/hooks/useRegisterEmailStep";
+import { useRegisterOtpStep } from "@/features/auth/hooks/useRegisterOtpStep";
+import { useRegisterProfileStep } from "@/features/auth/hooks/useRegisterProfileStep";
 import { Button } from "@/shared/components/ui/button";
-import { AuthCard, FormInput, useRegister } from "@/features/auth";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/components/ui/field";
+import { Input } from "@/shared/components/ui/input";
+import { Separator } from "@/shared/components/ui/separator";
+
+type RegisterStep = "email" | "otp" | "profile";
+
+const STEPS = ["step_identifier", "step_verify", "step_profile"] as const;
 
 export default function RegisterPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const stepParam = searchParams.get("step");
+  const step: RegisterStep = stepParam === "email" || stepParam === "otp" || stepParam === "profile" ? stepParam : "email";
+  const stepIndex = step === "otp" ? 1 : step === "profile" ? 2 : 0;
+
+  useEffect(() => {
+    if (stepParam === null || stepParam === step) return;
+    router.replace(`?step=${step}`);
+  }, [router, step, stepParam]);
+
+  const pageContent = <RegisterPageShell stepIndex={stepIndex}>{step === "profile" ? <ProfileStep /> : step === "otp" ? <OtpStep /> : <EmailStep />}</RegisterPageShell>;
+
+  if (step === "profile") {
+    return (
+      <StepGuard requiredFields={["identifier", "otp"]} redirectTo="?step=otp">
+        {pageContent}
+      </StepGuard>
+    );
+  }
+
+  if (step === "otp") {
+    return <StepGuard requiredFields={["identifier"]}>{pageContent}</StepGuard>;
+  }
+
+  return pageContent;
+}
+
+function RegisterPageShell({ stepIndex, children }: { stepIndex: number; children: React.ReactNode }) {
   const t = useTranslations("auth.register");
-  const { register, handleSubmit, errors, serverError, isLoading } = useRegister();
 
   return (
-    <AuthCard title={t("title")} subtitle={t("subtitle")}>
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {serverError && (
-          <div className="flex items-center gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-            <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 shrink-0" />
-            <p className="text-sm text-red-600 dark:text-red-400">{serverError}</p>
-          </div>
-        )}
-        <FormInput id="username" label={t("username")} type="text" icon={AtSign} placeholder="johndoe" error={errors.username} {...register("username")} />
+    <div className="mx-auto w-full max-w-md">
+      <StepIndicator steps={STEPS.map((s) => t(s))} currentStep={stepIndex} />
+      <Card className="bg-card">{children}</Card>
+      <p className="mt-6 text-center text-sm text-muted-foreground">
+        {t("haveAccount")}{" "}
+        <Link href="/login" className="font-medium text-foreground hover:underline">
+          {t("signIn")}
+        </Link>
+      </p>
+    </div>
+  );
+}
 
-        <div className="grid grid-cols-2 gap-4">
-          <FormInput id="first_name" label={t("firstName")} type="text" icon={User} placeholder="John" error={errors.first_name} {...register("first_name")} />
-          <FormInput id="last_name" label={t("lastName")} type="text" icon={User} placeholder="Doe" error={errors.last_name} {...register("last_name")} />
-        </div>
+function EmailStep() {
+  const t = useTranslations("auth");
+  const { form, apiError, onSubmit } = useRegisterEmailStep();
 
-        <FormInput id="email" label={t("email")} type="email" icon={Mail} placeholder="you@example.com" error={errors.email} {...register("email")} />
-
-        <div>
-          <div className="flex items-start">
-            <input
-              id="terms"
-              type="checkbox"
-              className="h-4 w-4 mt-1 text-wc-red focus:ring-wc-red border-zinc-300 dark:border-zinc-700 rounded"
-              {...register("acceptTerms")}
+  return (
+    <>
+      <CardHeader className="space-y-1 text-center">
+        <AuthStepHeaderIcon icon={Mail} />
+        <CardTitle className="text-2xl">{t("register.title")}</CardTitle>
+        <CardDescription>{t("register.subtitle")}</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <ErrorAlert message={apiError.message} />
+        <form id="register-email-form" onSubmit={onSubmit} className="space-y-4">
+          <FieldGroup>
+            <Controller
+              name="email"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="register-email">{t("register.email")}</FieldLabel>
+                  <Input
+                    {...field}
+                    id="register-email"
+                    type="email"
+                    aria-invalid={fieldState.invalid}
+                    placeholder={t("register.emailPlaceholder")}
+                    autoComplete="email"
+                  />
+                  <FieldMessageSlot>
+                    {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: t(fieldState.error.message) }]} /> : null}
+                  </FieldMessageSlot>
+                </Field>
+              )}
             />
-            <label htmlFor="terms" className="ml-2 text-sm text-zinc-700 dark:text-zinc-300">
-              {t("agreeToTerms")}{" "}
-              <Link href="/terms" className="font-medium text-gradient-secondary hover:text-wc-orange">
-                {t("termsOfService")}
-              </Link>{" "}
-              {t("and")}{" "}
-              <Link href="/privacy" className="font-medium text-gradient-secondary hover:text-wc-orange">
-                {t("privacyPolicy")}
-              </Link>
-            </label>
-          </div>
-          {errors.acceptTerms && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{errors.acceptTerms}</p>}
+          </FieldGroup>
+          <Button type="submit" form="register-email-form" className="w-full" disabled={form.formState.isSubmitting}>
+            {t("register.continue")}
+          </Button>
+        </form>
+      </CardContent>
+      <CardFooter className="flex flex-col items-center gap-6">
+        <div className="flex w-full flex-row items-center gap-2">
+          <Separator className="flex-1" />
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">{t("register.orContinueWithEmail")}</span>
+          <Separator className="flex-1" />
         </div>
+        <GoogleButton label={t("register.googleSignIn")} />
+      </CardFooter>
+    </>
+  );
+}
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          <UserPlus className="h-5 w-5" />
-          {t("submit")}
-        </Button>
-      </form>
+function OtpStep() {
+  const otpStep = useRegisterOtpStep();
 
-      <div className="mt-6 text-center">
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {t("haveAccount")}{" "}
-          <Link href="/login" className="font-medium text-gradient-secondary hover:text-wc-orange">
-            {t("signIn")}
-          </Link>
-        </p>
-      </div>
-    </AuthCard>
+  return (
+    <AuthOtpStep
+      formId="register-otp-form"
+      otpInputId="register-otp-code"
+      differentIdentifierHref="/register?step=email"
+      form={otpStep.form}
+      apiError={otpStep.apiError}
+      identifier={otpStep.identifier}
+      countdown={otpStep.countdown}
+      onSubmit={otpStep.onSubmit}
+      handleResend={otpStep.handleResend}
+      handleUseDifferentIdentifier={otpStep.handleUseDifferentIdentifier}
+    />
+  );
+}
+
+function ProfileStep() {
+  const t = useTranslations("auth");
+  const { form, apiError, onSubmit, handleBack } = useRegisterProfileStep();
+
+  return (
+    <>
+      <CardHeader className="space-y-1 text-center">
+        <AuthStepHeaderIcon icon={User} />
+        <CardTitle className="text-2xl">{t("profile.title")}</CardTitle>
+        <CardDescription>{t("profile.subtitle")}</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <ErrorAlert message={apiError.message} />
+        <form id="register-profile-form" onSubmit={onSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <Controller
+              name="firstName"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="register-first-name">{t("profile.firstName")}</FieldLabel>
+                  <Input
+                    {...field}
+                    id="register-first-name"
+                    aria-invalid={fieldState.invalid}
+                    placeholder={t("profile.firstNamePlaceholder")}
+                    autoComplete="given-name"
+                  />
+                  <FieldMessageSlot>
+                    {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: t(fieldState.error.message) }]} /> : null}
+                  </FieldMessageSlot>
+                </Field>
+              )}
+            />
+            <Controller
+              name="lastName"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="register-last-name">{t("profile.lastName")}</FieldLabel>
+                  <Input {...field} id="register-last-name" aria-invalid={fieldState.invalid} placeholder={t("profile.lastNamePlaceholder")} autoComplete="family-name" />
+                  <FieldMessageSlot>
+                    {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: t(fieldState.error.message) }]} /> : null}
+                  </FieldMessageSlot>
+                </Field>
+              )}
+            />
+          </div>
+          <Controller
+            name="username"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="register-username">{t("profile.username")}</FieldLabel>
+                <Input {...field} id="register-username" aria-invalid={fieldState.invalid} placeholder={t("profile.usernamePlaceholder")} autoComplete="username" />
+                <FieldMessageSlot>
+                  {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: t(fieldState.error.message) }]} /> : null}
+                </FieldMessageSlot>
+              </Field>
+            )}
+          />
+        </form>
+      </CardContent>
+      <CardFooter>
+        <div className="grid w-full grid-cols-12 gap-3">
+          <AuthActionLink href="/register?step=otp" onClick={handleBack} icon={MoveLeft} label={t("profile.back")} className="col-span-4 justify-center" />
+          <Button type="submit" form="register-profile-form" className="col-span-8 font-semibold" disabled={form.formState.isSubmitting}>
+            {t("profile.createAccount")}
+          </Button>
+        </div>
+      </CardFooter>
+    </>
   );
 }

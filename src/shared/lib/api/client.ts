@@ -1,167 +1,128 @@
 import { getSession, signOut } from "next-auth/react";
-import { ApiResponse, ApiErrorType, getErrorType } from "./types";
+
 import { logger } from "../logger";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+import { ApiError, ApiResponse } from "./types";
 
-/**
- * Attempt silent token refresh using HTTP-only refresh cookie
- * Returns new access token if successful, null otherwise
- */
-async function silentRefresh(): Promise<string | null> {
+const BASE_API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+
+type AuthData = {
+  access_token: string;
+  expires_at: string;
+};
+
+async function refreshToken(): Promise<AuthData | null> {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/auth/token/refresh`, {
+    const response = await fetch(`${BASE_API_URL}/api/auth/token/refresh`, {
       method: "POST",
-      credentials: "include", // Important: sends HTTP-only refresh cookie
+      credentials: "include", // Sends HTTP-only cookie with the refresh token
     });
 
-    if (!res.ok) return null;
+    if (!response.ok) return null;
 
-    const data = await res.json();
-    return data.access_token ?? data.data?.access_token ?? null;
-  } catch (error) {
-    logger.error("Silent refresh failed:", error);
+    const body = await response.json();
+    return body.data;
+  } catch {
     return null;
   }
 }
 
-interface FetchWithAuthOptions extends RequestInit {
-  skipRefresh?: boolean;
-}
+export async function fetchWithAuth(url: string, options: FetchWithAuthOptions): Promise<Response> {
+  const { update, ...fetchOptions } = options;
 
-export async function fetchWithAuth(url: string, options: FetchWithAuthOptions = {}): Promise<Response> {
-  const { skipRefresh = false, ...fetchOptions } = options;
-
-  // Get session from NextAuth (only works on client side)
-  let accessToken: string | null = null;
-  if (typeof window !== "undefined") {
-    const session = await getSession();
-    accessToken = session?.access_token ?? null;
-  }
+  const isBrowser = typeof window !== "undefined";
+  const session = isBrowser ? await getSession() : null;
+  const accessToken = session?.access_token ?? null;
 
   const headers = new Headers(fetchOptions.headers);
-
   if (accessToken && !headers.has("Authorization")) {
     headers.set("Authorization", `Bearer ${accessToken}`);
   }
 
-  const requestOptions: RequestInit = {
-    ...fetchOptions,
-    headers,
-    credentials: "include",
-  };
+  const response = await fetch(url, { ...fetchOptions, headers, credentials: "include" });
 
-  const response = await fetch(url, requestOptions);
+  if (response.status == 401) {
+    const authData = await refreshToken();
+    if (!authData) {
+      // If there is no successfull refresh, sign out the user and redirect to the login page
+      // TODO: call logout endpoint too (analyze if needed, as this one is probably expired)
+      if (isBrowser) void signOut({ callbackUrl: "/login" });
 
-  // Attempt silent refresh on 401 if not skipped
-  if (response.status === 401 && !skipRefresh) {
-    const newToken = await silentRefresh();
-
-    if (!newToken) {
-      // Refresh failed, sign out user
-      if (typeof window !== "undefined") {
-        signOut({ callbackUrl: "/login" });
-      }
       return response;
     }
 
-    // Retry request with new token
-    const retryHeaders = new Headers(fetchOptions.headers);
-    retryHeaders.set("Authorization", `Bearer ${newToken}`);
+    // Update the session with the new auth data
+    if (update) await update(authData);
 
-    return fetch(url, {
-      ...fetchOptions,
-      headers: retryHeaders,
-      credentials: "include",
-    });
+    // Retry the request with the new auth data
+    const retryHeaders = new Headers(fetchOptions.headers);
+    retryHeaders.set("Authorization", `Bearer ${authData.access_token}`);
+
+    return fetch(url, { ...fetchOptions, headers: retryHeaders, credentials: "include" });
   }
 
   return response;
 }
 
 type RequestOptions = Omit<RequestInit, "method" | "body"> & {
-  skipRefresh?: boolean;
+  authenticated?: boolean;
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  body?: unknown;
+  update?: (data: AuthData) => Promise<unknown>;
 };
 
-async function request<T>(endpoint: string, options: RequestOptions & { method: string; body?: unknown } = { method: "GET" }): Promise<ApiResponse<T>> {
-  try {
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}${endpoint}`;
+type FetchWithAuthOptions = RequestInit & { update?: (data: AuthData) => Promise<unknown> };
 
-    const fetchOptions: RequestInit = {
+async function request<T>(endpoint: string, options: RequestOptions = { method: "GET" }): Promise<ApiResponse<T>> {
+  try {
+    const url = `${BASE_API_URL}${endpoint}`;
+    const fetchOptions: FetchWithAuthOptions = {
       method: options.method,
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
+      headers: { "Content-Type": "application/json", ...options.headers },
       credentials: "include",
+      update: options.update,
     };
 
-    if (options.body != null) {
-      fetchOptions.body = JSON.stringify(options.body);
-    }
+    if (options.body != null) fetchOptions.body = JSON.stringify(options.body);
 
-    // For skipRefresh requests (like OTP), use plain fetch
-    // For authenticated requests, use fetchWithAuth
-    const response = options.skipRefresh ? await fetch(url, fetchOptions) : await fetchWithAuth(url, { ...fetchOptions, skipRefresh: false });
+    const response = options.authenticated ? await fetchWithAuth(url, fetchOptions) : await fetch(url, fetchOptions);
 
-    // Handle 204 No Content
+    // No-content responses
     if (response.status === 204) {
-      return {
-        success: true,
-        data: undefined as T,
-      };
+      return { success: true, data: undefined };
     }
 
-    const data = await response.json();
+    const body = await response.json();
 
     if (!response.ok) {
-      const errorMessage = data.error || "Something went wrong";
-      const errorType = getErrorType(response.status, errorMessage);
-
+      const { code, message, requestId, fields } = body.error as ApiError;
       return {
         success: false,
-        error: errorMessage,
-        errorType,
+        error: { code, message, requestId, fields },
       };
     }
 
-    return {
-      success: true,
-      data,
-    };
+    return { success: true, data: body.data };
   } catch (error) {
-    logger.error("API Request Error:", error);
+    logger.error("API request error:", error);
+
+    // TODO: should we consideer all catch errors as network errors?
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Network error occurred",
-      errorType: ApiErrorType.NETWORK_ERROR,
+      error: {
+        code: "NETWORK_ERROR",
+        message: "Network error occurred",
+        requestId: "",
+        fields: undefined,
+      },
     };
   }
 }
 
 export const api = {
   get: <T>(endpoint: string, options?: RequestOptions) => request<T>(endpoint, { ...options, method: "GET" }),
-
-  post: <T>(endpoint: string, body?: unknown, options?: RequestOptions) =>
-    request<T>(endpoint, {
-      ...options,
-      method: "POST",
-      body,
-    }),
-
-  put: <T>(endpoint: string, body?: unknown, options?: RequestOptions) =>
-    request<T>(endpoint, {
-      ...options,
-      method: "PUT",
-      body,
-    }),
-
+  post: <T>(endpoint: string, body?: unknown, options?: RequestOptions) => request<T>(endpoint, { ...options, method: "POST", body }),
+  put: <T>(endpoint: string, body?: unknown, options?: RequestOptions) => request<T>(endpoint, { ...options, method: "PUT", body }),
   delete: <T>(endpoint: string, options?: RequestOptions) => request<T>(endpoint, { ...options, method: "DELETE" }),
-
-  patch: <T>(endpoint: string, body?: unknown, options?: RequestOptions) =>
-    request<T>(endpoint, {
-      ...options,
-      method: "PATCH",
-      body,
-    }),
+  patch: <T>(endpoint: string, body?: unknown, options?: RequestOptions) => request<T>(endpoint, { ...options, method: "PATCH", body }),
 };

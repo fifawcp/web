@@ -1,17 +1,17 @@
 "use client";
 
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
-import { ThemeToggle } from "@/shared/components/ui/theme-toggle";
-import { LanguageToggle } from "@/shared/components/ui/language-toggle";
-import { UserCard } from "@/shared/components/ui/user-card";
+import { useTranslations } from "next-intl";
 
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
-import { WCPIcon } from "@/shared/icons/wcp-icon";
 import { Button } from "@/shared/components/ui/button";
+import { LanguageToggle } from "@/shared/components/ui/language-toggle";
+import { ThemeToggle } from "@/shared/components/ui/theme-toggle";
+import { UserCard } from "@/shared/components/ui/user-card";
+import { WCPIcon } from "@/shared/icons/wcp-icon";
 
 export function Header() {
   const pathname = usePathname();

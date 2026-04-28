@@ -1,6 +1,7 @@
-import { CardConfig } from "@/features/types/landing.types";
 import { LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+
+import { CardConfig } from "@/features/types/landing.types";
 
 export const DescriptionCard = ({ card, Icon, isVisible }: { card: CardConfig; Icon: LucideIcon; isVisible: boolean }) => {
   const t = useTranslations("home");

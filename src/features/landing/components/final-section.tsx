@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Button } from "@shared/components/ui/button";
+
+import { Button } from "@/shared/components/ui/button";
 import { FloatingShape } from "@shared/components/ui/floating-shape";
 import { useScrollAnimation } from "@shared/hooks/useScrollAnimation";
 import { FloatingShapeConfig } from "@shared/types/ui";
@@ -54,7 +55,7 @@ export function FinalSection() {
         <div className={`max-w-3xl mx-auto text-center ${isVisible ? "animate-appear-from-bottom" : "opacity-0"}`}>
           <h2 className="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">{t("finalCta.title")}</h2>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-8">{t("finalCta.subtitle")}</p>
-          <Button asChild size="lg">
+          <Button variant="gradient" asChild size="lg">
             <Link href="/register">{t("finalCta.button")}</Link>
           </Button>
         </div>

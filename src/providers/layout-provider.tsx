@@ -1,7 +1,10 @@
 "use client";
 
-import { ThemeProvider } from "next-themes";
 import { NextIntlClientProvider } from "next-intl";
+import { ThemeProvider } from "next-themes";
+
+import { SessionMonitor } from "@/features/auth/components/SessionMonitor";
+
 import { SessionProvider } from "./session-provider";
 
 export function Providers({ children, messages, locale }: { children: React.ReactNode; messages: Record<string, unknown>; locale: string }) {
@@ -9,7 +12,10 @@ export function Providers({ children, messages, locale }: { children: React.Reac
   return (
     <NextIntlClientProvider messages={messages} locale={locale} timeZone={timeZone}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <SessionMonitor />
+          {children}
+        </SessionProvider>
       </ThemeProvider>
     </NextIntlClientProvider>
   );

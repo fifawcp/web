@@ -1,0 +1,11 @@
+{
+  "INVALID_CREDENTIALS": "Invalid credentials. Please check your information.",
+  "RATE_LIMIT_EXCEEDED": "Too many requests. Please try again later.",
+  "OTP_COOLDOWN": "Please wait 30 seconds before requesting a new code.",
+  "USER_ALREADY_EXISTS": "An account with this email already exists.",
+  "OTP_INVALID_OR_EXPIRED": "The OTP code is invalid or has expired.",
+  "OTP_TOO_MANY_ATTEMPTS": "Too many attempts. Please try again later.",
+  "USERNAME_ALREADY_EXISTS": "This username is already taken.",
+  "MISSING_AUTH_HEADER": "Missing authentication header.",
+  "UNKNOWN_ERROR": "An error occurred. Please try again."
+}
