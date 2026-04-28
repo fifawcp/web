@@ -6,7 +6,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
 
 import { logout } from "@/features/auth";
-import { Button } from "@shared/components/ui/old-button";
+import { Button } from "@shared/components/ui/button";
 
 export default function HomePage() {
   const router = useRouter();

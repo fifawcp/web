@@ -8,9 +8,9 @@
     "orContinueWithEmail": "O continuar con",
     "step_identifier": "Identificador",
     "step_verify": "Verificar",
-    "useDifferentEmail": "Usar un correo diferente",
     "noAccount": "¿Eres nuevo?",
-    "createOne": "Crea una cuenta"
+    "createOne": "Crea una cuenta",
+    "continue": "Continuar"
   },
   "register": {
     "title": "Crea tu cuenta",
@@ -23,15 +23,12 @@
     "step_identifier": "Identificador",
     "step_verify": "Verificar",
     "step_profile": "Perfil",
-    "createAccount": "Crear cuenta",
     "haveAccount": "¿Ya tienes una cuenta?",
     "signIn": "Iniciar sesión"
   },
   "otp": {
     "title": "Revisa tu correo",
     "subtitle": "Enviamos un código de 6 dígitos a ",
-    "label": "Código de verificación",
-    "hint": "Pega o escribe el código de 6 dígitos.",
     "verifyCode": "Verificar código",
     "resendCode": "Reenviar código",
     "resendIn": "Reenviar código en {time}",
@@ -49,46 +46,19 @@
     "username": "Usuario",
     "usernamePlaceholder": "juanperez123",
     "createAccount": "Crear cuenta",
-    "haveAccount": "¿Ya tienes una cuenta?",
-    "signIn": "Iniciar sesión",
     "back": "Atrás"
   },
   "callback": {
-    "backToLogin": "Volver a iniciar sesión",
-    "welcomeRegister": "¡Bienvenido a la competencia, {name}!",
-    "welcomeLogin": "¡Bienvenido de nuevo, {name}!",
-    "welcomeOauth": "¡Todo listo!",
-    "continue": "Continuar"
-  },
-  "legal": {
-    "bySigningIn": "Al iniciar sesión, aceptas nuestros",
-    "termsOfService": "Términos de Servicio",
-    "and": "y",
-    "privacyPolicy": "Política de Privacidad"
+    "backToLogin": "Volver a iniciar sesión"
   },
   "errors": {
     "identifierRequired": "Ingresa tu correo o usuario",
     "invalidEmail": "Correo electrónico inválido",
     "usernameMinLength": "El usuario debe tener al menos 1 caracter",
-    "usernameMaxLength": "El usuario debe tener como máximo 50 caracteres",
+    "usernameMaxLength": "El usuario debe tener como máximo 20 caracteres",
     "firstNameRequired": "El nombre debe tener al menos 2 caracteres",
     "lastNameRequired": "El apellido debe tener al menos 2 caracteres",
-    "termsRequired": "Debes aceptar los términos y condiciones",
     "otpLength": "El código debe tener exactamente 6 dígitos",
-    "otpDigitsOnly": "El código solo puede contener dígitos",
-    "validationError": "Solicitud inválida. Por favor verifica tu información.",
-    "userExists": "Ya existe una cuenta con este correo.",
-    "invalidCredentials": "Credenciales inválidas. Por favor verifica tu información.",
-    "serverError": "Error del servidor. Por favor intenta de nuevo más tarde.",
-    "rateLimitExceeded": "Demasiadas solicitudes. Por favor intenta más tarde.",
-    "otpCooldown": "Por favor espera 30 segundos antes de solicitar un nuevo código.",
-    "otpInvalid": "Código de verificación inválido. Por favor intenta de nuevo.",
-    "otpExpired": "El código de verificación ha expirado. Por favor solicita uno nuevo.",
-    "usernameTaken": "Este nombre de usuario ya está en uso.",
-    "networkError": "Error de red. Por favor verifica tu conexión.",
-    "unknownError": "Ocurrió un error. Por favor intenta de nuevo."
-  },
-  "common": {
-    "loading": "Cargando..."
+    "otpDigitsOnly": "El código solo puede contener dígitos"
   }
 }

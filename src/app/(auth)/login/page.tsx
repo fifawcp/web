@@ -1,28 +1,25 @@
 "use client";
 
 import { useEffect } from "react";
-import { Mail, MoveLeft, ShieldCheck } from "lucide-react";
+import { Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Controller } from "react-hook-form";
 
-import { AuthActionLink } from "@/features/auth/components/AuthActionLink";
+import { AuthOtpStep } from "@/features/auth/components/AuthOtpStepCard";
 import { AuthStepHeaderIcon } from "@/features/auth/components/AuthStepHeaderIcon";
 import { ErrorAlert } from "@/features/auth/components/ErrorAlert";
 import { FieldMessageSlot } from "@/features/auth/components/FieldMessageSlot";
 import { GoogleButton } from "@/features/auth/components/GoogleButton";
-import { OtpDevTotpFill } from "@/features/auth/components/OtpDevTotpFill";
 import { StepGuard } from "@/features/auth/components/StepGuard";
 import { StepIndicator } from "@/features/auth/components/StepIndicator";
 import { useLoginIdentifierStep } from "@/features/auth/hooks/useLoginIdentifierStep";
 import { useLoginOtpStep } from "@/features/auth/hooks/useLoginOtpStep";
-import { formatCountdown } from "@/features/auth/utils";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/shared/components/ui/input-otp";
 import { Separator } from "@/shared/components/ui/separator";
 
 type LoginStep = "identifier" | "otp";
@@ -103,7 +100,7 @@ function IdentifierStep() {
           </FieldGroup>
         </form>
         <Button type="submit" form="login-form" className="w-full" disabled={form.formState.isSubmitting}>
-          Continue
+          {t("login.continue")}
         </Button>
       </CardContent>
       <CardFooter className="flex flex-col items-center gap-6">
@@ -119,84 +116,20 @@ function IdentifierStep() {
 }
 
 function OtpStep() {
-  const t = useTranslations("auth");
-  const { form, apiError, identifier, countdown, onSubmit, handleResend, handleUseDifferentIdentifier } = useLoginOtpStep();
-  const otpValue = form.watch("code");
+  const otpStep = useLoginOtpStep();
 
   return (
-    <>
-      <CardHeader className="relative space-y-1 text-center">
-        <OtpDevTotpFill
-          identifier={identifier}
-          setOtpCode={(code) => form.setValue("code", code, { shouldDirty: true, shouldValidate: true })}
-          onApiError={(err) => apiError.set(err ?? undefined)}
-        />
-        <AuthStepHeaderIcon icon={ShieldCheck} />
-        <CardTitle className="text-2xl">{t("otp.title")}</CardTitle>
-        <CardDescription className="text-center">
-          <span className="block">{t("otp.subtitle").trimEnd()}</span>
-          <span className="block font-semibold text-foreground">{identifier}</span>
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <ErrorAlert message={apiError.message} />
-        <form id="otp-form" onSubmit={onSubmit}>
-          <FieldGroup>
-            <Controller
-              name="code"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <div className="flex justify-center">
-                    <InputOTP
-                      {...field}
-                      id="otp-form-code"
-                      maxLength={6}
-                      aria-invalid={fieldState.invalid}
-                      onComplete={() => {
-                        void onSubmit();
-                      }}
-                    >
-                      <InputOTPGroup className="*:data-[slot=input-otp-slot]:h-14 *:data-[slot=input-otp-slot]:w-13 *:data-[slot=input-otp-slot]:text-xl">
-                        {Array.from({ length: 6 }).map((_, i) => (
-                          <InputOTPSlot key={i} index={i} />
-                        ))}
-                      </InputOTPGroup>
-                    </InputOTP>
-                  </div>
-                  <FieldMessageSlot>
-                    {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: t(fieldState.error.message) }]} /> : null}
-                  </FieldMessageSlot>
-                </Field>
-              )}
-            />
-          </FieldGroup>
-        </form>
-
-        <Button type="submit" form="otp-form" className="w-full" disabled={form.formState.isSubmitting || otpValue.length !== 6}>
-          {t("otp.verifyCode")}
-        </Button>
-
-        <div className="flex flex-col items-center gap-1 text-center text-sm text-muted-foreground">
-          <span>{t("otp.resend")}</span>
-          <AuthActionLink
-            label={countdown.isActive ? t("otp.resendIn", { time: formatCountdown(countdown.seconds) }) : t("otp.resendCode")}
-            onClick={handleResend}
-            disabled={countdown.isActive}
-            className="h-auto disabled:cursor-not-allowed disabled:opacity-50"
-          />
-        </div>
-
-        <div className="flex w-full flex-row items-center gap-2">
-          <Separator className="flex-1" />
-          <span className="text-xs uppercase tracking-wider text-muted-foreground">{t("otp.or")}</span>
-          <Separator className="flex-1" />
-        </div>
-
-        <div className="text-center">
-          <AuthActionLink href="/login?step=identifier" onClick={handleUseDifferentIdentifier} icon={MoveLeft} label={t("otp.useDifferentEmail")} />
-        </div>
-      </CardContent>
-    </>
+    <AuthOtpStep
+      formId="otp-form"
+      otpInputId="otp-form-code"
+      differentIdentifierHref="/login?step=identifier"
+      form={otpStep.form}
+      apiError={otpStep.apiError}
+      identifier={otpStep.identifier}
+      countdown={otpStep.countdown}
+      onSubmit={otpStep.onSubmit}
+      handleResend={otpStep.handleResend}
+      handleUseDifferentIdentifier={otpStep.handleUseDifferentIdentifier}
+    />
   );
 }

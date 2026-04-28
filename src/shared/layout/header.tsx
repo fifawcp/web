@@ -7,8 +7,8 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 
+import { Button } from "@/shared/components/ui/button";
 import { LanguageToggle } from "@/shared/components/ui/language-toggle";
-import { Button } from "@/shared/components/ui/old-button";
 import { ThemeToggle } from "@/shared/components/ui/theme-toggle";
 import { UserCard } from "@/shared/components/ui/user-card";
 import { WCPIcon } from "@/shared/icons/wcp-icon";

@@ -9,7 +9,8 @@
     "step_identifier": "Identifier",
     "step_verify": "Verify",
     "noAccount": "New here?",
-    "createOne": "Create an account"
+    "createOne": "Create an account",
+    "continue": "Continue"
   },
   "register": {
     "title": "Create your account",
@@ -22,15 +23,12 @@
     "step_identifier": "Identifier",
     "step_verify": "Verify",
     "step_profile": "Profile",
-    "createAccount": "Create account",
     "haveAccount": "Already have an account?",
     "signIn": "Sign in"
   },
   "otp": {
     "title": "Check your email",
     "subtitle": "We sent a 6-digit code to ",
-    "label": "Verification code",
-    "hint": "Paste or type the 6-digit code.",
     "verifyCode": "Verify code",
     "resendCode": "Resend code",
     "resendIn": "Resend code in {time}",
@@ -48,46 +46,19 @@
     "username": "Username",
     "usernamePlaceholder": "johndoe123",
     "createAccount": "Create account",
-    "haveAccount": "Already have an account?",
-    "signIn": "Sign in",
     "back": "Back"
   },
   "callback": {
-    "backToLogin": "Back to login",
-    "welcomeRegister": "Welcome to the competition, {name}!",
-    "welcomeLogin": "Welcome back, {name}!",
-    "welcomeOauth": "You're all set!",
-    "continue": "Continue"
-  },
-  "legal": {
-    "bySigningIn": "By signing in, you agree to our",
-    "termsOfService": "Terms of Service",
-    "and": "and",
-    "privacyPolicy": "Privacy Policy"
+    "backToLogin": "Back to login"
   },
   "errors": {
     "identifierRequired": "Enter your email or username",
     "invalidEmail": "Invalid email address",
     "usernameMinLength": "Username must be at least 1 character",
-    "usernameMaxLength": "Username must be at most 50 characters",
+    "usernameMaxLength": "Username must be at most 20 characters",
     "firstNameRequired": "First name must be at least 2 characters",
     "lastNameRequired": "Last name must be at least 2 characters",
-    "termsRequired": "You must accept the terms and conditions",
     "otpLength": "Code must be exactly 6 digits",
-    "otpDigitsOnly": "Code must contain only digits",
-    "validationError": "Invalid request. Please check your information.",
-    "userExists": "An account with this email already exists.",
-    "invalidCredentials": "Invalid credentials. Please check your information.",
-    "serverError": "Server error. Please try again later.",
-    "rateLimitExceeded": "Too many requests. Please try again later.",
-    "otpCooldown": "Please wait 30 seconds before requesting a new code.",
-    "otpInvalid": "Invalid verification code. Please try again.",
-    "otpExpired": "Verification code has expired. Please request a new one.",
-    "usernameTaken": "This username is already taken.",
-    "networkError": "Network error. Please check your connection.",
-    "unknownError": "An error occurred. Please try again."
-  },
-  "common": {
-    "loading": "Loading..."
+    "otpDigitsOnly": "Code must contain only digits"
   }
 }

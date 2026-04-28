@@ -30,7 +30,7 @@
   --header-height: 65px;
 
   /* Gradient definitions for light and dark modes */
-  --gradient-secondary: linear-gradient(to right, #731312, #ff6e3f, #4b2c87);
+  --gradient-secondary: linear-gradient(to right, var(--color-wc-red), var(--color-wc-orange), var(--color-wc-purple));
 
   /* Default */
   --color-background: var(--background);

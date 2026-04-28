@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
+import { Button } from "@/shared/components/ui/button";
 import { FloatingShape } from "@shared/components/ui/floating-shape";
-import { Button } from "@shared/components/ui/old-button";
 import { useScrollAnimation } from "@shared/hooks/useScrollAnimation";
 
 export function BannerSection() {
@@ -68,10 +68,10 @@ export function BannerSection() {
           <p className="text-lg sm:text-xl text-zinc-800 dark:text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">{t("hero.subtitle")}</p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mx-4 sm:mx-0">
-            <Button asChild size="lg">
+            <Button variant="gradient" asChild size="lg">
               <Link href="/register">{tCta("getStarted")}</Link>
             </Button>
-            <Button asChild variant="outline" size="lg">
+            <Button variant="outline" asChild size="lg">
               <Link href="/login">{tCta("signIn")}</Link>
             </Button>
           </div>
