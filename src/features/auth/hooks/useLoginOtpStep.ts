@@ -31,7 +31,10 @@ export function useLoginOtpStep() {
       return;
     }
 
-    const { access_token, expires_at, user } = res.data!;
+    const {
+      auth: { access_token, expires_at },
+      user,
+    } = res.data!;
 
     const result = await signIn("credentials", {
       access_token,
@@ -46,7 +49,7 @@ export function useLoginOtpStep() {
     }
 
     reset();
-    router.replace("/home");
+    router.replace("/");
   });
 
   const handleResend = async () => {

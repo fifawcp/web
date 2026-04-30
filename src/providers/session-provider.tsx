@@ -8,5 +8,7 @@ interface SessionProviderProps {
 }
 
 export function SessionProvider({ children }: SessionProviderProps) {
-  return <NextAuthSessionProvider>{children}</NextAuthSessionProvider>;
+  // Disable NextAuth's built-in window-focus refetch -> SessionMonitor already
+  // handles re-validation on tab focus via visibilitychange + Web Locks
+  return <NextAuthSessionProvider refetchOnWindowFocus={false}>{children}</NextAuthSessionProvider>;
 }
