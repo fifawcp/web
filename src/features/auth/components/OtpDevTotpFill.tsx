@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import { getDevTotp } from "@/features/auth/api/client";
-import { isProd } from "@/lib/env";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { ApiError } from "@/shared/lib/api/types";
@@ -21,7 +20,7 @@ type OtpDevTotpFillProps = {
 export function OtpDevTotpFill({ identifier, setOtpCode, onApiError, className }: OtpDevTotpFillProps) {
   const [isLoading, setIsLoading] = useState(false);
 
-  if (isProd) return null;
+  if (process.env.NODE_ENV === "production") return null;
 
   const handleClick = async () => {
     if (!identifier || isLoading) return;

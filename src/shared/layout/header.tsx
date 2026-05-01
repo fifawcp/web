@@ -37,9 +37,9 @@ export function Header() {
             {isLoggedIn && (
               <nav className="hidden md:flex items-center gap-6">
                 <Link
-                  href="/home"
+                  href="/"
                   className={`text-sm font-medium transition-colors hover:text-wc-red dark:hover:text-wc-orange ${
-                    isActive("/home") ? "text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
+                    isActive("/") ? "text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
                   }`}
                 >
                   {t("home")}
@@ -110,9 +110,9 @@ export function Header() {
                     </div>
                   )}
                   <Link
-                    href="/home"
+                    href="/"
                     className={`text-sm font-medium px-2 py-1 rounded-md ${
-                      isActive("/home") ? "bg-wc-red/10 dark:bg-wc-purple/20 text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
+                      isActive("/") ? "bg-wc-red/10 dark:bg-wc-purple/20 text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >

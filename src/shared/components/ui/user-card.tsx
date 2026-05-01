@@ -14,7 +14,7 @@ export function UserCard({ username, points = 0, firstName, lastName }: UserCard
 
   return (
     <Link
-      href="/home"
+      href="/"
       className="flex items-center justify-between md:justify-center gap-2 p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
     >
       <div className="h-8 w-8 rounded-full bg-linear-to-br from-wc-red to-wc-orange flex items-center justify-center text-white text-xs font-bold">{initials}</div>

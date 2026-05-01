@@ -1,6 +1,9 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+import { env } from "@/lib/env";
+import { User } from "@/shared/types/interfaces";
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -14,9 +17,20 @@ export const authOptions: NextAuthOptions = {
         if (!credentials) return null;
 
         const creds = credentials as Record<string, string>;
+        if (!creds.access_token || !creds.expires_at || !creds.user) return null;
 
         // OTP was already verified by backend, just create session
-        const user = JSON.parse(creds.user);
+        let user: User;
+
+        try {
+          user = JSON.parse(creds.user) as User;
+        } catch {
+          return null;
+        }
+
+        if (!user.id || !user.username || !user.email || !user.first_name || !user.last_name || !user.created_at || !user.updated_at) {
+          return null;
+        }
 
         return {
           id: user.id,
@@ -34,7 +48,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 7 * 24 * 60 * 60, // 7 days
+    maxAge: env.NEXTAUTH_SESSION_MAX_AGE,
   },
   callbacks: {
     async jwt({ token, user, trigger, session }) {
@@ -49,10 +63,12 @@ export const authOptions: NextAuthOptions = {
         token.access_token = user.access_token;
         token.expires_at = user.expires_at;
       }
+
       if (trigger === "update" && session?.access_token) {
         token.access_token = session.access_token;
         token.expires_at = session.expires_at;
       }
+
       return token;
     },
     async session({ session, token }) {
@@ -67,6 +83,7 @@ export const authOptions: NextAuthOptions = {
         session.access_token = token.access_token as string;
         session.expires_at = token.expires_at as string;
       }
+
       return session;
     },
   },
@@ -75,7 +92,7 @@ export const authOptions: NextAuthOptions = {
     signOut: "/",
     error: "/login",
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);

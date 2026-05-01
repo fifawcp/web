@@ -42,7 +42,10 @@ export function useRegisterProfileStep() {
       return;
     }
 
-    const { access_token, expires_at, user } = res.data!;
+    const {
+      auth: { access_token, expires_at },
+      user,
+    } = res.data!;
     const result = await signIn("credentials", {
       access_token,
       expires_at,
@@ -56,7 +59,7 @@ export function useRegisterProfileStep() {
     }
 
     reset();
-    router.replace("/home");
+    router.replace("/");
   });
 
   const handleBack = () => {

@@ -2,119 +2,107 @@ import { getSession, signOut } from "next-auth/react";
 
 import { logger } from "../logger";
 
+import { HARD_AUTH_FAILURE_CODES } from "./errors";
+import { isTokenStale } from "./jwt";
+import { refreshBackendAccessToken, RefreshedAccessToken } from "./refresh";
 import { ApiError, ApiResponse } from "./types";
 
-const BASE_API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
-
-type AuthData = {
-  access_token: string;
-  expires_at: string;
-};
-
-async function refreshToken(): Promise<AuthData | null> {
-  try {
-    const response = await fetch(`${BASE_API_URL}/api/auth/token/refresh`, {
-      method: "POST",
-      credentials: "include", // Sends HTTP-only cookie with the refresh token
-    });
-
-    if (!response.ok) return null;
-
-    const body = await response.json();
-    return body.data;
-  } catch {
-    return null;
-  }
-}
-
-export async function fetchWithAuth(url: string, options: FetchWithAuthOptions): Promise<Response> {
-  const { update, ...fetchOptions } = options;
-
-  const isBrowser = typeof window !== "undefined";
-  const session = isBrowser ? await getSession() : null;
-  const accessToken = session?.access_token ?? null;
-
-  const headers = new Headers(fetchOptions.headers);
-  if (accessToken && !headers.has("Authorization")) {
-    headers.set("Authorization", `Bearer ${accessToken}`);
-  }
-
-  const response = await fetch(url, { ...fetchOptions, headers, credentials: "include" });
-
-  if (response.status == 401) {
-    const authData = await refreshToken();
-    if (!authData) {
-      // If there is no successfull refresh, sign out the user and redirect to the login page
-      // TODO: call logout endpoint too (analyze if needed, as this one is probably expired)
-      if (isBrowser) void signOut({ callbackUrl: "/login" });
-
-      return response;
-    }
-
-    // Update the session with the new auth data
-    if (update) await update(authData);
-
-    // Retry the request with the new auth data
-    const retryHeaders = new Headers(fetchOptions.headers);
-    retryHeaders.set("Authorization", `Bearer ${authData.access_token}`);
-
-    return fetch(url, { ...fetchOptions, headers: retryHeaders, credentials: "include" });
-  }
-
-  return response;
-}
+type SessionUpdater = (data: RefreshedAccessToken) => Promise<unknown>;
 
 type RequestOptions = Omit<RequestInit, "method" | "body"> & {
   authenticated?: boolean;
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   body?: unknown;
-  update?: (data: AuthData) => Promise<unknown>;
+  update?: SessionUpdater;
 };
 
-type FetchWithAuthOptions = RequestInit & { update?: (data: AuthData) => Promise<unknown> };
+type FetchOptions = RequestInit & { update?: SessionUpdater };
+
+// Performs an authenticated fetch with two layers of token freshness:
+//   1. Lazy pre-refresh -> if the stored token is near expiry, refresh before sending
+//   2. Reactive retry -> if the API returns 401 anyway (clock skew, race), refresh once and retry
+// Transient failures (network, 5xx) are bubbled up without forcing signOut
+export async function fetchWithAuth(url: string, options: FetchOptions): Promise<Response> {
+  const { update, ...fetchOptions } = options;
+
+  let accessToken = await getAccessToken();
+
+  // If the stored token is near expiry, refresh before sending
+  if (accessToken && isTokenStale(accessToken)) {
+    accessToken = (await doRefresh(update)) ?? accessToken;
+  }
+
+  const response = await fetch(url, { ...fetchOptions, headers: withBearer(fetchOptions.headers, accessToken) });
+  if (response.status !== 401) return response;
+
+  // Reactive refresh + single retry as a safety net for clock-skew or race conditions
+  const fresh = await doRefresh(update);
+  if (!fresh) return response;
+
+  return fetch(url, { ...fetchOptions, headers: withBearer(fetchOptions.headers, fresh) });
+}
+
+async function getAccessToken(): Promise<string | null> {
+  const isBrowser = typeof window !== "undefined";
+  const session = isBrowser ? await getSession() : null;
+
+  return session?.access_token ?? null;
+}
+
+// Attempts a token refresh. Signs the user out only on hard auth errors (invalid / missing refresh token cookie).
+// Network blips and server errors leave the session intact for the next attempt.
+async function doRefresh(update?: SessionUpdater): Promise<string | null> {
+  const res = await refreshBackendAccessToken();
+
+  if (res.success && res.data) {
+    if (update) await update(res.data);
+    return res.data.access_token;
+  }
+
+  // If the refresh failed due to a hard auth error, sign the user out
+  if (res.error && HARD_AUTH_FAILURE_CODES.has(res.error.code)) {
+    if (typeof window !== "undefined") void signOut({ callbackUrl: "/login" });
+  }
+
+  // If the refresh failed due to a transient error, return null so the caller can retry
+  return null;
+}
+
+function withBearer(base: HeadersInit | undefined, token: string | null): Headers {
+  const headers = new Headers(base);
+  if (token && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  return headers;
+}
 
 async function request<T>(endpoint: string, options: RequestOptions = { method: "GET" }): Promise<ApiResponse<T>> {
   try {
-    const url = `${BASE_API_URL}${endpoint}`;
-    const fetchOptions: FetchWithAuthOptions = {
+    const fetchOptions: FetchOptions = {
       method: options.method,
       headers: { "Content-Type": "application/json", ...options.headers },
-      credentials: "include",
       update: options.update,
     };
-
     if (options.body != null) fetchOptions.body = JSON.stringify(options.body);
 
-    const response = options.authenticated ? await fetchWithAuth(url, fetchOptions) : await fetch(url, fetchOptions);
+    // Relative URL -> Next proxies "/api/*" to the backend, making cookies same-origin
+    const response = options.authenticated ? await fetchWithAuth(endpoint, fetchOptions) : await fetch(endpoint, fetchOptions);
 
-    // No-content responses
-    if (response.status === 204) {
-      return { success: true, data: undefined };
-    }
+    if (response.status === 204) return { success: true, data: undefined };
 
     const body = await response.json();
-
     if (!response.ok) {
       const { code, message, requestId, fields } = body.error as ApiError;
-      return {
-        success: false,
-        error: { code, message, requestId, fields },
-      };
+      return { success: false, error: { code, message, requestId, fields } };
     }
 
     return { success: true, data: body.data };
   } catch (error) {
     logger.error("API request error:", error);
-
-    // TODO: should we consideer all catch errors as network errors?
     return {
       success: false,
-      error: {
-        code: "NETWORK_ERROR",
-        message: "Network error occurred",
-        requestId: "",
-        fields: undefined,
-      },
+      error: { code: "NETWORK_ERROR", message: "Network error occurred", requestId: "", fields: undefined },
     };
   }
 }
