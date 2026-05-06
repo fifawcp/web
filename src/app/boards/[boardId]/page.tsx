@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { getTranslations } from "next-intl/server";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { Board, BoardDetails, BoardMembersList } from "@/features/boards";
+import { Board, BoardDetails, BoardMember } from "@/features/boards";
 import { BoardDetailsView } from "@/features/boards/components/BoardDetailsView";
 import { BoardNotFoundClient } from "@/features/boards/components/BoardNotFoundClient";
 import { NotBoardMemberClient } from "@/features/boards/components/NotBoardMemberClient";
@@ -23,9 +23,9 @@ export default async function BoardDetailsPage({ params }: BoardDetailsPageProps
 
   const boardRes = await serverApi.get<BoardDetails>(`/api/boards/${boardId}`);
   const boardsRes = await serverApi.get<Board[]>(`/api/boards`);
-  const membersRes = await serverApi.get<BoardMembersList>(`/api/boards/${boardId}/members`);
+  const membersRes = await serverApi.get<BoardMember[]>(`/api/boards/${boardId}/members`);
 
-  if (!boardRes.success || !boardRes.data || !boardsRes.success || !boardsRes.data || !membersRes.success || !membersRes.data) {
+  if (!boardRes.success || !boardRes.data || !boardsRes.success || !boardsRes.data || !membersRes.success || !membersRes.data || !membersRes.pagination) {
     const errorCode = boardRes.error?.code || membersRes.error?.code;
     const globalBoard = boardsRes.data?.find((b) => b.privacy === "public");
 
@@ -72,7 +72,14 @@ export default async function BoardDetailsPage({ params }: BoardDetailsPageProps
 
   return (
     <div className="min-h-[calc(100dvh-var(--header-height))] animate-appear bg-zinc-50 dark:bg-zinc-900">
-      <BoardDetailsView board={boardRes.data} boards={boardsRes.data} membersList={membersRes.data} currentUserId={session?.user?.id ?? "user-001"} boardId={boardId} />
+      <BoardDetailsView
+        board={boardRes.data}
+        boards={boardsRes.data}
+        initialMembers={membersRes.data}
+        initialPagination={membersRes.pagination}
+        currentUserId={session?.user?.id ?? "user-001"}
+        boardId={boardId}
+      />
     </div>
   );
 }

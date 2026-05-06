@@ -60,13 +60,3 @@ export interface UpdateBoardRequest {
 export interface UpdateMemberRoleRequest {
   role: BoardRole;
 }
-
-export interface BoardMembersList {
-  members: BoardMember[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    has_more: boolean;
-  };
-}

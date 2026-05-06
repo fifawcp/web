@@ -18,13 +18,4 @@ export { getBoards, createBoard, joinBoard, getBoardDetails, deleteBoard, update
 export { createBoardSchema, joinBoardSchema, updateBoardSchema, updateMemberRoleSchema } from "./schemas/board.schema";
 export type { CreateBoardFormData, JoinBoardFormData, UpdateBoardFormData, UpdateMemberRoleFormData } from "./schemas/board.schema";
 export { BoardRole } from "./types/board.types";
-export type {
-  Board,
-  BoardMember,
-  BoardDetails,
-  CreateBoardRequest,
-  JoinBoardRequest,
-  UpdateBoardRequest,
-  UpdateMemberRoleRequest,
-  BoardMembersList,
-} from "./types/board.types";
+export type { Board, BoardMember, BoardDetails, CreateBoardRequest, JoinBoardRequest, UpdateBoardRequest, UpdateMemberRoleRequest } from "./types/board.types";

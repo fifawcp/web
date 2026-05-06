@@ -97,7 +97,7 @@ async function request<T>(endpoint: string, options: RequestOptions = { method: 
       return { success: false, error: { code, message, requestId, fields } };
     }
 
-    return { success: true, data: body.data };
+    return { success: true, data: body.data, pagination: body.pagination };
   } catch (error) {
     logger.error("API request error:", error);
     return {

@@ -3,10 +3,12 @@
 import { useState } from "react";
 
 import { getBoardMembers } from "@/features/boards/api/client";
-import { BoardMembersList } from "@/features/boards/types/board.types";
+import { BoardMember } from "@/features/boards/types/board.types";
+import { Pagination } from "@/shared/lib/api/types";
 
-export function useBoardMembers(boardId: string, initialData: BoardMembersList) {
-  const [data, setData] = useState<BoardMembersList>(initialData);
+export function useBoardMembers(boardId: string, initialMembers: BoardMember[], initialPagination: Pagination) {
+  const [members, setMembers] = useState<BoardMember[]>(initialMembers);
+  const [pagination, setPagination] = useState<Pagination>(initialPagination);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,9 +16,10 @@ export function useBoardMembers(boardId: string, initialData: BoardMembersList) 
     setIsLoading(true);
     setError(null);
 
-    const res = await getBoardMembers(boardId, page, 20);
-    if (res.success && res.data) {
-      setData(res.data);
+    const res = await getBoardMembers(boardId, page, pagination.limit);
+    if (res.success && res.data && res.pagination) {
+      setMembers(res.data);
+      setPagination(res.pagination);
     } else {
       setError(res.error?.message || "Failed to load members");
     }
@@ -29,11 +32,12 @@ export function useBoardMembers(boardId: string, initialData: BoardMembersList) 
   };
 
   const refresh = async () => {
-    await fetchMembers(data.pagination.page);
+    await fetchMembers(pagination.page);
   };
 
   return {
-    data,
+    members,
+    pagination,
     isLoading,
     error,
     handlePageChange,

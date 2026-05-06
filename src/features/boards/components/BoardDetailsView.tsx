@@ -10,24 +10,26 @@ import { BoardSubheader } from "@/features/boards/components/BoardSubheader";
 import { ShareBoardDialog } from "@/features/boards/components/ShareBoardDialog";
 import { useBoardMembers } from "@/features/boards/hooks/useBoardMembers";
 import { useRemoveMember } from "@/features/boards/hooks/useRemoveMember";
-import { Board, BoardDetails, BoardMembersList } from "@/features/boards/types/board.types";
+import { Board, BoardDetails, BoardMember } from "@/features/boards/types/board.types";
 import { setLastVisitedBoardId } from "@/features/boards/utils/boardStorage";
+import { Pagination } from "@/shared/lib/api/types";
 import { getCurrentWorldCup2026Stage } from "@/shared/lib/utils/matchday";
 import { getRankColor } from "@/shared/lib/utils/ui";
 
 interface BoardDetailsViewProps {
   board: BoardDetails;
   boards: Board[];
-  membersList: BoardMembersList;
+  initialMembers: BoardMember[];
+  initialPagination: Pagination;
   currentUserId: string;
   boardId: string;
 }
 
-export function BoardDetailsView({ board, boards, membersList, currentUserId, boardId }: BoardDetailsViewProps) {
+export function BoardDetailsView({ board, boards, initialMembers, initialPagination, currentUserId, boardId }: BoardDetailsViewProps) {
   const t = useTranslations("boards");
 
   const { handleRemove } = useRemoveMember(String(board.id));
-  const { data: paginatedData, handlePageChange, refresh: refreshMembers } = useBoardMembers(boardId, membersList);
+  const { members, pagination, handlePageChange, refresh: refreshMembers } = useBoardMembers(boardId, initialMembers, initialPagination);
 
   const refresh = useCallback(() => {
     refreshMembers();
@@ -35,8 +37,6 @@ export function BoardDetailsView({ board, boards, membersList, currentUserId, bo
 
   const isGlobalBoard = (b: Board) => b.privacy === "public";
 
-  const members = paginatedData?.members;
-  const pagination = paginatedData?.pagination;
   const topThree = [...members].sort((a, b) => a.rank - b.rank).slice(0, 3);
 
   const currentState = getCurrentWorldCup2026Stage();
@@ -62,10 +62,10 @@ export function BoardDetailsView({ board, boards, membersList, currentUserId, bo
         id: "members",
         icon: <Users className="w-5 h-5 text-zinc-900 dark:text-zinc-100" />,
         label: t("subheader.members"),
-        value: paginatedData?.pagination.total.toString() || membersList.pagination.total.toString(),
+        value: pagination.total.toString(),
       },
     ],
-    [board.viewer.rank, board.viewer.total_points, paginatedData?.pagination.total, membersList.pagination.total, t]
+    [board.viewer.rank, board.viewer.total_points, pagination.total, t]
   );
 
   return (
