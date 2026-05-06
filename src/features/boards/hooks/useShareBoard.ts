@@ -4,7 +4,7 @@ import { BoardDetails } from "../types/board.types";
 
 import { useRegenerateJoinCode } from "./useRegenerateJoinCode";
 
-export const useShareBoard = ({ board }: { board: BoardDetails }) => {
+export const useShareBoard = ({ board, currentUserId }: { board: BoardDetails; currentUserId: string }) => {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
@@ -12,7 +12,7 @@ export const useShareBoard = ({ board }: { board: BoardDetails }) => {
 
   const joinCode = board.join_code || "";
   const shareLink = typeof window !== "undefined" ? `${window.location.origin}/boards/join?code=${joinCode}` : "";
-  const isAdminOrOwner = board.viewer.role === "admin" || board.viewer.role === "owner";
+  const isAdminOrOwner = board.viewer.role === "admin" || board.owner_user_id === currentUserId;
 
   const copyCode = async () => {
     await navigator.clipboard.writeText(joinCode);

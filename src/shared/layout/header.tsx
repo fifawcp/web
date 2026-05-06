@@ -52,6 +52,7 @@ export function Header() {
 
                 <Link
                   href="/boards"
+                  prefetch={false}
                   className={`text-sm font-medium transition-colors hover:text-wc-red dark:hover:text-wc-orange ${
                     isActive("/boards") ? "text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
                   }`}
@@ -125,6 +126,7 @@ export function Header() {
                   </Link>
                   <Link
                     href="/boards"
+                    prefetch={false}
                     className={`text-sm font-medium px-2 py-1 rounded-md ${
                       isActive("/boards") ? "bg-wc-red/10 dark:bg-wc-purple/20 text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
                     }`}

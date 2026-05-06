@@ -12,22 +12,26 @@ import { useShareBoard } from "../hooks/useShareBoard";
 
 interface ShareBoardDialogProps {
   board: BoardDetails;
+  currentUserId: string;
 }
 
-export function ShareBoardDialog({ board }: ShareBoardDialogProps) {
-  const { open, setOpen, copyCode, copyLink, handleRegenerate, isRegenerating, copied, linkCopied, joinCode, shareLink, isAdminOrOwner } = useShareBoard({ board });
+export function ShareBoardDialog({ board, currentUserId }: ShareBoardDialogProps) {
+  const { open, setOpen, copyCode, copyLink, handleRegenerate, isRegenerating, copied, linkCopied, joinCode, shareLink, isAdminOrOwner } = useShareBoard({
+    board,
+    currentUserId,
+  });
   const t = useTranslations("boards");
   const tShare = useTranslations("boards.share");
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button size="sm" className="h-auto py-2 px-3 text-sm w-1/2 lg:w-auto">
           <UserPlus className="h-4 w-4 mr-2" />
           {t("subheader.inviteFriends")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="p-5 min-w-auto md:min-w-100">
+      <DialogContent className="p-5 min-w-auto lg:min-w-100">
         <DialogHeader className="gap-0">
           <p className="text-xs text-muted-foreground uppercase tracking-wider">{tShare("inviteToPool")}</p>
           <DialogTitle className="font-bold text-xl">{board.name}</DialogTitle>

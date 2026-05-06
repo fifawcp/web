@@ -1,50 +1,64 @@
-export enum BoardRole {
-  ADMIN = "admin",
-  MEMBER = "member",
-}
+import { Pagination } from "@/shared/lib/api/types";
 
-export interface Board {
+export type BoardMemberRole = "admin" | "member";
+
+// Match API: BoardPrivacy.
+export type BoardPrivacy = "public" | "private";
+
+export interface BoardSummary {
   id: string;
   name: string;
-  privacy: "public" | "private";
+  privacy: BoardPrivacy;
 }
 
-export interface BoardMember {
-  correct_outcomes: number;
-  exact_hits: number;
-
-  match_score_points: number;
-  pickem_points: number;
-  total_points: number;
-
-  joined_at: string;
-  rank: number;
-  role: BoardRole;
-  updated_at: string;
-  user_id: string;
-  username: string;
-  first_name: string;
-  last_name: string;
+export interface Board extends BoardSummary {
+  owner_user_id?: string;
+  join_code?: string;
+  created_at: string;
 }
 
 export interface BoardViewer {
   is_owner: boolean;
   joined_at: string;
   rank: number;
-  role: string;
+  role: BoardMemberRole;
   total_points: number;
 }
-
-export interface BoardDetails {
-  id: string;
-  name: string;
-  privacy: "public" | "private";
-  created_at: string;
-  join_code?: string;
-  owner_user_id?: string;
+export interface BoardDetails extends Board {
   viewer: BoardViewer;
 }
 
+export interface BoardMemberDetails {
+  user_id: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  role: BoardMemberRole;
+  joined_at: string;
+  updated_at: string;
+  rank: number;
+  total_points: number;
+  pickem_points: number;
+  match_score_points: number;
+  exact_hits: number;
+  correct_outcomes: number;
+}
+
+// ─── listing / filtering ───
+
+// Sort options accepted by the members endpoint (Go: BoardMembersSort).
+export type BoardMembersSort = "total_points" | "pickem_points" | "match_score_points" | "exact_hits" | "correct_outcomes";
+
+// Query params for the members listing (Go: BoardMembersFilters).
+export interface BoardMembersFilters {
+  search?: string;
+  sort?: BoardMembersSort;
+}
+
+// Re-export for callers so they don't have to import from two places.
+export type { Pagination };
+
+// ─── requests (unchanged) ───
 export interface CreateBoardRequest {
   name: string;
 }
@@ -58,5 +72,5 @@ export interface UpdateBoardRequest {
 }
 
 export interface UpdateMemberRoleRequest {
-  role: BoardRole;
+  role: BoardMemberRole;
 }

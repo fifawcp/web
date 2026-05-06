@@ -1,25 +1,24 @@
 "use client";
 
-import { useCallback, useEffect, useMemo } from "react";
+import { Suspense, useCallback, useEffect, useMemo } from "react";
 import { Star, Trophy, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { BoardErrorHandler } from "@/features/boards/components/BoardErrorHandler";
 import { BoardPodium } from "@/features/boards/components/BoardPodium";
 import { BoardRankingTable } from "@/features/boards/components/BoardRankingTable";
 import { BoardSubheader } from "@/features/boards/components/BoardSubheader";
-import { ShareBoardDialog } from "@/features/boards/components/ShareBoardDialog";
 import { useBoardMembers } from "@/features/boards/hooks/useBoardMembers";
 import { useRemoveMember } from "@/features/boards/hooks/useRemoveMember";
-import { Board, BoardDetails, BoardMember } from "@/features/boards/types/board.types";
+import { Board, BoardDetails, BoardMemberDetails } from "@/features/boards/types/board.types";
 import { setLastVisitedBoardId } from "@/features/boards/utils/boardStorage";
 import { Pagination } from "@/shared/lib/api/types";
-import { getCurrentWorldCup2026Stage } from "@/shared/lib/utils/matchday";
 import { getRankColor } from "@/shared/lib/utils/ui";
 
 interface BoardDetailsViewProps {
   board: BoardDetails;
   boards: Board[];
-  initialMembers: BoardMember[];
+  initialMembers: BoardMemberDetails[];
   initialPagination: Pagination;
   currentUserId: string;
   boardId: string;
@@ -28,20 +27,20 @@ interface BoardDetailsViewProps {
 export function BoardDetailsView({ board, boards, initialMembers, initialPagination, currentUserId, boardId }: BoardDetailsViewProps) {
   const t = useTranslations("boards");
 
-  const { handleRemove } = useRemoveMember(String(board.id));
   const { members, pagination, handlePageChange, refresh: refreshMembers } = useBoardMembers(boardId, initialMembers, initialPagination);
 
   const refresh = useCallback(() => {
     refreshMembers();
   }, [refreshMembers]);
 
-  const isGlobalBoard = (b: Board) => b.privacy === "public";
+  const { handleRemove } = useRemoveMember(board.id, refresh);
 
   const topThree = [...members].sort((a, b) => a.rank - b.rank).slice(0, 3);
 
-  const currentState = getCurrentWorldCup2026Stage();
   useEffect(() => {
     setLastVisitedBoardId(boardId);
+    // Also set cookie for server-side redirect optimization
+    document.cookie = `LastVisitedBoardId=${boardId}; path=/; max-age=2592000`; // 30 days
   }, [boardId]);
 
   const boardUserStats = useMemo(
@@ -70,28 +69,21 @@ export function BoardDetailsView({ board, boards, initialMembers, initialPaginat
 
   return (
     <div className="flex flex-col gap-4">
-      <BoardSubheader boards={boards} currentBoard={board} />
+      <Suspense fallback={null}>
+        <BoardErrorHandler />
+      </Suspense>
+      <BoardSubheader boards={boards} currentBoard={board} currentUserId={currentUserId} currentUserRole={board.viewer.role} />
       <div className="flex flex-col gap-5 pt-0 p-4 sm:pt-0 sm:p-6 lg:pt-0 lg:p-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ">
-          <div>
-            <p className="text-xs text-muted-foreground">
-              {board.name} · {t(`matchday.${currentState}`)}
-            </p>
-            <h1 className="text-3xl sm:text-4xl font-bold">{t("details.title")}</h1>
-            <p className="text-sm text-muted-foreground">{t("details.subtitle")}</p>
-          </div>
-          {!isGlobalBoard(boards.find((b) => String(b.id) === boardId)!) && <ShareBoardDialog board={board} />}
-        </div>
-        <div className="flex items-center flex-row flex-wrap justify-center gap-4 my-6">
+        <div className="flex items-center flex-row justify-center gap-2 md:gap-4">
           {boardUserStats.map((stat) => (
             <div
               key={stat.id}
-              className="flex w-45 items-center justify-center md:justify-start gap-3 p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900"
+              className="flex flex-col md:flex-row w-40 md:w-45 items-center justify-center md:justify-start gap-2 md:gap-3  p-2 sm:p-3 md:p-4  rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900"
             >
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800">{stat.icon}</div>
-              <div className="flex flex-col">
+              <div className="flex flex-col items-center">
                 <span className="text-xs text-muted-foreground">{stat.label}</span>
-                <span className={`text-2xl font-bold ${stat.id === "myPosition" ? getRankColor(board?.viewer.rank || 0, "text") : ""}`}>{stat.value}</span>
+                <span className={`text-xl md:text-2xl font-bold ${stat.id === "myPosition" ? getRankColor(board?.viewer.rank || 0, "text") : ""}`}>{stat.value}</span>
               </div>
             </div>
           ))}

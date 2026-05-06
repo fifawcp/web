@@ -27,12 +27,13 @@ export function CreateBoardDialog() {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline" className="bg-background text-foreground h-auto py-2 px-3 text-sm">
+        <Button size="sm" variant="outline" className="bg-background text-foreground h-auto p-1.5 sm:py-2 sm:px-3 text-sm">
           <Plus className="h-3.5 w-3.5" />
-          {t("create.trigger")}
+          <span className="hidden sm:inline">{t("create.trigger")}</span>
+          <span className="text-xs sm:hidden">{t("create.create")}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="p-5 min-w-auto md:min-w-100">
+      <DialogContent className="p-5 min-w-auto sm:min-w-100">
         <DialogHeader className="gap-0">
           <DialogTitle className="font-bold text-xl">{t("create.title")}</DialogTitle>
           <DialogDescription className="">{t("create.description")}</DialogDescription>

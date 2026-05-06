@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createBoardSchema = z.object({
-  name: z.string().min(3, "errors.nameMinLength").max(20, "errors.nameMaxLength").trim(),
+  name: z.string().min(2, "errors.nameMinLength").max(20, "errors.nameMaxLength").trim(),
 });
 
 export const joinBoardSchema = z.object({
@@ -13,7 +13,7 @@ export const joinBoardSchema = z.object({
 });
 
 export const updateBoardSchema = z.object({
-  name: z.string().min(1, "errors.nameMinLength").max(20, "errors.nameMaxLength").trim(),
+  name: z.string().min(2, "errors.nameMinLength").max(20, "errors.nameMaxLength").trim(),
 });
 
 export const updateMemberRoleSchema = z.object({

@@ -3,11 +3,11 @@
 import { useState } from "react";
 
 import { getBoardMembers } from "@/features/boards/api/client";
-import { BoardMember } from "@/features/boards/types/board.types";
+import { BoardMemberDetails } from "@/features/boards/types/board.types";
 import { Pagination } from "@/shared/lib/api/types";
 
-export function useBoardMembers(boardId: string, initialMembers: BoardMember[], initialPagination: Pagination) {
-  const [members, setMembers] = useState<BoardMember[]>(initialMembers);
+export function useBoardMembers(boardId: string, initialMembers: BoardMemberDetails[], initialPagination: Pagination) {
+  const [members, setMembers] = useState<BoardMemberDetails[]>(initialMembers);
   const [pagination, setPagination] = useState<Pagination>(initialPagination);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

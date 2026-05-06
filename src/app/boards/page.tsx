@@ -1,9 +1,22 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 import { Board } from "@/features/boards";
-import { BoardRedirect } from "@/features/boards/components/BoardRedirect";
+import { LAST_VISITED_BOARD_KEY } from "@/features/boards/constants/boards";
 import { findGlobalBoard } from "@/features/boards/utils/boardStorage";
 import { serverApi } from "@/shared/lib/api/server";
 
 export default async function BoardsPage() {
+  // Try cookie first to avoid unnecessary fetch
+  const cookieStore = await cookies();
+  const lastVisitedCookie = cookieStore.get(LAST_VISITED_BOARD_KEY);
+
+  if (lastVisitedCookie?.value) {
+    // Trust the cookie - if board doesn't exist, [boardId] page will handle error
+    redirect(`/boards/${lastVisitedCookie.value}`);
+  }
+
+  // No cookie - fetch boards to find fallback
   const boardsRes = await serverApi.get<Board[]>(`/api/boards`);
 
   if (!boardsRes.success || !boardsRes.data || boardsRes.data.length === 0) {
@@ -14,8 +27,9 @@ export default async function BoardsPage() {
     );
   }
 
-  const globalBoard = findGlobalBoard(boardsRes.data);
-  const fallbackBoardId = globalBoard?.id || boardsRes.data[0]?.id;
+  const boards = boardsRes.data;
+  const globalBoard = findGlobalBoard(boards);
+  const fallbackBoardId = globalBoard?.id || boards[0]?.id;
 
   if (!fallbackBoardId) {
     return (
@@ -25,5 +39,5 @@ export default async function BoardsPage() {
     );
   }
 
-  return <BoardRedirect boards={boardsRes.data} fallbackBoardId={fallbackBoardId} />;
+  redirect(`/boards/${fallbackBoardId}`);
 }

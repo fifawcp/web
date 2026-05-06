@@ -47,13 +47,11 @@ export function useJoinBoard() {
     form.reset();
     setOpen(false);
 
-    setTimeout(() => {
-      if (boardId) {
-        router.push(`/boards/${boardId}`);
-      } else {
-        router.refresh();
-      }
-    }, 100);
+    if (boardId) {
+      router.push(`/boards/${boardId}`);
+    } else {
+      router.refresh();
+    }
   });
 
   return {

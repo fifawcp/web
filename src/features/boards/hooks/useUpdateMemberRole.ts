@@ -1,16 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { updateMemberRole } from "@/features/boards/api/client";
-import { BoardRole } from "@/features/boards/types/board.types";
+import { BoardMemberRole } from "@/features/boards/types/board.types";
 import { useApiError } from "@/shared/hooks/useApiError";
 
-export function useUpdateMemberRole(boardId: string) {
-  const router = useRouter();
+export function useUpdateMemberRole(boardId: string, onSuccess?: () => void) {
   const t = useTranslations("boards.ranking");
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
   const apiError = useApiError();
@@ -19,7 +17,7 @@ export function useUpdateMemberRole(boardId: string) {
     setUpdatingUserId(userId);
     apiError.clear();
 
-    const res = await updateMemberRole(boardId, userId, { role: role as BoardRole });
+    const res = await updateMemberRole(boardId, userId, { role: role as BoardMemberRole });
     setUpdatingUserId(null);
 
     if (!res.success) {
@@ -32,7 +30,8 @@ export function useUpdateMemberRole(boardId: string) {
       description: t("roleUpdateSuccess"),
     });
 
-    router.refresh();
+    // Call refresh callback to update client state
+    onSuccess?.();
   };
 
   return {

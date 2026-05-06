@@ -1,13 +1,12 @@
 import { AlertCircle, ArrowLeft, Home } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { getTranslations } from "next-intl/server";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { Board, BoardDetails, BoardMember } from "@/features/boards";
+import { Board, BoardDetails, BoardMemberDetails } from "@/features/boards";
 import { BoardDetailsView } from "@/features/boards/components/BoardDetailsView";
-import { BoardNotFoundClient } from "@/features/boards/components/BoardNotFoundClient";
-import { NotBoardMemberClient } from "@/features/boards/components/NotBoardMemberClient";
 import { Button } from "@/shared/components/ui/button";
 import { serverApi } from "@/shared/lib/api/server";
 
@@ -21,22 +20,26 @@ export default async function BoardDetailsPage({ params }: BoardDetailsPageProps
   const t = await getTranslations("boards");
   const session = await getServerSession(authOptions);
 
-  const boardRes = await serverApi.get<BoardDetails>(`/api/boards/${boardId}`);
-  const boardsRes = await serverApi.get<Board[]>(`/api/boards`);
-  const membersRes = await serverApi.get<BoardMember[]>(`/api/boards/${boardId}/members`);
+  const [boardRes, boardsRes, membersRes] = await Promise.all([
+    serverApi.get<BoardDetails>(`/api/boards/${boardId}`),
+    serverApi.get<Board[]>(`/api/boards`),
+    serverApi.get<BoardMemberDetails[]>(`/api/boards/${boardId}/members`),
+  ]);
 
   if (!boardRes.success || !boardRes.data || !boardsRes.success || !boardsRes.data || !membersRes.success || !membersRes.data || !membersRes.pagination) {
     const errorCode = boardRes.error?.code || membersRes.error?.code;
     const globalBoard = boardsRes.data?.find((b) => b.privacy === "public");
 
+    // Redirect to global board with error code for toast notification
     if (errorCode === "BOARD_NOT_FOUND" && globalBoard) {
-      return <BoardNotFoundClient globalBoardId={globalBoard.id} />;
+      redirect(`/boards/${globalBoard.id}?error=BOARD_NOT_FOUND`);
     }
 
     if (errorCode === "NOT_BOARD_MEMBER" && globalBoard) {
-      return <NotBoardMemberClient globalBoardId={globalBoard.id} />;
+      redirect(`/boards/${globalBoard.id}?error=NOT_BOARD_MEMBER`);
     }
 
+    // Unexpected error
     return (
       <div className="min-h-[calc(100dvh-var(--header-height))] flex items-center justify-center p-6 bg-zinc-50 dark:bg-zinc-900">
         <div className="max-w-md w-full space-y-6 text-center">
@@ -77,7 +80,7 @@ export default async function BoardDetailsPage({ params }: BoardDetailsPageProps
         boards={boardsRes.data}
         initialMembers={membersRes.data}
         initialPagination={membersRes.pagination}
-        currentUserId={session?.user?.id ?? "user-001"}
+        currentUserId={session?.user?.id ?? ""}
         boardId={boardId}
       />
     </div>

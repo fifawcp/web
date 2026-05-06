@@ -38,9 +38,7 @@ export function useLeaveBoard(boardId: string) {
 
     removeLastVisitedBoardId();
 
-    setTimeout(() => {
-      router.push("/boards");
-    }, 100);
+    router.push("/boards");
   };
 
   return {

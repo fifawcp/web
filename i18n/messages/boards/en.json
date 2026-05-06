@@ -7,6 +7,7 @@
   "back": "Back",
   "create": {
     "trigger": "Create Board",
+    "create": "Create",
     "title": "Create New Board",
     "description": "Create a private board to compete with your friends",
     "nameLabel": "Board Name",
@@ -19,6 +20,7 @@
   },
   "join": {
     "trigger": "Join Board",
+    "join": "Join",
     "title": "Join a Board",
     "description": "Enter the 8-character join code to join a board",
     "codeLabel": "Join Code",
@@ -63,7 +65,8 @@
     "submit": "Update Board",
     "processing": "Updating...",
     "success": "Board updated successfully",
-    "successDescription": "Your board has been updated"
+    "successDescription": "Your board has been updated",
+    "error": "Failed to update board"
   },
   "manage": {
     "trigger": "Manage Board"
@@ -71,9 +74,6 @@
   "details": {
     "loading": "Loading board...",
     "back": "Back to boards",
-    "title": "Board",
-    "subtitle": "Leaderboard, members, and invite — all in one place.",
-    "matchday": "MD",
     "invite": "Invite",
     "members": "Members",
     "errors": {
@@ -96,7 +96,6 @@
     "matchScore": "Match Score",
     "hits": "Hits",
     "outcomes": "Outcomes",
-    "leaderboard": "Leaderboard",
     "searchMembers": "Search members",
     "removeMember": "Remove member",
     "makeAdmin": "Make admin",
@@ -113,7 +112,7 @@
     }
   },
   "errors": {
-    "nameMinLength": "Board name must be at least 3 characters",
+    "nameMinLength": "Board name must be at least 2 characters",
     "nameMaxLength": "Board name must be 20 characters or less",
     "joinCodeLength": "Code must be exactly 8 characters",
     "joinCodeFormat": "Code must contain only uppercase letters and numbers",
@@ -121,11 +120,14 @@
     "loadFailed": "Failed to load board data",
     "notFound": "Board Not Found",
     "notFoundDescription": "This board doesn't exist. It may have been deleted by the owner.",
+    "boardNotFound": "Board Not Found",
+    "boardNotFoundDescription": "This board doesn't exist or has been deleted. Redirecting to global board...",
     "notMember": "Not a Member",
     "notMemberDescription": "You are not a member of this board. You may have been removed or never had access.",
     "errorOccurred": "Error Loading Board",
     "errorOccurredDescription": "An error occurred while trying to load this board. Please try again later.",
     "goToGlobalBoard": "Go to Global Board",
+    "FORBIDDEN": "You don't have permission to perform this action.",
     "BOARD_MEMBER_ALREADY_IN_BOARD": "You are already a member of this board",
     "BOARD_INVALID_JOIN_CODE": "Invalid join code. Please check and try again",
     "BOARD_LIMIT_REACHED": "You have reached the maximum limit of 10 boards"
@@ -140,18 +142,8 @@
     "shareHint": "Anyone with this link can join your board",
     "regenerate": "Regenerate"
   },
-  "matchday": {
-    "groupStage1": "Group Stage #1",
-    "groupStage2": "Group Stage #2",
-    "groupStage3": "Group Stage #3",
-    "roundOf32": "Round of 32",
-    "roundOf16": "Round of 16",
-    "quarterFinals": "Quarter Finals",
-    "semiFinals": "Semi Finals",
-    "thirdPlace": "Third Place",
-    "final": "Final"
-  },
   "selector": {
+    "board": "Board",
     "nowSeeing": "You are seeing"
   },
   "subheader": {

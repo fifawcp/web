@@ -27,12 +27,13 @@ export function JoinBoardDialog() {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline" className="bg-background text-foreground h-auto py-2 px-3 text-sm">
+        <Button size="sm" variant="outline" className="bg-background text-foreground h-auto p-1.5 sm:py-2 sm:px-3 text-sm">
           <UserPlus className="h-3.5 w-3.5" />
-          {t("join.trigger")}
+          <span className="hidden sm:inline">{t("join.trigger")}</span>
+          <span className="text-xs sm:hidden">{t("join.join")}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="p-5 min-w-auto md:min-w-120">
+      <DialogContent className="p-5 min-w-auto sm:min-w-120">
         <DialogHeader className="gap-0">
           <DialogTitle className="font-bold text-xl">{t("join.title")}</DialogTitle>
           <DialogDescription className="">{t("join.description")}</DialogDescription>
@@ -46,7 +47,15 @@ export function JoinBoardDialog() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="gap-2">
                   <FieldLabel htmlFor="join-code">{t("join.codeLabel")}</FieldLabel>
-                  <InputOTP {...field} id="join-code" maxLength={8} aria-invalid={fieldState.invalid} containerClassName="justify-center">
+                  <InputOTP
+                    {...field}
+                    id="join-code"
+                    maxLength={8}
+                    aria-invalid={fieldState.invalid}
+                    containerClassName="justify-center"
+                    onChange={(value) => field.onChange(value.toUpperCase())}
+                    value={field.value.toUpperCase()}
+                  >
                     <InputOTPGroup className="otp-group-custom">
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />

@@ -1,7 +1,7 @@
 import { api } from "@/shared/lib/api/client";
 import { ApiResponse } from "@/shared/lib/api/types";
 
-import { Board, BoardDetails, BoardMember, CreateBoardRequest, JoinBoardRequest, UpdateBoardRequest, UpdateMemberRoleRequest } from "../types/board.types";
+import { Board, BoardDetails, BoardMemberDetails, CreateBoardRequest, JoinBoardRequest, UpdateBoardRequest, UpdateMemberRoleRequest } from "../types/board.types";
 
 export const getBoards = async (): Promise<ApiResponse<Board[]>> => {
   return api.get<Board[]>("/api/boards", { authenticated: true });
@@ -43,6 +43,6 @@ export const regenerateJoinCode = async (boardId: string): Promise<ApiResponse<{
   return api.post<{ join_code: string }>(`/api/boards/${boardId}/regenerate-join-code`, undefined, { authenticated: true });
 };
 
-export const getBoardMembers = async (boardId: string, page: number = 1, limit: number = 20): Promise<ApiResponse<BoardMember[]>> => {
-  return api.get<BoardMember[]>(`/api/boards/${boardId}/members?page=${page}&limit=${limit}`, { authenticated: true });
+export const getBoardMembers = async (boardId: string, page: number = 1, limit: number = 20): Promise<ApiResponse<BoardMemberDetails[]>> => {
+  return api.get<BoardMemberDetails[]>(`/api/boards/${boardId}/members?page=${page}&limit=${limit}`, { authenticated: true });
 };

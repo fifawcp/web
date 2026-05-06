@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, MoreVertical, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { useUpdateMemberRole } from "@/features/boards/hooks/useUpdateMemberRole";
-import { BoardMember, BoardRole } from "@/features/boards/types/board.types";
+import { BoardMemberDetails } from "@/features/boards/types/board.types";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Button } from "@/shared/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
@@ -15,7 +15,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 interface BoardRankingTableProps {
   ownerId: string;
-  members: BoardMember[];
+  members: BoardMemberDetails[];
   currentUserId: string;
   currentUserRole: string;
   boardId: string;
@@ -42,7 +42,7 @@ export function BoardRankingTable({
   onPageChange,
 }: BoardRankingTableProps) {
   const t = useTranslations("boards.ranking");
-  const { handleUpdateRole } = useUpdateMemberRole(boardId);
+  const { handleUpdateRole } = useUpdateMemberRole(boardId, onRefresh);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -51,7 +51,7 @@ export function BoardRankingTable({
 
   const showPagination = pagination && totalPages > 1;
 
-  const columns: ColumnDef<BoardMember>[] = useMemo(
+  const columns: ColumnDef<BoardMemberDetails>[] = useMemo(
     () => [
       {
         accessorKey: "rank",
@@ -94,31 +94,31 @@ export function BoardRankingTable({
       {
         accessorKey: "total_points",
         header: () => <div className="text-center">{t("total")}</div>,
-        size: 100,
+        size: 150,
         cell: ({ row }) => <div className="text-center font-bold">{row.original.total_points}</div>,
       },
       {
         accessorKey: "pickem_points",
         header: () => <div className="text-center">{t("pickem")}</div>,
-        size: 100,
+        size: 150,
         cell: ({ row }) => <div className="text-center text-muted-foreground">{row.original.pickem_points}</div>,
       },
       {
         accessorKey: "match_score_points",
         header: () => <div className="text-center">{t("matchScore")}</div>,
-        size: 130,
+        size: 150,
         cell: ({ row }) => <div className="text-center text-muted-foreground">{row.original.match_score_points}</div>,
       },
       {
         accessorKey: "exact_hits",
         header: () => <div className="text-center">{t("hits")}</div>,
-        size: 80,
+        size: 150,
         cell: ({ row }) => <div className="text-center text-muted-foreground">{row.original.exact_hits}</div>,
       },
       {
         accessorKey: "correct_outcomes",
         header: () => <div className="text-center">{t("outcomes")}</div>,
-        size: 110,
+        size: 150,
         cell: ({ row }) => <div className="text-center text-muted-foreground">{row.original.correct_outcomes}</div>,
       },
       {
@@ -128,10 +128,10 @@ export function BoardRankingTable({
           const member = row.original;
           const isCurrentUser = member.user_id === currentUserId;
           const isOwner = currentUserId === ownerId;
-          const isAdmin = currentUserRole === BoardRole.ADMIN;
+          const isAdmin = currentUserRole === "admin";
           const canManageRoles = isOwner || isAdmin;
           const memberIsOwner = member.user_id === ownerId;
-          const memberIsAdmin = member.role === BoardRole.ADMIN;
+          const memberIsAdmin = member.role === "admin";
 
           const canRemove = (canManageRoles && !memberIsOwner) || (isOwner && !memberIsOwner);
           const canChangeRole = isOwner || (isAdmin && !memberIsOwner && !memberIsAdmin);
@@ -189,12 +189,9 @@ export function BoardRankingTable({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-8 md:gap-2">
-        <h3 className="font-semibold">{t("leaderboard")}</h3>
-        <div className="relative flex-1 max-w-3xs md:max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder={t("searchMembers")} value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="pl-9" />
-        </div>
+      <div className="relative flex-1 max-w-3xs md:max-w-sm w-full md:w-auto not-first:md:self-end">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input placeholder={t("searchMembers")} value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="pl-9" />
       </div>
 
       <div className="rounded-lg border bg-card overflow-x-auto">
@@ -208,7 +205,8 @@ export function BoardRankingTable({
                     className={`text-xs uppercase text-muted-foreground ${header.column.id === "username" ? "w-auto" : ""}`}
                     style={{
                       width: header.column.id === "username" ? undefined : `${header.getSize()}px`,
-                      minWidth: header.column.id === "username" ? `${header.getSize()}px` : undefined,
+                      minWidth:
+                        header.column.id === "username" ? `${header.getSize()}px` : header.column.id === "actions" || header.column.id === "rank" ? "50px" : "110px",
                     }}
                   >
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -227,7 +225,8 @@ export function BoardRankingTable({
                       className={cell.column.id === "username" ? "w-auto" : ""}
                       style={{
                         width: cell.column.id === "username" ? undefined : `${cell.column.getSize()}px`,
-                        minWidth: cell.column.id === "username" ? `${cell.column.getSize()}px` : undefined,
+                        minWidth:
+                          cell.column.id === "username" ? `${cell.column.getSize()}px` : cell.column.id === "actions" || cell.column.id === "rank" ? "50px" : "110px",
                       }}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

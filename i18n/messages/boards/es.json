@@ -7,6 +7,7 @@
   "back": "Volver",
   "create": {
     "trigger": "Crear Tablero",
+    "create": "Crear",
     "title": "Crear Nuevo Tablero",
     "description": "Crea un tablero privado para competir con tus amigos",
     "nameLabel": "Nombre del Tablero",
@@ -19,6 +20,7 @@
   },
   "join": {
     "trigger": "Unirse a Tablero",
+    "join": "Unirse",
     "title": "Unirse a un Tablero",
     "description": "Ingresa el código de 8 caracteres para unirte a un tablero",
     "codeLabel": "Código de Unión",
@@ -55,6 +57,7 @@
   },
   "update": {
     "trigger": "Actualizar Tablero",
+
     "title": "Actualizar Tablero",
     "description": "Cambia el nombre de tu tablero",
     "nameLabel": "Nombre del Tablero",
@@ -63,7 +66,8 @@
     "submit": "Actualizar Tablero",
     "processing": "Actualizando...",
     "success": "Tablero actualizado exitosamente",
-    "successDescription": "Tu tablero ha sido actualizado"
+    "successDescription": "Tu tablero ha sido actualizado",
+    "error": "Error al actualizar tablero"
   },
   "manage": {
     "trigger": "Administrar Tablero"
@@ -71,9 +75,6 @@
   "details": {
     "loading": "Cargando tablero...",
     "back": "Volver a tableros",
-    "title": "Tablero",
-    "subtitle": "Clasificación, miembros e invitación, todo en un solo lugar.",
-    "matchday": "Jornada",
     "invite": "Invitar Amigos",
     "members": "miembros",
     "errors": {
@@ -89,7 +90,6 @@
     "makeMember": "Hacer Miembro"
   },
   "ranking": {
-    "leaderboard": "Clasificación",
     "rank": "Posición",
     "member": "Miembro",
     "total": "Total",
@@ -113,7 +113,7 @@
     }
   },
   "errors": {
-    "nameMinLength": "El nombre del tablero debe tener al menos 3 caracteres",
+    "nameMinLength": "El nombre del tablero debe tener al menos 2 caracteres",
     "nameMaxLength": "El nombre del tablero debe tener 20 caracteres o menos",
     "joinCodeLength": "El código debe tener exactamente 8 caracteres",
     "joinCodeFormat": "El código debe contener solo letras mayúsculas y números",
@@ -121,12 +121,15 @@
     "loadFailed": "Error al cargar los datos del tablero",
     "notFound": "Tablero No Encontrado",
     "notFoundDescription": "Este tablero no existe. Puede haber sido eliminado por el propietario.",
+    "boardNotFound": "Tablero No Encontrado",
+    "boardNotFoundDescription": "Este tablero no existe o ha sido eliminado. Redirigiendo al tablero global...",
     "notMember": "No Eres Miembro",
-    "notMemberDescription": "No eres miembro de este tablero. Puedes haber sido removido o nunca tuviste acceso.",
+    "notMemberDescription": "No eres miembro de este tablero. Es posible que hayas sido eliminado o nunca tuviste acceso.",
     "errorOccurred": "Error al Cargar Tablero",
     "errorOccurredDescription": "Ocurrió un error al intentar cargar este tablero. Por favor intenta de nuevo más tarde.",
     "goToGlobalBoard": "Ir al Tablero Global",
     "BOARD_MEMBER_ALREADY_IN_BOARD": "Ya eres miembro de este tablero",
+    "FORBIDDEN": "No tienes permiso para realizar esta acción.",
     "BOARD_INVALID_JOIN_CODE": "Código de unión inválido. Por favor verifica e intenta de nuevo",
     "BOARD_LIMIT_REACHED": "Has alcanzado el límite máximo de 10 tableros"
   },
@@ -140,18 +143,8 @@
     "shareHint": "Cualquiera con este enlace puede unirse a tu tablero",
     "regenerate": "Regenerar"
   },
-  "matchday": {
-    "groupStage1": "Fase de Grupos #1",
-    "groupStage2": "Fase de Grupos #2",
-    "groupStage3": "Fase de Grupos #3",
-    "roundOf32": "Ronda de 32",
-    "roundOf16": "Octavos de Final",
-    "quarterFinals": "Cuartos de Final",
-    "semiFinals": "Semifinales",
-    "thirdPlace": "Tercer Lugar",
-    "final": "Final"
-  },
   "selector": {
+    "board": "Tablero",
     "nowSeeing": "Estás viendo"
   },
   "subheader": {

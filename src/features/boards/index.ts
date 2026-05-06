@@ -1,6 +1,5 @@
 export { BoardDetailsView } from "./components/BoardDetailsView";
 export { BoardPodium } from "./components/BoardPodium";
-export { BoardRedirect } from "./components/BoardRedirect";
 export { ShareBoardDialog } from "./components/ShareBoardDialog";
 export { CreateBoardDialog } from "./components/CreateBoardDialog";
 export { JoinBoardDialog } from "./components/JoinBoardDialog";
@@ -17,5 +16,13 @@ export { useUpdateMemberRole } from "./hooks/useUpdateMemberRole";
 export { getBoards, createBoard, joinBoard, getBoardDetails, deleteBoard, updateBoard, removeBoardMember, updateMemberRole, regenerateJoinCode } from "./api/client";
 export { createBoardSchema, joinBoardSchema, updateBoardSchema, updateMemberRoleSchema } from "./schemas/board.schema";
 export type { CreateBoardFormData, JoinBoardFormData, UpdateBoardFormData, UpdateMemberRoleFormData } from "./schemas/board.schema";
-export { BoardRole } from "./types/board.types";
-export type { Board, BoardMember, BoardDetails, CreateBoardRequest, JoinBoardRequest, UpdateBoardRequest, UpdateMemberRoleRequest } from "./types/board.types";
+export type {
+  Board,
+  BoardMemberDetails,
+  BoardDetails,
+  BoardMemberRole,
+  CreateBoardRequest,
+  JoinBoardRequest,
+  UpdateBoardRequest,
+  UpdateMemberRoleRequest,
+} from "./types/board.types";

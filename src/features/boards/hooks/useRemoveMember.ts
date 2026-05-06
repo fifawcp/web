@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { removeBoardMember } from "@/features/boards/api/client";
 import { useApiError } from "@/shared/hooks/useApiError";
 
-export function useRemoveMember(boardId: string) {
-  const router = useRouter();
+export function useRemoveMember(boardId: string, onSuccess?: () => void) {
   const [removingUserId, setRemovingUserId] = useState<string | null>(null);
   const apiError = useApiError();
 
@@ -23,7 +21,8 @@ export function useRemoveMember(boardId: string) {
       return;
     }
 
-    router.refresh();
+    // Call refresh callback to update client state
+    onSuccess?.();
   };
 
   return {

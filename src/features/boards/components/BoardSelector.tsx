@@ -29,10 +29,12 @@ export function BoardSelector({ boards, currentBoardId, currentBoardName }: Boar
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-auto p-1 gap-2 hover:bg-muted/50">
-          {isGlobalBoard ? <Globe className="h-4 w-4" /> : <Users className="h-4 w-4" />}
-          <span className="font-semibold">{currentBoardName}</span>
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+        <Button variant="ghost" className="h-auto p-1 gap-2 hover:bg-muted/50 flex-1 min-w-0">
+          {isGlobalBoard ? <Globe className="h-4 w-4 shrink-0" /> : <Users className="h-4 w-4 shrink-0" />}
+
+          <span className="truncate min-w-0 text-xs md:text-md font-semibold">{currentBoardName}</span>
+
+          <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-56">
