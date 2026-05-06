@@ -23,9 +23,10 @@ export function Header() {
   const isLoggedIn = status === "authenticated" && !!session?.user;
   const isLoading = status === "loading";
   const user = session?.user;
+  const isAuthRoute = pathname === "/login" || pathname === "/register" || pathname.startsWith("/callback");
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
+    <header className={`sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm ${isAuthRoute ? "lg:hidden" : ""}`}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex  h-16 items-center justify-between">
           <div className="flex items-center gap-8">

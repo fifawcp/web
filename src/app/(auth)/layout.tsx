@@ -1,6 +1,9 @@
 import { ReactNode } from "react";
 
+import { AuthPanel } from "@/features/auth/components/AuthPanel";
 import { FloatingShape } from "@/shared/components/ui/floating-shape";
+import { LanguageToggle } from "@/shared/components/ui/language-toggle";
+import { ThemeToggle } from "@/shared/components/ui/theme-toggle";
 import { FloatingShapeConfig } from "@/shared/types/ui";
 
 const floatingShapes: FloatingShapeConfig[] = [
@@ -47,11 +50,25 @@ const floatingShapes: FloatingShapeConfig[] = [
 
 export default function AuthPagesLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-[calc(100dvh-var(--header-height))] relative flex items-center justify-center bg-background px-4 pt-8 pb-[15vh] overflow-hidden">
-      {floatingShapes.map((shape, index) => (
-        <FloatingShape key={index} {...shape} />
-      ))}
-      <div className="w-full max-w-md relative z-10">{children}</div>
+    <div className="min-h-[calc(100dvh-var(--header-height))] lg:min-h-dvh lg:grid lg:grid-cols-2 bg-background">
+      <AuthPanel />
+
+      <div className="relative flex flex-col overflow-hidden">
+        <div className="lg:hidden pointer-events-none absolute inset-0">
+          {floatingShapes.map((shape, index) => (
+            <FloatingShape key={index} {...shape} />
+          ))}
+        </div>
+
+        <div className="hidden lg:flex absolute right-6 top-6 z-20 items-center gap-1">
+          <LanguageToggle />
+          <ThemeToggle />
+        </div>
+
+        <div className="relative z-10 flex flex-1 items-center justify-center px-4 pt-8 pb-[15vh] lg:p-12">
+          <div className="w-full max-w-md">{children}</div>
+        </div>
+      </div>
     </div>
   );
 }
