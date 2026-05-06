@@ -8,7 +8,7 @@ This document serves as the source of truth for AI instructions and developer st
 - **Language:** TypeScript (Strict)
 - **Styling:** Tailwind CSS (Mobile-first)
 - **Components:** shadcn/ui (Radix UI)
-- **Icons:** Lucide React
+- **Icons:** Lucide React (ONLY - never use inline SVG or other icon libraries)
 - **Validation:** Zod + React Hook Form
 - **Testing:** Vitest + React Testing Library
 - **State Management:** Zustand
@@ -42,13 +42,16 @@ This document serves as the source of truth for AI instructions and developer st
 ## 5. Coding Standards
 
 - **TypeScript:** No `any` or `unknown`. Define interfaces for Match, User, Pick, and Group.
-- **Naming:** - Components: PascalCase (`MatchCard.tsx`)
+- **Naming:**
+  - Components: PascalCase (`MatchCard.tsx`)
   - Hooks: camelCase (`useMatchLock.ts`)
   - Server Actions: `action.ts` files within feature folders.
 - **Tailwind:** Avoid arbitrary values; use the theme's spacing and color tokens.
 - **Performance:** Use `useMemo` and `useCallback` for expensive calculations. Implement proper loading states.
 - **Accessibility:** Ensure all interactive elements are keyboard navigable and have proper ARIA labels.
-
+- **DRY Principle:** Extract repeated layout patterns (e.g., page containers, gradient backgrounds) into reusable components. Never duplicate the same layout code across multiple pages.
+- **Linting:** **CRITICAL** - Always fix ALL lint errors and warnings before completing any task. Run Prettier/ESLint and resolve all issues. No exceptions.
+- **Spacing:** ALWAYS prefer `gap` (flexbox, no grid) for spacing between elements. Only use margins when `gap` cannot be used (e.g., single element spacing, external spacing from parent).
 - Instead of "bg-gradient-to-r" use "bg-linear-to-r"
 
 ## 6. Git & Workflow

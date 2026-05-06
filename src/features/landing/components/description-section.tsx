@@ -26,7 +26,7 @@ export function DescriptionSection() {
           <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">{t("howItWorks.subtitle")}</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto">
           {cards.map((card) => {
             const Icon = card.icon;
             return <DescriptionCard key={card.translationKey} card={card} Icon={Icon} isVisible={isVisible} />;

@@ -1,0 +1,164 @@
+{
+  "title": "My Boards",
+  "subtitle": "Manage your private groups and compete with friends",
+  "loading": "Loading boards...",
+  "empty": "No boards yet",
+  "emptyHint": "Create a new board or join one with a code",
+  "back": "Back",
+  "create": {
+    "trigger": "Create Board",
+    "title": "Create New Board",
+    "description": "Create a private board to compete with your friends",
+    "nameLabel": "Board Name",
+    "namePlaceholder": "Enter board name",
+    "submit": "Create Board",
+    "success": "Board created successfully",
+    "successDescription": "Your new board is ready to use",
+    "error": "Failed to create board",
+    "errorDescription": "An error occurred while creating the board"
+  },
+  "join": {
+    "trigger": "Join Board",
+    "title": "Join a Board",
+    "description": "Enter the 8-character join code to join a board",
+    "codeLabel": "Join Code",
+    "codePlaceholder": "ABCD1234",
+    "submit": "Join Board",
+    "success": "Successfully joined board",
+    "successDescription": "Redirecting to board...",
+    "error": "Failed to join board",
+    "errorDescription": "An error occurred while joining the board"
+  },
+  "delete": {
+    "trigger": "Delete Board",
+    "title": "Delete Board",
+    "description": "Are you sure you want to delete {boardName}? This action cannot be undone and all members will lose access.",
+    "cancel": "Cancel",
+    "confirm": "Delete Board",
+    "processing": "Deleting...",
+    "success": "Board deleted successfully",
+    "successDescription": "Redirecting to boards...",
+    "error": "Failed to delete board",
+    "errorDescription": "An error occurred while deleting the board"
+  },
+  "leave": {
+    "trigger": "Leave Board",
+    "title": "Leave Board",
+    "description": "Are you sure you want to leave {boardName}? You will need a new invite code to rejoin.",
+    "cancel": "Cancel",
+    "confirm": "Leave Board",
+    "processing": "Leaving...",
+    "success": "Left board successfully",
+    "successDescription": "Redirecting to boards...",
+    "error": "Failed to leave board",
+    "errorDescription": "An error occurred while leaving the board"
+  },
+  "update": {
+    "trigger": "Update Board",
+    "title": "Update Board",
+    "description": "Change your board name",
+    "nameLabel": "Board Name",
+    "namePlaceholder": "Enter new board name",
+    "cancel": "Cancel",
+    "submit": "Update Board",
+    "processing": "Updating...",
+    "success": "Board updated successfully",
+    "successDescription": "Your board has been updated"
+  },
+  "manage": {
+    "trigger": "Manage Board"
+  },
+  "details": {
+    "loading": "Loading board...",
+    "back": "Back to boards",
+    "title": "Board",
+    "subtitle": "Leaderboard, members, and invite — all in one place.",
+    "matchday": "MD",
+    "invite": "Invite",
+    "members": "Members",
+    "errors": {
+      "loadFailed": "Failed to load board details"
+    }
+  },
+  "members": {
+    "username": "Username",
+    "role": "Role",
+    "joinedAt": "Joined",
+    "actions": "Actions",
+    "makeAdmin": "Make Admin",
+    "makeMember": "Make Member"
+  },
+  "ranking": {
+    "rank": "Rank",
+    "member": "Member",
+    "total": "Total",
+    "pickem": "Pick'em",
+    "matchScore": "Match Score",
+    "hits": "Hits",
+    "outcomes": "Outcomes",
+    "leaderboard": "Leaderboard",
+    "searchMembers": "Search members",
+    "removeMember": "Remove member",
+    "makeAdmin": "Make admin",
+    "makeMember": "Make member",
+    "roleUpdated": "Role updated",
+    "roleUpdateSuccess": "Member role has been updated successfully",
+    "noResults": "No members found",
+    "pagination": {
+      "showing": "Showing",
+      "of": "of",
+      "page": "Page",
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
+  "errors": {
+    "nameMinLength": "Board name must be at least 3 characters",
+    "nameMaxLength": "Board name must be 20 characters or less",
+    "joinCodeLength": "Code must be exactly 8 characters",
+    "joinCodeFormat": "Code must contain only uppercase letters and numbers",
+    "invalidRole": "Invalid role selected",
+    "loadFailed": "Failed to load board data",
+    "notFound": "Board Not Found",
+    "notFoundDescription": "This board doesn't exist. It may have been deleted by the owner.",
+    "notMember": "Not a Member",
+    "notMemberDescription": "You are not a member of this board. You may have been removed or never had access.",
+    "errorOccurred": "Error Loading Board",
+    "errorOccurredDescription": "An error occurred while trying to load this board. Please try again later.",
+    "goToGlobalBoard": "Go to Global Board",
+    "BOARD_MEMBER_ALREADY_IN_BOARD": "You are already a member of this board",
+    "BOARD_INVALID_JOIN_CODE": "Invalid join code. Please check and try again",
+    "BOARD_LIMIT_REACHED": "You have reached the maximum limit of 10 boards"
+  },
+  "share": {
+    "joinCode": "Join code",
+    "copyCode": "Copy code",
+    "copied": "Copied!",
+    "copyLink": "Copy link",
+    "inviteToPool": "Invite to pool",
+    "orShareLink": "Or share this link",
+    "shareHint": "Anyone with this link can join your board",
+    "regenerate": "Regenerate"
+  },
+  "matchday": {
+    "groupStage1": "Group Stage #1",
+    "groupStage2": "Group Stage #2",
+    "groupStage3": "Group Stage #3",
+    "roundOf32": "Round of 32",
+    "roundOf16": "Round of 16",
+    "quarterFinals": "Quarter Finals",
+    "semiFinals": "Semi Finals",
+    "thirdPlace": "Third Place",
+    "final": "Final"
+  },
+  "selector": {
+    "nowSeeing": "You are seeing"
+  },
+  "subheader": {
+    "myPosition": "My position",
+    "totalPoints": "Total points",
+    "members": "Members",
+    "privacy": "Privacy",
+    "inviteFriends": "Invite friends"
+  }
+}

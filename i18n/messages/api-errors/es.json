@@ -7,5 +7,10 @@
   "OTP_TOO_MANY_ATTEMPTS": "Demasiados intentos. Por favor intenta más tarde.",
   "USERNAME_ALREADY_EXISTS": "Este nombre de usuario ya está en uso.",
   "MISSING_AUTH_HEADER": "Falta el header de autenticación.",
-  "UNKNOWN_ERROR": "Ocurrió un error. Por favor intenta de nuevo."
+  "BOARD_MEMBER_ALREADY_IN_BOARD": "Ya eres miembro de este tablero",
+  "BOARD_INVALID_JOIN_CODE": "Código de unión inválido. Por favor verifica e intenta de nuevo",
+  "BOARD_NOT_FOUND": "Tablero no encontrado",
+  "NOT_BOARD_MEMBER": "No eres miembro de este tablero",
+  "UNKNOWN_ERROR": "Ocurrió un error. Por favor intenta de nuevo.",
+  "NETWORK_ERROR": "Ocurrió un error. Por favor intenta de nuevo."
 }

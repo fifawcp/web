@@ -26,6 +26,10 @@
   --color-wc-orange: #ff6e3f;
   --color-wc-red-light: #d40100;
 
+  --color-gold: theme(colors.yellow.500);
+  --color-silver: theme(colors.gray.500);
+  --color-bronze: theme(colors.orange.900);
+
   /* Layout dimensions */
   --header-height: 65px;
 
@@ -94,6 +98,27 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* Extra text classes */
+.text-2xs {
+  font-size: 0.625rem;
+  line-height: 0.75rem;
+}
+.text-3xs {
+  font-size: 0.5rem;
+  line-height: 0.5rem;
+}
+
+/* Text color classes */
+.text-gold {
+  color: var(--color-gold);
+}
+.text-silver {
+  color: var(--color-silver);
+}
+.text-bronze {
+  color: var(--color-bronze);
 }
 
 :root {
@@ -174,5 +199,26 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer base {
+  button:not([disabled]),
+  [role="button"]:not([disabled]) {
+    cursor: pointer;
+  }
+}
+
+/* OTP Input Custom Styles - Outside layers for higher specificity */
+.otp-group-custom [data-slot="input-otp-slot"] {
+  height: 3.75rem !important; /* h-15 */
+  width: 2.75rem !important; /* w-11 */
+  font-size: 1.25rem !important; /* text-xl */
+}
+
+@media (min-width: 768px) {
+  .otp-group-custom [data-slot="input-otp-slot"] {
+    width: 3.25rem !important; /* w-13 */
+    font-size: 1.5rem !important; /* text-2xl */
   }
 }

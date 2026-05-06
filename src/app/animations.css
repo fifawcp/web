@@ -129,7 +129,7 @@
 }
 
 .animate-appear {
-  animation: appear 1s ease-in forwards;
+  animation: appear 0.75s ease-in forwards;
 }
 
 .animate-fade-in-fast {

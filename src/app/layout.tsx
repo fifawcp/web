@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { getLocale, getMessages } from "next-intl/server";
 
 import { Providers } from "@/providers/layout-provider";
+import { Toaster } from "@/shared/components/ui/sonner";
 import { Header } from "@/shared/layout/header";
 import { cn } from "@/shared/lib/utils";
 
@@ -31,6 +32,7 @@ export default async function RootLayout({
         <Providers messages={messages} locale={locale}>
           <Header />
           <main className="flex-1 overflow-x-hidden">{children}</main>
+          <Toaster />
         </Providers>
       </body>
     </html>

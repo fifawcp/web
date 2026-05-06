@@ -1,0 +1,164 @@
+{
+  "title": "Mis Tableros",
+  "subtitle": "Administra tus grupos privados y compite con amigos",
+  "loading": "Cargando tableros...",
+  "empty": "Aún no hay tableros",
+  "emptyHint": "Crea un nuevo tablero o únete con un código",
+  "back": "Volver",
+  "create": {
+    "trigger": "Crear Tablero",
+    "title": "Crear Nuevo Tablero",
+    "description": "Crea un tablero privado para competir con tus amigos",
+    "nameLabel": "Nombre del Tablero",
+    "namePlaceholder": "Ingresa el nombre del tablero",
+    "submit": "Crear Tablero",
+    "success": "Tablero creado exitosamente",
+    "successDescription": "Tu nuevo tablero está listo para usar",
+    "error": "Error al crear tablero",
+    "errorDescription": "Ocurrió un error al crear el tablero"
+  },
+  "join": {
+    "trigger": "Unirse a Tablero",
+    "title": "Unirse a un Tablero",
+    "description": "Ingresa el código de 8 caracteres para unirte a un tablero",
+    "codeLabel": "Código de Unión",
+    "codePlaceholder": "ABCD1234",
+    "submit": "Unirse al Tablero",
+    "success": "Te uniste al tablero exitosamente",
+    "successDescription": "Redirigiendo al tablero...",
+    "error": "Error al unirse al tablero",
+    "errorDescription": "Ocurrió un error al unirse al tablero"
+  },
+  "delete": {
+    "trigger": "Eliminar Tablero",
+    "title": "Eliminar Tablero",
+    "description": "¿Estás seguro de que quieres eliminar {boardName}? Esta acción no se puede deshacer y todos los miembros perderán el acceso.",
+    "cancel": "Cancelar",
+    "confirm": "Eliminar Tablero",
+    "processing": "Eliminando...",
+    "success": "Tablero eliminado exitosamente",
+    "successDescription": "Redirigiendo a tableros...",
+    "error": "Error al eliminar tablero",
+    "errorDescription": "Ocurrió un error al eliminar el tablero"
+  },
+  "leave": {
+    "trigger": "Salir del Tablero",
+    "title": "Salir del Tablero",
+    "description": "¿Estás seguro de que quieres salir de {boardName}? Necesitarás un nuevo código de invitación para volver a unirte.",
+    "cancel": "Cancelar",
+    "confirm": "Salir del Tablero",
+    "processing": "Saliendo...",
+    "success": "Saliste del tablero exitosamente",
+    "successDescription": "Redirigiendo a tableros...",
+    "error": "Error al salir del tablero",
+    "errorDescription": "Ocurrió un error al salir del tablero"
+  },
+  "update": {
+    "trigger": "Actualizar Tablero",
+    "title": "Actualizar Tablero",
+    "description": "Cambia el nombre de tu tablero",
+    "nameLabel": "Nombre del Tablero",
+    "namePlaceholder": "Ingresa el nuevo nombre del tablero",
+    "cancel": "Cancelar",
+    "submit": "Actualizar Tablero",
+    "processing": "Actualizando...",
+    "success": "Tablero actualizado exitosamente",
+    "successDescription": "Tu tablero ha sido actualizado"
+  },
+  "manage": {
+    "trigger": "Administrar Tablero"
+  },
+  "details": {
+    "loading": "Cargando tablero...",
+    "back": "Volver a tableros",
+    "title": "Tablero",
+    "subtitle": "Clasificación, miembros e invitación, todo en un solo lugar.",
+    "matchday": "Jornada",
+    "invite": "Invitar Amigos",
+    "members": "miembros",
+    "errors": {
+      "loadFailed": "Error al cargar detalles del tablero"
+    }
+  },
+  "members": {
+    "username": "Usuario",
+    "role": "Rol",
+    "joinedAt": "Se unió",
+    "actions": "Acciones",
+    "makeAdmin": "Hacer Admin",
+    "makeMember": "Hacer Miembro"
+  },
+  "ranking": {
+    "leaderboard": "Clasificación",
+    "rank": "Posición",
+    "member": "Miembro",
+    "total": "Total",
+    "pickem": "Pick'em",
+    "matchScore": "Marcador",
+    "hits": "Aciertos",
+    "outcomes": "Resultados",
+    "searchMembers": "Buscar miembros",
+    "removeMember": "Eliminar miembro",
+    "makeAdmin": "Hacer administrador",
+    "makeMember": "Hacer miembro",
+    "roleUpdated": "Rol actualizado",
+    "roleUpdateSuccess": "El rol del miembro ha sido actualizado exitosamente",
+    "noResults": "No se encontraron miembros",
+    "pagination": {
+      "showing": "Mostrando",
+      "of": "de",
+      "page": "Página",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    }
+  },
+  "errors": {
+    "nameMinLength": "El nombre del tablero debe tener al menos 3 caracteres",
+    "nameMaxLength": "El nombre del tablero debe tener 20 caracteres o menos",
+    "joinCodeLength": "El código debe tener exactamente 8 caracteres",
+    "joinCodeFormat": "El código debe contener solo letras mayúsculas y números",
+    "invalidRole": "Rol inválido seleccionado",
+    "loadFailed": "Error al cargar los datos del tablero",
+    "notFound": "Tablero No Encontrado",
+    "notFoundDescription": "Este tablero no existe. Puede haber sido eliminado por el propietario.",
+    "notMember": "No Eres Miembro",
+    "notMemberDescription": "No eres miembro de este tablero. Puedes haber sido removido o nunca tuviste acceso.",
+    "errorOccurred": "Error al Cargar Tablero",
+    "errorOccurredDescription": "Ocurrió un error al intentar cargar este tablero. Por favor intenta de nuevo más tarde.",
+    "goToGlobalBoard": "Ir al Tablero Global",
+    "BOARD_MEMBER_ALREADY_IN_BOARD": "Ya eres miembro de este tablero",
+    "BOARD_INVALID_JOIN_CODE": "Código de unión inválido. Por favor verifica e intenta de nuevo",
+    "BOARD_LIMIT_REACHED": "Has alcanzado el límite máximo de 10 tableros"
+  },
+  "share": {
+    "joinCode": "Código de acceso",
+    "copyCode": "Copiar código",
+    "copied": "¡Copiado!",
+    "copyLink": "Copiar enlace",
+    "inviteToPool": "Invitar a la piscina",
+    "orShareLink": "O comparte este enlace",
+    "shareHint": "Cualquiera con este enlace puede unirse a tu tablero",
+    "regenerate": "Regenerar"
+  },
+  "matchday": {
+    "groupStage1": "Fase de Grupos #1",
+    "groupStage2": "Fase de Grupos #2",
+    "groupStage3": "Fase de Grupos #3",
+    "roundOf32": "Ronda de 32",
+    "roundOf16": "Octavos de Final",
+    "quarterFinals": "Cuartos de Final",
+    "semiFinals": "Semifinales",
+    "thirdPlace": "Tercer Lugar",
+    "final": "Final"
+  },
+  "selector": {
+    "nowSeeing": "Estás viendo"
+  },
+  "subheader": {
+    "myPosition": "Mi posición",
+    "totalPoints": "Puntos totales",
+    "members": "Miembros",
+    "privacy": "Privacidad",
+    "inviteFriends": "Invitar amigos"
+  }
+}

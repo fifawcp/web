@@ -19,7 +19,12 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: session, status } = useSession();
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => {
+    if (path === "/boards") {
+      return pathname.startsWith("/boards");
+    }
+    return pathname === path;
+  };
   const isLoggedIn = status === "authenticated" && !!session?.user;
   const isLoading = status === "loading";
   const user = session?.user;
