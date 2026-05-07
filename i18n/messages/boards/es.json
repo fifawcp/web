@@ -6,8 +6,6 @@
   "emptyHint": "Crea un nuevo tablero o únete con un código",
   "back": "Volver",
   "create": {
-    "trigger": "Crear Tablero",
-    "create": "Crear",
     "title": "Crear Nuevo Tablero",
     "description": "Crea un tablero privado para competir con tus amigos",
     "nameLabel": "Nombre del Tablero",
@@ -19,8 +17,6 @@
     "errorDescription": "Ocurrió un error al crear el tablero"
   },
   "join": {
-    "trigger": "Unirse a Tablero",
-    "join": "Unirse",
     "title": "Unirse a un Tablero",
     "description": "Ingresa el código de 8 caracteres para unirte a un tablero",
     "codeLabel": "Código de Unión",
@@ -119,15 +115,14 @@
     "joinCodeFormat": "El código debe contener solo letras mayúsculas y números",
     "invalidRole": "Rol inválido seleccionado",
     "loadFailed": "Error al cargar los datos del tablero",
-    "notFound": "Tablero No Encontrado",
-    "notFoundDescription": "Este tablero no existe. Puede haber sido eliminado por el propietario.",
     "boardNotFound": "Tablero No Encontrado",
     "boardNotFoundDescription": "Este tablero no existe o ha sido eliminado. Redirigiendo al tablero global...",
     "notMember": "No Eres Miembro",
     "notMemberDescription": "No eres miembro de este tablero. Es posible que hayas sido eliminado o nunca tuviste acceso.",
+    "invalidBoardId": "ID de Tablero Inválido",
+    "invalidBoardIdDescription": "El ID del tablero proporcionado es inválido. Redirigiendo al tablero global...",
     "errorOccurred": "Error al Cargar Tablero",
     "errorOccurredDescription": "Ocurrió un error al intentar cargar este tablero. Por favor intenta de nuevo más tarde.",
-    "goToGlobalBoard": "Ir al Tablero Global",
     "BOARD_MEMBER_ALREADY_IN_BOARD": "Ya eres miembro de este tablero",
     "FORBIDDEN": "No tienes permiso para realizar esta acción.",
     "BOARD_INVALID_JOIN_CODE": "Código de unión inválido. Por favor verifica e intenta de nuevo",
@@ -144,8 +139,12 @@
     "regenerate": "Regenerar"
   },
   "selector": {
-    "board": "Tablero",
-    "nowSeeing": "Estás viendo"
+    "currentBoard": "Tablero Actual",
+    "otherBoards": "Otros Tableros",
+    "createBoard": "Crear tablero",
+    "createBoardHint": "Inicia un nuevo tablero privado",
+    "joinBoard": "Unirse a tablero",
+    "joinBoardHint": "Ingresa un código para unirte"
   },
   "subheader": {
     "myPosition": "Mi posición",

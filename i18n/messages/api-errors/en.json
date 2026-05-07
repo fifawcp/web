@@ -7,6 +7,9 @@
   "OTP_TOO_MANY_ATTEMPTS": "Too many attempts. Please try again later.",
   "USERNAME_ALREADY_EXISTS": "This username is already taken.",
   "MISSING_AUTH_HEADER": "Missing authentication header.",
-  "UNKNOWN_ERROR": "An error occurred. Please try again.",
-  "NETWORK_ERROR": "An error occurred. Please try again."
+  "BOARD_MEMBER_ALREADY_IN_BOARD": "You are already a member of this board",
+  "BOARD_INVALID_JOIN_CODE": "Invalid join code. Please check and try again",
+  "BOARD_NOT_FOUND": "Board not found",
+  "NOT_BOARD_MEMBER": "You are not a member of this board",
+  "UNKNOWN_ERROR": "An error occurred. Please try again."
 }

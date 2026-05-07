@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -11,10 +10,9 @@ import { createBoard } from "@/features/boards/api/client";
 import { createBoardSchema, type CreateBoardFormData } from "@/features/boards/schemas/board.schema";
 import { useApiError } from "@/shared/hooks/useApiError";
 
-export function useCreateBoard() {
+export function useCreateBoard(setOpen: (open: boolean) => void) {
   const router = useRouter();
   const apiError = useApiError();
-  const [open, setOpen] = useState(false);
   const t = useTranslations("boards.create");
   const tErrors = useTranslations("boards.errors");
 
@@ -57,7 +55,5 @@ export function useCreateBoard() {
     form,
     apiError,
     onSubmit,
-    open,
-    setOpen,
   };
 }

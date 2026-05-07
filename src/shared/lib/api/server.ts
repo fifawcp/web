@@ -1,9 +1,8 @@
 import "server-only";
 
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getSession } from "@/lib/auth";
 import { env } from "@/lib/env";
 
 import { logger } from "../logger";
@@ -29,7 +28,7 @@ async function request<T>(endpoint: string, options: RequestOptions = { method: 
     if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
 
     if (authenticated) {
-      const session = await getServerSession(authOptions);
+      const session = await getSession();
       const accessToken = session?.access_token;
 
       if (!accessToken) redirect("/login");

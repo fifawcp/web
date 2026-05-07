@@ -1,6 +1,5 @@
 "use client";
 
-import { UserPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Controller } from "react-hook-form";
 
@@ -8,31 +7,29 @@ import { ErrorAlert } from "@/features/auth/components/ErrorAlert";
 import { FieldMessageSlot } from "@/features/auth/components/FieldMessageSlot";
 import { useJoinBoard } from "@/features/boards/hooks/useJoinBoard";
 import { Button } from "@/shared/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/components/ui/field";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/shared/components/ui/input-otp";
 
-export function JoinBoardDialog() {
+interface JoinBoardDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function JoinBoardDialog({ open, onOpenChange }: JoinBoardDialogProps) {
   const t = useTranslations("boards");
-  const { form, apiError, onSubmit, open, setOpen } = useJoinBoard();
+  const { form, apiError, onSubmit } = useJoinBoard(onOpenChange);
 
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
       form.reset();
       apiError.clear();
     }
-    setOpen(isOpen);
+    onOpenChange(isOpen);
   };
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button size="sm" variant="outline" className="bg-background text-foreground h-auto p-1.5 sm:py-2 sm:px-3 text-sm">
-          <UserPlus className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">{t("join.trigger")}</span>
-          <span className="text-xs sm:hidden">{t("join.join")}</span>
-        </Button>
-      </DialogTrigger>
       <DialogContent className="p-5 min-w-auto sm:min-w-120">
         <DialogHeader className="gap-0">
           <DialogTitle className="font-bold text-xl">{t("join.title")}</DialogTitle>
@@ -54,7 +51,6 @@ export function JoinBoardDialog() {
                     aria-invalid={fieldState.invalid}
                     containerClassName="justify-center"
                     onChange={(value) => field.onChange(value.toUpperCase())}
-                    value={field.value.toUpperCase()}
                   >
                     <InputOTPGroup className="otp-group-custom">
                       <InputOTPSlot index={0} />

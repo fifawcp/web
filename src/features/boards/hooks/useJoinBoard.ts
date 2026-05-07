@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -11,10 +10,9 @@ import { joinBoard } from "@/features/boards/api/client";
 import { joinBoardSchema, type JoinBoardFormData } from "@/features/boards/schemas/board.schema";
 import { useApiError } from "@/shared/hooks/useApiError";
 
-export function useJoinBoard() {
+export function useJoinBoard(setOpen: (open: boolean) => void) {
   const router = useRouter();
   const apiError = useApiError();
-  const [open, setOpen] = useState(false);
   const t = useTranslations("boards.join");
   const tErrors = useTranslations("boards.errors");
 
@@ -58,7 +56,5 @@ export function useJoinBoard() {
     form,
     apiError,
     onSubmit,
-    open,
-    setOpen,
   };
 }

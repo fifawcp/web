@@ -16,6 +16,14 @@ const ERROR_MAP = {
     title: "notMember",
     description: "notMemberDescription",
   },
+  INVALID_BOARD_ID: {
+    title: "invalidBoardId",
+    description: "invalidBoardIdDescription",
+  },
+  DEFAULT: {
+    title: "errorOccurred",
+    description: "errorOccurredDescription",
+  },
 } as const;
 
 export function BoardErrorHandler() {
@@ -30,11 +38,11 @@ export function BoardErrorHandler() {
     if (hasHandled.current) return;
 
     const error = searchParams.get("error");
-    if (!error || !(error in ERROR_MAP)) return;
+    if (!error) return;
 
     hasHandled.current = true;
 
-    const config = ERROR_MAP[error as keyof typeof ERROR_MAP];
+    const config = error in ERROR_MAP ? ERROR_MAP[error as keyof typeof ERROR_MAP] : ERROR_MAP.DEFAULT;
 
     removeLastVisitedBoardId();
 

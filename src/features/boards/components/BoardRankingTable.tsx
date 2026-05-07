@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
-import { ChevronLeft, ChevronRight, MoreVertical, Search } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, MoreVertical, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { useUpdateMemberRole } from "@/features/boards/hooks/useUpdateMemberRole";
@@ -45,6 +45,56 @@ export function BoardRankingTable({
   const { handleUpdateRole } = useUpdateMemberRole(boardId, onRefresh);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [mobileStatView, setMobileStatView] = useState<"total" | "pickem" | "matchScore" | "hits" | "outcomes">("total");
+
+  const statOptions: Record<"total" | "pickem" | "matchScore" | "hits" | "outcomes", { label: string; key: keyof BoardMemberDetails }> = {
+    total: { label: t("total"), key: "total_points" },
+    pickem: { label: t("pickem"), key: "pickem_points" },
+    matchScore: { label: t("matchScore"), key: "match_score_points" },
+    hits: { label: t("hits"), key: "exact_hits" },
+    outcomes: { label: t("outcomes"), key: "correct_outcomes" },
+  };
+
+  const getActionsCell = (member: BoardMemberDetails) => {
+    const isCurrentUser = member.user_id === currentUserId;
+    const isOwner = currentUserId === ownerId;
+    const isAdmin = currentUserRole === "admin";
+    const canManageRoles = isOwner || isAdmin;
+    const memberIsOwner = member.user_id === ownerId;
+    const memberIsAdmin = member.role === "admin";
+    const canRemove = (canManageRoles && !memberIsOwner) || (isOwner && !memberIsOwner);
+    const canChangeRole = isOwner || (isAdmin && !memberIsOwner && !memberIsAdmin);
+
+    if (isCurrentUser || (!canRemove && !canChangeRole)) return null;
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-8 w-8">
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {canChangeRole && (
+            <DropdownMenuItem
+              onClick={async () => {
+                const newRole = memberIsAdmin ? "member" : "admin";
+                await handleUpdateRole(member.user_id, newRole);
+                onRefresh?.();
+              }}
+            >
+              {memberIsAdmin ? t("makeMember") : t("makeAdmin")}
+            </DropdownMenuItem>
+          )}
+          {canRemove && (
+            <DropdownMenuItem onClick={() => onRemoveMember?.(member.user_id)} className="text-destructive">
+              {t("removeMember")}
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  };
 
   const currentPage = pagination?.page ?? 1;
   const totalPages = pagination ? Math.ceil(pagination.total / pagination.limit) : 1;
@@ -124,51 +174,10 @@ export function BoardRankingTable({
       {
         id: "actions",
         size: 30,
-        cell: ({ row }) => {
-          const member = row.original;
-          const isCurrentUser = member.user_id === currentUserId;
-          const isOwner = currentUserId === ownerId;
-          const isAdmin = currentUserRole === "admin";
-          const canManageRoles = isOwner || isAdmin;
-          const memberIsOwner = member.user_id === ownerId;
-          const memberIsAdmin = member.role === "admin";
-
-          const canRemove = (canManageRoles && !memberIsOwner) || (isOwner && !memberIsOwner);
-          const canChangeRole = isOwner || (isAdmin && !memberIsOwner && !memberIsAdmin);
-
-          if (isCurrentUser || (!canRemove && !canChangeRole)) return null;
-
-          return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-4 w-4 text-center align-middle">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {canChangeRole && (
-                  <DropdownMenuItem
-                    onClick={async () => {
-                      const newRole = memberIsAdmin ? "member" : "admin";
-                      await handleUpdateRole(member.user_id, newRole);
-                      onRefresh?.();
-                    }}
-                  >
-                    {memberIsAdmin ? t("makeMember") : t("makeAdmin")}
-                  </DropdownMenuItem>
-                )}
-                {canRemove && (
-                  <DropdownMenuItem onClick={() => onRemoveMember?.(member.user_id)} className="text-destructive">
-                    {t("removeMember")}
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          );
-        },
+        cell: ({ row }) => getActionsCell(row.original),
       },
     ],
-    [t, onRemoveMember, currentUserId, handleUpdateRole, currentUserRole, ownerId, onRefresh]
+    [t, currentUserId, getActionsCell]
   );
 
   //eslint-disable-next-line
@@ -189,12 +198,13 @@ export function BoardRankingTable({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="relative flex-1 max-w-3xs md:max-w-sm w-full md:w-auto not-first:md:self-end">
+      <div className="relative w-full md:max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input placeholder={t("searchMembers")} value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="pl-9" />
+        <Input placeholder={t("searchMembers")} value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} className="pl-9 text-sm md:text-base" />
       </div>
 
-      <div className="rounded-lg border bg-card overflow-x-auto">
+      {/* Desktop Table */}
+      <div className="hidden md:block rounded-lg border bg-card overflow-x-auto">
         <Table className="w-full">
           <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -237,7 +247,79 @@ export function BoardRankingTable({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  {t("ranking.noResults")}
+                  {t("noResults")}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Mobile Table */}
+      <div className="md:hidden rounded-lg border bg-card">
+        <Table>
+          <TableHeader className="bg-muted">
+            <TableRow>
+              <TableHead className="text-xs uppercase text-muted-foreground w-10 p-1 rounded-tl-lg text-center">#</TableHead>
+              <TableHead className="text-xs uppercase text-muted-foreground p-1">{t("member")}</TableHead>
+              <TableHead className="text-xs uppercase text-muted-foreground text-center w-25 p-0">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="h-full w-full text-sm uppercase font-normal hover:bg-transparent px-0">
+                      <span className="truncate text-[10px]">{statOptions[mobileStatView].label}</span>
+                      <ChevronDown className="h-3 w-3 ml-0.5 shrink-0" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-40">
+                    {(Object.keys(statOptions) as Array<keyof typeof statOptions>).map((key) => (
+                      <DropdownMenuItem key={key} onClick={() => setMobileStatView(key)}>
+                        {statOptions[key].label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableHead>
+              <TableHead className="w-8 rounded-tr-lg"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => {
+                const member = row.original;
+                const isCurrentUser = member.user_id === currentUserId;
+                const initials = member.username.slice(0, 2).toUpperCase();
+
+                return (
+                  <TableRow key={row.id}>
+                    <TableCell className="text-center p-0">
+                      <div className={`${isCurrentUser ? "text-gradient-secondary" : "text-muted-foreground"} text-xs font-medium`}>
+                        {String(member.rank).padStart(2, "0")}
+                      </div>
+                    </TableCell>
+                    <TableCell className="px-0 py-2">
+                      <div className="flex items-center gap-1.5 min-w-0 overflow-hidden">
+                        <Avatar className="h-7 w-7 shrink-0 hidden sm:block">
+                          <AvatarFallback className="text-[10px] bg-muted">{initials}</AvatarFallback>
+                        </Avatar>
+                        <div className="min-w-0 overflow-hidden">
+                          <p className={`font-medium text-xs truncate ${isCurrentUser ? "text-gradient-secondary" : ""}`}>
+                            {member?.first_name || ""} {member?.last_name || ""}
+                          </p>
+                          <p className={`text-[10px] text-muted-foreground truncate ${isCurrentUser ? "text-gradient-secondary" : ""}`}>@{member.username}</p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center p-0">
+                      <div className="font-bold text-xs">{member[statOptions[mobileStatView].key] as number}</div>
+                    </TableCell>
+                    <TableCell className="p-0">{getActionsCell(member)}</TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell colSpan={4} className="h-24 text-center">
+                  {t("noResults")}
                 </TableCell>
               </TableRow>
             )}

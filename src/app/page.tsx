@@ -1,10 +1,8 @@
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { LogoutButton } from "@/features/auth/components/LogoutButton";
+import { getSession } from "@/lib/auth";
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
 
   return (
     <div className="flex min-h-[calc(100dvh-var(--header-height))] items-center justify-center">
