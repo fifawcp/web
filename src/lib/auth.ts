@@ -1,46 +1,24 @@
 import "server-only";
 
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
+import { getServerSession, Session } from "next-auth";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-/**
- * Get the current session without redirecting.
- * Returns null if no session exists.
- */
-export async function getSession() {
-  return await getServerSession(authOptions);
-}
+type AuthResult<T extends boolean> = T extends true
+  ? { session: Session; user: NonNullable<Session["user"]> }
+  : { session: Session | null; user: Session["user"] | undefined };
 
-/**
- * Get the current user without redirecting.
- * Returns undefined if no session exists.
- */
-export async function getCurrentUser() {
-  const session = await getSession();
-  return session?.user;
-}
+async function auth(options: { required: true; redirectTo?: string }): Promise<AuthResult<true>>;
+async function auth(options?: { required?: false; redirectTo?: string }): Promise<AuthResult<false>>;
+async function auth(options?: { required?: boolean; redirectTo?: string }) {
+  const session = await getServerSession(authOptions);
 
-/**
- * Require authentication - redirects to /login if no session.
- * Returns the session object.
- */
-export async function requireAuth() {
-  const session = await getSession();
-
-  if (!session?.user?.id) {
-    redirect("/login");
+  if (options?.required && !session?.user?.id) {
+    redirect(options.redirectTo ?? "/login");
   }
 
-  return session;
+  return { session: session ?? null, user: session?.user };
 }
 
-/**
- * Get authenticated user - redirects to /login if no session.
- * Returns the user object directly.
- */
-export async function getAuthenticatedUser() {
-  const session = await requireAuth();
-  return session.user;
-}
+export { auth };

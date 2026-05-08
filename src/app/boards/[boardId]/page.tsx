@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { Board, BoardDetails, BoardMemberDetails } from "@/features/boards";
 import { BoardDetailsView } from "@/features/boards/components/BoardDetailsView";
-import { requireAuth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { serverApi } from "@/shared/lib/api/server";
 
 interface BoardDetailsPageProps {
@@ -12,7 +12,7 @@ interface BoardDetailsPageProps {
 export default async function BoardDetailsPage({ params }: BoardDetailsPageProps) {
   const { boardId } = await params;
 
-  const session = await requireAuth();
+  const { user } = await auth({ required: true });
 
   const [boardRes, boardsRes, membersRes] = await Promise.all([
     serverApi.get<BoardDetails>(`/api/boards/${boardId}`),
@@ -40,7 +40,7 @@ export default async function BoardDetailsPage({ params }: BoardDetailsPageProps
         boards={boardsRes.data}
         initialMembers={membersRes.data}
         initialPagination={membersRes.pagination}
-        currentUserId={session?.user?.id}
+        currentUserId={user.id}
         boardId={boardId}
       />
     </div>

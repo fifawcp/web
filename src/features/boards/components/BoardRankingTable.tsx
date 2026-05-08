@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
-import { ChevronDown, ChevronLeft, ChevronRight, MoreVertical, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowLeft, ArrowRight, MoreVertical, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { useUpdateMemberRole } from "@/features/boards/hooks/useUpdateMemberRole";
@@ -55,46 +55,62 @@ export function BoardRankingTable({
     outcomes: { label: t("outcomes"), key: "correct_outcomes" },
   };
 
-  const getActionsCell = (member: BoardMemberDetails) => {
-    const isCurrentUser = member.user_id === currentUserId;
-    const isOwner = currentUserId === ownerId;
-    const isAdmin = currentUserRole === "admin";
-    const canManageRoles = isOwner || isAdmin;
-    const memberIsOwner = member.user_id === ownerId;
-    const memberIsAdmin = member.role === "admin";
-    const canRemove = (canManageRoles && !memberIsOwner) || (isOwner && !memberIsOwner);
-    const canChangeRole = isOwner || (isAdmin && !memberIsOwner && !memberIsAdmin);
+  const statKeys = Object.keys(statOptions) as Array<keyof typeof statOptions>;
+  const currentStatIndex = statKeys.indexOf(mobileStatView);
 
-    if (isCurrentUser || (!canRemove && !canChangeRole)) return null;
-
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
-            <MoreVertical className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          {canChangeRole && (
-            <DropdownMenuItem
-              onClick={async () => {
-                const newRole = memberIsAdmin ? "member" : "admin";
-                await handleUpdateRole(member.user_id, newRole);
-                onRefresh?.();
-              }}
-            >
-              {memberIsAdmin ? t("makeMember") : t("makeAdmin")}
-            </DropdownMenuItem>
-          )}
-          {canRemove && (
-            <DropdownMenuItem onClick={() => onRemoveMember?.(member.user_id)} className="text-destructive">
-              {t("removeMember")}
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
+  const handlePreviousStat = () => {
+    const newIndex = currentStatIndex === 0 ? statKeys.length - 1 : currentStatIndex - 1;
+    setMobileStatView(statKeys[newIndex]);
   };
+
+  const handleNextStat = () => {
+    const newIndex = currentStatIndex === statKeys.length - 1 ? 0 : currentStatIndex + 1;
+    setMobileStatView(statKeys[newIndex]);
+  };
+
+  const getActionsCell = useCallback(
+    (member: BoardMemberDetails) => {
+      const isCurrentUser = member.user_id === currentUserId;
+      const isOwner = currentUserId === ownerId;
+      const isAdmin = currentUserRole === "admin";
+      const canManageRoles = isOwner || isAdmin;
+      const memberIsOwner = member.user_id === ownerId;
+      const memberIsAdmin = member.role === "admin";
+      const canRemove = (canManageRoles && !memberIsOwner) || (isOwner && !memberIsOwner);
+      const canChangeRole = isOwner || (isAdmin && !memberIsOwner && !memberIsAdmin);
+
+      if (isCurrentUser || (!canRemove && !canChangeRole)) return null;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-5 w-5">
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {canChangeRole && (
+              <DropdownMenuItem
+                onClick={async () => {
+                  const newRole = memberIsAdmin ? "member" : "admin";
+                  await handleUpdateRole(member.user_id, newRole);
+                  onRefresh?.();
+                }}
+              >
+                {memberIsAdmin ? t("makeMember") : t("makeAdmin")}
+              </DropdownMenuItem>
+            )}
+            {canRemove && (
+              <DropdownMenuItem onClick={() => onRemoveMember?.(member.user_id)} className="text-destructive">
+                {t("removeMember")}
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+    [t, currentUserId, ownerId, currentUserRole, handleUpdateRole, onRefresh, onRemoveMember]
+  );
 
   const currentPage = pagination?.page ?? 1;
   const totalPages = pagination ? Math.ceil(pagination.total / pagination.limit) : 1;
@@ -173,7 +189,7 @@ export function BoardRankingTable({
       },
       {
         id: "actions",
-        size: 30,
+        size: 20,
         cell: ({ row }) => getActionsCell(row.original),
       },
     ],
@@ -216,7 +232,7 @@ export function BoardRankingTable({
                     style={{
                       width: header.column.id === "username" ? undefined : `${header.getSize()}px`,
                       minWidth:
-                        header.column.id === "username" ? `${header.getSize()}px` : header.column.id === "actions" || header.column.id === "rank" ? "50px" : "110px",
+                        header.column.id === "username" ? `${header.getSize()}px` : header.column.id === "actions" || header.column.id === "rank" ? "40px" : "110px",
                     }}
                   >
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -236,7 +252,7 @@ export function BoardRankingTable({
                       style={{
                         width: cell.column.id === "username" ? undefined : `${cell.column.getSize()}px`,
                         minWidth:
-                          cell.column.id === "username" ? `${cell.column.getSize()}px` : cell.column.id === "actions" || cell.column.id === "rank" ? "50px" : "110px",
+                          cell.column.id === "username" ? `${cell.column.getSize()}px` : cell.column.id === "actions" || cell.column.id === "rank" ? "40px" : "110px",
                       }}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -262,24 +278,18 @@ export function BoardRankingTable({
             <TableRow>
               <TableHead className="text-xs uppercase text-muted-foreground w-10 p-1 rounded-tl-lg text-center">#</TableHead>
               <TableHead className="text-xs uppercase text-muted-foreground p-1">{t("member")}</TableHead>
-              <TableHead className="text-xs uppercase text-muted-foreground text-center w-25 p-0">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="h-full w-full text-sm uppercase font-normal hover:bg-transparent px-0">
-                      <span className="truncate text-[10px]">{statOptions[mobileStatView].label}</span>
-                      <ChevronDown className="h-3 w-3 ml-0.5 shrink-0" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-40">
-                    {(Object.keys(statOptions) as Array<keyof typeof statOptions>).map((key) => (
-                      <DropdownMenuItem key={key} onClick={() => setMobileStatView(key)}>
-                        {statOptions[key].label}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <TableHead className="text-xs uppercase text-muted-foreground text-center w-30 p-0">
+                <div className="flex items-center justify-center h-full">
+                  <Button variant="ghost" size="icon" className="h-5 w-5 p-0" onClick={handlePreviousStat}>
+                    <ArrowLeft className="h-3 w-3" />
+                  </Button>
+                  <span className="text-[10px] font-semibold min-w-0 flex-1 truncate px-0.5">{statOptions[mobileStatView].label}</span>
+                  <Button variant="ghost" size="icon" className="h-5 w-5 p-0" onClick={handleNextStat}>
+                    <ArrowRight className="h-3 w-3" />
+                  </Button>
+                </div>
               </TableHead>
-              <TableHead className="w-8 rounded-tr-lg"></TableHead>
+              <TableHead className="w-5 rounded-tr-lg"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

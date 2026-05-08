@@ -78,12 +78,14 @@ export function BoardDetailsView({ board, boards, initialMembers, initialPaginat
           {boardUserStats.map((stat) => (
             <div
               key={stat.id}
-              className="flex flex-col md:flex-row w-25 md:w-45 items-center justify-center md:justify-start gap-2 md:gap-3  p-2 sm:p-3 md:p-4  rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900"
+              className="flex flex-row w-30 md:w-45 items-center justify-center md:justify-start gap-2 md:gap-3  p-2 sm:p-3 md:p-4  rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900"
             >
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800">{stat.icon}</div>
+              <div className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-zinc-100 dark:bg-zinc-800">{stat.icon}</div>
               <div className="flex flex-col items-center md:items-start">
-                <span className="text-xs text-muted-foreground">{stat.label}</span>
-                <span className={`text-xl md:text-2xl font-bold ${stat.id === "myPosition" ? getRankColor(board?.viewer.rank || 0, "text") : ""}`}>{stat.value}</span>
+                <span className="text-xs text-muted-foreground hidden md:flex">{stat.label}</span>
+                <span className={`text-lg sm:text-xl md:text-2xl font-bold ${stat.id === "myPosition" ? getRankColor(board?.viewer.rank || 0, "text") : ""}`}>
+                  {stat.value}
+                </span>
               </div>
             </div>
           ))}

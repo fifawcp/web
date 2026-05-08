@@ -211,14 +211,15 @@
 
 /* OTP Input Custom Styles - Outside layers for higher specificity */
 .otp-group-custom [data-slot="input-otp-slot"] {
-  height: 3.75rem !important; /* h-15 */
-  width: 2.75rem !important; /* w-11 */
-  font-size: 1.25rem !important; /* text-xl */
+  height: 3.5rem !important;
+  width: 2.25rem !important;
+  font-size: 1.25rem !important;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 500px) {
   .otp-group-custom [data-slot="input-otp-slot"] {
-    width: 3.25rem !important; /* w-13 */
-    font-size: 1.5rem !important; /* text-2xl */
+    height: 4rem !important;
+    width: 3.25rem !important;
+    font-size: 1.5rem !important;
   }
 }

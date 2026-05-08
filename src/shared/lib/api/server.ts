@@ -2,7 +2,7 @@ import "server-only";
 
 import { redirect } from "next/navigation";
 
-import { getSession } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { env } from "@/lib/env";
 
 import { logger } from "../logger";
@@ -28,10 +28,8 @@ async function request<T>(endpoint: string, options: RequestOptions = { method: 
     if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
 
     if (authenticated) {
-      const session = await getSession();
-      const accessToken = session?.access_token;
-
-      if (!accessToken) redirect("/login");
+      const { session } = await auth({ required: true });
+      const accessToken = session.access_token;
 
       headers.set("Authorization", `Bearer ${accessToken}`);
     }

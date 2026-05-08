@@ -26,7 +26,7 @@ export function ShareBoardDialog({ board, currentUserId }: ShareBoardDialogProps
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" className="h-auto py-2 px-3 text-sm w-1/2 lg:w-auto">
+        <Button size="sm" className="h-auto py-2 px-3 text-sm w-auto flex-1 lg:w-auto">
           <UserPlus className="h-4 w-4 mr-2" />
           {t("subheader.inviteFriends")}
         </Button>

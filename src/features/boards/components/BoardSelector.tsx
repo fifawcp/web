@@ -26,6 +26,7 @@ export function BoardSelector({ boards, currentBoardId, currentBoardName }: Boar
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [joinDialogOpen, setJoinDialogOpen] = useState(false);
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   const handleBoardChange = (boardId: string) => {
     setLastVisitedBoardId(boardId);
     router.push(`/boards/${boardId}`);
@@ -39,13 +40,15 @@ export function BoardSelector({ boards, currentBoardId, currentBoardName }: Boar
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="h-auto py-2 px-3 gap-2 hover:bg-muted/50 min-w-0 bg-background">
-          {isGlobalBoard ? <Globe className="h-4 w-4 shrink-0" /> : <Users className="h-4 w-4 shrink-0" />}
-          <span className="truncate min-w-0 text-sm md:text-md font-semibold">{currentBoardName}</span>
-          <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />
+        <Button variant="outline" className="h-auto py-2 px-3 gap-2 hover:bg-muted/50 min-w-0 bg-background w-full md:w-65 justify-between">
+          <div className="flex items-center gap-2">
+            {isGlobalBoard ? <Globe className="h-4 w-4 shrink-0" /> : <Users className="h-4 w-4 shrink-0" />}
+            <span className="truncate min-w-0 text-sm md:text-md font-semibold">{currentBoardName}</span>
+          </div>
+          <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0 ml-auto md:ml-1 " />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-80 p-0">
+      <DropdownMenuContent align={isMobile ? "center" : "start"} className="p-0 w-(--radix-dropdown-menu-trigger-width)">
         {/* Current Board Section */}
         <div className="px-3 py-2">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">{t("currentBoard")}</p>
