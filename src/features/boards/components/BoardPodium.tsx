@@ -4,6 +4,7 @@ import { Crown } from "lucide-react";
 
 import { BoardMemberDetails } from "@/features/boards/types/board.types";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
+import { useIsMobile } from "@/shared/hooks/useIsMobile";
 import { getRankColor } from "@/shared/lib/utils/ui";
 
 interface BoardPodiumProps {
@@ -16,15 +17,26 @@ interface PodiumPositionProps {
 }
 
 function PodiumPosition({ member, position }: PodiumPositionProps) {
+  const isMobile = useIsMobile();
   const initials = member.username.slice(0, 2).toUpperCase();
 
   const isFirst = position === 1;
+
+  const podiumConfig = isMobile
+    ? {
+        base: 140,
+        decrement: 20,
+      }
+    : {
+        base: 190,
+        decrement: 30,
+      };
 
   const orderClass = isFirst ? "order-2" : position === 2 ? "order-1" : "order-3";
   const containerClass = isFirst ? "bg-black dark:bg-card" : "bg-muted shadow-md";
   const textClass = isFirst ? "text-white" : "text-foreground";
   const textSize = isFirst ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl";
-  const height = 190 - position * 30;
+  const height = podiumConfig.base - position * podiumConfig.decrement;
 
   return (
     <div className={`flex flex-col items-center ${orderClass} flex-1 min-w-0`}>
@@ -47,7 +59,7 @@ function PodiumPosition({ member, position }: PodiumPositionProps) {
 
       <div
         className={`w-full ${containerClass} rounded-t-lg flex items-center flex-col justify-center border border-border border-b-0 p-1 md:p-3 gap-1`}
-        style={{ height: `${height}px` }}
+        style={{ height }}
       >
         <span className={`${textSize} font-bold leading-none ${textClass}`}>{position}</span>
         <span className={`text-[10px] md:text-sm ${textClass} truncate w-full text-center px-1`}>@{member.username}</span>

@@ -1,11 +1,11 @@
 "use client";
 
-import { Copy, RefreshCw, UserPlus } from "lucide-react";
+import { Copy, RefreshCw } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { BoardDetails } from "@/features/boards/types/board.types";
 import { Button } from "@/shared/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/components/ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
 
 import { useShareBoard } from "../hooks/useShareBoard";
@@ -13,27 +13,22 @@ import { useShareBoard } from "../hooks/useShareBoard";
 interface ShareBoardDialogProps {
   board: BoardDetails;
   currentUserId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export function ShareBoardDialog({ board, currentUserId }: ShareBoardDialogProps) {
-  const { open, setOpen, copyCode, copyLink, handleRegenerate, isRegenerating, copied, linkCopied, joinCode, shareLink, isAdminOrOwner } = useShareBoard({
+export function ShareBoardDialog({ board, currentUserId, open, onOpenChange }: ShareBoardDialogProps) {
+  const { copyCode, copyLink, handleRegenerate, isRegenerating, copied, linkCopied, joinCode, shareLink, isAdminOrOwner } = useShareBoard({
     board,
     currentUserId,
   });
-  const t = useTranslations("boards");
   const tShare = useTranslations("boards.share");
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm" className="h-auto py-2 px-3 text-sm w-auto flex-1 lg:w-auto">
-          <UserPlus className="h-4 w-4 mr-2" />
-          {t("subheader.inviteFriends")}
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="p-5 min-w-auto lg:min-w-100">
         <DialogHeader className="gap-0">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider">{tShare("inviteToPool")}</p>
+          <p className="text-xs text-muted-foreground uppercase tracking-wider">{tShare("inviteToBoard")}</p>
           <DialogTitle className="font-bold text-xl">{board.name}</DialogTitle>
         </DialogHeader>
 

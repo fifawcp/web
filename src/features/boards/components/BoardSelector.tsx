@@ -9,6 +9,7 @@ import { Board } from "@/features/boards/types/board.types";
 import { setLastVisitedBoardId } from "@/features/boards/utils/boardStorage";
 import { Button } from "@/shared/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
+import { useIsMobile } from "@/shared/hooks/useIsMobile";
 
 import { CreateBoardDialog } from "./CreateBoardDialog";
 import { JoinBoardDialog } from "./JoinBoardDialog";
@@ -26,7 +27,8 @@ export function BoardSelector({ boards, currentBoardId, currentBoardName }: Boar
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [joinDialogOpen, setJoinDialogOpen] = useState(false);
 
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const isMobile = useIsMobile();
+
   const handleBoardChange = (boardId: string) => {
     setLastVisitedBoardId(boardId);
     router.push(`/boards/${boardId}`);
@@ -40,7 +42,7 @@ export function BoardSelector({ boards, currentBoardId, currentBoardName }: Boar
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="h-auto py-2 px-3 gap-2 hover:bg-muted/50 min-w-0 bg-background w-full md:w-65 justify-between">
+        <Button variant="outline" className="h-auto py-2 px-3 gap-2 hover:bg-muted/50 min-w-0 bg-background flex-1 md:flex-none md:w-65 justify-between">
           <div className="flex items-center gap-2">
             {isGlobalBoard ? <Globe className="h-4 w-4 shrink-0" /> : <Users className="h-4 w-4 shrink-0" />}
             <span className="truncate min-w-0 text-sm md:text-md font-semibold">{currentBoardName}</span>

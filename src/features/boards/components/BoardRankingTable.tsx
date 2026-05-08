@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { ColumnDef, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
-import { ChevronLeft, ChevronRight, ArrowLeft, ArrowRight, MoreVertical, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoreVertical, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { useUpdateMemberRole } from "@/features/boards/hooks/useUpdateMemberRole";
@@ -281,11 +281,11 @@ export function BoardRankingTable({
               <TableHead className="text-xs uppercase text-muted-foreground text-center w-30 p-0">
                 <div className="flex items-center justify-center h-full">
                   <Button variant="ghost" size="icon" className="h-5 w-5 p-0" onClick={handlePreviousStat}>
-                    <ArrowLeft className="h-3 w-3" />
+                    <ChevronLeft className="h-3 w-3" />
                   </Button>
                   <span className="text-[10px] font-semibold min-w-0 flex-1 truncate px-0.5">{statOptions[mobileStatView].label}</span>
                   <Button variant="ghost" size="icon" className="h-5 w-5 p-0" onClick={handleNextStat}>
-                    <ArrowRight className="h-3 w-3" />
+                    <ChevronRight className="h-3 w-3" />
                   </Button>
                 </div>
               </TableHead>

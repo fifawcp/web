@@ -37,15 +37,15 @@ export function ManageBoardDropdown({ boardId, boardName, isOwner, currentUserRo
             {t("manage.trigger")}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-(--radix-dropdown-menu-trigger-width)">
+        <DropdownMenuContent align="center" className="w-(--radix-dropdown-menu-trigger-width)">
           {isAdmin && (
-            <DropdownMenuItem className="gap-2" onClick={() => setUpdateDialogOpen(true)}>
+            <DropdownMenuItem className="gap-2 cursor-pointer" onClick={() => setUpdateDialogOpen(true)}>
               <Edit className="h-4 w-4" />
               {t("update.trigger")}
             </DropdownMenuItem>
           )}
           {isOwner && (
-            <DropdownMenuItem className="gap-2 text-destructive" onClick={() => setDeleteDialogOpen(true)}>
+            <DropdownMenuItem className="gap-2 text-destructive cursor-pointer" onClick={() => setDeleteDialogOpen(true)}>
               <Trash2 className="h-4 w-4" />
               {t("delete.trigger")}
             </DropdownMenuItem>

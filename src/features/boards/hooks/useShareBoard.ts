@@ -6,7 +6,6 @@ import { BoardDetails } from "../types/board.types";
 import { useRegenerateJoinCode } from "./useRegenerateJoinCode";
 
 export const useShareBoard = ({ board, currentUserId }: { board: BoardDetails; currentUserId: string }) => {
-  const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const { handleRegenerate, isRegenerating } = useRegenerateJoinCode(String(board.id));
@@ -28,8 +27,6 @@ export const useShareBoard = ({ board, currentUserId }: { board: BoardDetails; c
   };
 
   return {
-    open,
-    setOpen,
     copied,
     setCopied,
     linkCopied,
