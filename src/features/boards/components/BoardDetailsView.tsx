@@ -15,6 +15,8 @@ import { setLastVisitedBoardId } from "@/features/boards/utils/boardStorage";
 import { Pagination } from "@/shared/lib/api/types";
 import { getRankColor } from "@/shared/lib/utils/ui";
 
+import { LAST_VISITED_BOARD_KEY } from "../constants/boards";
+
 interface BoardDetailsViewProps {
   board: BoardDetails;
   boards: Board[];
@@ -35,12 +37,14 @@ export function BoardDetailsView({ board, boards, initialMembers, initialPaginat
 
   const { handleRemove } = useRemoveMember(board.id, refresh);
 
-  const topThree = [...members].sort((a, b) => a.rank - b.rank).slice(0, 3);
+  const topThreeMembers = useMemo(() => {
+    return [...initialMembers].sort((a, b) => a.rank - b.rank).slice(0, 3);
+  }, [initialMembers]);
 
   useEffect(() => {
     setLastVisitedBoardId(boardId);
     // Also set cookie for server-side redirect optimization
-    document.cookie = `LastVisitedBoardId=${boardId}; path=/; max-age=2592000`; // 30 days
+    document.cookie = `${LAST_VISITED_BOARD_KEY}=${boardId}; path=/; max-age=2592000`; // 30 days
   }, [boardId]);
 
   const boardUserStats = useMemo(
@@ -83,7 +87,7 @@ export function BoardDetailsView({ board, boards, initialMembers, initialPaginat
               <div className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-zinc-100 dark:bg-zinc-800">{stat.icon}</div>
               <div className="flex flex-col items-center md:items-start">
                 <span className="text-xs text-muted-foreground hidden md:flex">{stat.label}</span>
-                <span className={`text-lg sm:text-xl md:text-2xl font-bold ${stat.id === "myPosition" ? getRankColor(board?.viewer.rank || 0, "text") : ""}`}>
+                <span className={`md:text-lg lg:text-xl xl:text-2xl font-bold ${stat.id === "myPosition" ? getRankColor(board?.viewer.rank || 0, "text") : ""}`}>
                   {stat.value}
                 </span>
               </div>
@@ -91,7 +95,7 @@ export function BoardDetailsView({ board, boards, initialMembers, initialPaginat
           ))}
         </div>
 
-        <BoardPodium members={topThree} />
+        <BoardPodium members={topThreeMembers} />
 
         <BoardRankingTable
           ownerId={board.owner_user_id || ""}

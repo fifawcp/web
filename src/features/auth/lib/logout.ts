@@ -1,5 +1,6 @@
 import { signOut } from "next-auth/react";
 
+import { LAST_VISITED_BOARD_KEY } from "@/features/boards/constants/boards";
 import { removeLastVisitedBoardId } from "@/features/boards/utils/boardStorage";
 
 import { logout as apiLogout } from "../api/client";
@@ -18,7 +19,7 @@ export async function logoutAndSignOut(redirectUrl = "/"): Promise<void> {
   // Clear last visited board ID to prevent stale data when logging in with a different user
   removeLastVisitedBoardId();
   // Clear cookie as well
-  document.cookie = "LastVisitedBoardId=; path=/; max-age=0";
+  document.cookie = `${LAST_VISITED_BOARD_KEY}=; path=/; max-age=0`;
 
   await signOut({ redirect: false });
   window.location.href = redirectUrl;
