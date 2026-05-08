@@ -29,6 +29,13 @@
   /* Layout dimensions */
   --header-height: 65px;
 
+  /* Offset used when scrolling a date-group into view on /schedule.
+     header (65px) + sticky filter bar (~52px) + section gap (19px). */
+  --schedule-scroll-offset: calc(var(--header-height) + 52px + 19px);
+
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 0.875rem;
+
   /* Gradient definitions for light and dark modes */
   --gradient-secondary: linear-gradient(to right, var(--color-wc-red), var(--color-wc-orange), var(--color-wc-purple));
 

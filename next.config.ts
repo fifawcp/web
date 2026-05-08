@@ -4,6 +4,9 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "flagcdn.com", pathname: "/w320/**" }],
+  },
   async rewrites() {
     const upstream = process.env.BACKEND_API_URL;
     if (!upstream) throw new Error("BACKEND_API_URL is required");
@@ -24,9 +27,10 @@ const nextConfig: NextConfig = {
         { source: "/api/oauth/:path*", destination: `${upstream}/api/oauth/:path*` },
       ],
 
-      // afterFiles: proxy all non-auth API routes (boards, users, etc.) after
-      // Next.js has confirmed there is no matching page or API route handler.
-      afterFiles: [{ source: "/api/:path((?!auth/).*)", destination: `${upstream}/api/:path*` }],
+      // afterFiles: proxy non-auth API routes to the backend.
+      // Excludes paths owned by custom route handlers (e.g. matches/:id/pick) —
+      // afterFiles rewrites run before dynamic routes, so a match here would swallow them
+      afterFiles: [{ source: "/api/:path((?!auth/|matches/[^/]+/pick).*)", destination: `${upstream}/api/:path*` }],
 
       fallback: [],
     };

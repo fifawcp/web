@@ -54,7 +54,7 @@ export function OtpDevTotpFill({ identifier, setOtpCode, onApiError, className }
       className={cn("absolute right-6 gap-2 text-xs font-medium", className)}
       aria-label="Fill verification code from dev endpoint"
     >
-      <Badge variant="secondary" className="px-1.5 font-mono text-[10px] uppercase tracking-wide">
+      <Badge variant="secondary" className="px-1.5 font-mono text-2xs uppercase tracking-wide">
         dev
       </Badge>
       Fill

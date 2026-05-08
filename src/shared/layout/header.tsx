@@ -55,6 +55,15 @@ export function Header() {
                 </Link>
 
                 <Link
+                  href="/schedule"
+                  className={`text-sm font-medium transition-colors hover:text-wc-red dark:hover:text-wc-orange ${
+                    isActive("/schedule") ? "text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
+                  }`}
+                >
+                  {t("schedule")}
+                </Link>
+
+                <Link
                   href="/leaderboard"
                   className={`text-sm font-medium transition-colors hover:text-wc-red dark:hover:text-wc-orange ${
                     isActive("/leaderboard") ? "text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
@@ -126,6 +135,15 @@ export function Header() {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {t("boards")}
+                  </Link>
+                  <Link
+                    href="/schedule"
+                    className={`text-sm font-medium px-2 py-1 rounded-md ${
+                      isActive("/schedule") ? "bg-wc-red/10 dark:bg-wc-purple/20 text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {t("schedule")}
                   </Link>
                   <Link
                     href="/leaderboard"

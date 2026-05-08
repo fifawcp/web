@@ -1,0 +1,54 @@
+{
+  "title": "Calendario",
+  "filters": {
+    "openButton": "Filtros",
+    "title": "Filtros",
+    "description": "Filtra los partidos",
+    "noResults": "Sin resultados",
+    "stage": {
+      "label": "Fase",
+      "all": "Todas",
+      "group_stage": "Fase de grupos",
+      "round_of_32": "Dieciseisavos",
+      "round_of_16": "Octavos",
+      "quarterfinals": "Cuartos",
+      "semifinals": "Semifinales",
+      "third_place": "Tercer puesto",
+      "final": "Final"
+    },
+    "group": {
+      "label": "Grupo",
+      "all": "Todos"
+    },
+    "team": {
+      "label": "Equipo",
+      "all": "Todos",
+      "search": "Buscar equipo…"
+    },
+    "matchStatus": {
+      "label": "Estado",
+      "all": "Todos",
+      "scheduled": "Programado",
+      "finished": "Finalizado"
+    },
+    "reset": "Restablecer",
+    "done": "Listo"
+  },
+  "card": {
+    "yourPick": "Tu pick",
+    "noPickMade": "No hiciste tu pick",
+    "tapToPick": "Haz tu pick",
+    "closesIn": "Cierra en {time}",
+    "save": "Guardar",
+    "cancel": "Cancelar"
+  },
+  "matchCount": "{count, plural, one {# partido} other {# partidos}}",
+  "badge": {
+    "picked": "Pickeado",
+    "locked": "Bloqueado"
+  },
+  "empty": {
+    "title": "No se encontraron partidos",
+    "description": "Ajusta tus filtros"
+  }
+}

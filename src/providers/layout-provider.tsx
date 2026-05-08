@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "next-themes";
 
 import { SessionMonitor } from "@/features/auth/components/SessionMonitor";
+import { QueryProvider } from "@/shared/lib/query/QueryProvider";
 
 import { SessionProvider } from "./session-provider";
 
@@ -14,7 +15,7 @@ export function Providers({ children, messages, locale }: { children: React.Reac
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <SessionProvider>
           <SessionMonitor />
-          {children}
+          <QueryProvider>{children}</QueryProvider>
         </SessionProvider>
       </ThemeProvider>
     </NextIntlClientProvider>
