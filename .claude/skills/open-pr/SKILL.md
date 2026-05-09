@@ -1,9 +1,9 @@
 ---
-name: pr-summary
-description: Analyse the current branch's diff against develop, fill .github/pull_request_template.md, and open a PR with `gh`. Output stays terse and skimmable.
+name: open-pr
+description: Analyse the current branch's diff against develop, fill .github/pull_request_template.md, push the branch, and open the PR with `gh`. Output stays terse and skimmable.
 ---
 
-# PR summary
+# Open PR
 
 ## Goal
 
@@ -38,14 +38,17 @@ Open a PR whose body a reviewer can scan in under 30 seconds. Optimise for **sig
 
 3. **Show the draft to the user** as a fenced markdown block. Ask: *"Open the PR with this body, or want me to adjust?"* Wait for confirmation.
 
-4. **On approval**, run:
-   ```bash
-   gh pr create --base develop --title "<title>" --body "$(cat <<'EOF'
-   <body>
-   EOF
-   )"
-   ```
-   Use the most recent commit subject as the title unless the user provided one.
+4. **On approval**, push the branch if needed, then open the PR:
+   - Check upstream: `git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null`
+   - If no upstream is set, push first: `git push -u origin <branch>`
+   - Then run:
+     ```bash
+     gh pr create --base develop --title "<title>" --body "$(cat <<'EOF'
+     <body>
+     EOF
+     )"
+     ```
+   - Use the most recent commit subject as the title unless the user provided one.
 
 5. **Return the PR URL.** Nothing else.
 
