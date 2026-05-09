@@ -50,5 +50,30 @@
   "empty": {
     "title": "No se encontraron partidos",
     "description": "Ajusta tus filtros"
+  },
+  "progress": {
+    "label": "Progreso general",
+    "picked": "{count} pickeados",
+    "missed": "{count} sin pick"
+  },
+  "board": {
+    "today": "Picks pendientes hoy",
+    "missed": "Sin pick",
+    "correctScore": "Marcador exacto",
+    "correctOutcome": "Acierto del ganador"
+  },
+  "pending": {
+    "matches": "{count, plural, one {Tienes <highlight>#</highlight> partido por pickear} other {Tienes <highlight>#</highlight> partidos por pickear}}",
+    "subtitle": "Haz tus picks antes del cierre"
+  },
+  "tabs": {
+    "all": "Todos",
+    "pending": "Por pickear",
+    "picked": "Pickeados"
+  },
+  "signedOut": {
+    "title": "Inicia sesión para pickear",
+    "description": "Haz tus picks y sigue tu progreso",
+    "cta": "Iniciar sesión"
   }
 }

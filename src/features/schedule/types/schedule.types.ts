@@ -52,11 +52,14 @@ export type Match = {
   user_score_pick: UserScorePick | null;
 };
 
+export type PickFilter = "all" | "pending" | "picked";
+
 export type ScheduleFilters = {
   stage: StageCode | "all";
   group: GroupCode | "all";
   team: string | "all";
   matchStatus: MatchStatus | "all";
+  pick: PickFilter;
 };
 
 export const DEFAULT_FILTERS: ScheduleFilters = {
@@ -64,4 +67,5 @@ export const DEFAULT_FILTERS: ScheduleFilters = {
   group: "all",
   team: "all",
   matchStatus: "all",
+  pick: "all",
 };

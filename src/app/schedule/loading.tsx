@@ -4,6 +4,14 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 export default function ScheduleLoading() {
   return (
     <div className="flex flex-col">
+      <div className="container mx-auto flex w-full flex-col gap-3 px-4 py-4 sm:px-6 lg:px-8">
+        <div className="lg:hidden">
+          <ProgressCardSkeleton />
+        </div>
+        <div className="hidden lg:block">
+          <StatsBoardSkeleton />
+        </div>
+      </div>
       <FilterBarSkeleton />
       <div className="container mx-auto flex w-full flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
         {Array.from({ length: 2 }).map((_, i) => (
@@ -14,19 +22,73 @@ export default function ScheduleLoading() {
   );
 }
 
-const CHIP_SKELETON_WIDTHS = ["w-52", "w-32", "w-60", "w-44"];
+const CHIP_SKELETON_WIDTHS = ["w-44", "w-32", "w-60", "w-44"];
+
+function ProgressCardSkeleton() {
+  return (
+    <Card size="sm" className="flex-row items-center gap-4 px-4">
+      <Skeleton className="size-20 shrink-0 rounded-full sm:size-24" />
+      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <Skeleton className="h-7 w-24" />
+        <Skeleton className="h-3 w-32" />
+        <div className="mt-2 flex items-center gap-2.5">
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-3 w-20" />
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function StatsBoardSkeleton() {
+  return (
+    <Card size="sm" className="flex-row items-center gap-5 px-5 py-3">
+      <div className="flex min-w-64 xl:min-w-80 shrink-0 items-center gap-4">
+        <Skeleton className="size-24 shrink-0 rounded-full" />
+        <div className="flex flex-col gap-0.5">
+          <Skeleton className="h-7 w-24" />
+          <Skeleton className="h-3 w-28" />
+          <div className="mt-1.5 flex items-center gap-2.5">
+            <Skeleton className="h-3 w-20" />
+            <Skeleton className="h-3 w-16" />
+          </div>
+        </div>
+      </div>
+      <div className="h-20 w-px shrink-0 bg-border" />
+      <div className="flex flex-1 items-center">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="contents">
+            <div className="flex flex-1 items-center gap-3 px-3">
+              <Skeleton className="size-10 shrink-0 rounded-lg" />
+              <div className="flex min-w-0 flex-col gap-0.5">
+                <Skeleton className="h-6 w-10" />
+                <Skeleton className="h-4 w-full max-w-24" />
+              </div>
+            </div>
+            {i < 2 && <div className="h-20 w-px shrink-0 bg-border" />}
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+}
 
 function FilterBarSkeleton() {
   return (
-    <div className="border-b border-border">
-      <div className="container mx-auto px-4 py-2 sm:px-6 lg:px-8">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="border-b border-border py-2">
         <div className="hidden flex-wrap items-center gap-2 lg:flex">
           {CHIP_SKELETON_WIDTHS.map((w, i) => (
-            <Skeleton key={i} className={`h-8 ${w} rounded-full`} />
+            <Skeleton key={i} className={`h-8 ${w} rounded-lg`} />
           ))}
         </div>
         <div className="flex w-full lg:hidden">
           <Skeleton className="h-8 w-full rounded-md" />
+        </div>
+        <div className="mt-3 flex items-center gap-2">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-7 flex-1 rounded-md lg:flex-none lg:min-w-40" />
+          ))}
         </div>
       </div>
     </div>
@@ -75,9 +137,9 @@ function TeamRowSkeleton({ side }: { side: "home" | "away" }) {
   const justify = side === "home" ? "justify-start" : "justify-end";
   const flag = <Skeleton className="h-6 w-9 shrink-0 rounded-xs sm:h-9 sm:w-13" />;
   const label = (
-    <div className={`flex flex-col gap-1.5 ${side === "home" ? "items-start" : "items-end"}`}>
-      <Skeleton className="h-3 w-16" />
-      <Skeleton className="h-2 w-8" />
+    <div className={`flex flex-col leading-tight ${side === "home" ? "items-start" : "items-end"}`}>
+      <Skeleton className="h-3 w-16 sm:h-4" />
+      <Skeleton className="h-3 w-8" />
     </div>
   );
 

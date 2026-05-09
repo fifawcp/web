@@ -41,7 +41,7 @@ function ScoreStepper({ value, onChange, disabled, ariaLabel }: { value: number;
       >
         <Plus />
       </StepperButton>
-      <span className="text-center text-xl font-semibold tabular-nums leading-none text-zinc-900 dark:text-white sm:text-2xl">{value}</span>
+      <span className="text-center text-xl font-semibold tabular-nums leading-none text-foreground sm:text-2xl">{value}</span>
       <StepperButton
         className="absolute -bottom-0.5 sm:-bottom-2 left-1/2 -translate-x-1/2"
         onClick={() => onChange(Math.max(MIN_SCORE, value - 1))}
@@ -58,8 +58,9 @@ function StepperButton({ className, ...props }: React.ComponentProps<"button">) 
   return (
     <Button
       type="button"
+      size="icon-xs"
       className={cn(
-        "inline-flex size-6 cursor-pointer items-center justify-center rounded-md border border-input bg-background text-foreground shadow-xs transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-40 sm:size-8 [&_svg]:size-3 sm:[&_svg]:size-3.5",
+        "cursor-pointer border-border bg-card dark:bg-card text-foreground shadow-xs hover:bg-muted dark:hover:bg-muted disabled:opacity-40 sm:size-8 sm:[&_svg]:size-3.5",
         className
       )}
       {...props}

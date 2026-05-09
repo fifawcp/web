@@ -50,5 +50,30 @@
   "empty": {
     "title": "No matches found",
     "description": "Try adjusting your filters"
+  },
+  "progress": {
+    "label": "Overall progress",
+    "picked": "{count} picked",
+    "missed": "{count} missed"
+  },
+  "board": {
+    "today": "Today's pending picks",
+    "missed": "No pick",
+    "correctScore": "Exact score",
+    "correctOutcome": "Correct outcome"
+  },
+  "pending": {
+    "matches": "{count, plural, one {You have <highlight>#</highlight> match to pick} other {You have <highlight>#</highlight> matches to pick}}",
+    "subtitle": "Pick before they kick off"
+  },
+  "tabs": {
+    "all": "All",
+    "pending": "Pending",
+    "picked": "Picked"
+  },
+  "signedOut": {
+    "title": "Sign in to track your picks",
+    "description": "Make picks, follow your progress, and see your stats",
+    "cta": "Sign in"
   }
 }

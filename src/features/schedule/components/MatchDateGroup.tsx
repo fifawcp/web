@@ -19,10 +19,10 @@ export function MatchDateGroup({ group, isAuthed }: Props) {
 
   return (
     // --schedule-scroll-offset (defined in globals.css) clears the sticky stack
-    // so the date header lands just below the filter bar on initial anchor
+    // so the date header lands just below the filter bar on anchor match scroll
     <section className="flex scroll-mt-(--schedule-scroll-offset) flex-col gap-3">
       <header className="flex items-center justify-between px-1 py-1">
-        <h2 className="text-sm font-semibold text-zinc-900 dark:text-white">{dateLabel}</h2>
+        <h2 className="text-sm font-semibold text-foreground">{dateLabel}</h2>
         <span className="text-xs uppercase tracking-wide text-muted-foreground">{t("matchCount", { count: group.matches.length })}</span>
       </header>
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
@@ -33,4 +33,3 @@ export function MatchDateGroup({ group, isAuthed }: Props) {
     </section>
   );
 }
-

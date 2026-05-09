@@ -5,14 +5,20 @@ import { useTranslations } from "next-intl";
 
 import { useMatches } from "../hooks/useMatches";
 import { useScheduleFilters } from "../hooks/useScheduleFilters";
-import { useScrollToAnchor } from "../hooks/useScrollToAnchor";
 import { collectTeams } from "../lib/collectTeams";
+import { computePickStats } from "../lib/computePickStats";
 import { filterMatches } from "../lib/filterMatches";
 import { groupMatchesByLocalDate } from "../lib/groupByDate";
-import { type Match } from "../types/schedule.types";
+import { scrollMatchIntoView } from "../lib/scrollMatchIntoView";
+import { DEFAULT_FILTERS, type Match, type PickFilter } from "../types/schedule.types";
 
 import { MatchDateGroup } from "./MatchDateGroup";
+import { PendingPicksCta } from "./PendingPicksCta";
+import { PickProgressCard } from "./PickProgressCard";
+import { PickProgressDashboard } from "./PickProgressDashboard";
+import { PickStatusTabs } from "./PickStatusTabs";
 import { ScheduleFilters } from "./ScheduleFilters";
+import { SignedOutCta } from "./SignedOutCta";
 
 type Props = {
   initialMatches: Match[];
@@ -30,14 +36,46 @@ export function ScheduleView({ initialMatches, anchorMatchId, isAuthed }: Props)
   // Filter the teams by group if the group is not "all"
   const visibleTeams = useMemo(() => (filters.group === "all" ? allTeams : allTeams.filter((team) => team.group_code === filters.group)), [allTeams, filters.group]);
 
-  const filtered = useMemo(() => filterMatches(matches, filters), [matches, filters]);
+  const filteredByChips = useMemo(() => filterMatches(matches, { ...filters, pick: "all" }), [matches, filters]);
+  const filtered = useMemo(
+    () => (filters.pick === "all" ? filteredByChips : filterMatches(filteredByChips, { ...DEFAULT_FILTERS, pick: filters.pick })),
+    [filteredByChips, filters.pick]
+  );
   const groups = useMemo(() => groupMatchesByLocalDate(filtered), [filtered]);
 
-  useScrollToAnchor(anchorMatchId, matches.length);
+  const overallStats = useMemo(() => computePickStats(matches), [matches]);
+  const tabStats = useMemo(() => computePickStats(filteredByChips), [filteredByChips]);
+  const counts = { all: filteredByChips.length, pending: tabStats.pendingAll, picked: tabStats.picked };
+
+  const onPickChange = (next: PickFilter) => setFilters({ ...filters, pick: next });
 
   return (
     <div className="flex flex-col">
-      <ScheduleFilters filters={filters} onChange={setFilters} teams={visibleTeams} />
+      <div className="container mx-auto flex w-full flex-col gap-3 px-4 py-4 sm:px-6 lg:px-8">
+        {isAuthed ? (
+          <>
+            <div className="lg:hidden">
+              <PickProgressCard stats={overallStats} />
+            </div>
+            <div className="hidden lg:block">
+              <PickProgressDashboard stats={overallStats} />
+            </div>
+          </>
+        ) : (
+          <SignedOutCta />
+        )}
+        {isAuthed && overallStats.pendingAll > 0 && anchorMatchId !== null && (
+          <PendingPicksCta count={overallStats.pendingAll} onPress={() => scrollMatchIntoView(anchorMatchId)} />
+        )}
+      </div>
+
+      <ScheduleFilters
+        filters={filters}
+        onChange={setFilters}
+        teams={visibleTeams}
+        tabs={isAuthed ? <PickStatusTabs value={filters.pick} onChange={onPickChange} counts={counts} /> : undefined}
+      />
+
       <div className="container mx-auto flex w-full flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
         {groups.length === 0 ? (
           <EmptyState title={t("empty.title")} description={t("empty.description")} />

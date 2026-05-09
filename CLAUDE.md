@@ -57,12 +57,19 @@ For mutations whose effects must be visible after the next RSC navigation:
 
 - **Time Handling:** All match times must be stored/processed in UTC. Convert to user's local time only at the edge (UI).
 - **Match Locking:** Picks lock exactly at kickoff, mirroring the API. UI must disable the picker at `match.kickoff_at` (no pre-kickoff buffer).
-- **Scoring Engine:** Centralize scoring logic in `src/lib/scoring.ts` to ensure consistency between the leaderboard and user profiles.
 - **Tournament Simulation:** Logic for bracket progression must be deterministic.
 
 ## 4. Design & UI Standards
 
 - **Theme:** Clean, neutral, shadcn-style minimalism. Use the `background`/`foreground`/`muted`/`card`/`border` tokens for layout surfaces — no colorful page-background gradients. Reserve `wc-*` for branded touches (logo, occasional CTAs). Use `lime-*` as the success/picked accent (CTA "Tap to pick", "Picked" badge) so the action and its confirmed state share a color story. Always support dark and light modes.
+- **Radius hierarchy:** Radius encodes role, not just visual variety. A child surface always uses a *smaller* radius than its parent so it visually nests inside instead of competing with the parent's outline.
+  - `rounded-xl` — top-level surfaces (Card, Dialog, Drawer, full-card click targets)
+  - `rounded-lg` — decorative containers nested in cards (icon holders, status pills, stat tiles)
+  - `rounded-md` — interactive form controls (Button, Input, Select, filter triggers)
+  - `rounded-full` — identity primitives (avatars, indicator dots, drawer handle)
+
+  Avoid `rounded-xl` on small elements inside a card — at 40px it reads as ~35% radius and echoes the card's own corner.
+- **Hover surfaces:** All hover backgrounds use `bg-muted` (and `dark:hover:bg-muted` where the dark variant doesn't inherit). Never overlay with opacity (`hover:bg-muted/40`, `/60`, etc.) — drift across components produced 3 different "hover gray" shades that almost matched but didn't. The `--muted` token is the canonical hover surface; let it speak at full opacity.
 - **Responsiveness:** The "Pick'em Grid" must be highly optimized for mobile devices (touch-friendly targets).
 - **States:** Always implement Loading (Suspense), skeleton loaders, and Error Boundary states for match data. Skeletons mirror the real layout 1:1 — see §2.1.
 - **Feedback:** Use `sonner` or shadcn `Toast` for successful pick submissions.

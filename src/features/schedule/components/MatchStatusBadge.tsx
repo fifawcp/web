@@ -9,7 +9,7 @@ import { cn } from "@/shared/lib/utils";
 type BadgeState = "picked" | "locked";
 
 const variantClasses: Record<BadgeState, string> = {
-  picked: "bg-lime-100 text-lime-700 dark:bg-lime-950 dark:text-lime-300",
+  picked: "bg-page-accent-soft text-page-accent-strong",
   locked: "bg-muted text-muted-foreground",
 };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, MapPin, X } from "lucide-react";
+import { MapPin, MoveRight } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -49,7 +49,7 @@ export function MatchCard({ match, isAuthed }: Props) {
   const save = () => updatePick.mutate({ matchId: match.id, pick: draft }, { onSuccess: () => setEditing(false) });
 
   return (
-    <Card data-match-id={match.id} className={cn("relative gap-3 px-4 py-4", editing && "ring-2 ring-foreground")} size="sm">
+    <Card data-match-id={match.id} className={cn("relative gap-3 px-4 py-4", editing && "ring-2 ring-page-accent")} size="sm">
       <header className="flex items-center justify-between text-xs text-muted-foreground">
         <span className="font-medium uppercase tracking-wide">{stageHeaderLabel(match, stageT)}</span>
         <KickoffTime kickoffAt={match.kickoff_at} />
@@ -72,7 +72,7 @@ export function MatchCard({ match, isAuthed }: Props) {
       </div>
 
       <footer className="relative -mx-4 pt-4 flex min-h-9 items-center justify-between gap-3 border-t border-border px-4 text-xs text-muted-foreground">
-        <span className="inline-flex min-w-0 items-center gap-1.5">
+        <span className="inline-flex min-w-0 max-w-[55%] items-center gap-1.5 sm:max-w-none">
           <MapPin className="size-3.5 shrink-0" aria-hidden />
           <span className="truncate">
             {match.venue.name} · {match.venue.city}
@@ -80,13 +80,16 @@ export function MatchCard({ match, isAuthed }: Props) {
         </span>
         {editing ? (
           <div className="absolute right-4 flex shrink-0 items-center gap-1.5">
-            <Button size="sm" variant="outline" onClick={cancelEdit} disabled={updatePick.isPending} className="h-[30px] cursor-pointer max-sm:size-6 max-sm:p-0">
-              <X />
-              <span className="max-sm:hidden">{t("cancel")}</span>
+            <Button size="sm" variant="ghost" onClick={cancelEdit} disabled={updatePick.isPending} className="h-[30px] text-xs sm:text-sm cursor-pointer">
+              {t("cancel")}
             </Button>
-            <Button size="sm" onClick={save} disabled={updatePick.isPending} className="h-[30px] cursor-pointer max-sm:size-6 max-sm:p-0">
-              <Check />
-              <span className="max-sm:hidden">{t("save")}</span>
+            <Button
+              size="sm"
+              onClick={save}
+              disabled={updatePick.isPending}
+              className="h-[30px] cursor-pointer bg-page-accent text-background hover:bg-page-accent-strong text-xs sm:text-sm"
+            >
+              {t("save")}
             </Button>
           </div>
         ) : (
@@ -118,7 +121,7 @@ function TeamColumn({ team, side, locale, dim }: { team: Team | null; side: "hom
 
   const label = (
     <div className={cn("flex min-w-0 flex-col leading-tight", align)}>
-      {team ? <TeamName team={team} locale={locale} /> : <span className="text-xs font-medium text-zinc-900 dark:text-white sm:text-sm">TBD</span>}
+      {team ? <TeamName team={team} locale={locale} /> : <span className="text-xs font-medium text-foreground sm:text-sm">TBD</span>}
       {team ? <span className="text-2xs uppercase tracking-wide text-muted-foreground">{team.fifa_code}</span> : null}
     </div>
   );
@@ -145,7 +148,7 @@ function TeamName({ team, locale }: { team: Team; locale: string }) {
   if (team.fifa_code === "BIH") {
     const idx = name.indexOf("Herzegovina");
     return (
-      <span className="text-xs font-medium leading-tight text-zinc-900 dark:text-white sm:text-sm">
+      <span className="text-xs font-medium leading-tight text-foreground sm:text-sm">
         {name.slice(0, idx).trim()}
         <br />
         Herzegovina
@@ -153,7 +156,7 @@ function TeamName({ team, locale }: { team: Team; locale: string }) {
     );
   }
 
-  return <span className="truncate text-xs font-medium text-zinc-900 dark:text-white sm:text-sm">{name}</span>;
+  return <span className="truncate text-xs font-medium text-foreground sm:text-sm">{name}</span>;
 }
 
 type ScoreAreaProps = {
@@ -181,7 +184,7 @@ function ScoreArea({ match, ui, isAuthed, hasTeams, editing, draft, isSaving, on
 
   return (
     <div className="flex flex-col items-center justify-center gap-1">
-      <div className="flex items-center gap-3 text-2xl font-semibold tabular-nums text-zinc-900 dark:text-white">
+      <div className="flex items-center gap-3 text-2xl font-semibold tabular-nums text-foreground">
         <ScoreCell value={result?.home_score} />
         <span className="text-xl text-muted-foreground">&minus;</span>
         <ScoreCell value={result?.away_score} />
@@ -229,12 +232,8 @@ function PickHint({ pick, canTapToPick, onClick }: { pick: UserScorePick | null;
   }
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="cursor-pointer text-xs font-semibold text-lime-600 transition-colors hover:text-lime-700 dark:text-lime-400 dark:hover:text-lime-300"
-    >
-      {t("tapToPick")} →
+    <button type="button" onClick={onClick} className="cursor-pointer text-xs font-semibold text-page-accent transition-colors hover:text-page-accent-strong">
+      {t("tapToPick")} <MoveRight className="inline-block size-3.5 shrink-0 align-middle" aria-hidden />
     </button>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -17,28 +17,33 @@ type Props = {
   filters: Filters;
   onChange: (next: Filters) => void;
   teams: Team[];
+  tabs?: ReactNode;
 };
 
-export function ScheduleFilters({ filters, onChange, teams }: Props) {
+export function ScheduleFilters({ filters, onChange, teams, tabs }: Props) {
   const t = useTranslations("schedule.filters");
   const locale = useLocale();
   const count = activeFilterCount(filters);
 
   return (
     // TODO: derive the offset dynamically from the header height instead of hardcoding 64px
-    <div className="sticky top-16 z-20 border-b border-border bg-background">
-      <div className="container mx-auto px-4 py-2 sm:px-6 lg:px-8">
-        <div className="hidden min-w-0 flex-wrap items-center gap-2 lg:flex">
-          <FilterControls filters={filters} onChange={onChange} teams={teams} locale={locale} variant="chip" className="flex flex-wrap items-center gap-2" />
-          {count > 0 && (
-            <Button variant="ghost" size="sm" onClick={() => onChange(DEFAULT_FILTERS)} className="h-8 cursor-pointer gap-1 text-xs text-muted-foreground">
-              <X />
-              {t("reset")}
-            </Button>
-          )}
-        </div>
+    <div className="sticky top-16 z-20 bg-background">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="border-b border-border py-2">
+          <div className="hidden min-w-0 flex-wrap items-center gap-2 lg:flex">
+            <FilterControls filters={filters} onChange={onChange} teams={teams} locale={locale} variant="chip" className="flex flex-wrap items-center gap-2" />
+            {count > 0 && (
+              <Button variant="ghost" size="sm" onClick={() => onChange(DEFAULT_FILTERS)} className="h-8 cursor-pointer gap-1 text-xs text-muted-foreground">
+                <X />
+                {t("reset")}
+              </Button>
+            )}
+          </div>
 
-        <MobileFilters filters={filters} onChange={onChange} teams={teams} locale={locale} count={count} />
+          <MobileFilters filters={filters} onChange={onChange} teams={teams} locale={locale} count={count} />
+
+          {tabs && <div className="mt-3">{tabs}</div>}
+        </div>
       </div>
     </div>
   );
@@ -64,7 +69,7 @@ function MobileFilters({
     <Drawer open={open} onOpenChange={setOpen}>
       <div className="flex w-full gap-2 lg:hidden">
         <DrawerTrigger asChild>
-          <Button variant="outline" size="sm" className="flex-1">
+          <Button variant="outline" size="sm" className="flex-1 dark:bg-card dark:hover:bg-muted">
             <SlidersHorizontal />
             {t("openButton")}
             {count > 0 && (
@@ -94,7 +99,9 @@ function MobileFilters({
             {t("reset")}
           </Button>
           <DrawerClose asChild>
-            <Button size="sm">{t("done")}</Button>
+            <Button size="sm" className="bg-page-accent text-background hover:bg-page-accent-strong">
+              {t("done")}
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

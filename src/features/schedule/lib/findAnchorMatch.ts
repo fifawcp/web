@@ -1,16 +1,22 @@
 import type { Match } from "../types/schedule.types";
 
-// Returns the id of the match the user should land on when the page opens
+// Returns the id of the first upcoming unpicked match so the CTA scrolls to
+// an actionable section. Falls back progressively so the anchor is always set
 export function findAnchorMatchId(matches: Match[], now: Date = new Date()): number | null {
   if (matches.length === 0) return null;
 
-  // Anchor on today's first match (kickoff on or after today's midnight) so the
-  // user lands on today's group even if its matches have already kicked off.
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const upcoming = matches.find((match) => new Date(match.kickoff_at).getTime() >= todayStart);
+  const nowMs = now.getTime();
+  const isUpcoming = (m: Match) => new Date(m.kickoff_at).getTime() > nowMs;
+  const hasTeams = (m: Match) => m.teams.home != null && m.teams.away != null;
 
-  if (upcoming) return upcoming.id;
+  // Best: first upcoming match the user can still pick
+  const firstUnpicked = matches.find((m) => isUpcoming(m) && hasTeams(m) && m.user_score_pick == null);
+  if (firstUnpicked) return firstUnpicked.id;
 
-  // No matches today or later — fall back to the most recent one
+  // All pickable upcoming matches are done — anchor to the next upcoming match
+  const firstUpcoming = matches.find(isUpcoming);
+  if (firstUpcoming) return firstUpcoming.id;
+
+  // Tournament is over — fall back to the last match
   return matches[matches.length - 1].id;
 }

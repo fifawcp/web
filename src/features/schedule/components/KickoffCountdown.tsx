@@ -24,7 +24,8 @@ export function KickoffCountdown({ kickoffAt }: Props) {
   return (
     <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
       <Clock className="size-3.5 shrink-0" aria-hidden />
-      {t("closesIn", { time: text })}
+      <span className="max-sm:hidden">{t("closesIn", { time: text })}</span>
+      <span className="sm:hidden">{text}</span>
     </span>
   );
 }
