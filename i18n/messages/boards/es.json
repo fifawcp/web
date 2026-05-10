@@ -77,14 +77,6 @@
       "loadFailed": "Error al cargar detalles del tablero"
     }
   },
-  "members": {
-    "username": "Usuario",
-    "role": "Rol",
-    "joinedAt": "Se unió",
-    "actions": "Acciones",
-    "makeAdmin": "Hacer Admin",
-    "makeMember": "Hacer Miembro"
-  },
   "ranking": {
     "rank": "Posición",
     "member": "Miembro",
@@ -96,7 +88,7 @@
     "searchMembers": "Buscar miembros",
     "removeMember": "Eliminar miembro",
     "makeAdmin": "Hacer administrador",
-    "makeMember": "Hacer miembro",
+    "revokeAdmin": "Quitar rol de administrador",
     "roleUpdated": "Rol actualizado",
     "roleUpdateSuccess": "El rol del miembro ha sido actualizado exitosamente",
     "noResults": "No se encontraron miembros",

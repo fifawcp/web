@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { BoardDetails } from "@/features/boards/types/board.types";
 import { Button } from "@/shared/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
 
 import { useShareBoard } from "../hooks/useShareBoard";
@@ -30,6 +30,7 @@ export function ShareBoardDialog({ board, currentUserId, open, onOpenChange }: S
         <DialogHeader className="gap-0">
           <p className="text-xs text-muted-foreground uppercase tracking-wider">{tShare("inviteToBoard")}</p>
           <DialogTitle className="font-bold text-xl">{board.name}</DialogTitle>
+          <DialogDescription className="sr-only">{tShare("shareHint")}</DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-5">

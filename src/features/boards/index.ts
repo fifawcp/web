@@ -5,7 +5,6 @@ export { CreateBoardDialog } from "./components/CreateBoardDialog";
 export { JoinBoardDialog } from "./components/JoinBoardDialog";
 export { BoardRankingTable } from "./components/BoardRankingTable";
 export { UpdateBoardDialog } from "./components/UpdateBoardDialog";
-export { ManageBoardDropdown } from "./components/ManageBoardDropdown";
 export { useCreateBoard } from "./hooks/useCreateBoard";
 export { useJoinBoard } from "./hooks/useJoinBoard";
 export { useUpdateBoard } from "./hooks/useUpdateBoard";

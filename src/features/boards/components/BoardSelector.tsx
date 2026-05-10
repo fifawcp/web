@@ -9,7 +9,6 @@ import { Board } from "@/features/boards/types/board.types";
 import { setLastVisitedBoardId } from "@/features/boards/utils/boardStorage";
 import { Button } from "@/shared/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
-import { useIsMobile } from "@/shared/hooks/useIsMobile";
 
 import { CreateBoardDialog } from "./CreateBoardDialog";
 import { JoinBoardDialog } from "./JoinBoardDialog";
@@ -26,8 +25,6 @@ export function BoardSelector({ boards, currentBoardId, currentBoardName }: Boar
   const [open, setOpen] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [joinDialogOpen, setJoinDialogOpen] = useState(false);
-
-  const isMobile = useIsMobile();
 
   const handleBoardChange = (boardId: string) => {
     setLastVisitedBoardId(boardId);
@@ -50,7 +47,7 @@ export function BoardSelector({ boards, currentBoardId, currentBoardName }: Boar
           <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0 ml-auto md:ml-1 " />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align={isMobile ? "center" : "start"} className="p-0 w-(--radix-dropdown-menu-trigger-width)">
+      <DropdownMenuContent align={"center"} className="left-1/2  p-0 w-(--radix-dropdown-menu-trigger-width)">
         {/* Current Board Section */}
         <div className="px-3 py-2">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">{t("currentBoard")}</p>

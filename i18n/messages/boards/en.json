@@ -76,14 +76,6 @@
       "loadFailed": "Failed to load board details"
     }
   },
-  "members": {
-    "username": "Username",
-    "role": "Role",
-    "joinedAt": "Joined",
-    "actions": "Actions",
-    "makeAdmin": "Make Admin",
-    "makeMember": "Make Member"
-  },
   "ranking": {
     "rank": "Rank",
     "member": "Member",
@@ -95,7 +87,7 @@
     "searchMembers": "Search members",
     "removeMember": "Remove member",
     "makeAdmin": "Make admin",
-    "makeMember": "Make member",
+    "revokeAdmin": "Revoke admin",
     "roleUpdated": "Role updated",
     "roleUpdateSuccess": "Member role has been updated successfully",
     "noResults": "No members found",

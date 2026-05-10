@@ -43,6 +43,8 @@ export const regenerateJoinCode = async (boardId: string): Promise<ApiResponse<{
   return api.post<{ join_code: string }>(`/api/boards/${boardId}/regenerate-join-code`, undefined, { authenticated: true });
 };
 
-export const getBoardMembers = async (boardId: string, page: number = 1, limit: number = 20): Promise<ApiResponse<BoardMemberDetails[]>> => {
-  return api.get<BoardMemberDetails[]>(`/api/boards/${boardId}/members?page=${page}&limit=${limit}`, { authenticated: true });
+export const getBoardMembers = async (boardId: string, page: number = 1, limit: number = 20, search?: string): Promise<ApiResponse<BoardMemberDetails[]>> => {
+  const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+  if (search) params.set("search", search);
+  return api.get<BoardMemberDetails[]>(`/api/boards/${boardId}/members?${params.toString()}`, { authenticated: true });
 };

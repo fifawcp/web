@@ -29,7 +29,7 @@ interface BoardDetailsViewProps {
 export function BoardDetailsView({ board, boards, initialMembers, initialPagination, currentUserId, boardId }: BoardDetailsViewProps) {
   const t = useTranslations("boards");
 
-  const { members, pagination, handlePageChange, refresh: refreshMembers } = useBoardMembers(boardId, initialMembers, initialPagination);
+  const { members, pagination, handlePageChange, refresh: refreshMembers, search, setSearch } = useBoardMembers(boardId, initialMembers, initialPagination);
 
   const refresh = useCallback(() => {
     refreshMembers();
@@ -76,7 +76,7 @@ export function BoardDetailsView({ board, boards, initialMembers, initialPaginat
       <Suspense fallback={null}>
         <BoardErrorHandler />
       </Suspense>
-      <BoardSubheader boards={boards} currentBoard={board} currentUserId={currentUserId} currentUserRole={board.viewer.role} />
+      <BoardSubheader boards={boards} currentBoard={board} currentUserId={currentUserId} />
       <div className="flex flex-col gap-5 pt-0 p-4 sm:pt-0 sm:p-6 lg:pt-0 lg:p-8">
         <div className="flex items-center flex-row justify-center gap-4">
           {boardUserStats.map((stat) => (
@@ -98,11 +98,11 @@ export function BoardDetailsView({ board, boards, initialMembers, initialPaginat
         <BoardPodium members={topThreeMembers} />
 
         <BoardRankingTable
-          ownerId={board.owner_user_id || ""}
+          board={board}
           members={members}
           currentUserId={currentUserId}
-          currentUserRole={board.viewer.role}
-          boardId={boardId}
+          search={search}
+          onSearchChange={setSearch}
           onRemoveMember={handleRemove}
           onRefresh={refresh}
           pagination={pagination}
