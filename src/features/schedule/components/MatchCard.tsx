@@ -7,11 +7,11 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
+import { formatKickoffTime } from "@/shared/lib/dates";
 import { cn } from "@/shared/lib/utils";
 
 import { useUpdatePick } from "../hooks/useUpdatePick";
 import { computeMatchUiState, type MatchUiState } from "../lib/computeMatchUiState";
-import { formatKickoffTime } from "../lib/formatKickoffTime";
 import type { Match, Team, UserScorePick } from "../types/schedule.types";
 
 import { KickoffCountdown } from "./KickoffCountdown";

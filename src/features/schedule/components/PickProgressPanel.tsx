@@ -16,17 +16,19 @@ type Props = {
 
 const ACCENT_ICON = "bg-page-accent-soft text-page-accent-strong";
 
-export function PickProgressDashboard({ stats }: Props) {
+export function PickProgressPanel({ stats }: Props) {
   const t = useTranslations("schedule.progress");
   const tBoard = useTranslations("schedule.board");
 
+  const available = stats.picked + stats.missed + stats.pendingAll;
+
   return (
-    <Card size="sm" className="flex-row items-center gap-5 px-5 py-3">
-      <div className="flex min-w-64 xl:min-w-80 shrink-0 items-center gap-4">
-        <PickProgressRadial picked={stats.picked} missed={stats.missed} total={stats.total} />
+    <Card size="sm" className="flex-row items-center gap-4 px-4 lg:gap-5 lg:px-5 lg:py-3">
+      <div className="flex shrink-0 items-center gap-4 lg:min-w-64 xl:min-w-80">
+        <PickProgressRadial picked={stats.picked} missed={stats.missed} total={available} />
         <div className="flex flex-col gap-0.5">
           <div className="font-heading text-2xl leading-none font-semibold tabular-nums">
-            {stats.picked + stats.missed} / {stats.total}
+            {stats.picked + stats.missed} / {available}
           </div>
           <div className="text-sm text-muted-foreground">{t("label")}</div>
           <div className="mt-1.5 flex items-center gap-2.5 text-xs">
@@ -47,9 +49,9 @@ export function PickProgressDashboard({ stats }: Props) {
         </div>
       </div>
 
-      <div className="h-20 w-px shrink-0 bg-border" />
+      <div className="hidden h-20 w-px shrink-0 bg-border lg:block" />
 
-      <div className="flex flex-1 items-center">
+      <div className="hidden flex-1 items-center lg:flex">
         <StatTile className="flex-1 px-3" icon={CalendarClock} value={stats.pendingToday} label={tBoard("today")} iconClassName={ACCENT_ICON} />
         <div className="h-20 w-px shrink-0 bg-border" />
         <StatTile className="flex-1 px-3" icon={Target} value={stats.correctScores} label={tBoard("correctScore")} iconClassName={ACCENT_ICON} />

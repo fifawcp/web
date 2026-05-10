@@ -4,8 +4,9 @@ import { useMemo } from "react";
 import { Clock } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { formatTimeUntil } from "@/shared/lib/dates";
+
 import { useNow } from "../hooks/useNow";
-import { formatTimeUntil } from "../lib/formatTimeUntil";
 
 type Props = {
   kickoffAt: string;

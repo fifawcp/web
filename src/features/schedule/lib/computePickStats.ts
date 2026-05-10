@@ -10,6 +10,7 @@ export type PickStats = {
   pendingAll: number;
   correctScores: number;
   correctOutcomes: number;
+  nextMatchAt: string | null;
 };
 
 export function computePickStats(matches: Match[], now: Date = new Date()): PickStats {
@@ -51,5 +52,7 @@ export function computePickStats(matches: Match[], now: Date = new Date()): Pick
     }
   }
 
-  return { total: matches.length, picked, missed, pendingToday, pendingAll, correctScores, correctOutcomes };
+  const nextMatchAt = matches.find((m) => new Date(m.kickoff_at).getTime() > nowMs)?.kickoff_at ?? null;
+
+  return { total: matches.length, picked, missed, pendingToday, pendingAll, correctScores, correctOutcomes, nextMatchAt };
 }

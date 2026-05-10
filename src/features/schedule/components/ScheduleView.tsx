@@ -14,11 +14,11 @@ import { DEFAULT_FILTERS, type Match, type PickFilter } from "../types/schedule.
 
 import { MatchDateGroup } from "./MatchDateGroup";
 import { PendingPicksCta } from "./PendingPicksCta";
-import { PickProgressCard } from "./PickProgressCard";
-import { PickProgressDashboard } from "./PickProgressDashboard";
+import { PickProgressPanel } from "./PickProgressPanel";
 import { PickStatusTabs } from "./PickStatusTabs";
 import { ScheduleFilters } from "./ScheduleFilters";
 import { SignedOutCta } from "./SignedOutCta";
+import { UpToDateCta } from "./UpToDateCta";
 
 type Props = {
   initialMatches: Match[];
@@ -49,24 +49,15 @@ export function ScheduleView({ initialMatches, anchorMatchId, isAuthed }: Props)
 
   const onPickChange = (next: PickFilter) => setFilters({ ...filters, pick: next });
 
+  const showPendingCta = isAuthed && overallStats.pendingAll > 0 && anchorMatchId !== null;
+  const showUpToDateCta = isAuthed && overallStats.pendingAll === 0;
+
   return (
     <div className="flex flex-col">
       <div className="container mx-auto flex w-full flex-col gap-3 px-4 py-4 sm:px-6 lg:px-8">
-        {isAuthed ? (
-          <>
-            <div className="lg:hidden">
-              <PickProgressCard stats={overallStats} />
-            </div>
-            <div className="hidden lg:block">
-              <PickProgressDashboard stats={overallStats} />
-            </div>
-          </>
-        ) : (
-          <SignedOutCta />
-        )}
-        {isAuthed && overallStats.pendingAll > 0 && anchorMatchId !== null && (
-          <PendingPicksCta count={overallStats.pendingAll} onPress={() => scrollMatchIntoView(anchorMatchId)} />
-        )}
+        {isAuthed ? <PickProgressPanel stats={overallStats} /> : <SignedOutCta />}
+        {showPendingCta && <PendingPicksCta count={overallStats.pendingAll} onPress={() => scrollMatchIntoView(anchorMatchId!)} />}
+        {showUpToDateCta && <UpToDateCta nextMatchAt={overallStats.nextMatchAt} />}
       </div>
 
       <ScheduleFilters

@@ -2,7 +2,8 @@
 
 import { useLocale, useTranslations } from "next-intl";
 
-import { formatDateHeader } from "../lib/formatDateHeader";
+import { formatDateHeader } from "@/shared/lib/dates";
+
 import type { MatchDateGroup as DateGroup } from "../lib/groupByDate";
 
 import { MatchCard } from "./MatchCard";

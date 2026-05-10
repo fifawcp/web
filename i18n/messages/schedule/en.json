@@ -66,6 +66,10 @@
     "matches": "{count, plural, one {You have <highlight>#</highlight> match to pick} other {You have <highlight>#</highlight> matches to pick}}",
     "subtitle": "Pick before they kick off"
   },
+  "upToDate": {
+    "title": "You're all caught up!",
+    "nextMatch": "Next match in {time}"
+  },
   "tabs": {
     "all": "All",
     "pending": "Pending",

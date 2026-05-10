@@ -66,6 +66,10 @@
     "matches": "{count, plural, one {Tienes <highlight>#</highlight> partido por pickear} other {Tienes <highlight>#</highlight> partidos por pickear}}",
     "subtitle": "Haz tus picks antes del cierre"
   },
+  "upToDate": {
+    "title": "Estás al día!",
+    "nextMatch": "Próximo partido en {time}"
+  },
   "tabs": {
     "all": "Todos",
     "pending": "Por pickear",
