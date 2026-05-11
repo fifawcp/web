@@ -6,20 +6,6 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* Primary Color System */
-  --color-primary-*: initial;
-  --color-primary-50: theme(colors.emerald.50);
-  --color-primary-100: theme(colors.emerald.100);
-  --color-primary-200: theme(colors.emerald.200);
-  --color-primary-300: theme(colors.emerald.300);
-  --color-primary-400: theme(colors.emerald.400);
-  --color-primary-500: theme(colors.emerald.500);
-  --color-primary-600: theme(colors.emerald.600);
-  --color-primary-700: theme(colors.emerald.700);
-  --color-primary-800: theme(colors.emerald.800);
-  --color-primary-900: theme(colors.emerald.900);
-  --color-primary-950: theme(colors.emerald.950);
-
   /* Custom */
   --color-wc-red: #731312;
   --color-wc-purple: #4b2c87;
@@ -28,6 +14,13 @@
 
   /* Layout dimensions */
   --header-height: 65px;
+
+  /* Offset used when scrolling a date-group into view on /schedule.
+    header (65px) + sticky filter+tabs bar (~108px when authed, 52px otherwise) + section gap (11px) */
+  --schedule-scroll-offset: calc(var(--header-height) + 108px + 11px);
+
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 0.875rem;
 
   /* Gradient definitions for light and dark modes */
   --gradient-secondary: linear-gradient(to right, var(--color-wc-red), var(--color-wc-orange), var(--color-wc-purple));
@@ -67,6 +60,10 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-page-accent-soft: var(--page-accent-soft);
+  --color-page-accent: var(--page-accent);
+  --color-page-accent-strong: var(--page-accent-strong);
+  --color-missed-track: var(--missed-track);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -96,73 +93,153 @@
   -webkit-text-fill-color: transparent;
 }
 
+/* Base colors */
 :root {
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: #ffffff;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: #09090b;
+  --primary-foreground: #fafafa;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717b;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
+  --destructive: #e40014;
+  --destructive-foreground: #fafafa;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #9f9fa9;
+  --missed-track: var(--color-gray-300);
+  --chart-1: #09090b;
+  --chart-2: #3f3f46;
+  --chart-3: #71717b;
+  --chart-4: #9f9fa9;
+  --chart-5: #d4d4d8;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --sidebar: #fafafa;
+  --sidebar-foreground: #09090b;
+  --sidebar-primary: #09090b;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #f4f4f5;
+  --sidebar-accent-foreground: #18181b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #9f9fa9;
+}
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #121317;
+  --card-foreground: #fafafa;
+  --popover: #121317;
+  --popover-foreground: #fafafa;
+  --primary: #fafafa;
+  --primary-foreground: #09090b;
+  --secondary: #1c1c20;
+  --secondary-foreground: #fafafa;
+  --muted: #18181b;
+  --muted-foreground: #8c8d95;
+  --accent: #1c1c20;
+  --accent-foreground: #fafafa;
+  --destructive: #e40014;
+  --destructive-foreground: #fafafa;
+  --border: #ffffff14;
+  --input: #ffffff1f;
+  --ring: #71717b;
+  --missed-track: var(--color-gray-600);
+  --chart-1: #fafafa;
+  --chart-2: #d4d4d8;
+  --chart-3: #a1a1aa;
+  --chart-4: #71717b;
+  --chart-5: #3f3f46;
+  --sidebar: #121317;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #fafafa;
+  --sidebar-primary-foreground: #09090b;
+  --sidebar-accent: #1c1c20;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #ffffff14;
+  --sidebar-ring: #71717b;
 }
 
+/* Palettes */
+:root {
+  --wcp-neutral-soft: var(--color-zinc-100);
+  --wcp-neutral: var(--color-zinc-600);
+  --wcp-neutral-strong: var(--color-zinc-800);
+
+  --wcp-green-soft: var(--color-lime-100);
+  --wcp-green: var(--color-lime-600);
+  --wcp-green-strong: var(--color-lime-700);
+
+  --wcp-purple-soft: var(--color-violet-100);
+  --wcp-purple: var(--color-violet-600);
+  --wcp-purple-strong: var(--color-violet-700);
+
+  --wcp-red-soft: var(--color-red-100);
+  --wcp-red: var(--color-red-600);
+  --wcp-red-strong: var(--color-red-700);
+
+  --wcp-blue-soft: var(--color-sky-100);
+  --wcp-blue: var(--color-sky-600);
+  --wcp-blue-strong: var(--color-sky-700);
+}
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --wcp-neutral-soft: var(--color-zinc-900);
+  --wcp-neutral: var(--color-zinc-400);
+  --wcp-neutral-strong: var(--color-zinc-200);
+
+  --wcp-green-soft: var(--color-green-950);
+  --wcp-green: var(--color-green-400);
+  --wcp-green-strong: var(--color-green-300);
+
+  --wcp-purple-soft: var(--color-violet-950);
+  --wcp-purple: var(--color-violet-400);
+  --wcp-purple-strong: var(--color-violet-300);
+
+  --wcp-red-soft: var(--color-red-950);
+  --wcp-red: var(--color-red-400);
+  --wcp-red-strong: var(--color-red-300);
+
+  --wcp-blue-soft: var(--color-sky-950);
+  --wcp-blue: var(--color-sky-400);
+  --wcp-blue-strong: var(--color-sky-300);
+}
+
+/* Active accent (default = neutral; pages opt-in via data-accent) */
+:root {
+  --page-accent-soft: var(--wcp-neutral-soft);
+  --page-accent: var(--wcp-neutral);
+  --page-accent-strong: var(--wcp-neutral-strong);
+}
+:root:has([data-accent="neutral"]) {
+  --page-accent-soft: var(--wcp-neutral-soft);
+  --page-accent: var(--wcp-neutral);
+  --page-accent-strong: var(--wcp-neutral-strong);
+}
+:root:has([data-accent="green"]) {
+  --page-accent-soft: var(--wcp-green-soft);
+  --page-accent: var(--wcp-green);
+  --page-accent-strong: var(--wcp-green-strong);
+}
+:root:has([data-accent="purple"]) {
+  --page-accent-soft: var(--wcp-purple-soft);
+  --page-accent: var(--wcp-purple);
+  --page-accent-strong: var(--wcp-purple-strong);
+}
+:root:has([data-accent="red"]) {
+  --page-accent-soft: var(--wcp-red-soft);
+  --page-accent: var(--wcp-red);
+  --page-accent-strong: var(--wcp-red-strong);
+}
+:root:has([data-accent="blue"]) {
+  --page-accent-soft: var(--wcp-blue-soft);
+  --page-accent: var(--wcp-blue);
+  --page-accent-strong: var(--wcp-blue-strong);
 }
 
 @layer base {

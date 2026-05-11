@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "boards": "Boards",
+    "schedule": "Schedule",
     "leaderboard": "Leaderboard",
     "login": "Login",
     "register": "Register"

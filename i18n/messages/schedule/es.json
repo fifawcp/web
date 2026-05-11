@@ -1,0 +1,83 @@
+{
+  "title": "Calendario",
+  "filters": {
+    "openButton": "Filtros",
+    "title": "Filtros",
+    "description": "Filtra los partidos",
+    "noResults": "Sin resultados",
+    "stage": {
+      "label": "Fase",
+      "all": "Todas",
+      "group_stage": "Fase de grupos",
+      "round_of_32": "Dieciseisavos",
+      "round_of_16": "Octavos",
+      "quarterfinals": "Cuartos",
+      "semifinals": "Semifinales",
+      "third_place": "Tercer puesto",
+      "final": "Final"
+    },
+    "group": {
+      "label": "Grupo",
+      "all": "Todos"
+    },
+    "team": {
+      "label": "Equipo",
+      "all": "Todos",
+      "search": "Buscar equipo…"
+    },
+    "matchStatus": {
+      "label": "Estado",
+      "all": "Todos",
+      "scheduled": "Programado",
+      "finished": "Finalizado"
+    },
+    "reset": "Restablecer",
+    "done": "Listo"
+  },
+  "card": {
+    "yourPick": "Tu pick",
+    "noPickMade": "No hiciste tu pick",
+    "tapToPick": "Haz tu pick",
+    "closesIn": "Cierra en {time}",
+    "save": "Guardar",
+    "cancel": "Cancelar"
+  },
+  "matchCount": "{count, plural, one {# partido} other {# partidos}}",
+  "badge": {
+    "picked": "Pickeado",
+    "locked": "Bloqueado"
+  },
+  "empty": {
+    "title": "No se encontraron partidos",
+    "description": "Ajusta tus filtros"
+  },
+  "progress": {
+    "label": "Progreso general",
+    "picked": "{count} pickeados",
+    "missed": "{count} sin pick"
+  },
+  "board": {
+    "today": "Picks pendientes hoy",
+    "missed": "Sin pick",
+    "correctScore": "Marcador exacto",
+    "correctOutcome": "Acierto del ganador"
+  },
+  "pending": {
+    "matches": "{count, plural, one {Tienes <highlight>#</highlight> partido por pickear} other {Tienes <highlight>#</highlight> partidos por pickear}}",
+    "subtitle": "Haz tus picks antes del cierre"
+  },
+  "upToDate": {
+    "title": "Estás al día!",
+    "nextMatch": "Próximo partido en {time}"
+  },
+  "tabs": {
+    "all": "Todos",
+    "pending": "Por pickear",
+    "picked": "Pickeados"
+  },
+  "signedOut": {
+    "title": "Inicia sesión para pickear",
+    "description": "Haz tus picks y sigue tu progreso",
+    "cta": "Iniciar sesión"
+  }
+}
