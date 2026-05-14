@@ -1,0 +1,165 @@
+{
+  "guest": {
+    "badge": "FIFA WCP · USA · Mexico · Canada",
+    "hero": {
+      "title": "Your home for the World Cup 2026.",
+      "subtitle": "Track every match, every group, every knockout round — and turn your instincts into points with pick'ems and tournament awards."
+    },
+    "cta": {
+      "makeYourPicks": "Make your picks",
+      "viewSchedule": "View schedule"
+    },
+    "countdown": {
+      "tournamentBegins": "Tournament begins",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds"
+    },
+    "stats": {
+      "totalMatches": "Total matches",
+      "knockouts": "Knockouts",
+      "groupMatches": "Group matches",
+      "teams": "Teams"
+    },
+    "pickems": {
+      "label": "Pick'ems",
+      "daysToLockIn": "{days} days to lock in",
+      "title": "Predict every match. Win the tournament awards.",
+      "description": "Score 3 points for an exact result, 1 for the right outcome. Bonus points for nailing the Golden Boot, Golden Glove, Young Player and the Champion.",
+      "openPickems": "Open pick'ems",
+      "viewAwards": "View awards"
+    },
+    "navigation": {
+      "schedule": {
+        "title": "Schedule",
+        "description": "Browse every match by day, stage, group or team."
+      },
+      "standings": {
+        "title": "Standings",
+        "description": "12 group tables and the best 3rd-place race."
+      },
+      "bracket": {
+        "title": "Bracket",
+        "description": "The road to the final."
+      }
+    },
+    "tutorial": {
+      "title": "How to participate",
+      "subtitle": "Get started in 6 simple steps",
+      "steps": {
+        "createAccount": {
+          "step": "1",
+          "title": "Create an Account",
+          "description": "Sign up and create your profile to start competing with other players around the world."
+        },
+        "joinOrCreateBoard": {
+          "step": "2",
+          "title": "Join or Create a Board",
+          "description": "Create your own private board and invite friends with a join code, or join an existing one instantly. If you don't join any board, you'll still participate automatically in the Global Board with all app users."
+        },
+        "tournaments": {
+          "step": "3",
+          "title": "Play in Tournaments",
+          "description": "Board owners can create tournaments for their members. If you join a board, you'll automatically participate in all its tournaments."
+        },
+        "customRules": {
+          "step": "4",
+          "title": "Customize the Competition",
+          "description": "Each tournament can be configured differently depending on how your board wants to play and score points."
+        },
+        "pickems": {
+          "step": "5",
+          "title": "Predict Tournament Results",
+          "description": "Use Pickems to predict group stage standings and full bracket results. Earn points for every correct position and additional points for correctly predicting how far each team advances."
+        },
+        "schedule": {
+          "step": "6",
+          "title": "Predict Match Scores",
+          "description": "Use the Schedule mode to predict the score of every match. Earn points for correctly predicting the winner and bonus points for the exact final score."
+        }
+      },
+      "cta": "Create your account"
+    }
+  },
+  "auth": {
+    "countdown": "● {days} days  ·  {hours} hours · {minutes} minutes until kickoff",
+    "welcome": {
+      "title": "Welcome! Let's get you started",
+      "subtitle": "Complete these steps to start competing with players around the world.",
+      "cta": "Start tutorial"
+    },
+    "hero": {
+      "title": "Predict the World Cup. Beat your friends.",
+      "subtitle": "Two games, one trophy. Lock in your full bracket before kickoff, then place exact-score picks for every match and climb all your boards leaderboards!"
+    },
+    "cta": {
+      "finishBracket": "Finish my bracket",
+      "seeMyBrackets": "See my brackets",
+      "viewSchedule": "View schedule"
+    },
+    "stats": {
+      "predictedChampion": "Your predicted champion",
+      "pointsOnLift": "+{points} pts on lift",
+      "yourRank": "Your rank",
+      "ofMembers": "of {count} in global board",
+      "bracketComplete": "Bracket complete",
+      "slots": "{filled} / {total} slots",
+      "nextRound": "Next round",
+      "rounds": {
+        "group_stage": "Group Stage",
+        "round_of_32": "Round of 32",
+        "round_of_16": "Round of 16",
+        "quarterfinals": "Quarterfinals",
+        "semifinals": "Semifinals",
+        "final": "Final"
+      }
+    },
+    "pickStatus": {
+      "title": "Pick status",
+      "bracket": {
+        "title": "Pick'em Bracket",
+        "description": "4 steps · groups, third-place, knockout. Locks at kickoff.",
+        "step": "Step {current} of 4",
+        "continue": "Continue",
+        "start": "Start",
+        "see": "See"
+      },
+      "matchPicks": {
+        "title": "Match Picks",
+        "description": "Exact scores per match. Closes before kickoff.",
+        "match": "Match {current} of {total}",
+        "continue": "Continue",
+        "start": "Start",
+        "see": "See"
+      },
+      "awards": {
+        "title": "Tournament Awards",
+        "description": "Predict the individual award winners for bonus points.",
+        "goldenBoot": "Golden Boot",
+        "goldenGlove": "Golden Glove",
+        "goldenBall": "Golden Ball",
+        "youngPlayer": "Best Young Player",
+        "picked": "Award {count} of 4",
+        "continue": "Continue",
+        "start": "Start",
+        "see": "See"
+      }
+    },
+    "boardTop5": {
+      "boardName": "Global Board",
+      "title": "Global Board Top 5",
+      "you": "You",
+      "pts": "pts",
+      "fullRanking": "Full ranking",
+      "empty": {
+        "title": "No rankings yet",
+        "description": "Rankings will appear once the tournament starts."
+      }
+    },
+    "openingMatches": {
+      "title": "Opening matches",
+      "dateRange": "{start} – {end}"
+    }
+  }
+}
