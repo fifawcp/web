@@ -1,29 +1,35 @@
 "use client";
 
-import { GitBranch, LucideIcon, Target, Trophy } from "lucide-react";
+import { GitBranch, type LucideIcon, Target, Trophy } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 
-import type { PickStatusData } from "../types/dashboard.types";
+import type { MatchPickProgress, PickemProgress, TournamentAwards, UserPickemSummary } from "../types/dashboard.types";
 
 type Props = {
-  data: PickStatusData | null;
+  pickem: UserPickemSummary | null;
+  matchProgress: MatchPickProgress | null;
+  awards: TournamentAwards | null;
+  isLoggedIn: boolean;
 };
 
 type PickStatusItemProps = {
   icon: LucideIcon;
   id: string;
-  progress?: number;
-  statusText?: string;
+  progress: number;
+  statusText: string;
   buttonHref: string;
   isLast?: boolean;
+  isLoggedIn: boolean;
 };
 
-function PickStatusItem({ icon: Icon, id, progress, statusText, buttonHref, isLast }: PickStatusItemProps) {
-  const t = useTranslations("dashboard.auth.pickStatus");
+function PickStatusItem({ icon: Icon, id, progress, statusText, buttonHref, isLast, isLoggedIn }: PickStatusItemProps) {
+  const t = useTranslations("dashboard.pickStatus");
+
+  const ctaKey = !isLoggedIn || progress === 0 ? "start" : progress >= 100 ? "see" : "continue";
 
   return (
     <div className={`flex items-start gap-3 p-3 sm:p-4 ${!isLast ? "border-b border-border" : ""}`}>
@@ -33,53 +39,76 @@ function PickStatusItem({ icon: Icon, id, progress, statusText, buttonHref, isLa
       <div className="flex flex-col gap-1 flex-1 min-w-0">
         <span className="text-sm font-medium">{t(`${id}.title`)}</span>
         <span className="text-xs text-muted-foreground">{t(`${id}.description`)}</span>
-
-        <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-          <div className="h-full bg-lime-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
-        </div>
+        {isLoggedIn && (
+          <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+            <div className="h-full bg-lime-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
+          </div>
+        )}
       </div>
       <div className="flex flex-col items-end gap-2 shrink-0">
-        {statusText && <span className="text-xs text-muted-foreground">● {statusText}</span>}
+        {isLoggedIn && statusText && <span className="text-xs text-muted-foreground">● {statusText}</span>}
         <Button asChild variant="outline" size="sm" className="min-w-24 sm:min-w-32">
-          <Link href={buttonHref}>{t(`${id}.${progress === 0 ? "start" : progress === 100 ? "see" : "continue"}`)}</Link>
+          <Link href={buttonHref}>{t(`${id}.${ctaKey}`)}</Link>
         </Button>
       </div>
     </div>
   );
 }
 
-export function PickStatusCard({ data }: Props) {
-  const t = useTranslations("dashboard.auth.pickStatus");
+function getBracketProgressPercent(progress: PickemProgress): number {
+  const total = progress.groups.total + progress.best_thirds.total + progress.bracket.total;
+  const completed = progress.groups.completed + progress.best_thirds.completed + progress.bracket.completed;
+  return total > 0 ? (completed / total) * 100 : 0;
+}
+
+function getCurrentBracketStep(progress: PickemProgress): number {
+  if (!progress.groups.is_complete) return 1;
+  if (!progress.best_thirds.is_complete) return 2;
+  return 3;
+}
+
+function countPickedAwards(awards: TournamentAwards): number {
+  return [awards.golden_boot, awards.golden_glove, awards.golden_ball, awards.young_player].filter((a) => a.picked).length;
+}
+
+export function PickStatusCard({ pickem, matchProgress, awards, isLoggedIn }: Props) {
+  const t = useTranslations("dashboard.pickStatus");
+
+  const bracketPercent = isLoggedIn && pickem ? getBracketProgressPercent(pickem.progress) : 0;
+  const bracketStep = isLoggedIn && pickem ? getCurrentBracketStep(pickem.progress) : 0;
+  const matchPercent = isLoggedIn && matchProgress ? (matchProgress.made / matchProgress.total) * 100 : 0;
+  const awardsPicked = isLoggedIn && awards ? countPickedAwards(awards) : 0;
+  const awardsPercent = (awardsPicked / 4) * 100;
 
   const picksStatus = [
     {
       id: "bracket",
       icon: GitBranch,
-      progress: data ? (data.currentBracketStep / 4) * 100 : 0,
-      statusText: t("bracket.step", { current: data?.currentBracketStep ?? 0 }),
+      progress: bracketPercent,
+      statusText: isLoggedIn ? t("bracket.step", { current: bracketStep }) : "",
       buttonHref: "/bracket",
     },
     {
       id: "matchPicks",
       icon: Target,
-      progress: data ? (data.gamesCount / data.gamesCountTotal) * 100 : 0,
-      statusText: t("matchPicks.match", { current: data?.gamesCount ?? 0, total: data?.gamesCountTotal ?? 0 }),
+      progress: matchPercent,
+      statusText: isLoggedIn ? t("matchPicks.match", { current: matchProgress?.made ?? 0, total: matchProgress?.total ?? 0 }) : "",
       buttonHref: "/schedule",
     },
     {
       id: "awards",
       icon: Trophy,
-      statusText: t("awards.picked", { count: data?.awardsPicked ?? 0 }),
-      progress: data ? (data.awardsPicked / 4) * 100 : 0,
+      progress: awardsPercent,
+      statusText: isLoggedIn ? t("awards.picked", { count: awardsPicked }) : "",
       buttonHref: "/awards",
     },
   ];
+
   return (
-    <Card size="sm" className="bg-card h-full gap-2 sm:gap-4">
+    <Card size="sm" className="bg-card h-full">
       <div className="flex px-4 py-3 border-b border-border">
         <span className="text-sm font-medium">{t("title")}</span>
       </div>
-
       {picksStatus.map((pick, index) => (
         <PickStatusItem
           key={pick.id}
@@ -89,6 +118,7 @@ export function PickStatusCard({ data }: Props) {
           statusText={pick.statusText}
           buttonHref={pick.buttonHref}
           isLast={index === picksStatus.length - 1}
+          isLoggedIn={isLoggedIn}
         />
       ))}
     </Card>

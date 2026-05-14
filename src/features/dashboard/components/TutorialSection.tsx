@@ -21,7 +21,7 @@ const TUTORIAL_STEPS = [
 ] as const;
 
 export function TutorialSection({ isLoggedIn }: { isLoggedIn: boolean }) {
-  const t = useTranslations("dashboard.guest.tutorial");
+  const t = useTranslations("dashboard.tutorial");
 
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);

@@ -10,7 +10,7 @@ export type Team = {
   fifa_code: string;
   name: LocalizedName;
   flag_url: string;
-  group_code: GroupCode;
+  group_code: GroupCode | null;
 };
 
 export type Teams = {
