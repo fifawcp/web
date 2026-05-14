@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { Card } from "@/shared/components/ui/card";
+import { getRankColor } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
 import type { CompetitionLeaderboard } from "../types/dashboard.types";
@@ -54,29 +55,10 @@ function LeaderboardColumn({ data, currentUserId, title, href, fullRankingLabel,
             {data.entries.map((entry) => {
               const isMe = entry.member.user_id === currentUserId;
               return (
-                <div
-                  key={entry.member.user_id}
-                  className={cn("flex items-center gap-2.5 px-4 py-2.5 border-b border-border last:border-b-0", isMe && "bg-lime-50 dark:bg-lime-950/20")}
-                >
-                  <span
-                    className={cn(
-                      "w-4 text-xs tabular-nums font-medium shrink-0",
-                      entry.rank === 1 && "text-amber-500",
-                      entry.rank === 2 && "text-zinc-400",
-                      entry.rank === 3 && "text-amber-700/80",
-                      entry.rank > 3 && "text-muted-foreground"
-                    )}
-                  >
-                    {entry.rank}
-                  </span>
+                <div key={entry.member.user_id} className={cn("flex items-center gap-2.5 px-4 py-2.5 border-b border-border", isMe && "bg-lime-50 dark:bg-lime-950/20")}>
+                  <span className={`w-4 text-xs tabular-nums font-medium shrink-0 ${getRankColor(entry.rank, "text")}`}>{entry.rank}</span>
                   <div
-                    className={cn(
-                      "flex size-7 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold",
-                      entry.rank === 1 && "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400",
-                      entry.rank === 2 && "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300",
-                      entry.rank === 3 && "bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400",
-                      entry.rank > 3 && "bg-muted text-muted-foreground"
-                    )}
+                    className={cn("flex size-7 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold bg-muted", getRankColor(entry.rank, "text"))}
                   >
                     {getInitials(entry.member.username)}
                   </div>
@@ -88,7 +70,7 @@ function LeaderboardColumn({ data, currentUserId, title, href, fullRankingLabel,
               );
             })}
           </div>
-          <div className="flex items-center justify-end px-4 py-3 border-t border-border">
+          <div className="flex items-center justify-end px-4 py-3 mt-auto">
             <Link href={href} className="flex items-center gap-1 text-xs font-medium hover:underline">
               {fullRankingLabel}
               <ArrowRight className="size-3" />
@@ -114,7 +96,7 @@ export function CombinedLeaderboardCard({ pickem, match, currentUserId }: Props)
 
   return (
     <Card size="sm" className="bg-card h-full">
-      <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-border">
+      <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-border flex-1">
         <LeaderboardColumn {...columnProps} data={pickem} title={t("pickemTitle")} href="/boards/global?tab=pickem" />
         <LeaderboardColumn {...columnProps} data={match} title={t("matchTitle")} href="/boards/global?tab=match" />
       </div>

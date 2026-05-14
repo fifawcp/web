@@ -47,7 +47,7 @@ function PickStatusItem({ icon: Icon, id, progress, statusText, buttonHref, isLa
       </div>
       <div className="flex flex-col items-end gap-2 shrink-0">
         {isLoggedIn && statusText && <span className="text-xs text-muted-foreground">● {statusText}</span>}
-        <Button asChild variant="outline" size="sm" className="min-w-24 sm:min-w-32">
+        <Button asChild variant="outline" size="sm" className="px-0 min-w-22 sm:px-2 sm:min-w-32">
           <Link href={buttonHref}>{t(`${id}.${ctaKey}`)}</Link>
         </Button>
       </div>
@@ -107,7 +107,7 @@ export function PickStatusCard({ pickem, matchProgress, awards, isLoggedIn }: Pr
   return (
     <Card size="sm" className="bg-card h-full">
       <div className="flex px-4 py-3 border-b border-border">
-        <span className="text-sm font-medium">{t("title")}</span>
+        <span className="text-sm font-medium">{isLoggedIn ? t("title") : t("notLoggedIn")}</span>
       </div>
       {picksStatus.map((pick, index) => (
         <PickStatusItem

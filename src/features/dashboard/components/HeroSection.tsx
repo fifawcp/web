@@ -1,9 +1,6 @@
 import { Suspense } from "react";
 
-import { FloatingShapes } from "@/shared/components/FloatingShapes";
-
 import { getDashboardStats, getUserPickemSummary } from "../api/dashboard.api";
-import { floatingShapes } from "../lib/dashboardFloatingShapes";
 import type { PickemProgress } from "../types/dashboard.types";
 
 import { AuthHero } from "./AuthHero";
@@ -27,7 +24,7 @@ async function AuthHeroContent() {
 export function HeroSection({ isLoggedIn }: Props) {
   return (
     <section className="relative overflow-hidden bg-muted/30 dark:bg-zinc-950">
-      <FloatingShapes shapes={floatingShapes} />
+      {/* <FloatingShapes shapes={floatingShapes} /> */}
       <div className="container mx-auto px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
         {isLoggedIn ? (
           <Suspense fallback={<HeroSkeleton />}>

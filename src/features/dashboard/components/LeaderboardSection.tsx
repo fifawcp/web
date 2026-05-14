@@ -11,18 +11,9 @@ type Props = {
 };
 
 async function LeaderboardContent({ isLoggedIn }: Props) {
-  const [user, leaderboard] = await Promise.all([
-    isLoggedIn ? getCurrentUser() : Promise.resolve(null),
-    getDashboardLeaderboard(),
-  ]);
+  const [user, leaderboard] = await Promise.all([isLoggedIn ? getCurrentUser() : Promise.resolve(null), getDashboardLeaderboard()]);
 
-  return (
-    <CombinedLeaderboardCard
-      pickem={leaderboard?.pickem ?? null}
-      match={leaderboard?.match ?? null}
-      currentUserId={user?.id ?? null}
-    />
-  );
+  return <CombinedLeaderboardCard pickem={leaderboard?.pickem ?? null} match={leaderboard?.match ?? null} currentUserId={user?.id ?? null} />;
 }
 
 function LeaderboardLoading() {

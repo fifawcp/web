@@ -21,18 +21,11 @@ export function HeroCard({ badge, primaryCta, bottomContent }: HeroCardProps) {
     <Card className="relative overflow-hidden p-4 sm:p-6 md:p-8 bg-linear-to-br from-primary/10 via-background to-background">
       {/* Mobile stadium image */}
       <div className="pointer-events-none absolute inset-0 sm:hidden mask-[radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)] [-webkit-mask-image:radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)]">
-        <Image src="/banner-stadium-mobile.webp" alt="" fill className="object-cover object-right-bottom opacity-50 dark:opacity-15" sizes="100vw" priority />
+        <Image src="/banner-stadium-mobile.webp" alt="" fill className="object-cover object-bottom-right opacity-50 dark:opacity-15" sizes="600px" priority />
       </div>
       {/* Desktop stadium image */}
       <div className="pointer-events-none absolute inset-0 hidden sm:block mask-[radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)] [-webkit-mask-image:radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)]">
-        <Image
-          src="/banner-stadium.webp"
-          alt=""
-          fill
-          className="object-cover object-bottom-right opacity-50 dark:opacity-15"
-          sizes="(max-width: 1024px) 80vw, 1376px"
-          priority
-        />
+        <Image src="/banner-stadium.webp" alt="" fill className="object-cover object-bottom-right opacity-50 dark:opacity-15" sizes="1024px" priority />
       </div>
       {/* Color overlay */}
       <div className="pointer-events-none absolute inset-0 bg-white/65 dark:bg-black/20" />

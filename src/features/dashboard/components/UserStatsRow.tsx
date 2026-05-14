@@ -29,7 +29,7 @@ function StatItem({ label, icon, iconContent, value }: StatItemProps) {
         </div>
       }
       <div className="flex flex-col sm:text-center xl:text-start min-w-0 flex-1 gap-1">
-        <span className="text-xs sm:text-[11px] xl:text-xs h-5 sm:h-7 xl:h-auto flex items-center uppercase tracking-wider text-muted-foreground leading-none">
+        <span className="text-xs sm:text-[11px] xl:text-xs h-5 sm:h-7 xl:h-auto flex items-center uppercase tracking-wider text-muted-foreground leading-none md:justify-center xl:justify-start">
           {label}
         </span>
         {value}
@@ -88,7 +88,7 @@ export function UserStatsRow({ stats }: Props) {
           label={`${t("nextMatch")} · ${kickoffDate}`}
           icon={CalendarDays}
           value={
-            <div className="flex items-center gap-1 font-heading text-sm md:text-base font-bold leading-tight truncate">
+            <div className="flex items-center sm:justify-center xl:justify-start gap-1 font-heading text-sm md:text-base font-bold leading-tight truncate">
               {nextMatch.home_team?.flag_url && <img src={nextMatch.home_team.flag_url} alt="" className="inline size-4 mr-1 align-middle" />}
               <span className="sm:hidden lg:inline">{homeFifaCode}</span> {t("vs")} <span className="sm:hidden lg:inline">{awayFifaCode}</span>
               {nextMatch.away_team?.flag_url && <img src={nextMatch.away_team.flag_url} alt="" className="inline size-4 ml-1 align-middle" />}

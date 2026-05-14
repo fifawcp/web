@@ -44,13 +44,12 @@ export function GuestHeroStats() {
     { label: t("teams"), value: TOURNAMENT_STATS.teams },
   ];
 
+  const containerStyles =
+    "flex items-center flex-col gap-2 flex-1 px-2 sm:px-3 pt-2 md:pt-3  pb-2 md:pb-0 min-w-0 border-b sm:border-b-0 border-gray-400 dark:border-border";
   return (
     <>
       {/* Countdown */}
-      <div
-        className="flex items-center flex-col gap-2 flex-1 px-2 sm:px-3 pt-2 md:pt-3 min-w-0 border-b sm:border-b-0 border-gray-400 dark:border-border"
-        suppressHydrationWarning
-      >
+      <div className={containerStyles}>
         <div className="flex items-center gap-1.5">
           <Clock className="size-3 text-muted-foreground" />
           <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -59,11 +58,13 @@ export function GuestHeroStats() {
         </div>
         <div className="flex gap-3">
           {countdownItems.map(({ value, label }, i) => (
-            <div key={label} className="flex items-start gap-3">
+            <div key={label} className="flex items-start gap-2 lg:gap-3">
               {i > 0 && <span className="font-heading text-xl  leading-none mt-1">:</span>}
-              <div className="flex flex-col items-center">
-                <span className="font-heading text-2xl sm:text-3xl font-bold tabular-nums leading-none">{String(value).padStart(2, "0")}</span>
-                <span className="text-[9px] uppercase tracking-wider text-muted-foreground mt-1">{label}</span>
+              <div className="flex flex-col items-center gap-1">
+                <span className="font-heading text-xl sm:text-2xl md:text-3xl font-bold tabular-nums leading-none" suppressHydrationWarning>
+                  {String(value).padStart(2, "0")}
+                </span>
+                <span className="text-[9px] uppercase tracking-wider text-muted-foreground">{label}</span>
               </div>
             </div>
           ))}
@@ -71,16 +72,16 @@ export function GuestHeroStats() {
       </div>
 
       {/* Tournament stats */}
-      <div className="flex items-center flex-col gap-2 flex-1 px-2 sm:px-3 pt-2 md:pt-3 min-w-0 border-b sm:border-b-0 border-gray-400 dark:border-border">
+      <div className={containerStyles}>
         <div className="flex items-center gap-1.5">
           <ChartColumn className="size-3 text-muted-foreground" />
           <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("tournamentByNumbers")}</span>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2 lg:gap-3">
           {stats.map(({ label, value }) => (
-            <div key={label} className="flex flex-col items-center gap-1 ">
-              <span className="font-heading text-2xl sm:text-3xl font-bold tabular-nums leading-none">{value}</span>
-              <span className="text-[9px] uppercase tracking-wider text-muted-foreground">{label}</span>
+            <div key={label} className="flex flex-col items-center gap-1">
+              <span className="font-heading text-xl sm:text-2xl md:text-3xl font-bold tabular-nums leading-none">{value}</span>
+              <span className="text-[9px] uppercase tracking-wider text-muted-foreground text-center">{label}</span>
             </div>
           ))}
         </div>

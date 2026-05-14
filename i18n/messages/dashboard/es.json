@@ -74,6 +74,7 @@
   },
   "pickStatus": {
     "title": "Estado de picks",
+    "notLoggedIn": "Tipos de picks",
     "bracket": {
       "title": "Bracket Pick'em",
       "description": "3 pasos · grupos, mejores terceros, eliminatorias. Cierra al inicio.",

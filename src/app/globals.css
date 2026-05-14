@@ -12,6 +12,10 @@
   --color-wc-orange: #ff6e3f;
   --color-wc-red-light: #d40100;
 
+  --color-gold: theme(colors.amber.500);
+  --color-silver: theme(colors.gray.400);
+  --color-bronze: theme(colors.amber.700);
+
   /* Layout dimensions */
   --header-height: 65px;
 
@@ -79,6 +83,16 @@
 /* Dark mode opacity for floating shapes */
 :where(.dark, .dark *) [style*="--dark-opacity"] {
   opacity: var(--dark-opacity) !important;
+}
+
+.text-gold {
+  color: var(--color-gold);
+}
+.text-silver {
+  color: var(--color-silver);
+}
+.text-bronze {
+  color: var(--color-bronze);
 }
 
 /* Gradient utility classes */

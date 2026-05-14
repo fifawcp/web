@@ -67,6 +67,7 @@
   },
   "pickStatus": {
     "title": "Pick status",
+    "notLoggedIn": "Pick types",
     "bracket": {
       "title": "Pick'em Bracket",
       "description": "3 steps · groups, best thirds, knockout. Locks at kickoff.",
