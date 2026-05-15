@@ -14,8 +14,10 @@ export function forwardedClientHeaders(req: NextRequest): Record<string, string>
   return headers;
 }
 
-// Extracts the refresh token from the upstream Set-Cookie header and re-sets it
-// with path="/" so it travels on every browser request, not only /api/auth ones.
+// Re-sets the refresh-token cookie at path="/" so it is visible on every route.
+// Also clears the backend's natural Path=/api/auth copy — the Google OAuth callback
+// sets it there directly (browser ← backend redirect, bypasses Next.js), and only
+// this BFF rewrite can clean it up proactively on the next token operation
 export function rewriteRefreshCookie(header: string | null, res: NextResponse): void {
   if (!header) return;
   const valueMatch = new RegExp(`^${REFRESH_COOKIE}=([^;]+)`).exec(header.trim());
@@ -28,4 +30,10 @@ export function rewriteRefreshCookie(header: string | null, res: NextResponse): 
     path: "/",
     ...(expiresMatch?.[1] && { expires: new Date(expiresMatch[1]) }),
   });
+
+  // Clear the Path=/api/auth copy. Use headers.append — cookies.set is keyed by
+  // name only, so a second call for the same cookie name at a different path
+  // would silently clobber the set above
+  const secureSuffix = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  res.headers.append("Set-Cookie", `${REFRESH_COOKIE}=; Path=/api/auth; Max-Age=0; HttpOnly; SameSite=Lax${secureSuffix}`);
 }
