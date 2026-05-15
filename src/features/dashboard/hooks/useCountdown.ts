@@ -23,9 +23,9 @@ function stopIfEmpty() {
 export function useCountdown(targetDate: Date): CountdownValues {
   const [countdown, setCountdown] = useState(() => computeCountdown(targetDate));
   const targetRef = useRef(targetDate);
-  targetRef.current = targetDate;
 
   useEffect(() => {
+    targetRef.current = targetDate;
     const tick = () => setCountdown(computeCountdown(targetRef.current));
     subscribers.add(tick);
     startIfNeeded();
@@ -33,7 +33,7 @@ export function useCountdown(targetDate: Date): CountdownValues {
       subscribers.delete(tick);
       stopIfEmpty();
     };
-  }, []);
+  }, [targetDate]);
 
   return countdown;
 }

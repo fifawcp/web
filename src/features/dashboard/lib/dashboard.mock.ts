@@ -1,10 +1,4 @@
-import type {
-  DashboardLeaderboard,
-  DashboardStats,
-  MatchPickProgress,
-  TournamentAwards,
-  UserPickemSummary,
-} from "../types/dashboard.types";
+import type { DashboardLeaderboard, DashboardStats, MatchPickProgress, TournamentAwards, UserPickemSummary } from "../types/dashboard.types";
 
 export const MOCK_DASHBOARD_STATS: DashboardStats = {
   picked_champion: {
