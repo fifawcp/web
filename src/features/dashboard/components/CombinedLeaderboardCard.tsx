@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
 import { ArrowRight, Users } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -8,6 +10,7 @@ import { Card } from "@/shared/components/ui/card";
 import { getRankColor } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
+import { leaderboardCardAnimation } from "../animations/card.animations";
 import type { CompetitionLeaderboard } from "../types/dashboard.types";
 
 type Props = {
@@ -84,6 +87,17 @@ function LeaderboardColumn({ data, currentUserId, title, href, fullRankingLabel,
 
 export function CombinedLeaderboardCard({ pickem, match, currentUserId }: Props) {
   const t = useTranslations("dashboard.leaderboard");
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!cardRef.current) {
+      return;
+    }
+
+    return leaderboardCardAnimation({
+      card: cardRef.current,
+    });
+  }, []);
 
   const columnProps = {
     currentUserId,
@@ -95,7 +109,7 @@ export function CombinedLeaderboardCard({ pickem, match, currentUserId }: Props)
   };
 
   return (
-    <Card size="sm" className="bg-card h-full">
+    <Card ref={cardRef} size="sm" className="bg-card h-full opacity-0">
       <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-border flex-1">
         <LeaderboardColumn {...columnProps} data={pickem} title={t("pickemTitle")} href="/boards/global?tab=pickem" />
         <LeaderboardColumn {...columnProps} data={match} title={t("matchTitle")} href="/boards/global?tab=match" />

@@ -23,13 +23,12 @@ type StatItemProps = {
 function StatItem({ label, icon, iconContent, value }: StatItemProps) {
   return (
     <div className="flex items-center sm:flex-col xl:flex-row sm:justify-center xl:justify-start gap-3 flex-1 px-2 sm:px-3 py-2 md:py-3 min-w-0 border-b sm:border-b-0 border-foreground/30 dark:border-border">
-      {
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted">
-          {iconContent || (icon && React.createElement(icon, { className: "size-7 text-muted-foreground" }))}
-        </div>
-      }
+      <div className={`flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted ${!iconContent ? "xl:hidden" : ""}`}>
+        {iconContent || (icon && React.createElement(icon, { className: "size-7 text-muted-foreground" }))}
+      </div>
+
       <div className="flex flex-col sm:text-center xl:text-start min-w-0 flex-1 gap-1">
-        <span className="text-xs sm:text-[11px] xl:text-xs h-5 sm:h-7 xl:h-auto flex items-center uppercase tracking-wider text-muted-foreground leading-none md:justify-center xl:justify-start">
+        <span className="text-xs sm:text-[11px] xl:text-xs h-5 md:h-auto flex items-center uppercase tracking-wider text-muted-foreground leading-none md:justify-center xl:justify-start">
           {label}
         </span>
         {value}
@@ -88,10 +87,11 @@ export function UserStatsRow({ stats }: Props) {
           label={`${t("nextMatch")} · ${kickoffDate}`}
           icon={CalendarDays}
           value={
-            <div className="flex items-center sm:justify-center xl:justify-start gap-1 font-heading text-sm md:text-base font-bold leading-tight truncate">
-              {nextMatch.home_team?.flag_url && <img src={nextMatch.home_team.flag_url} alt="" className="inline size-4 mr-1 align-middle" />}
-              <span className="sm:hidden lg:inline">{homeFifaCode}</span> {t("vs")} <span className="sm:hidden lg:inline">{awayFifaCode}</span>
-              {nextMatch.away_team?.flag_url && <img src={nextMatch.away_team.flag_url} alt="" className="inline size-4 ml-1 align-middle" />}
+            <div className="flex items-center sm:justify-center xl:justify-start gap-2 font-heading text-sm md:text-base font-bold leading-tight truncate text-muted-foreground ">
+              {nextMatch.home_team?.flag_url && <img src={nextMatch.home_team.flag_url} alt="" className="inline h-3.5 w-5.5 align-middle" />}
+              <span className="sm:hidden lg:inline text-foreground">{homeFifaCode}</span> {t("vs")}{" "}
+              <span className="sm:hidden lg:inline text-foreground">{awayFifaCode}</span>
+              {nextMatch.away_team?.flag_url && <img src={nextMatch.away_team.flag_url} alt="" className="inline h-3.5 w-5.5 align-middle" />}
             </div>
           }
         />

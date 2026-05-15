@@ -1,6 +1,6 @@
 export const fadeUp = {
   opacity: 0,
-  y: 20,
+  y: 25,
 };
 
 export const fadeUpLarge = {

@@ -12,7 +12,7 @@ export function HeroSkeleton() {
       </div>
       {/* Desktop stadium image */}
       <div className="pointer-events-none absolute inset-0 hidden sm:block mask-[radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)] [-webkit-mask-image:radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)]">
-        <Image src="/banner-stadium.webp" alt="" fill className="object-cover object-right-bottom opacity-50 dark:opacity-15" sizes="(max-width: 1024px) 80vw, 1376px" />
+        <Image src="/banner-stadium.webp" alt="" fill className="object-cover object-bottom-right opacity-50 dark:opacity-15" sizes="(max-width: 1024px) 80vw, 1376px" />
       </div>
       <div className="pointer-events-none absolute inset-0 bg-white/65 dark:bg-black/20" />
       <div className="flex flex-col gap-4 sm:gap-5 relative z-10">

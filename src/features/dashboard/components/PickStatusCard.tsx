@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
 import { GitBranch, type LucideIcon, Target, Trophy } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -7,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 
+import { pickStatusCardAnimation } from "../animations/card.animations";
 import type { MatchPickProgress, PickemProgress, TournamentAwards, UserPickemSummary } from "../types/dashboard.types";
 
 type Props = {
@@ -73,6 +76,17 @@ function countPickedAwards(awards: TournamentAwards): number {
 
 export function PickStatusCard({ pickem, matchProgress, awards, isLoggedIn }: Props) {
   const t = useTranslations("dashboard.pickStatus");
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!cardRef.current) {
+      return;
+    }
+
+    return pickStatusCardAnimation({
+      card: cardRef.current,
+    });
+  }, []);
 
   const bracketPercent = isLoggedIn && pickem ? getBracketProgressPercent(pickem.progress) : 0;
   const bracketStep = isLoggedIn && pickem ? getCurrentBracketStep(pickem.progress) : 0;
@@ -105,7 +119,7 @@ export function PickStatusCard({ pickem, matchProgress, awards, isLoggedIn }: Pr
   ];
 
   return (
-    <Card size="sm" className="bg-card h-full">
+    <Card ref={cardRef} size="sm" className="bg-card h-full flex-1 opacity-0">
       <div className="flex px-4 py-3 border-b border-border">
         <span className="text-sm font-medium">{isLoggedIn ? t("title") : t("notLoggedIn")}</span>
       </div>

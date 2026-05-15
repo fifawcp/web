@@ -17,7 +17,7 @@ export function DashboardView({ isLoggedIn }: Props) {
       <HeroSection isLoggedIn={isLoggedIn} />
 
       <section className="border-t border-border">
-        <div className=" container mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <FloatingShapes shapes={floatingShapes} />
           <div className="flex flex-col lg:flex-row gap-6">
             <div className="flex-1">
