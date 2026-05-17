@@ -1,17 +1,13 @@
-"use client";
-
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
 import { ArrowRight, Users } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-import { Card } from "@/shared/components/ui/card";
 import { getRankColor } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
-import { cardFadeUpAnimation } from "../animations/card.animations";
 import type { CompetitionLeaderboard, DashboardLeaderboard } from "../types/dashboard.types";
+
+import { CardReveal } from "./CardReveal";
 
 type Props = {
   leaderboard: DashboardLeaderboard | null;
@@ -59,9 +55,7 @@ function LeaderboardColumn({ data, currentUserId, title, href, fullRankingLabel,
               return (
                 <div key={entry.member.user_id} className={cn("flex items-center gap-2.5 px-4 py-2.5 border-b border-border", isMe && "bg-lime-50 dark:bg-lime-950/20")}>
                   <span className={`w-4 text-xs tabular-nums font-medium shrink-0 ${getRankColor(entry.rank, "text")}`}>{entry.rank}</span>
-                  <div
-                    className={cn("flex size-7 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold bg-muted", getRankColor(entry.rank, "text"))}
-                  >
+                  <div className={cn("flex size-7 shrink-0 items-center justify-center rounded-full text-2xs font-semibold bg-muted", getRankColor(entry.rank, "text"))}>
                     {getInitials(entry.member.username)}
                   </div>
                   <span className={cn("flex-1 text-sm truncate", isMe && "font-medium")}>{isMe ? youLabel : entry.member.username}</span>
@@ -84,21 +78,10 @@ function LeaderboardColumn({ data, currentUserId, title, href, fullRankingLabel,
   );
 }
 
-export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
+export async function LeaderboardSection({ leaderboard, currentUserId }: Props) {
   const pickem = leaderboard?.pickem ?? null;
   const match = leaderboard?.match ?? null;
-  const t = useTranslations("dashboard.leaderboard");
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    if (!cardRef.current) {
-      return;
-    }
-
-    return cardFadeUpAnimation({
-      card: cardRef.current,
-    });
-  }, []);
+  const t = await getTranslations("dashboard.leaderboard");
 
   const columnProps = {
     currentUserId,
@@ -110,11 +93,12 @@ export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
   };
 
   return (
-    <Card ref={cardRef} size="sm" className="bg-card h-full opacity-0">
+    //TODO: Update the redirection once the boards page is ready
+    <CardReveal className="bg-card h-full opacity-0">
       <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-border flex-1">
         <LeaderboardColumn {...columnProps} data={pickem} title={t("pickemTitle")} href="/boards/global?tab=pickem" />
         <LeaderboardColumn {...columnProps} data={match} title={t("matchTitle")} href="/boards/global?tab=match" />
       </div>
-    </Card>
+    </CardReveal>
   );
 }

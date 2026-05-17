@@ -1,17 +1,13 @@
-"use client";
-
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
 import { GitBranch, type LucideIcon, Target, Trophy } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/shared/components/ui/button";
-import { Card } from "@/shared/components/ui/card";
 
-import { cardFadeUpAnimation } from "../animations/card.animations";
 import { getBracketProgressPercent, getCurrentBracketStep } from "../lib/pickStatusDerivations";
 import type { DashboardProgress } from "../types/dashboard.types";
+
+import { CardReveal } from "./CardReveal";
 
 type Props = {
   progress: DashboardProgress | null;
@@ -28,8 +24,8 @@ type PickStatusItemProps = {
   isLoggedIn: boolean;
 };
 
-function PickStatusItem({ icon: Icon, id, progress, statusText, buttonHref, isLast, isLoggedIn }: PickStatusItemProps) {
-  const t = useTranslations("dashboard.pickStatus");
+async function PickStatusItem({ icon: Icon, id, progress, statusText, buttonHref, isLast, isLoggedIn }: PickStatusItemProps) {
+  const t = await getTranslations("dashboard.pickStatus");
 
   const ctaKey = !isLoggedIn || progress === 0 ? "start" : progress >= 100 ? "see" : "continue";
 
@@ -57,14 +53,8 @@ function PickStatusItem({ icon: Icon, id, progress, statusText, buttonHref, isLa
   );
 }
 
-export function PickStatusSection({ progress, isLoggedIn }: Props) {
-  const t = useTranslations("dashboard.pickStatus");
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    if (!cardRef.current) return;
-    return cardFadeUpAnimation({ card: cardRef.current });
-  }, []);
+export async function PickStatusSection({ progress, isLoggedIn }: Props) {
+  const t = await getTranslations("dashboard.pickStatus");
 
   const pickemProgress = isLoggedIn && progress ? progress.pickem : null;
   const matchPicks = isLoggedIn && progress ? progress.match_picks : null;
@@ -100,7 +90,7 @@ export function PickStatusSection({ progress, isLoggedIn }: Props) {
   ];
 
   return (
-    <Card ref={cardRef} size="sm" className="bg-card h-full flex-1 opacity-0">
+    <CardReveal className="bg-card h-full flex-1 opacity-0">
       <div className="flex px-4 py-3 border-b border-border">
         <span className="text-sm font-medium">{isLoggedIn ? t("title") : t("notLoggedIn")}</span>
       </div>
@@ -116,6 +106,6 @@ export function PickStatusSection({ progress, isLoggedIn }: Props) {
           isLoggedIn={isLoggedIn}
         />
       ))}
-    </Card>
+    </CardReveal>
   );
 }

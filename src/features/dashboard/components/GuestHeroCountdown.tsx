@@ -53,7 +53,7 @@ export function GuestHeroStats() {
       <div className={containerStyles}>
         <div className="flex items-center gap-1.5">
           <Clock className="size-3 text-muted-foreground" />
-          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+          <span className="text-2xs uppercase tracking-wider text-muted-foreground">
             {label} · {date}
           </span>
         </div>
@@ -65,7 +65,7 @@ export function GuestHeroStats() {
                 <span className="font-heading text-xl sm:text-2xl md:text-3xl font-bold tabular-nums leading-none" suppressHydrationWarning>
                   {String(value).padStart(2, "0")}
                 </span>
-                <span className="text-[9px] uppercase tracking-wider text-muted-foreground">{label}</span>
+                <span className="text-2xs uppercase tracking-wider text-muted-foreground">{label}</span>
               </div>
             </div>
           ))}
@@ -76,13 +76,13 @@ export function GuestHeroStats() {
       <div className={containerStyles}>
         <div className="flex items-center gap-1.5">
           <ChartColumn className="size-3 text-muted-foreground" />
-          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("tournamentByNumbers")}</span>
+          <span className="text-2xs uppercase tracking-wider text-muted-foreground">{t("tournamentByNumbers")}</span>
         </div>
         <div className="flex gap-2 lg:gap-3">
           {stats.map(({ label, value }) => (
             <div key={label} className="flex flex-col items-center gap-1">
               <span className="font-heading text-xl sm:text-2xl md:text-3xl font-bold tabular-nums leading-none">{value}</span>
-              <span className="text-[9px] uppercase tracking-wider text-muted-foreground text-center">{label}</span>
+              <span className="text-2xs uppercase tracking-wider text-muted-foreground text-center">{label}</span>
             </div>
           ))}
         </div>

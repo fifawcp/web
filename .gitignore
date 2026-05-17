@@ -43,3 +43,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .worktrees/
+
+# claude — local-only agent settings (launch.json is shared, this is not)
+.claude/settings.local.json
