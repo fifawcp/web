@@ -25,7 +25,7 @@ export function cardFadeUpAnimation({ card }: CardAnimationProps) {
   });
 
   return () => {
-    tl.kill();
+    tl.progress(1).kill();
     tl.scrollTrigger?.kill();
   };
 }

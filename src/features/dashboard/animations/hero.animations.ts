@@ -66,7 +66,7 @@ export function heroSectionAnimation({ container, card, background }: HeroAnimat
   );
 
   return () => {
-    tl.kill();
+    tl.progress(1).kill();
     tl.scrollTrigger?.kill();
   };
 }

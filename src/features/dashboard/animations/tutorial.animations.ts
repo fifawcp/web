@@ -110,7 +110,7 @@ export function tutorialSectionAnimation({
   }
 
   return () => {
-    tl.kill();
+    tl.progress(1).kill();
     tl.scrollTrigger?.kill();
 
     animations.forEach((animation) => animation.kill());
