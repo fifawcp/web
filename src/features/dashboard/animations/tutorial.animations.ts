@@ -41,115 +41,25 @@ export function tutorialSectionAnimation({
     },
   });
 
-  // START infinite scrolling immediately
-  if (backgroundLeft2) {
-    const leftScroll = gsap.to(backgroundLeft2, {
-      yPercent: -50,
-      duration: 6,
-      ease: "none",
-      repeat: -1,
-    });
+  // Decorative number panels — identical fade-in; only scroll direction & speed differ.
+  const backgroundPanels = [
+    { target: backgroundLeft2, yPercent: -50, duration: 6 },
+    { target: backgroundLeft6, yPercent: -50, duration: 6 },
+    { target: backgroundRight2, yPercent: 50, duration: 2 },
+    { target: backgroundRight6, yPercent: 50, duration: 2 },
+  ];
 
-    animations.push(leftScroll);
+  for (const { target, yPercent, duration } of backgroundPanels) {
+    if (!target) continue;
 
-    // Only animate appearance
+    // Infinite scroll loop, starts immediately.
+    animations.push(gsap.to(target, { yPercent, duration, ease: "none", repeat: -1 }));
+
+    // One-shot blur/scale reveal as the section enters the viewport.
     tl.fromTo(
-      backgroundLeft2,
-      {
-        opacity: 0,
-        scale: 1.15,
-        filter: "blur(30px) hue-rotate(20deg)",
-      },
-      {
-        opacity: 1,
-        scale: 1,
-        filter: "blur(0px) hue-rotate(0deg)",
-        duration: 0.8,
-      },
-      0
-    );
-  }
-
-  if (backgroundLeft6) {
-    const leftScroll = gsap.to(backgroundLeft6, {
-      yPercent: -50,
-      duration: 6,
-      ease: "none",
-      repeat: -1,
-    });
-
-    animations.push(leftScroll);
-
-    // Only animate appearance
-    tl.fromTo(
-      backgroundLeft6,
-      {
-        opacity: 0,
-        scale: 1.15,
-        filter: "blur(30px) hue-rotate(20deg)",
-      },
-      {
-        opacity: 1,
-        scale: 1,
-        filter: "blur(0px) hue-rotate(0deg)",
-        duration: 0.8,
-      },
-      0
-    );
-  }
-
-  if (backgroundRight2) {
-    const rightScroll = gsap.to(backgroundRight2, {
-      yPercent: 50,
-      duration: 2,
-      ease: "none",
-      repeat: -1,
-    });
-
-    animations.push(rightScroll);
-
-    // Only animate appearance
-    tl.fromTo(
-      backgroundRight2,
-      {
-        opacity: 0,
-        scale: 1.15,
-        filter: "blur(30px) hue-rotate(20deg)",
-      },
-      {
-        opacity: 1,
-        scale: 1,
-        filter: "blur(0px) hue-rotate(0deg)",
-        duration: 0.8,
-      },
-      0
-    );
-  }
-
-  if (backgroundRight6) {
-    const rightScroll = gsap.to(backgroundRight6, {
-      yPercent: 50,
-      duration: 2,
-      ease: "none",
-      repeat: -1,
-    });
-
-    animations.push(rightScroll);
-
-    // Only animate appearance
-    tl.fromTo(
-      backgroundRight6,
-      {
-        opacity: 0,
-        scale: 1.15,
-        filter: "blur(30px) hue-rotate(20deg)",
-      },
-      {
-        opacity: 1,
-        scale: 1,
-        filter: "blur(0px) hue-rotate(0deg)",
-        duration: 0.8,
-      },
+      target,
+      { opacity: 0, scale: 1.15, filter: "blur(30px) hue-rotate(20deg)" },
+      { opacity: 1, scale: 1, filter: "blur(0px) hue-rotate(0deg)", duration: 0.8 },
       0
     );
   }

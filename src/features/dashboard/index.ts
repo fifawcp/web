@@ -1,14 +1,16 @@
+export { DashboardLoading } from "./components/DashboardLoading";
 export { DashboardView } from "./components/DashboardView";
+
 export type {
-  BoardMember,
   BoardMemberRole,
   CompetitionLeaderboard,
   CompetitionUserStats,
+  DashboardData,
   DashboardLeaderboard,
+  DashboardProgress,
   DashboardStats,
   LeaderboardEntry,
-  MatchPickProgress,
-  NextMatch,
-  TournamentAwards,
-  UserPickemSummary,
+  LeaderboardMember,
+  PickemProgress,
+  StepProgress,
 } from "./types/dashboard.types";

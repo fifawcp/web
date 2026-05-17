@@ -20,11 +20,3 @@ export function computeCountdown(targetDate: Date, now: Date = new Date()): Coun
 
   return { days, hours, minutes, seconds, isExpired: false };
 }
-
-export function formatCountdownLabel(days: number, hours: number, minutes: number): string {
-  const parts: string[] = [];
-  if (days > 0) parts.push(`${days} days`);
-  if (hours > 0) parts.push(`${hours} hours`);
-  if (minutes > 0) parts.push(`${minutes} minutes`);
-  return parts.join(" · ");
-}

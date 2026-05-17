@@ -38,9 +38,9 @@ export function HeroCard({ badge, primaryCta, bottomContent }: HeroCardProps) {
 
   return (
     <div ref={containerRef} className="relative">
-      <div ref={backgroundRef} className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 w-full h-full opacity-0 pointer-events-none">
+      <div ref={backgroundRef} className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-full opacity-0 pointer-events-none">
         <div className="relative w-full h-full">
-          <Image src="/background-mobile.webp" alt="" fill className="object-cover opacity-20 blur-lg" priority={false} />
+          <Image src="/banner-stadium-mobile.webp" alt="" fill className="object-cover opacity-20 blur-lg" priority={false} />
           <div className="absolute inset-0 bg-linear-to-r from-transparent via-primary/5 to-transparent" />
         </div>
       </div>

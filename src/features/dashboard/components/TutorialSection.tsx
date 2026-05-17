@@ -53,7 +53,11 @@ export function TutorialSection({ isLoggedIn }: { isLoggedIn: boolean }) {
   }, []);
 
   return (
-    <section id="tutorial" ref={sectionRef} className="relative bg-muted/30 dark:bg-zinc-950 border-t border-border py-16 scroll-mt-20 overflow-hidden">
+    <section
+      id="tutorial"
+      ref={sectionRef}
+      className="relative bg-muted/30 dark:bg-zinc-950 border-t border-border py-16 scroll-mt-(--tutorial-scroll-offset) overflow-hidden"
+    >
       {/* Background images - Desktop only */}
       {/* LEFT BACKGROUND - infinite upward loop */}
       <div className="hidden lg:block absolute left-0 top-0 w-1/5 h-full overflow-hidden pointer-events-none">

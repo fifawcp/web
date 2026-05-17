@@ -7,6 +7,6 @@ const rankColors = {
 type ColorType = "text" | "bg" | "border";
 
 export const getRankColor = (rank: number, type: ColorType = "text") => {
-  const color = rankColors[rank as keyof typeof rankColors] ?? "";
-  return `${type}-${color}`;
+  const color = rankColors[rank as keyof typeof rankColors];
+  return color ? `${type}-${color}` : "";
 };

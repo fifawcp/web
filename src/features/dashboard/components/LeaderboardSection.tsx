@@ -1,54 +1,120 @@
-import { Suspense } from "react";
+"use client";
 
-import { getCurrentUser } from "@/lib/auth";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { ArrowRight, Users } from "lucide-react";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-import { getDashboardLeaderboard } from "../api/dashboard.api";
+import { Card } from "@/shared/components/ui/card";
+import { getRankColor } from "@/shared/lib/ui";
+import { cn } from "@/shared/lib/utils";
 
-import { CombinedLeaderboardCard } from "./CombinedLeaderboardCard";
+import { cardFadeUpAnimation } from "../animations/card.animations";
+import type { CompetitionLeaderboard, DashboardLeaderboard } from "../types/dashboard.types";
 
 type Props = {
-  isLoggedIn: boolean;
+  leaderboard: DashboardLeaderboard | null;
+  currentUserId: string | null;
 };
 
-async function LeaderboardContent({ isLoggedIn }: Props) {
-  const [user, leaderboard] = await Promise.all([isLoggedIn ? getCurrentUser() : Promise.resolve(null), getDashboardLeaderboard()]);
+type ColumnProps = {
+  data: CompetitionLeaderboard | null;
+  currentUserId: string | null;
+  title: string;
+  href: string;
+  fullRankingLabel: string;
+  youLabel: string;
+  ptsLabel: string;
+  emptyTitle: string;
+  emptyDescription: string;
+};
 
-  return <CombinedLeaderboardCard pickem={leaderboard?.pickem ?? null} match={leaderboard?.match ?? null} currentUserId={user?.id ?? null} />;
+function getInitials(username: string): string {
+  return username.slice(0, 2).toUpperCase();
 }
 
-function LeaderboardLoading() {
+function LeaderboardColumn({ data, currentUserId, title, href, fullRankingLabel, youLabel, ptsLabel, emptyTitle, emptyDescription }: ColumnProps) {
+  const isEmpty = !data || data.entries.length === 0;
+
   return (
-    <div className="bg-card rounded-xl border border-border animate-pulse h-full">
-      <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-border">
-        {[0, 1].map((i) => (
-          <div key={i} className="flex flex-col flex-1">
-            <div className="flex items-center px-4 py-3 border-b border-border">
-              <div className="h-4 w-28 bg-muted rounded" />
-            </div>
-            <div className="flex flex-col">
-              {[...Array(5)].map((_, j) => (
-                <div key={j} className="flex items-center gap-2 px-4 py-2.5 border-b border-border last:border-b-0">
-                  <div className="h-4 w-4 bg-muted rounded" />
-                  <div className="h-7 w-7 rounded-full bg-muted" />
-                  <div className="flex-1 h-4 bg-muted rounded" />
-                  <div className="h-4 w-10 bg-muted rounded" />
-                </div>
-              ))}
-            </div>
-            <div className="flex justify-end px-4 py-3 border-t border-border">
-              <div className="h-3 w-20 bg-muted rounded" />
-            </div>
-          </div>
-        ))}
+    <div className="flex flex-col flex-1 min-w-0">
+      <div className="px-4 py-3 border-b border-border">
+        <span className="text-sm font-medium">{title}</span>
       </div>
+
+      {isEmpty ? (
+        <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
+          <div className="flex size-10 items-center justify-center rounded-full bg-muted mb-2">
+            <Users className="size-4 text-muted-foreground" />
+          </div>
+          <span className="text-sm font-medium">{emptyTitle}</span>
+          <span className="text-xs text-muted-foreground mt-1">{emptyDescription}</span>
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-col">
+            {data.entries.map((entry) => {
+              const isMe = entry.member.user_id === currentUserId;
+              return (
+                <div key={entry.member.user_id} className={cn("flex items-center gap-2.5 px-4 py-2.5 border-b border-border", isMe && "bg-lime-50 dark:bg-lime-950/20")}>
+                  <span className={`w-4 text-xs tabular-nums font-medium shrink-0 ${getRankColor(entry.rank, "text")}`}>{entry.rank}</span>
+                  <div
+                    className={cn("flex size-7 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold bg-muted", getRankColor(entry.rank, "text"))}
+                  >
+                    {getInitials(entry.member.username)}
+                  </div>
+                  <span className={cn("flex-1 text-sm truncate", isMe && "font-medium")}>{isMe ? youLabel : entry.member.username}</span>
+                  <span className="text-xs font-medium tabular-nums shrink-0">
+                    {entry.points} <span className="text-muted-foreground font-normal">{ptsLabel}</span>
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex items-center justify-end px-4 py-3 mt-auto">
+            <Link href={href} className="flex items-center gap-1 text-xs font-medium hover:underline">
+              {fullRankingLabel}
+              <ArrowRight className="size-3" />
+            </Link>
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
-export function LeaderboardSection({ isLoggedIn }: Props) {
+export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
+  const pickem = leaderboard?.pickem ?? null;
+  const match = leaderboard?.match ?? null;
+  const t = useTranslations("dashboard.leaderboard");
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!cardRef.current) {
+      return;
+    }
+
+    return cardFadeUpAnimation({
+      card: cardRef.current,
+    });
+  }, []);
+
+  const columnProps = {
+    currentUserId,
+    fullRankingLabel: t("fullRanking"),
+    youLabel: t("you"),
+    ptsLabel: t("pts"),
+    emptyTitle: t("empty.title"),
+    emptyDescription: t("empty.description"),
+  };
+
   return (
-    <Suspense fallback={<LeaderboardLoading />}>
-      <LeaderboardContent isLoggedIn={isLoggedIn} />
-    </Suspense>
+    <Card ref={cardRef} size="sm" className="bg-card h-full opacity-0">
+      <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-border flex-1">
+        <LeaderboardColumn {...columnProps} data={pickem} title={t("pickemTitle")} href="/boards/global?tab=pickem" />
+        <LeaderboardColumn {...columnProps} data={match} title={t("matchTitle")} href="/boards/global?tab=match" />
+      </div>
+    </Card>
   );
 }

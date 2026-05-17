@@ -1,39 +1,25 @@
-import type { LocalizedName, Team } from "@/features/schedule/types/schedule.types";
+import type { LocalizedName, Match, Team } from "@/features/schedule/types/schedule.types";
 
-export type { LocalizedName, Team };
+export type { LocalizedName, Match, Team };
 
-// GET /dashboard/stats
+// ─── GET /dashboard — single consolidated payload ───────────────────────────
+// Shape mirrors the backend response under `data` (see lib/ExampleRequest.json).
+
+// stats.pickem / stats.match
 export type CompetitionUserStats = {
-  competition_id: number;
   rank: number;
   points: number;
 };
 
-export type NextMatch = {
-  id: number;
-  kickoff_at: string;
-  home_team: Team | null;
-  away_team: Team | null;
-};
-
 export type DashboardStats = {
-  picked_champion: Team | null;
   pickem: CompetitionUserStats;
   match: CompetitionUserStats;
-  next_match: NextMatch | null;
 };
 
-// GET /matches/pick-progress
-export type MatchPickProgress = {
-  made: number;
-  total: number;
-};
-
-// GET /pickems — only the subset needed for dashboard display
+// progress.* — every progress block shares this shape
 export type StepProgress = {
   completed: number;
   total: number;
-  is_complete: boolean;
 };
 
 export type PickemProgress = {
@@ -42,45 +28,32 @@ export type PickemProgress = {
   bracket: StepProgress;
 };
 
-export type UserPickemSummary = {
-  progress: PickemProgress;
-  is_locked: boolean;
+export type DashboardProgress = {
+  match_picks: StepProgress;
+  pickem: PickemProgress;
+  awards: StepProgress;
 };
 
-// Tournament Awards — mocked until endpoint is available
-export type TournamentAward = {
-  id: string;
-  name: string;
-  picked: boolean;
-  player: string | null;
-};
+//  leaderboard.pickem / leaderboard.match
+export type BoardMemberRole = "admin" | "member";
 
-export type TournamentAwards = {
-  golden_boot: TournamentAward;
-  golden_glove: TournamentAward;
-  golden_ball: TournamentAward;
-  young_player: TournamentAward;
-};
-
-// GET /dashboard/leaderboard
-export type BoardMemberRole = "owner" | "admin" | "member";
-
-export type BoardMember = {
-  board_id: number;
+export type LeaderboardMember = {
   user_id: string;
-  role: BoardMemberRole;
-  created_at: string;
   username: string;
+  first_name: string;
+  last_name: string;
+  role: BoardMemberRole;
+  joined_at: string;
 };
 
 export type LeaderboardEntry = {
   rank: number;
   points: number;
-  member: BoardMember;
+  member: LeaderboardMember;
 };
 
 export type CompetitionLeaderboard = {
-  competition_id: number;
+  competition_name: string;
   entries: LeaderboardEntry[];
 };
 
@@ -89,10 +62,11 @@ export type DashboardLeaderboard = {
   match: CompetitionLeaderboard;
 };
 
-// Static tournament stats — hardcoded config, not from API
-export type TournamentStats = {
-  totalMatches: number;
-  groupMatches: number;
-  knockoutMatches: number;
-  teams: number;
+// Full consolidated response
+export type DashboardData = {
+  picked_champion: Team | null;
+  stats: DashboardStats;
+  next_match: Match | null;
+  progress: DashboardProgress;
+  leaderboard: DashboardLeaderboard;
 };

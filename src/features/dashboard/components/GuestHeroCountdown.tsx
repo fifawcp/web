@@ -8,7 +8,8 @@ import { formatShortDate } from "@/shared/lib/dates";
 import { useCountdown } from "../hooks/useCountdown";
 import { TOURNAMENT_END_DATE, TOURNAMENT_START_DATE, TOURNAMENT_STATS } from "../lib/tournamentConfig";
 
-export function GuestHeroBadge() {
+// Countdown pill shared by both the guest and authenticated hero.
+export function HeroCountdownBadge() {
   const t = useTranslations("dashboard.hero");
   const countdown = useCountdown(TOURNAMENT_START_DATE);
 
