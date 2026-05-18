@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "schedule": "Schedule",
+    "boards": "Board",
+    "login": "Log in",
+    "register": "Sign up",
+    "menuLabel": "Navigation",
+    "menuDescription": "Main navigation menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "userMenu": {
+    "accountMenu": "Account menu",
+    "profile": "Profile",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "appearance": "Appearance",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
+  },
+  "footer": {
+    "tagline": "Predict every match. Climb the leaderboards.",
+    "disclaimer": "This is an unofficial fan project with no affiliation to, endorsement by, or connection to FIFA or any of its affiliates. \"FIFA\", \"World Cup\", team names, competition marks, and all related trademarks are the property of their respective owners and are referenced here for identification purposes only.",
+    "rights": "© {year} World Cup Pick'em — an independent fan project for entertainment purposes only.",
+    "developedBy": "Designed & developed by"
+  }
+}

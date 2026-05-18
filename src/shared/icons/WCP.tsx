@@ -6,7 +6,7 @@ interface WCPIconProps {
   fill?: string;
 }
 
-export function WCPIcon({ width = 32, height = 32, scale = 1, className = "", fill = "currentColor" }: WCPIconProps) {
+export function WCP({ width = 32, height = 32, scale = 1, className = "", fill = "currentColor" }: WCPIconProps) {
   const scaledWidth = width * scale;
   const scaledHeight = height * scale;
   const useGradient = fill === "gradient";

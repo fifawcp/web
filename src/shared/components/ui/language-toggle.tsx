@@ -1,61 +1,69 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Globe } from "lucide-react";
-import { useLocale } from "next-intl";
+import { Check, ChevronDown, Globe } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
-import { IconButton } from "@/shared/components/ui/icon-button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
+import { cn } from "@/shared/lib/utils";
 
 const LANGUAGES = [
-  { code: "en", label: "English", flag: "🇺🇸" },
-  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "en", label: "English" },
+  { code: "es", label: "Español" },
 ] as const;
 
-export function LanguageToggle() {
+type LanguageToggleProps = {
+  className?: string;
+};
+
+export function LanguageToggle({ className }: LanguageToggleProps) {
   const locale = useLocale();
-  const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations("language");
+  const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const handleLanguageChange = (newLocale: string) => {
-    if (newLocale === locale) {
-      setIsOpen(false);
-    } else {
-      startTransition(() => {
-        document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`;
-        window.location.reload();
-      });
-      setIsOpen(false);
-    }
+  const handleChange = (next: string) => {
+    setOpen(false);
+    if (next === locale) return;
+    startTransition(() => {
+      document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000`;
+      window.location.reload();
+    });
   };
 
   return (
-    <div className="relative">
-      <IconButton onClick={() => setIsOpen(!isOpen)} aria-label="Change language" disabled={isPending}>
-        <Globe className="h-5 w-5 text-zinc-900 dark:text-zinc-100" />
-      </IconButton>
-
-      {isOpen && (
-        <>
-          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 mt-1 w-auto bg-white dark:bg-zinc-900 rounded-md shadow-lg border border-zinc-200 dark:border-zinc-800 z-20">
-            <div>
-              {LANGUAGES.map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => handleLanguageChange(lang.code)}
-                  disabled={isPending}
-                  className={`cursor-pointer w-full px-3 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-3 transition-colors leading-none ${
-                    locale === lang.code ? "bg-zinc-100 dark:bg-zinc-800" : ""
-                  }`}
-                >
-                  <span>{lang.flag}</span>
-                  <span className="text-zinc-900 dark:text-zinc-100 ">{lang.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          disabled={isPending}
+          aria-label={t("label")}
+          className={cn(
+            "inline-flex h-9 items-center gap-1.5 rounded-md border border-border bg-background px-2.5 text-xs font-medium transition-colors hover:bg-muted disabled:opacity-50",
+            className
+          )}
+        >
+          <Globe className="size-4 text-muted-foreground" />
+          <span className="uppercase">{locale}</span>
+          <ChevronDown className="size-3 text-muted-foreground" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-44 gap-0 p-1.5">
+        <span className="px-2 pb-1 text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("label")}</span>
+        {LANGUAGES.map((lang) => (
+          <button
+            key={lang.code}
+            type="button"
+            onClick={() => handleChange(lang.code)}
+            disabled={isPending}
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-muted disabled:opacity-50"
+          >
+            <span className="w-5 text-2xs font-semibold uppercase text-muted-foreground">{lang.code}</span>
+            <span className="flex-1 text-left">{lang.label}</span>
+            {lang.code === locale && <Check className="size-4" />}
+          </button>
+        ))}
+      </PopoverContent>
+    </Popover>
   );
 }

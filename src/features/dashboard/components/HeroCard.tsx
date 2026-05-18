@@ -40,7 +40,6 @@ export function HeroCard({ badge, primaryCta, bottomContent }: HeroCardProps) {
     <div ref={containerRef} className="relative">
       <div ref={backgroundRef} className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-full opacity-0 pointer-events-none">
         <div className="relative w-full h-full">
-          <Image src="/banner-stadium-mobile.webp" alt="" fill className="object-cover opacity-20 blur-lg" priority={false} />
           <div className="absolute inset-0 bg-linear-to-r from-transparent via-primary/5 to-transparent" />
         </div>
       </div>
@@ -48,11 +47,27 @@ export function HeroCard({ badge, primaryCta, bottomContent }: HeroCardProps) {
       <Card ref={cardRef} className="relative overflow-hidden p-4 sm:p-6 md:p-8 bg-linear-to-br from-primary/10 via-background to-background opacity-0 z-10">
         {/* Mobile stadium image */}
         <div className="pointer-events-none absolute inset-0 sm:hidden mask-[radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)] [-webkit-mask-image:radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)]">
-          <Image src="/banner-stadium-mobile.webp" alt="" fill className="object-cover object-bottom-right opacity-50 dark:opacity-15" sizes="600px" priority />
+          <Image
+            src="/banner-stadium-mobile.webp"
+            alt=""
+            fill
+            className="object-cover object-bottom-right opacity-50 dark:opacity-15"
+            sizes="600px"
+            fetchPriority="high"
+            loading="eager"
+          />
         </div>
         {/* Desktop stadium image */}
         <div className="pointer-events-none absolute inset-0 hidden sm:block mask-[radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)] [-webkit-mask-image:radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)]">
-          <Image src="/banner-stadium.webp" alt="" fill className="object-cover object-bottom-right opacity-50 dark:opacity-15" sizes="1024px" priority />
+          <Image
+            src="/banner-stadium.webp"
+            alt=""
+            fill
+            className="object-cover object-bottom-right opacity-50 dark:opacity-15"
+            sizes="1024px"
+            fetchPriority="high"
+            loading="eager"
+          />
         </div>
         {/* Color overlay */}
         <div className="pointer-events-none absolute inset-0 bg-white/65 dark:bg-black/20" />

@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import { getLocale, getMessages } from "next-intl/server";
 
 import { Providers } from "@/providers/layout-provider";
-import { Header } from "@/shared/layout/header";
+import { Footer } from "@/shared/layout/Footer";
+import { Header } from "@/shared/layout/Header";
 import { cn } from "@/shared/lib/utils";
 
 import "./globals.css";
@@ -31,6 +32,7 @@ export default async function RootLayout({
         <Providers messages={messages} locale={locale}>
           <Header />
           <main className="flex-1 overflow-x-clip">{children}</main>
+          <Footer />
         </Providers>
       </body>
     </html>

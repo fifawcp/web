@@ -1,173 +1,67 @@
-"use client";
-
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
+import { getCurrentUser } from "@/lib/auth";
 import { Button } from "@/shared/components/ui/button";
-import { LanguageToggle } from "@/shared/components/ui/language-toggle";
-import { ThemeToggle } from "@/shared/components/ui/theme-toggle";
-import { UserCard } from "@/shared/components/ui/user-card";
-import { WCPIcon } from "@/shared/icons/wcp-icon";
 
-export function Header() {
-  const pathname = usePathname();
-  const t = useTranslations("nav");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { data: session, status } = useSession();
+import { Brand } from "./Brand";
+import { MobileMenu } from "./MobileMenu";
+import { NavLinks } from "./NavLinks";
+import { PreferencesMenu } from "./PreferencesMenu";
+import { UserMenu } from "./UserMenu";
 
-  const isActive = (path: string) => pathname === path;
-  const isLoggedIn = status === "authenticated" && !!session?.user;
-  const isLoading = status === "loading";
-  const user = session?.user;
+export async function Header() {
+  const t = await getTranslations("nav");
+  const user = await getCurrentUser();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex  h-16 items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-              <WCPIcon width={32} height={32} fill="gradient" />
-              <span className="text-gradient-secondary">WCP</span>
-            </Link>
-
-            {isLoggedIn && (
-              <nav className="hidden md:flex items-center gap-6">
-                <Link
-                  href="/"
-                  className={`text-sm font-medium transition-colors hover:text-wc-red dark:hover:text-wc-orange ${
-                    isActive("/") ? "text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
-                  }`}
-                >
-                  {t("home")}
-                </Link>
-
-                <Link
-                  href="/boards"
-                  className={`text-sm font-medium transition-colors hover:text-wc-red dark:hover:text-wc-orange ${
-                    isActive("/boards") ? "text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
-                  }`}
-                >
-                  {t("boards")}
-                </Link>
-
-                <Link
-                  href="/schedule"
-                  className={`text-sm font-medium transition-colors hover:text-wc-red dark:hover:text-wc-orange ${
-                    isActive("/schedule") ? "text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
-                  }`}
-                >
-                  {t("schedule")}
-                </Link>
-
-                <Link
-                  href="/leaderboard"
-                  className={`text-sm font-medium transition-colors hover:text-wc-red dark:hover:text-wc-orange ${
-                    isActive("/leaderboard") ? "text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
-                  }`}
-                >
-                  {t("leaderboard")}
-                </Link>
-              </nav>
-            )}
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-sm">
+      <div className="mx-auto flex h-16 items-center px-4 sm:px-6 lg:px-8">
+        {/* Desktop */}
+        <div className="relative hidden w-full items-center justify-between gap-6 md:flex">
+          <Brand />
+          <div className="absolute left-1/2 -translate-x-1/2">
+            <NavLinks variant="bar" />
           </div>
 
-          <div className="flex items-center gap-1">
-            <LanguageToggle />
-            <ThemeToggle />
-
-            {!isLoading && (
+          <div className="flex items-center gap-2">
+            {!!user ? (
+              <UserMenu username={user.username} firstName={user.first_name} lastName={user.last_name} />
+            ) : (
               <>
-                {isLoggedIn && user ? (
-                  <div className="hidden md:flex items-center ml-2 animate-fade-in-fast">
-                    <UserCard username={user.username} points={0} firstName={user.first_name} lastName={user.last_name} />
-                  </div>
-                ) : (
-                  <div className="hidden md:flex items-center gap-2 ml-2 animate-fade-in-fast">
-                    <Button asChild variant="ghost" size="sm">
-                      <Link href="/login">{t("login")}</Link>
-                    </Button>
-                    <Button asChild size="sm">
-                      <Link href="/register">{t("register")}</Link>
-                    </Button>
-                  </div>
-                )}
-              </>
-            )}
-
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
-        </div>
-
-        {mobileMenuOpen && !isLoading && (
-          <div className="md:hidden border-t border-zinc-200 dark:border-zinc-800 py-4 animate-fade-in-fast">
-            <nav className="flex flex-col gap-4">
-              {isLoggedIn ? (
-                <>
-                  {user && (
-                    <div className="px-2 pb-4 border-b border-zinc-200 dark:border-zinc-800">
-                      <UserCard username={user.username} points={0} firstName={user.first_name} lastName={user.last_name} />
-                    </div>
-                  )}
-                  <Link
-                    href="/"
-                    className={`text-sm font-medium px-2 py-1 rounded-md ${
-                      isActive("/") ? "bg-wc-red/10 dark:bg-wc-purple/20 text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {t("home")}
-                  </Link>
-                  <Link
-                    href="/boards"
-                    className={`text-sm font-medium px-2 py-1 rounded-md ${
-                      isActive("/boards") ? "bg-wc-red/10 dark:bg-wc-purple/20 text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {t("boards")}
-                  </Link>
-                  <Link
-                    href="/schedule"
-                    className={`text-sm font-medium px-2 py-1 rounded-md ${
-                      isActive("/schedule") ? "bg-wc-red/10 dark:bg-wc-purple/20 text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {t("schedule")}
-                  </Link>
-                  <Link
-                    href="/leaderboard"
-                    className={`text-sm font-medium px-2 py-1 rounded-md ${
-                      isActive("/leaderboard") ? "bg-wc-red/10 dark:bg-wc-purple/20 text-gradient-secondary" : "text-zinc-700 dark:text-zinc-300"
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {t("leaderboard")}
-                  </Link>
-                </>
-              ) : (
-                <div className="flex flex-col gap-2">
-                  <Button asChild variant="outline" onClick={() => setMobileMenuOpen(false)}>
+                <div className="flex items-center">
+                  <Button asChild variant="ghost" size="sm">
                     <Link href="/login">{t("login")}</Link>
                   </Button>
-                  <Button asChild onClick={() => setMobileMenuOpen(false)}>
+                  <Button asChild size="sm">
                     <Link href="/register">{t("register")}</Link>
                   </Button>
                 </div>
-              )}
-            </nav>
+                <hr className="h-6 w-px bg-border" />
+                <PreferencesMenu />
+              </>
+            )}
           </div>
-        )}
+        </div>
+
+        {/* Mobile */}
+        <div className="grid w-full grid-cols-3 items-center md:hidden">
+          <div className="justify-self-start">
+            <MobileMenu isLoggedIn={!!user} user={user} />
+          </div>
+          <div className="justify-self-center">
+            <Brand />
+          </div>
+          <div className="flex items-center gap-1 justify-self-end">
+            {!!user ? (
+              <>
+                <UserMenu username={user.username} firstName={user.first_name} lastName={user.last_name} />
+              </>
+            ) : (
+              <PreferencesMenu />
+            )}
+          </div>
+        </div>
       </div>
     </header>
   );

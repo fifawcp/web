@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "dashboard": "Panel",
+    "schedule": "Calendario",
+    "boards": "Tableros",
+    "login": "Iniciar sesión",
+    "register": "Crear cuenta",
+    "menuLabel": "Navegación",
+    "menuDescription": "Menú de navegación principal",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "userMenu": {
+    "accountMenu": "Menú de cuenta",
+    "profile": "Perfil",
+    "signOut": "Cerrar sesión",
+    "signingOut": "Cerrando sesión…"
+  },
+  "language": {
+    "label": "Idioma"
+  },
+  "preferences": {
+    "title": "Preferencias",
+    "appearance": "Apariencia",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeSystem": "Sistema"
+  },
+  "footer": {
+    "tagline": "Predice cada partido. Escala las clasificaciones.",
+    "disclaimer": "Este es un proyecto no oficial de fanáticos, sin afiliación, aval ni vinculación con la FIFA ni sus filiales. «FIFA», «Copa del Mundo», nombres de equipos, marcas de competencias y demás marcas registradas son propiedad de sus respectivos dueños y se mencionan aquí únicamente con fines de identificación.",
+    "rights": "© {year} World Cup Pick'em — proyecto independiente de fanáticos, solo con fines de entretenimiento.",
+    "developedBy": "Diseñado y desarrollado por"
+  }
+}

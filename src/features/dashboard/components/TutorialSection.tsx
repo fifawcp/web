@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { Calendar, GitBranch, Settings, Sparkles, Trophy, UserPlus, Users } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 

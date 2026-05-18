@@ -2,7 +2,8 @@ import { ArrowRight, Users } from "lucide-react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
-import { getRankColor } from "@/shared/lib/ui";
+import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
+import { getInitials, getRankColor } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
 import type { CompetitionLeaderboard, DashboardLeaderboard } from "../types/dashboard.types";
@@ -25,10 +26,6 @@ type ColumnProps = {
   emptyTitle: string;
   emptyDescription: string;
 };
-
-function getInitials(username: string): string {
-  return username.slice(0, 2).toUpperCase();
-}
 
 function LeaderboardColumn({ data, currentUserId, title, href, fullRankingLabel, youLabel, ptsLabel, emptyTitle, emptyDescription }: ColumnProps) {
   const isEmpty = !data || data.entries.length === 0;
@@ -55,9 +52,9 @@ function LeaderboardColumn({ data, currentUserId, title, href, fullRankingLabel,
               return (
                 <div key={entry.member.user_id} className={cn("flex items-center gap-2.5 px-4 py-2.5 border-b border-border", isMe && "bg-lime-50 dark:bg-lime-950/20")}>
                   <span className={`w-4 text-xs tabular-nums font-medium shrink-0 ${getRankColor(entry.rank, "text")}`}>{entry.rank}</span>
-                  <div className={cn("flex size-7 shrink-0 items-center justify-center rounded-full text-2xs font-semibold bg-muted", getRankColor(entry.rank, "text"))}>
-                    {getInitials(entry.member.username)}
-                  </div>
+                  <Avatar className="size-7">
+                    <AvatarFallback className={cn("text-2xs", getRankColor(entry.rank, "text"))}>{getInitials(entry.member.username)}</AvatarFallback>
+                  </Avatar>
                   <span className={cn("flex-1 text-sm truncate", isMe && "font-medium")}>{isMe ? youLabel : entry.member.username}</span>
                   <span className="text-xs font-medium tabular-nums shrink-0">
                     {entry.points} <span className="text-muted-foreground font-normal">{ptsLabel}</span>
