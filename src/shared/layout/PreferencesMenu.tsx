@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -13,10 +12,9 @@ import { LanguageSwitch, ThemeSwitch } from "./PreferenceControls";
 export function PreferencesMenu() {
   const t = useTranslations("preferences");
   const tLang = useTranslations("language");
-  const [open, setOpen] = useState(false);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover>
       <PopoverTrigger asChild>
         <Button aria-label={t("title")} size="sm" variant="outline" className="flex items-center justify-center rounded-md p-2">
           <Settings className="size-5" />

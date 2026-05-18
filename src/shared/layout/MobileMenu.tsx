@@ -67,7 +67,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
           </DrawerClose>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-3 gap-2 flex flex-col">
+        <div className="flex flex-1 flex-col gap-2 overflow-y-auto p-3">
           <span className="px-3 text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("menuLabel")}</span>
           <NavLinks variant="drawer" onNavigate={close} />
         </div>

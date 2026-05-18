@@ -1,19 +1,16 @@
-interface WCPIconProps {
+interface WCPProps {
   width?: number;
   height?: number;
-  scale?: number;
   className?: string;
   fill?: string;
 }
 
-export function WCP({ width = 32, height = 32, scale = 1, className = "", fill = "currentColor" }: WCPIconProps) {
-  const scaledWidth = width * scale;
-  const scaledHeight = height * scale;
+export function WCP({ width = 32, height = 32, className = "", fill = "currentColor" }: WCPProps) {
   const useGradient = fill === "gradient";
   const actualFill = useGradient ? "url(#wcp-gradient)" : fill;
 
   return (
-    <svg viewBox="400 100 620 550" width={scaledWidth} height={scaledHeight} className={className} fill={actualFill}>
+    <svg viewBox="400 100 620 550" width={width} height={height} className={className} fill={actualFill}>
       <defs>
         <linearGradient id="wcp-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="#731312" />
