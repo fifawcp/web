@@ -4,9 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+import { isNavItemActive, NAV_ITEMS } from "@/shared/lib/nav-config";
 import { cn } from "@/shared/lib/utils";
-
-import { isNavItemActive, NAV_ITEMS } from "../lib/nav-config";
 
 type NavLinksProps = {
   /** `bar` = horizontal desktop header, `drawer` = stacked mobile menu. */

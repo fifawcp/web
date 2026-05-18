@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
-import { GitHub } from "../icons/Github";
-import { LinkedIn } from "../icons/LinkedIn";
+import { GitHub } from "@/shared/icons/Github";
+import { LinkedIn } from "@/shared/icons/LinkedIn";
 
 import { Brand } from "./Brand";
 
@@ -59,7 +59,7 @@ export async function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-1 border-t border-border pt-4 ">
+        <div className="flex flex-col gap-1 border-t border-border pt-4">
           <p className="text-xs leading-relaxed text-muted-foreground text-center">{t("disclaimer")}</p>
           <p className="text-xs text-muted-foreground text-center">{t("rights", { year })}</p>
         </div>

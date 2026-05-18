@@ -23,8 +23,7 @@
     "title": "Preferencias",
     "appearance": "Apariencia",
     "themeLight": "Claro",
-    "themeDark": "Oscuro",
-    "themeSystem": "Sistema"
+    "themeDark": "Oscuro"
   },
   "footer": {
     "tagline": "Predice cada partido. Escala las clasificaciones.",

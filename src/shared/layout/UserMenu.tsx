@@ -1,18 +1,18 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { Check, ChevronRight, LogOut, Moon, Sun, User } from "lucide-react";
+import { useState } from "react";
+import { ChevronRight, LogOut, User } from "lucide-react";
 import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 
 import { logoutAndSignOut } from "@/features/auth/lib/logout";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { getInitials } from "@/shared/lib/ui";
-import { cn } from "@/shared/lib/utils";
 
 import { Button } from "../components/ui/button";
+
+import { LanguageSwitch, ThemeSwitch } from "./PreferenceControls";
 
 type UserMenuProps = {
   username: string;
@@ -20,25 +20,12 @@ type UserMenuProps = {
   lastName?: string;
 };
 
-const THEMES = [
-  { value: "light", icon: Sun },
-  { value: "dark", icon: Moon },
-] as const;
-
-const LANGUAGES = [
-  { code: "en", label: "English" },
-  { code: "es", label: "Español" },
-] as const;
-
 export function UserMenu({ username, firstName, lastName }: UserMenuProps) {
   const t = useTranslations("userMenu");
   const tPref = useTranslations("preferences");
   const tLang = useTranslations("language");
-  const locale = useLocale();
-  const { theme, setTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isPending, startTransition] = useTransition();
 
   const initials = getInitials(username, firstName, lastName);
   const fullName = [firstName, lastName].filter(Boolean).join(" ") || username;
@@ -46,19 +33,6 @@ export function UserMenu({ username, firstName, lastName }: UserMenuProps) {
   const handleSignOut = async () => {
     setLoading(true);
     await logoutAndSignOut("/");
-  };
-
-  const changeLanguage = (next: string) => {
-    if (next === locale) return;
-    startTransition(() => {
-      document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000`;
-      window.location.reload();
-    });
-  };
-
-  const themeLabel: Record<string, string> = {
-    light: tPref("themeLight"),
-    dark: tPref("themeDark"),
   };
 
   return (
@@ -89,7 +63,7 @@ export function UserMenu({ username, firstName, lastName }: UserMenuProps) {
 
         {/* Nav rows */}
         <div className="p-1.5">
-          <Link href={"/profile"} onClick={() => setOpen(false)} className="flex items-center gap-2.5 rounded-md px-2 py-2 text-sm transition-colors hover:bg-muted">
+          <Link href="/profile" onClick={() => setOpen(false)} className="flex items-center gap-2.5 rounded-md px-2 py-2 text-sm transition-colors hover:bg-muted">
             <User className="size-4 shrink-0 text-muted-foreground" />
             <span className="flex-1">{t("profile")}</span>
             <ChevronRight className="size-4 shrink-0 text-muted-foreground/60" />
@@ -99,50 +73,18 @@ export function UserMenu({ username, firstName, lastName }: UserMenuProps) {
         {/* Appearance */}
         <div className="border-t border-border px-1.5 pt-2 pb-1.5">
           <span className="px-1 pb-1.5 block text-2xs font-medium uppercase tracking-wider text-muted-foreground">{tPref("appearance")}</span>
-          <div className="grid grid-cols-2 gap-1">
-            {THEMES.map(({ value, icon: Icon }) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => setTheme(value)}
-                className={cn(
-                  "flex flex-col items-center gap-1 rounded-md border py-2 text-2xs font-medium transition-colors",
-                  theme === value ? "border-border bg-muted text-foreground" : "border-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
-                )}
-              >
-                <Icon className="size-4" />
-                {themeLabel[value]}
-              </button>
-            ))}
-          </div>
+          <ThemeSwitch />
         </div>
 
         {/* Language */}
         <div className="border-t border-border px-1.5 pt-2 pb-1.5">
           <span className="px-1 pb-1 block text-2xs font-medium uppercase tracking-wider text-muted-foreground">{tLang("label")}</span>
-          {LANGUAGES.map((lang) => (
-            <button
-              key={lang.code}
-              type="button"
-              onClick={() => changeLanguage(lang.code)}
-              disabled={isPending}
-              className="flex w-full items-center gap-2.5 rounded-md px-1.5 py-1.5 text-sm transition-colors hover:bg-muted disabled:opacity-50"
-            >
-              <span className="w-5 text-2xs font-semibold uppercase text-muted-foreground">{lang.code}</span>
-              <span className="flex-1 text-left">{lang.label}</span>
-              {lang.code === locale && <Check className="size-4" />}
-            </button>
-          ))}
+          <LanguageSwitch />
         </div>
 
         {/* Sign out */}
         <div className="border-t border-border p-1.5">
-          <Button
-            onClick={handleSignOut}
-            disabled={loading}
-            variant="outline"
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-sm transition-colors hover:bg-destructive/15 disabled:opacity-50 dark:hover:bg-destructive/25"
-          >
+          <Button variant="outline" size="sm" onClick={handleSignOut} disabled={loading} className="flex w-full items-center gap-2.5 rounded-md px-2 py-2">
             <LogOut className="size-4 shrink-0" />
             <span className="flex-1 text-left">{loading ? t("signingOut") : t("signOut")}</span>
             <ChevronRight className="size-4 shrink-0 opacity-50" />

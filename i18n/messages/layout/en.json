@@ -2,7 +2,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "schedule": "Schedule",
-    "boards": "Board",
+    "boards": "Boards",
     "login": "Log in",
     "register": "Sign up",
     "menuLabel": "Navigation",
@@ -23,8 +23,7 @@
     "title": "Preferences",
     "appearance": "Appearance",
     "themeLight": "Light",
-    "themeDark": "Dark",
-    "themeSystem": "System"
+    "themeDark": "Dark"
   },
   "footer": {
     "tagline": "Predict every match. Climb the leaderboards.",

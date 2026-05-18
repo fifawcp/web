@@ -9,6 +9,7 @@ import { logoutAndSignOut } from "@/features/auth/lib/logout";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Button } from "@/shared/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerTitle, DrawerTrigger } from "@/shared/components/ui/drawer";
+import { patchReleasePointerCapture } from "@/shared/lib/patch-pointer-capture";
 import { getInitials } from "@/shared/lib/ui";
 
 import { Brand } from "./Brand";
@@ -21,31 +22,18 @@ type SessionUser = {
 };
 
 type MobileMenuProps = {
-  isLoggedIn: boolean;
   user?: SessionUser;
 };
 
-export function MobileMenu({ isLoggedIn, user }: MobileMenuProps) {
+export function MobileMenu({ user }: MobileMenuProps) {
   const t = useTranslations("nav");
   const tUser = useTranslations("userMenu");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Suppress vaul ≤ 1.1.2 bug: releasePointerCapture fires after the pointer is
-  // already gone on mobile, throwing a NotFoundError at draggable.tsx:185.
+  // Workaround for a vaul ≤ 1.1.2 mobile drag bug — see patch-pointer-capture.ts.
   useEffect(() => {
-    const proto = Element.prototype;
-    const original = proto.releasePointerCapture;
-    proto.releasePointerCapture = function (pointerId: number) {
-      try {
-        original.call(this, pointerId);
-      } catch {
-        // Ignore NotFoundError — pointer was already released.
-      }
-    };
-    return () => {
-      proto.releasePointerCapture = original;
-    };
+    patchReleasePointerCapture();
   }, []);
 
   const close = () => setOpen(false);
@@ -79,15 +67,13 @@ export function MobileMenu({ isLoggedIn, user }: MobileMenuProps) {
           </DrawerClose>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-3">
+        <div className="flex-1 overflow-y-auto p-3 gap-2 flex flex-col">
           <span className="px-3 text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("menuLabel")}</span>
-          <div className="flex flex-col gap-1">
-            <NavLinks variant="drawer" onNavigate={close} />
-          </div>
+          <NavLinks variant="drawer" onNavigate={close} />
         </div>
 
         <div className="border-t border-border p-3">
-          {isLoggedIn && user ? (
+          {user ? (
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-3 px-1">
                 <Avatar className="size-9">
