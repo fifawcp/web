@@ -12,12 +12,19 @@
   --color-wc-orange: #ff6e3f;
   --color-wc-red-light: #d40100;
 
+  --color-gold: theme(colors.amber.500);
+  --color-silver: theme(colors.gray.400);
+  --color-bronze: theme(colors.amber.700);
+
   /* Layout dimensions */
   --header-height: 65px;
 
   /* Offset used when scrolling a date-group into view on /schedule.
     header (65px) + sticky filter+tabs bar (~108px when authed, 52px otherwise) + section gap (11px) */
   --schedule-scroll-offset: calc(var(--header-height) + 108px + 11px);
+
+  /* Offset used when scrolling the tutorial section into view (header + breathing room). */
+  --tutorial-scroll-offset: var(--header-height);
 
   --text-2xs: 0.625rem;
   --text-2xs--line-height: 0.875rem;
@@ -79,6 +86,16 @@
 /* Dark mode opacity for floating shapes */
 :where(.dark, .dark *) [style*="--dark-opacity"] {
   opacity: var(--dark-opacity) !important;
+}
+
+.text-gold {
+  color: var(--color-gold);
+}
+.text-silver {
+  color: var(--color-silver);
+}
+.text-bronze {
+  color: var(--color-bronze);
 }
 
 /* Gradient utility classes */
@@ -251,5 +268,13 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+}
+
+@layer base {
+  button:not([disabled]),
+  [role="button"]:not([disabled]) {
+    cursor: pointer;
   }
 }

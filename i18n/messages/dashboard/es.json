@@ -1,0 +1,114 @@
+{
+  "hero": {
+    "badge": "FIFA WCP · USA · México · Canadá",
+    "countdown": "● {days} días  · {hours} horas  · {minutes} minutos para el inicio",
+    "title": "Predice el Mundial. Vence a tus amigos.",
+    "subtitle": "Dos juegos, un trofeo. Completa tu bracket antes del inicio, ¡luego haz picks exactos para cada partido y escala en todos tus rankings de tus tableros!",
+    "cta": {
+      "makeYourPicks": "Haz tus picks",
+      "finishBracket": "Terminar mi bracket",
+      "seeMyBrackets": "Ver mis brackets",
+      "viewSchedule": "Ver calendario"
+    },
+    "welcome": {
+      "subtitle": "Completa estos pasos para empezar a competir con jugadores de todo el mundo.",
+      "cta": "Iniciar tutorial"
+    },
+    "tournamentStats": {
+      "tournamentBegins": "Inicia el Mundial",
+      "tournamentEnds": "Termina el Mundial",
+      "tournamentByNumbers": "El mundial en números",
+      "days": "Días",
+      "hours": "Horas",
+      "minutes": "Minutos",
+      "seconds": "Segundos",
+      "totalMatches": "Partidos totales",
+      "knockouts": "Eliminatorias",
+      "groupMatches": "Fase de grupos",
+      "teams": "Equipos"
+    }
+  },
+  "tutorial": {
+    "title": "Cómo participar",
+    "subtitle": "Empieza en 6 simples pasos",
+    "steps": {
+      "createAccount": {
+        "step": "1",
+        "title": "Crea una Cuenta",
+        "description": "Regístrate y crea tu perfil para empezar a competir con jugadores de todo el mundo."
+      },
+      "joinOrCreateBoard": {
+        "step": "2",
+        "title": "Únete o Crea un Tablero",
+        "description": "Crea tu propio tablero privado e invita amigos con un código, o únete a uno existente al instante. Si no te unes a ningún tablero, participarás automáticamente en el Tablero Global con todos los usuarios."
+      },
+      "tournaments": {
+        "step": "3",
+        "title": "Juega en Torneos",
+        "description": "Los dueños de los tableros pueden crear torneos para sus miembros. Si te unes a un tablero, participarás automáticamente en todos sus torneos."
+      },
+      "customRules": {
+        "step": "4",
+        "title": "Personaliza la Competencia",
+        "description": "Cada torneo puede configurarse de manera diferente según cómo tu tablero quiera jugar y puntuar."
+      },
+      "pickems": {
+        "step": "5",
+        "title": "Predice Resultados del Torneo",
+        "description": "Usa Pickems para predecir posiciones de fase de grupos y resultados completos del bracket. Gana puntos por cada posición correcta y puntos adicionales por predecir correctamente el avance de cada equipo."
+      },
+      "schedule": {
+        "step": "6",
+        "title": "Predice Marcadores",
+        "description": "Usa el modo Calendario para predecir el marcador de cada partido. Gana puntos por predecir correctamente al ganador y puntos bonus por el marcador exacto."
+      }
+    },
+    "cta": "Crea tu cuenta"
+  },
+  "stats": {
+    "predictedChampion": "Campeón predicho",
+    "pickemRank": "Ranking pick'em",
+    "matchRank": "Ranking picks de partidos",
+    "nextMatch": "Próximo partido",
+    "vs": "vs"
+  },
+  "pickStatus": {
+    "title": "Estado de picks",
+    "notLoggedIn": "Tipos de picks",
+    "bracket": {
+      "title": "Bracket Pick'em",
+      "description": "3 pasos · grupos, mejores terceros, eliminatorias. Cierra al inicio.",
+      "step": "Paso {current} de 3",
+      "continue": "Continuar",
+      "start": "Empezar",
+      "see": "Ver"
+    },
+    "matchPicks": {
+      "title": "Picks de Partidos",
+      "description": "Marcadores exactos por partido. Cierra antes del inicio de cada uno.",
+      "match": "Partido {current} de {total}",
+      "continue": "Continuar",
+      "start": "Empezar",
+      "see": "Ver"
+    },
+    "awards": {
+      "title": "Premios del Mundial",
+      "description": "Predice los ganadores de premios individuales para puntos bonus.",
+      "picked": "Premio {count} de 4",
+      "continue": "Continuar",
+      "start": "Empezar",
+      "see": "Ver"
+    }
+  },
+  "leaderboard": {
+    "pickemTitle": "Top 5 Pick'em",
+    "matchTitle": "Top 5 Picks de Partidos",
+    "you": "Tú",
+    "pts": "pts",
+    "fullRanking": "Ranking completo",
+    "empty": {
+      "title": "Sin rankings aún",
+      "description": "Los rankings aparecerán cuando inicie el mundial."
+    }
+  }
+}

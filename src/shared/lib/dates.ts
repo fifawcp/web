@@ -43,3 +43,14 @@ export function formatDateHeader(date: Date, locale: string): string {
     day: "numeric",
   }).format(date);
 }
+
+/**
+ * Formats a date to a month day format
+ * @example formatShortDate(new Date('2026-06-14'), 'en') // "Jun 14"
+ */
+export function formatShortDate(date: Date, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    month: "long",
+    day: "numeric",
+  }).format(date);
+}

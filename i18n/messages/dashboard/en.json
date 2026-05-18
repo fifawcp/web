@@ -1,0 +1,115 @@
+{
+  "hero": {
+    "badge": "FIFA WCP · USA · Mexico · Canada",
+    "countdown": "● {days} days  ·  {hours} hours · {minutes} minutes until kickoff",
+    "title": "Predict the World Cup. Beat your friends.",
+    "subtitle": "Two games, one trophy. Lock in your full bracket before kickoff, then place exact-score picks for every match and climb all your boards leaderboards!",
+    "cta": {
+      "makeYourPicks": "Make your picks",
+      "finishBracket": "Finish my bracket",
+      "seeMyBrackets": "See my brackets",
+      "viewSchedule": "View schedule"
+    },
+    "welcome": {
+      "subtitle": "Complete these steps to start competing with players around the world.",
+      "cta": "Start tutorial"
+    },
+    "tournamentStats": {
+      "tournamentBegins": "World Cup begins",
+      "tournamentEnds": "World Cup ends",
+      "tournamentByNumbers": "World Cup by the numbers",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "totalMatches": "Total matches",
+      "knockouts": "Knockouts",
+      "groupMatches": "Group matches",
+      "teams": "Teams"
+    }
+  },
+  "tutorial": {
+    "title": "How to participate",
+    "subtitle": "Get started in 6 simple steps",
+    "steps": {
+      "createAccount": {
+        "step": "1",
+        "title": "Create an Account",
+        "description": "Sign up and create your profile to start competing with other players around the world."
+      },
+      "joinOrCreateBoard": {
+        "step": "2",
+        "title": "Join or Create a Board",
+        "description": "Create your own private board and invite friends with a join code, or join an existing one instantly. If you don't join any board, you'll still participate automatically in the Global Board with all app users."
+      },
+      "tournaments": {
+        "step": "3",
+        "title": "Play in Tournaments",
+        "description": "Board owners can create tournaments for their members. If you join a board, you'll automatically participate in all its tournaments."
+      },
+      "customRules": {
+        "step": "4",
+        "title": "Customize the Competition",
+        "description": "Each tournament can be configured differently depending on how your board wants to play and score points."
+      },
+      "pickems": {
+        "step": "5",
+        "title": "Predict Tournament Results",
+        "description": "Use Pickems to predict group stage standings and full bracket results. Earn points for every correct position and additional points for correctly predicting how far each team advances."
+      },
+      "schedule": {
+        "step": "6",
+        "title": "Predict Match Scores",
+        "description": "Use the Schedule mode to predict the score of every match. Earn points for correctly predicting the winner and bonus points for the exact final score."
+      }
+    },
+    "cta": "Create your account"
+  },
+  "pickStatus": {
+    "title": "Pick status",
+    "notLoggedIn": "Pick types",
+    "bracket": {
+      "title": "Pick'em Bracket",
+      "description": "3 steps · groups, best thirds, knockout. Locks at kickoff.",
+      "step": "Step {current} of 3",
+      "continue": "Continue",
+      "start": "Start",
+      "see": "See"
+    },
+    "matchPicks": {
+      "title": "Match Picks",
+      "description": "Exact scores per match. Closes before kickoff.",
+      "match": "Match {current} of {total}",
+      "continue": "Continue",
+      "start": "Start",
+      "see": "See"
+    },
+    "awards": {
+      "title": "World Cup Awards",
+      "description": "Predict the individual award winners for bonus points.",
+      "picked": "Award {count} of 4",
+      "continue": "Continue",
+      "start": "Start",
+      "see": "See"
+    }
+  },
+  "stats": {
+    "predictedChampion": "Predicted champion",
+    "pickemRank": "Pick'em ranking",
+    "matchRank": "Match Picks ranking",
+    "nextMatch": "Next match",
+    "vs": "vs"
+  },
+
+  "leaderboard": {
+    "pickemTitle": "Pick'em Top 5",
+    "matchTitle": "Match Picks Top 5",
+    "you": "You",
+    "pts": "pts",
+    "fullRanking": "Full ranking",
+    "empty": {
+      "title": "No rankings yet",
+      "description": "Rankings will appear once the World Cup starts."
+    }
+  }
+}
