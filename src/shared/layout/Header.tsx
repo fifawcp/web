@@ -18,7 +18,7 @@ export async function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-sm">
       <div className="container mx-auto flex h-16 items-center px-4 sm:px-6 lg:px-8">
         {/* Desktop */}
-        <div className="hidden w-full grid-cols-[1fr_auto_1fr] items-center gap-6 md:grid">
+        <div className="hidden w-full grid-cols-[1fr_auto_1fr] items-center gap-6 lg:grid">
           <Brand className="justify-self-start" />
           <div className="justify-self-center">
             <NavLinks variant="bar" />
@@ -45,7 +45,7 @@ export async function Header() {
         </div>
 
         {/* Mobile */}
-        <div className="grid w-full grid-cols-3 items-center md:hidden">
+        <div className="grid w-full grid-cols-3 items-center lg:hidden">
           <div className="justify-self-start">
             <MobileMenu user={user} />
           </div>

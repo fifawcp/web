@@ -3,6 +3,8 @@
     "dashboard": "Dashboard",
     "schedule": "Calendario",
     "boards": "Tableros",
+    "standings": "Posiciones",
+    "bracket": "Eliminatorias",
     "login": "Iniciar sesión",
     "register": "Crear cuenta",
     "menuLabel": "Navegación",
@@ -55,6 +57,14 @@
     "terms": {
       "title": "Términos del servicio",
       "body": "Estamos finalizando los términos del servicio para usar World Cup Pick'em."
+    },
+    "standings": {
+      "title": "Posiciones",
+      "body": "Pronto: tablas de la fase de grupos y posiciones completas del torneo."
+    },
+    "bracket": {
+      "title": "Eliminatorias",
+      "body": "Pronto: el cuadro interactivo de eliminatorias para pronosticar cada ronda."
     }
   }
 }

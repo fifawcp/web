@@ -3,6 +3,8 @@
     "dashboard": "Dashboard",
     "schedule": "Schedule",
     "boards": "Boards",
+    "standings": "Standings",
+    "bracket": "Bracket",
     "login": "Log in",
     "register": "Sign up",
     "menuLabel": "Navigation",
@@ -55,6 +57,14 @@
     "terms": {
       "title": "Terms of service",
       "body": "The terms of service for using World Cup Pick'em are being finalized."
+    },
+    "standings": {
+      "title": "Standings",
+      "body": "Live group-stage tables and full tournament standings are on the way."
+    },
+    "bracket": {
+      "title": "Bracket",
+      "body": "The interactive knockout bracket for predicting every round is on the way."
     }
   }
 }

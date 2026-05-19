@@ -4,6 +4,8 @@ export const NAV_ITEMS = [
   { key: "dashboard", href: "/" },
   { key: "schedule", href: "/schedule" },
   { key: "boards", href: "/boards" },
+  { key: "standings", href: "/standings" },
+  { key: "bracket", href: "/bracket" },
 ] as const;
 
 // About routes — stub pages under src/app, keyed to the `pages` i18n namespace.
