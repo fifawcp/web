@@ -8,7 +8,7 @@ import { useLanguage } from "@/shared/hooks/useLanguage";
 import { LANGUAGES, THEMES } from "@/shared/lib/preferences";
 import { cn } from "@/shared/lib/utils";
 
-/** Two-column light/dark theme picker. Shared by PreferencesMenu and UserMenu. */
+/** Segmented light/dark theme control. Shared by PreferencesMenu and UserMenu. */
 export function ThemeSwitch() {
   const t = useTranslations("preferences");
   const { theme, setTheme } = useTheme();
@@ -19,18 +19,18 @@ export function ThemeSwitch() {
   };
 
   return (
-    <div className="grid grid-cols-2 gap-1">
+    <div className="flex rounded-md bg-muted p-0.5">
       {THEMES.map(({ value, icon: Icon }) => (
         <button
           key={value}
           type="button"
           onClick={() => setTheme(value)}
           className={cn(
-            "flex flex-col items-center gap-1 rounded-md border py-2 text-2xs font-medium transition-colors",
-            theme === value ? "border-border bg-muted text-foreground" : "border-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
+            "flex flex-1 items-center justify-center gap-1.5 rounded py-1.5 text-xs font-medium transition-colors",
+            theme === value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
           )}
         >
-          <Icon className="size-4" />
+          <Icon className="size-3.5" />
           {themeLabel[value]}
         </button>
       ))}

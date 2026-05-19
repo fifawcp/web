@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight, LogOut, User } from "lucide-react";
+import { ChevronDown, ChevronRight, LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -9,6 +9,7 @@ import { logoutAndSignOut } from "@/features/auth/lib/logout";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { getInitials } from "@/shared/lib/ui";
+import { cn } from "@/shared/lib/utils";
 
 import { Button } from "../components/ui/button";
 
@@ -41,11 +42,14 @@ export function UserMenu({ username, firstName, lastName }: UserMenuProps) {
         <button
           type="button"
           aria-label={t("accountMenu")}
-          className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="flex items-center gap-1.5 rounded-full p-0.5 pr-2 transition-colors hover:bg-muted outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
-          <Avatar className="size-9 cursor-pointer">
-            <AvatarFallback className="bg-primary-foreground text-primary border border-border dark:bg-primary dark:text-primary-foreground">{initials}</AvatarFallback>
+          <Avatar className="size-8">
+            <AvatarFallback className="bg-primary-foreground text-primary border border-border text-xs dark:bg-primary dark:text-primary-foreground">
+              {initials}
+            </AvatarFallback>
           </Avatar>
+          <ChevronDown className={cn("size-3 shrink-0 text-muted-foreground transition-transform duration-200", open && "rotate-180")} />
         </button>
       </PopoverTrigger>
 
@@ -84,7 +88,7 @@ export function UserMenu({ username, firstName, lastName }: UserMenuProps) {
 
         {/* Sign out */}
         <div className="border-t border-border p-1.5">
-          <Button variant="outline" size="sm" onClick={handleSignOut} disabled={loading} className="flex w-full items-center gap-2.5 rounded-md px-2 py-2">
+          <Button variant="ghost" size="sm" onClick={handleSignOut} disabled={loading} className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-destructive">
             <LogOut className="size-4 shrink-0" />
             <span className="flex-1 text-left">{loading ? t("signingOut") : t("signOut")}</span>
             <ChevronRight className="size-4 shrink-0 opacity-50" />

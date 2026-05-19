@@ -1,6 +1,6 @@
 {
   "nav": {
-    "dashboard": "Panel",
+    "dashboard": "Dashboard",
     "schedule": "Calendario",
     "boards": "Tableros",
     "login": "Iniciar sesión",
@@ -26,9 +26,35 @@
     "themeDark": "Oscuro"
   },
   "footer": {
-    "tagline": "Predice cada partido. Escala las clasificaciones.",
+    "tagline": "Pronostica cada partido del Mundial 2026 y escala la clasificación con tus amigos.",
+    "play": "Juego",
+    "about": "Acerca de",
+    "legal": "Legal",
+    "developedBy": "Diseñado y desarrollado por",
     "disclaimer": "Este es un proyecto no oficial de fanáticos, sin afiliación, aval ni vinculación con la FIFA ni sus filiales. «FIFA», «Copa del Mundo», nombres de equipos, marcas de competencias y demás marcas registradas son propiedad de sus respectivos dueños y se mencionan aquí únicamente con fines de identificación.",
-    "rights": "© {year} World Cup Pick'em — proyecto independiente de fanáticos, solo con fines de entretenimiento.",
-    "developedBy": "Diseñado y desarrollado por"
+    "rights": "© {year} World Cup Pick'em — proyecto independiente de fanáticos, solo con fines de entretenimiento."
+  },
+  "pages": {
+    "comingSoonBadge": "Próximamente",
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "body": "Pronto: una guía paso a paso para hacer pronósticos, unirte a tableros y sumar puntos."
+    },
+    "rules": {
+      "title": "Reglas y puntuación",
+      "body": "Pronto: el desglose completo de cómo se otorgan los puntos por cada pronóstico."
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "body": "Pronto: respuestas a las preguntas más frecuentes sobre el Pick'em del Mundial 2026."
+    },
+    "privacy": {
+      "title": "Política de privacidad",
+      "body": "Estamos finalizando nuestra política de privacidad sobre cómo se recopilan y manejan tus datos."
+    },
+    "terms": {
+      "title": "Términos del servicio",
+      "body": "Estamos finalizando los términos del servicio para usar World Cup Pick'em."
+    }
   }
 }

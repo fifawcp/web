@@ -47,6 +47,7 @@ export default function CallbackPage() {
           redirect: false,
         });
 
+        router.refresh();
         router.replace("/");
       } catch {
         apiError.set({ code: "AUTHENTICATION_FAILED" });

@@ -16,7 +16,7 @@ export async function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-sm">
-      <div className="mx-auto flex h-16 items-center px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto flex h-16 items-center px-4 sm:px-6 lg:px-8">
         {/* Desktop */}
         <div className="hidden w-full grid-cols-[1fr_auto_1fr] items-center gap-6 md:grid">
           <Brand className="justify-self-start" />

@@ -86,7 +86,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
                   <span className="truncate text-xs text-muted-foreground">@{user.username}</span>
                 </div>
               </div>
-              <Button variant="outline" size="sm" onClick={handleSignOut} disabled={loading} className="w-full">
+              <Button variant="ghost" size="sm" onClick={handleSignOut} disabled={loading} className="w-full text-destructive">
                 <LogOut className="size-4" />
                 {loading ? tUser("signingOut") : tUser("signOut")}
               </Button>
