@@ -8,6 +8,7 @@ import { LANGUAGES, THEMES } from "@/shared/lib/preferences";
 import { cn } from "@/shared/lib/utils";
 
 /** Segmented light/dark theme control. Shared by PreferencesMenu and UserMenu. */
+const buttonClass = "flex flex-1 items-center justify-center gap-1.5 rounded py-1.5 text-xs font-medium transition-colors";
 export function ThemeSwitch() {
   const t = useTranslations("preferences");
   const { theme, setTheme } = useTheme();
@@ -24,13 +25,10 @@ export function ThemeSwitch() {
           key={value}
           type="button"
           onClick={() => setTheme(value)}
-          className={cn(
-            "flex flex-1 items-center justify-center gap-1.5 rounded py-1.5 text-xs font-medium transition-colors",
-            theme === value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-          )}
+          className={cn(buttonClass, theme === value ? "bg-background text-foreground shadow-sm font-semibold" : "text-muted-foreground hover:text-foreground")}
         >
           <Icon className="size-3.5" />
-          {themeLabel[value]}
+          <span className="hidden lg:inline">{themeLabel[value]}</span>
         </button>
       ))}
     </div>
@@ -53,12 +51,13 @@ export function LanguageSwitch() {
             disabled={isPending}
             aria-pressed={isActive}
             className={cn(
-              "flex flex-1 items-center justify-center gap-1.5 rounded py-1.5 text-xs font-medium transition-colors disabled:opacity-50",
-              isActive ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              buttonClass,
+              "disabled:opacity-50",
+              isActive ? "bg-background text-foreground shadow-sm font-semibold" : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <span className="font-mono text-2xs font-semibold uppercase tracking-wider opacity-70">{lang.code}</span>
-            {lang.label}
+            <span className="font-mono text-2xs uppercase tracking-wider opacity-70">{lang.code}</span>
+            <span className="hidden lg:inline">{lang.label}</span>
           </button>
         );
       })}
