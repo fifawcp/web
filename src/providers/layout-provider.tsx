@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "next-themes";
 
 import { SessionMonitor } from "@/features/auth/components/SessionMonitor";
+import { Toaster } from "@/shared/components/ui/sonner";
 import { QueryProvider } from "@/shared/lib/query/QueryProvider";
 
 import { SessionProvider } from "./session-provider";
@@ -17,6 +18,7 @@ export function Providers({ children, messages, locale }: { children: React.Reac
           <SessionMonitor />
           <QueryProvider>{children}</QueryProvider>
         </SessionProvider>
+        <Toaster position="bottom-right" />
       </ThemeProvider>
     </NextIntlClientProvider>
   );

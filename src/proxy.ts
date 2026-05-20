@@ -72,7 +72,7 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/", "/schedule", "/boards/:path*", "/login", "/register", "/callback"],
+  matcher: ["/", "/schedule", "/pickems", "/boards/:path*", "/login", "/register", "/callback"],
 };
 
 type RefreshSuccess = { accessToken: string; expiresAt: string; refreshToken: string; expires?: Date };

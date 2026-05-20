@@ -23,9 +23,9 @@ const nextConfig: NextConfig = {
       ],
 
       // afterFiles: proxy non-auth API routes to the backend
-      // Excludes paths owned by custom route handlers (e.g. matches/:id/pick) —
+      // Excludes paths owned by custom route handlers (e.g. matches/:id/pick, pickems/{groups,best-thirds,bracket}) —
       // afterFiles rewrites run before dynamic routes, so a match here would swallow them
-      afterFiles: [{ source: "/api/:path((?!auth/|matches/[^/]+/pick).*)", destination: `${upstream}/api/:path*` }],
+      afterFiles: [{ source: "/api/:path((?!auth/|matches/[^/]+/pick|pickems/(?:groups|best-thirds|bracket)).*)", destination: `${upstream}/api/:path*` }],
 
       fallback: [],
     };

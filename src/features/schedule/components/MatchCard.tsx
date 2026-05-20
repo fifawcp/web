@@ -8,6 +8,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 import { formatKickoffTime } from "@/shared/lib/dates";
+import { getTeamName } from "@/shared/lib/getTeamName";
 import { cn } from "@/shared/lib/utils";
 
 import { useUpdatePick } from "../hooks/useUpdatePick";
@@ -142,7 +143,7 @@ function TeamColumn({ team, side, locale, dim }: { team: Team | null; side: "hom
 }
 
 function TeamName({ team, locale }: { team: Team; locale: string }) {
-  const name = team.name[locale];
+  const name = getTeamName(team, locale);
 
   // BIH is too long for a single line, force a wrap before "Herzegovina" so it doesn't get truncated
   if (team.fifa_code === "BIH") {

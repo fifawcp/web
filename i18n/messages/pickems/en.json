@@ -1,0 +1,81 @@
+{
+  "title": "Pick'em",
+  "locked": "Picks are locked. The tournament has started",
+  "lockedDescription": "You can still view your picks, but no further edits are possible.",
+  "stepper": {
+    "1": "Group stage",
+    "2": "Best thirds",
+    "3": "Bracket"
+  },
+  "stepCrumb": "Step {n} of {total}",
+  "common": {
+    "back": "Back",
+    "continue": "Continue",
+    "continueToStep2": "Step 2",
+    "continueToStep3": "Step 3",
+    "saveDraft": "Save draft",
+    "saving": "Saving..."
+  },
+  "groups": {
+    "title": "Predict the group stage",
+    "subtitleMobile": "Drag teams to set the finishing order for each group. 1st & 2nd advance automatically; 3rd goes to next step.",
+    "sectionLabel": "Groups",
+    "dragToOrder": "Drag to order",
+    "reset": "Reset",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "tipsHeader": "Tip",
+    "tipsBody": "Drag the <handle></handle> to reorder teams within each group.",
+    "tipsDismiss": "Dismiss tip",
+    "groupLabel": "Group {code}",
+    "badges": {
+      "qualify": "Q",
+      "third": "3rd",
+      "out": "Out"
+    }
+  },
+  "bestThirds": {
+    "title": "Best third-place teams",
+    "subtitle": "From the 12 third-placed sides above, pick the {total} you think will advance to the Round of 32.",
+    "moreNeeded": "{n, plural, one {# more selection needed} other {# more selections needed}}",
+    "groupTag": "Group {code}"
+  },
+  "bracket": {
+    "title": "Build your bracket",
+    "subtitleDesktop": "Pick the winner of every knockout match from the Round of 32 to the Final.",
+    "picksLeft": "{n} picks left",
+    "pickWinner": "Pick winner",
+    "champion": "Champion",
+    "pickFinalWinner": "Pick the Final winner",
+    "submit": "Submit picks",
+    "hint": "You can change your picks at any time before submitting.",
+    "rounds": {
+      "round_of_32": "Round of 32",
+      "round_of_16": "Round of 16",
+      "quarterfinals": "Quarterfinals",
+      "semifinals": "Semifinals",
+      "third_place": "Third place",
+      "final": "Final"
+    },
+    "roundsShort": {
+      "round_of_32": "R32",
+      "round_of_16": "R16",
+      "quarterfinals": "QF",
+      "semifinals": "SF",
+      "third_place": "3rd",
+      "final": "Final"
+    },
+    "roundLeft": "{n} left",
+    "pickRoundCount": "Pick {n} winners"
+  },
+  "toasts": {
+    "groupsSaved": "Groups saved",
+    "thirdsSaved": "Best thirds saved",
+    "bracketSubmitted": "Picks saved",
+    "picksClearedByGroupChange": "{n, plural, one {Your bracket changed: # pick was cleared.} other {Your bracket changed: # picks were cleared.}}",
+    "groupsChangedReset": "Group order changed. Best thirds and bracket picks were reset.",
+    "thirdsChangedReset": "Best thirds changed. Bracket picks were reset.",
+    "saveFailed": "Could not save. Try again.",
+    "submitFailed": "Could not submit your bracket. Try again."
+  }
+}

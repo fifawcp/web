@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/shared/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
+import { getTeamName } from "@/shared/lib/getTeamName";
 import { cn } from "@/shared/lib/utils";
 
 import type { Team } from "../types/schedule.types";
@@ -26,7 +27,7 @@ export function TeamCombobox({ value, onChange, teams, locale, variant = "chip",
   const [open, setOpen] = useState(false);
 
   const selected = value === "all" ? null : (teams.find((team) => team.fifa_code === value) ?? null);
-  const valueLabel = selected ? selected.name[locale] : t("team.all");
+  const valueLabel = selected ? getTeamName(selected, locale) : t("team.all");
 
   const select = (next: string) => {
     onChange(next);
@@ -59,7 +60,7 @@ export function TeamCombobox({ value, onChange, teams, locale, variant = "chip",
                 <span>{t("team.all")}</span>
               </CommandItem>
               {teams.map((team) => {
-                const label = team.name[locale];
+                const label = getTeamName(team, locale);
                 return (
                   <CommandItem key={team.fifa_code} value={`${label} ${team.fifa_code}`} onSelect={() => select(team.fifa_code)} data-checked={value === team.fifa_code}>
                     <Check className={cn("size-4", value === team.fifa_code ? "opacity-100" : "opacity-0")} />
