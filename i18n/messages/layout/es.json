@@ -23,7 +23,7 @@
   },
   "preferences": {
     "title": "Preferencias",
-    "appearance": "Apariencia",
+    "theme": "Tema",
     "themeLight": "Claro",
     "themeDark": "Oscuro"
   },
@@ -33,8 +33,9 @@
     "about": "Acerca de",
     "legal": "Legal",
     "developedBy": "Diseñado y desarrollado por",
-    "disclaimer": "Este es un proyecto no oficial de fanáticos, sin afiliación, aval ni vinculación con la FIFA ni sus filiales. «FIFA», «Copa del Mundo», nombres de equipos, marcas de competencias y demás marcas registradas son propiedad de sus respectivos dueños y se mencionan aquí únicamente con fines de identificación.",
-    "rights": "© {year} World Cup Pick'em — proyecto independiente de fanáticos, solo con fines de entretenimiento."
+    "disclaimer": "Este es un proyecto no oficial de aficionados, sin afiliación, aval ni vinculación con la FIFA ni sus filiales. «FIFA», «Copa del Mundo», nombres de equipos, marcas de competencias y demás marcas registradas son propiedad de sus respectivos dueños y se mencionan aquí únicamente con fines de identificación.",
+    "copyright": "© {year} World Cup Pick'em",
+    "rights": "Proyecto aficionado independiente con el único fin de entretener."
   },
   "pages": {
     "comingSoonBadge": "Próximamente",

@@ -11,8 +11,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/
 import { getInitials } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
-import { Button } from "../components/ui/button";
-
 import { LanguageSwitch, ThemeSwitch } from "./PreferenceControls";
 
 type UserMenuProps = {
@@ -74,25 +72,29 @@ export function UserMenu({ username, firstName, lastName }: UserMenuProps) {
           </Link>
         </div>
 
-        {/* Appearance */}
-        <div className="border-t border-border px-1.5 pt-2 pb-1.5">
-          <span className="px-1 pb-1.5 block text-2xs font-medium uppercase tracking-wider text-muted-foreground">{tPref("appearance")}</span>
+        {/* Theme */}
+        <div className="border-t border-border p-2">
+          <span className="px-1 pb-1.5 block text-2xs font-medium uppercase tracking-wider text-muted-foreground">{tPref("theme")}</span>
           <ThemeSwitch />
         </div>
 
         {/* Language */}
-        <div className="border-t border-border px-1.5 pt-2 pb-1.5">
+        <div className="p-2">
           <span className="px-1 pb-1 block text-2xs font-medium uppercase tracking-wider text-muted-foreground">{tLang("label")}</span>
           <LanguageSwitch />
         </div>
 
-        {/* Sign out */}
+        {/* Sign out — destructive text, hover swaps to the theme-aware destructive-hover var */}
         <div className="border-t border-border p-1.5">
-          <Button variant="ghost" size="sm" onClick={handleSignOut} disabled={loading} className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-destructive">
+          <button
+            type="button"
+            onClick={handleSignOut}
+            disabled={loading}
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10 hover:text-destructive-hover disabled:opacity-50"
+          >
             <LogOut className="size-4 shrink-0" />
             <span className="flex-1 text-left">{loading ? t("signingOut") : t("signOut")}</span>
-            <ChevronRight className="size-4 shrink-0 opacity-50" />
-          </Button>
+          </button>
         </div>
       </PopoverContent>
     </Popover>

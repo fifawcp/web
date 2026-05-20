@@ -23,7 +23,7 @@
   },
   "preferences": {
     "title": "Preferences",
-    "appearance": "Appearance",
+    "theme": "Theme",
     "themeLight": "Light",
     "themeDark": "Dark"
   },
@@ -34,7 +34,8 @@
     "legal": "Legal",
     "developedBy": "Designed & developed by",
     "disclaimer": "This is an unofficial fan project with no affiliation to, endorsement by, or connection to FIFA or any of its affiliates. \"FIFA\", \"World Cup\", team names, competition marks, and all related trademarks are the property of their respective owners and are referenced here for identification purposes only.",
-    "rights": "© {year} World Cup Pick'em — an independent fan project for entertainment purposes only."
+    "copyright": "© {year} World Cup Pick'em",
+    "rights": "An independent fan project for entertainment purposes only."
   },
   "pages": {
     "comingSoonBadge": "Coming soon",

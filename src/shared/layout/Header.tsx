@@ -44,17 +44,10 @@ export async function Header() {
           </div>
         </div>
 
-        {/* Mobile */}
-        <div className="grid w-full grid-cols-3 items-center lg:hidden">
-          <div className="justify-self-start">
-            <MobileMenu user={user} />
-          </div>
-          <div className="justify-self-center">
-            <Brand />
-          </div>
-          <div className="flex items-center gap-1 justify-self-end">
-            {user ? <UserMenu username={user.username} firstName={user.first_name} lastName={user.last_name} /> : <PreferencesMenu />}
-          </div>
+        {/* Mobile — logo left, burger right. Identity + preferences live in the drawer. */}
+        <div className="flex w-full items-center justify-between lg:hidden">
+          <Brand />
+          <MobileMenu user={user} />
         </div>
       </div>
     </header>

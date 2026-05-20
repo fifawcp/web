@@ -9,15 +9,16 @@ import { Brand } from "./Brand";
 
 const DEVELOPERS = [
   {
-    name: "Julian Pereira",
-    github: "https://github.com/Nzone56",
-    linkedin: "https://www.linkedin.com/in/jpereirap",
-  },
-  {
     name: "Nicolas Conde",
     github: "https://github.com/ncondes",
     linkedin: "https://www.linkedin.com/in/ncondes",
   },
+  {
+    name: "Julian Pereira",
+    github: "https://github.com/Nzone56",
+    linkedin: "https://www.linkedin.com/in/jpereirap",
+  },
+
   {
     name: "Axel Gomez",
     github: "https://github.com/Axel072",
@@ -25,8 +26,11 @@ const DEVELOPERS = [
   },
 ] as const;
 
-const sectionLabel = "text-2xs font-medium uppercase tracking-wider text-muted-foreground";
-const navLink = "text-xs md:text-sm text-muted-foreground transition-colors hover:text-foreground";
+// Hierarchy: section titles stay dim/uppercase (labels), links default to full
+// foreground (actionable, matches the "DESIGNED & DEVELOPED BY → dev name" pattern),
+// and dim on hover. Inverts the usual muted→foreground hover convention.
+const sectionLabel = "text-2xs font-medium uppercase tracking-wider text-muted-foreground/90";
+const navLink = "text-xs md:text-sm text-foreground transition-colors hover:text-muted-foreground";
 const iconLink = "flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground";
 // grow + basis lets columns wrap and fill the row at every width; min-w-0 prevents x-overflow.
 const column = "flex min-w-0 grow basis-32 flex-col gap-3";
@@ -92,32 +96,41 @@ export async function Footer() {
               </ul>
             </nav>
 
-            {/* Credits */}
+            {/* Pickems brand + credits — right-side block, Claude-style */}
             <div className={column}>
-              <span className={sectionLabel}>{t("developedBy")}</span>
-              <ul className="flex flex-col gap-1.5">
-                {DEVELOPERS.map((dev) => (
-                  <li key={dev.name} className="flex items-center gap-x-1.5 gap-y-1">
-                    <span className="text-xs md:text-sm font-medium text-foreground">{dev.name}</span>
-                    <span className="flex items-center">
-                      <a href={dev.github} target="_blank" rel="noreferrer" aria-label={`${dev.name} on GitHub`} className={iconLink}>
-                        <GitHub className="size-4" />
-                      </a>
-                      <a href={dev.linkedin} target="_blank" rel="noreferrer" aria-label={`${dev.name} on LinkedIn`} className={iconLink}>
-                        <LinkedIn className="size-4" />
-                      </a>
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <div className="flex flex-col gap-2">
+                <span className={sectionLabel}>{t("developedBy")}</span>
+                <ul className="flex flex-col gap-1.5">
+                  {DEVELOPERS.map((dev) => (
+                    <li key={dev.name} className="flex items-center gap-2">
+                      <span className="w-26 shrink-0 truncate text-sm font-medium text-foreground">{dev.name}</span>
+                      <span className="flex items-center">
+                        <a href={dev.github} target="_blank" rel="noreferrer" aria-label={`${dev.name} on GitHub`} className={iconLink}>
+                          <GitHub className="size-4" />
+                        </a>
+                        <a href={dev.linkedin} target="_blank" rel="noreferrer" aria-label={`${dev.name} on LinkedIn`} className={iconLink}>
+                          <LinkedIn className="size-4" />
+                        </a>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Legal fine print */}
-        <div className="mt-10 flex flex-col gap-2 border-t border-border pt-6">
-          <p className="max-w-4xl text-xs leading-relaxed text-muted-foreground">{t("disclaimer")}</p>
-          <p className="text-2xs text-muted-foreground">{t("rights", { year })}</p>
+        {/* Legal fine print — rich-text emphasises the brand on both desktop and mobile */}
+        <div className="mt-10 flex flex-col items-center md:flex-row gap-4 border-t border-border pt-6 justify-between text-muted-foreground/70">
+          <p className="md:max-w-1/2 text-xs leading-relaxed ">{t("disclaimer")}</p>
+          <div className="flex flex-col items-center md:items-end md:max-w-58 font-semibold">
+            <p className="text-xs leading-relaxed ">
+              {t.rich("copyright", {
+                year,
+              })}
+            </p>
+            <p className="text-xs leading-relaxed text-center md:text-right">{t("rights")}</p>
+          </div>
         </div>
       </div>
     </footer>
