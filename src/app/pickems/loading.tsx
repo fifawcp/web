@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { PickemsSkeleton } from "@/features/pickems/components/PickemsSkeleton";
 import { parseStep } from "@/features/pickems/lib/pickemStep";
 
-const CONTAINER = "mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 pb-28 pt-6 sm:px-6 lg:pb-8 lg:pt-8";
+const CONTAINER = "container flex flex-col gap-6 pt-6 pb-28 lg:pt-8 lg:pb-8";
 
 /**
  * Client component so we can read `?step=` via `useSearchParams` — server

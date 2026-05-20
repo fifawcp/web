@@ -31,11 +31,11 @@ export function PickemsCTABar({ onBack, onSaveDraft, action }: Props) {
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-30 m-0 border-t border-border bg-background px-4 py-3 lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background py-3 lg:hidden"
       style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
     >
-      {action.kind !== "hidden" && action.helperText && <p className="pb-2 text-center text-2xs text-muted-foreground">{action.helperText}</p>}
-      <div className="mx-auto flex max-w-7xl items-center gap-2">
+      {action.kind !== "hidden" && action.helperText && <p className="container pb-2 text-center text-2xs text-muted-foreground">{action.helperText}</p>}
+      <div className="container flex items-center gap-2">
         {onBack && (
           <Button variant="outline" size="sm" onClick={onBack} className="h-10 flex-1 cursor-pointer gap-1.5">
             <ArrowLeft className="size-4" />

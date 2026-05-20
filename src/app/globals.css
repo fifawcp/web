@@ -84,6 +84,25 @@
 /* Override dark variant to use class selector for manual toggle */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* The page rail shared by /schedule, /pickems, /boards, the landing sections,
+   and any future top-level route. Tailwind v4's built-in `container` is just
+   `width: 100%`; we extend it here to center, cap at 1440px on ultrawide
+   displays, and step the horizontal gutter 16 → 24 → 32px. Pages add their
+   own vertical padding on top of this. */
+@utility container {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 90rem;
+  padding-inline: 1rem;
+
+  @media (min-width: 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 64rem) {
+    padding-inline: 2rem;
+  }
+}
+
 /* Dark mode opacity for floating shapes */
 :where(.dark, .dark *) [style*="--dark-opacity"] {
   opacity: var(--dark-opacity) !important;

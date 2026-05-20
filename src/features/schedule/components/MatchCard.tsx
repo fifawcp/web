@@ -60,7 +60,6 @@ export function MatchCard({ match, isAuthed }: Props) {
         <TeamColumn team={match.teams.home} side="home" locale={locale} dim={editing} />
         <ScoreArea
           match={match}
-          ui={uiState}
           isAuthed={isAuthed}
           hasTeams={hasTeams}
           editing={editing}
@@ -162,7 +161,6 @@ function TeamName({ team, locale }: { team: Team; locale: string }) {
 
 type ScoreAreaProps = {
   match: Match;
-  ui: MatchUiState;
   isAuthed: boolean;
   hasTeams: boolean;
   editing: boolean;
@@ -172,7 +170,7 @@ type ScoreAreaProps = {
   onStartEdit?: () => void;
 };
 
-function ScoreArea({ match, ui, isAuthed, hasTeams, editing, draft, isSaving, onDraftChange, onStartEdit }: ScoreAreaProps) {
+function ScoreArea({ match, isAuthed, hasTeams, editing, draft, isSaving, onDraftChange, onStartEdit }: ScoreAreaProps) {
   const t = useTranslations("schedule.card");
 
   if (editing) {
@@ -182,31 +180,28 @@ function ScoreArea({ match, ui, isAuthed, hasTeams, editing, draft, isSaving, on
   const result = match.result;
   const pick = match.user_score_pick;
   const canTapToPick = Boolean(onStartEdit);
+  const showPickHint = isAuthed && hasTeams;
 
+  // 3-row grid keeps the score (or VS) anchored at the true vertical center.
+  // The pick hint hangs in row 3 anchored to its top, so it appears just below
+  // the score without pulling the score upward to recenter the group.
   return (
-    <div className="flex flex-col items-center justify-center gap-1">
+    <div className="grid h-full grid-rows-[1fr_auto_1fr] justify-items-center self-stretch">
+      <div aria-hidden />
       <div className="flex items-center gap-3 text-2xl font-semibold tabular-nums text-foreground">
-        <ScoreCell value={result?.home_score} />
-        <span className="text-xl text-muted-foreground">&minus;</span>
-        <ScoreCell value={result?.away_score} />
+        {result ? (
+          <>
+            <span>{result.home_score}</span>
+            <span className="text-xl text-muted-foreground">&minus;</span>
+            <span>{result.away_score}</span>
+          </>
+        ) : (
+          <span className="text-lg font-semibold uppercase tracking-wide text-muted-foreground">vs</span>
+        )}
       </div>
-
-      {isAuthed && !ui.isFinished && hasTeams && <PickHint pick={pick} canTapToPick={canTapToPick} onClick={onStartEdit} />}
-
-      {isAuthed && ui.isFinished && pick && (
-        <span className="text-xs text-muted-foreground">
-          {t("yourPick")}:{" "}
-          <span className="font-medium tabular-nums">
-            {pick.home_score} - {pick.away_score}
-          </span>
-        </span>
-      )}
+      <div className="self-start pt-1 text-center">{showPickHint && <PickHint pick={pick} canTapToPick={canTapToPick} onClick={onStartEdit} />}</div>
     </div>
   );
-}
-
-function ScoreCell({ value }: { value: number | undefined }) {
-  return <span className={cn(value == null && "text-muted-foreground")}>{value ?? "–"}</span>;
 }
 
 function PickHint({ pick, canTapToPick, onClick }: { pick: UserScorePick | null; canTapToPick: boolean; onClick?: () => void }) {
@@ -218,10 +213,13 @@ function PickHint({ pick, canTapToPick, onClick }: { pick: UserScorePick | null;
         type="button"
         onClick={onClick}
         disabled={!canTapToPick}
-        className="cursor-pointer text-xs text-muted-foreground transition-colors hover:text-foreground disabled:cursor-default"
+        className={cn(
+          "text-xs font-medium transition-colors disabled:cursor-default",
+          canTapToPick ? "cursor-pointer text-page-accent hover:text-page-accent-strong" : "text-muted-foreground"
+        )}
       >
         {t("yourPick")}:{" "}
-        <span className="font-medium tabular-nums">
+        <span className="tabular-nums">
           {pick.home_score} - {pick.away_score}
         </span>
       </button>

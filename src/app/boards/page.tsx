@@ -14,7 +14,7 @@ export default async function BoardsPage() {
   if (!res.success) {
     return (
       <div className="min-h-[calc(100dvh-var(--header-height))] bg-linear-to-br from-wc-red/10 via-white to-wc-orange/10 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container">
           <h1 className="text-2xl font-bold">Boards</h1>
           <p className="mt-4 text-destructive" role="alert">
             {res.error?.message ?? "Something went wrong"}

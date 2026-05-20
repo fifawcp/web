@@ -4,16 +4,17 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 export default function ScheduleLoading() {
   return (
     <div className="flex flex-col">
-      <div className="container mx-auto flex w-full flex-col gap-3 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="container flex flex-col gap-3 pt-6 pb-4 lg:pt-8">
         <div className="lg:hidden">
           <ProgressCardSkeleton />
         </div>
         <div className="hidden lg:block">
           <StatsBoardSkeleton />
         </div>
+        <CtaCardSkeleton />
       </div>
       <FilterBarSkeleton />
-      <div className="container mx-auto flex w-full flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="container flex flex-col gap-6 py-6">
         {Array.from({ length: 2 }).map((_, i) => (
           <DateGroupSkeleton key={i} />
         ))}
@@ -73,9 +74,22 @@ function StatsBoardSkeleton() {
   );
 }
 
+function CtaCardSkeleton() {
+  return (
+    <Card size="sm" className="flex-row items-center gap-3 px-4">
+      <Skeleton className="size-10 shrink-0 rounded-lg" />
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <Skeleton className="h-4 w-40" />
+        <Skeleton className="h-3 w-56" />
+      </div>
+      <Skeleton className="size-5 shrink-0 rounded-md" />
+    </Card>
+  );
+}
+
 function FilterBarSkeleton() {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="container">
       <div className="border-b border-border py-2">
         <div className="hidden flex-wrap items-center gap-2 lg:flex">
           {CHIP_SKELETON_WIDTHS.map((w, i) => (

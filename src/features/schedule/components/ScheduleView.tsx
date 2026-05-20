@@ -54,7 +54,7 @@ export function ScheduleView({ initialMatches, anchorMatchId, isAuthed }: Props)
 
   return (
     <div className="flex flex-col">
-      <div className="container mx-auto flex w-full flex-col gap-3 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="container flex flex-col gap-3 pt-6 pb-4 lg:pt-8">
         {isAuthed ? <PickProgressPanel stats={overallStats} /> : <SignedOutCta />}
         {showPendingCta && <PendingPicksCta count={overallStats.pendingAll} onPress={() => scrollMatchIntoView(anchorMatchId!)} />}
         {showUpToDateCta && <UpToDateCta nextMatchAt={overallStats.nextMatchAt} />}
@@ -67,7 +67,7 @@ export function ScheduleView({ initialMatches, anchorMatchId, isAuthed }: Props)
         tabs={isAuthed ? <PickStatusTabs value={filters.pick} onChange={onPickChange} counts={counts} /> : undefined}
       />
 
-      <div className="container mx-auto flex w-full flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="container flex flex-col gap-6 py-6">
         {groups.length === 0 ? (
           <EmptyState title={t("empty.title")} description={t("empty.description")} />
         ) : (

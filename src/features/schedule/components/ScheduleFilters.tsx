@@ -28,7 +28,7 @@ export function ScheduleFilters({ filters, onChange, teams, tabs }: Props) {
   return (
     // TODO: derive the offset dynamically from the header height instead of hardcoding 64px
     <div className="sticky top-16 z-20 bg-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container">
         <div className="border-b border-border py-2">
           <div className="hidden min-w-0 flex-wrap items-center gap-2 lg:flex">
             <FilterControls filters={filters} onChange={onChange} teams={teams} locale={locale} variant="chip" className="flex flex-wrap items-center gap-2" />
