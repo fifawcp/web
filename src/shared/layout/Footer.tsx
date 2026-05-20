@@ -18,7 +18,6 @@ const DEVELOPERS = [
     github: "https://github.com/Nzone56",
     linkedin: "https://www.linkedin.com/in/jpereirap",
   },
-
   {
     name: "Axel Gomez",
     github: "https://github.com/Axel072",

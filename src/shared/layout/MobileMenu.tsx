@@ -51,7 +51,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
   const fullName = user ? [user.first_name, user.last_name].filter(Boolean).join(" ") || user.username : "";
 
   return (
-    <Drawer open={open} onOpenChange={setOpen} direction="left" preventScrollRestoration noBodyStyles>
+    <Drawer open={open} onOpenChange={setOpen} direction="left" noBodyStyles>
       <DrawerTrigger asChild>
         <button type="button" aria-label={t("openMenu")} className="flex size-9 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted">
           <Menu className="size-5" />
@@ -88,7 +88,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
             <span className={sectionLabel}>{tPref("title")}</span>
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
-                <div className="flex w-1/4 items-center gap-2 text-sm text-foreground">
+                <div className="flex w-1/3 items-center gap-2 text-sm text-foreground">
                   <Palette className="size-4 text-muted-foreground" />
                   <span>{tPref("theme")}:</span>
                 </div>
@@ -96,7 +96,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
               </div>
 
               <div className="flex gap-2">
-                <div className="flex w-1/4 items-center gap-2 text-sm text-foreground">
+                <div className="flex w-1/3 items-center gap-2 text-sm text-foreground">
                   <Globe className="size-4 text-muted-foreground" />
                   <span>{tLang("label")}:</span>
                 </div>
@@ -126,7 +126,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
                 type="button"
                 onClick={handleSignOut}
                 disabled={loading}
-                className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10 hover:text-destructive-hover disabled:opacity-50"
+                className="flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-sm font-medium text-destructive transition-colors hover:text-destructive-hover disabled:opacity-50"
               >
                 <LogOut className="size-4 shrink-0" />
                 <span className="flex-1 text-left">{loading ? tUser("signingOut") : tUser("signOut")}</span>
