@@ -72,16 +72,17 @@ export function UserMenu({ username, firstName, lastName }: UserMenuProps) {
           </Link>
         </div>
 
-        {/* Theme */}
+        {/* Theme — `expanded` variant fills the popover width and shows
+            icon + label on each pill. */}
         <div className="border-t border-border p-2">
           <span className="px-1 pb-1.5 block text-2xs font-medium uppercase tracking-wider text-muted-foreground">{tPref("theme")}</span>
-          <ThemeSwitch />
+          <ThemeSwitch variant="expanded" />
         </div>
 
-        {/* Language */}
+        {/* Language — same `expanded` treatment: code · language name. */}
         <div className="p-2">
           <span className="px-1 pb-1 block text-2xs font-medium uppercase tracking-wider text-muted-foreground">{tLang("label")}</span>
-          <LanguageSwitch />
+          <LanguageSwitch variant="expanded" />
         </div>
 
         {/* Sign out — destructive text, hover swaps to the theme-aware destructive-hover var */}

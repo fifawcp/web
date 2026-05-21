@@ -1,54 +1,28 @@
 import { Card } from "@/shared/components/ui/card";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 
 import { HeroSkeleton } from "./HeroSkeleton";
 
-// Mirrors PickStatusSection's CardReveal layout (Card size="sm").
-function CardSkeleton() {
+// Mirrors the new PickStatusSection — outer card with header + stacked sub-cards.
+function PickStatusSkeleton() {
   return (
-    <Card size="sm" className="h-full animate-pulse">
-      <div className="flex items-center px-4 py-3 border-b border-border">
-        <div className="h-4 w-24 bg-muted rounded" />
+    <Card size="sm" className="flex h-full flex-col gap-4 p-4 sm:p-5 animate-pulse">
+      <div className="flex flex-col gap-2">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-3 w-56" />
       </div>
-      {[...Array(3)].map((_, i) => (
-        <div key={i} className="flex items-start gap-3 p-4 border-b border-border last:border-b-0">
-          <div className="h-10 w-10 rounded-lg bg-muted shrink-0" />
-          <div className="flex-1 space-y-2">
-            <div className="h-4 w-32 bg-muted rounded" />
-            <div className="h-3 w-48 bg-muted rounded" />
-            <div className="h-1.5 w-full bg-muted rounded-full" />
-          </div>
-          <div className="flex flex-col items-end gap-2 shrink-0">
-            <div className="h-3 w-20 bg-muted rounded" />
-            <div className="h-8 w-24 bg-muted rounded" />
-          </div>
-        </div>
-      ))}
-    </Card>
-  );
-}
-
-// Mirrors LeaderboardSection's CardReveal layout (Card size="sm").
-function LeaderboardSkeleton() {
-  return (
-    <Card size="sm" className="h-full animate-pulse">
-      <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-border">
-        {[0, 1].map((i) => (
-          <div key={i} className="flex flex-col flex-1">
-            <div className="flex items-center px-4 py-3 border-b border-border">
-              <div className="h-4 w-28 bg-muted rounded" />
+      <div className="mt-4 flex flex-col gap-3 px-[3px]">
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="flex items-start gap-3 rounded-xl border border-border bg-card p-3 sm:p-4">
+            <Skeleton className="size-12 shrink-0 rounded-lg" />
+            <div className="flex flex-1 flex-col gap-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-3 w-48" />
+              <Skeleton className="h-1.5 w-full" />
             </div>
-            <div className="flex flex-col">
-              {[...Array(5)].map((_, j) => (
-                <div key={j} className="flex items-center gap-2 px-4 py-2.5 border-b border-border last:border-b-0">
-                  <div className="h-4 w-4 bg-muted rounded" />
-                  <div className="h-7 w-7 rounded-full bg-muted" />
-                  <div className="flex-1 h-4 bg-muted rounded" />
-                  <div className="h-4 w-10 bg-muted rounded" />
-                </div>
-              ))}
-            </div>
-            <div className="flex justify-end px-4 py-3 border-t border-border">
-              <div className="h-3 w-20 bg-muted rounded" />
+            <div className="flex shrink-0 flex-col items-end gap-1.5">
+              <Skeleton className="h-3 w-14" />
+              <Skeleton className="h-8 w-24" />
             </div>
           </div>
         ))}
@@ -57,22 +31,52 @@ function LeaderboardSkeleton() {
   );
 }
 
+// Mirrors the new LeaderboardSection — header + tabs + 5 rows + footer link.
+function LeaderboardSkeleton() {
+  return (
+    <Card size="sm" className="flex h-full flex-col p-4 sm:p-5 animate-pulse">
+      <div className="flex flex-col gap-2">
+        <Skeleton className="h-4 w-36" />
+        <Skeleton className="h-3 w-48" />
+      </div>
+      <Skeleton className="mt-4 h-9 w-full rounded-md" />
+      <div className="mt-3 flex items-center justify-between border-b border-border px-2 pb-2">
+        <Skeleton className="h-2.5 w-14" />
+        <Skeleton className="h-2.5 w-12" />
+      </div>
+      <ul className="divide-y divide-border">
+        {[...Array(5)].map((_, j) => (
+          <li key={j} className="flex items-center gap-3 px-2 py-2.5">
+            <Skeleton className="size-4" />
+            <Skeleton className="size-7 rounded-full" />
+            <Skeleton className="h-4 flex-1" />
+            <Skeleton className="h-3 w-10" />
+          </li>
+        ))}
+      </ul>
+      <div className="mt-auto flex justify-end pt-3">
+        <Skeleton className="h-3 w-24" />
+      </div>
+    </Card>
+  );
+}
+
 export function DashboardLoading() {
   return (
     <div className="relative flex flex-col">
-      {/* Hero skeleton */}
+      {/* Hero skeleton — matches HeroSection padding */}
       <section className="relative overflow-hidden bg-muted/30 dark:bg-zinc-950">
-        <div className="container mx-auto px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
+        <div className="container py-6 lg:py-8">
           <HeroSkeleton />
         </div>
       </section>
 
       {/* PickStatus + Leaderboard skeletons */}
       <section className="border-t border-border">
-        <div className="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row gap-6">
+        <div className="container py-6 lg:py-8">
+          <div className="flex flex-col gap-6 lg:flex-row">
             <div className="flex-1">
-              <CardSkeleton />
+              <PickStatusSkeleton />
             </div>
             <div className="flex-1">
               <LeaderboardSkeleton />

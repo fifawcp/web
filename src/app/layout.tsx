@@ -12,7 +12,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: { default: "Pickems · FIFA World Cup 2026", template: "Pickems · %s" },
+  title: { default: "Pick'ems · FIFA World Cup 2026", template: "Pickems · %s" },
   description: "Predict match scores and compete with friends in the 2026 World Cup pick'em game",
   icons: {
     icon: "/favicon.svg",
@@ -31,7 +31,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <Providers messages={messages} locale={locale}>
           <Header />
-          <main className="flex-1 overflow-x-clip">{children}</main>
+          <main className="flex-1 overflow-x-clip min-h-[calc(100dvh-var(--header-height))]">{children}</main>
           <Footer />
         </Providers>
       </body>

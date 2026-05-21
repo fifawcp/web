@@ -49,7 +49,7 @@ export function TutorialSection({ isLoggedIn }: { isLoggedIn: boolean }) {
       ref={sectionRef}
       className="relative bg-muted/30 dark:bg-zinc-950 border-t border-border py-16 scroll-mt-(--tutorial-scroll-offset) overflow-hidden"
     >
-      <div className="flex flex-col items-center gap-12 container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="flex flex-col items-center gap-12 container relative z-10">
         <div className="flex flex-col items-center text-center gap-2">
           <h2 className="opacity-0 text-3xl font-bold" ref={titleRef}>
             {t("title")}

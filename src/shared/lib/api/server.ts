@@ -23,46 +23,31 @@ type RequestOptions = Omit<RequestInit, "method" | "body"> & {
 async function request<T>(endpoint: string, options: RequestOptions = { method: "GET" }): Promise<ApiResponse<T>> {
   const authenticated = options.authenticated !== false;
 
+  const url = `${env.BACKEND_API_URL}${endpoint}`;
+  const headers = new Headers(options.headers as HeadersInit | undefined);
+  if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+
+  if (authenticated) {
+    const session = await getServerSession(authOptions);
+    const accessToken = session?.access_token;
+
+    if (!accessToken) redirect("/login");
+
+    headers.set("Authorization", `Bearer ${accessToken}`);
+  }
+
+  const init: RequestInit = {
+    method: options.method,
+    headers,
+    cache: options.cache,
+    next: options.next,
+    signal: options.signal,
+  };
+  if (options.body != null) init.body = JSON.stringify(options.body);
+
+  let response: Response;
   try {
-    const url = `${env.BACKEND_API_URL}${endpoint}`;
-    const headers = new Headers(options.headers as HeadersInit | undefined);
-    if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
-
-    if (authenticated) {
-      const session = await getServerSession(authOptions);
-      const accessToken = session?.access_token;
-
-      if (!accessToken) redirect("/login");
-
-      headers.set("Authorization", `Bearer ${accessToken}`);
-    }
-
-    const init: RequestInit = {
-      method: options.method,
-      headers,
-      cache: options.cache,
-      next: options.next,
-      signal: options.signal,
-    };
-    if (options.body != null) init.body = JSON.stringify(options.body);
-
-    const response = await fetch(url, init);
-
-    if (response.status === 204) return { success: true, data: undefined };
-
-    const body = await response.json();
-
-    // 401 here means either the token was revoked server-side or there is a clock
-    // skew past what middleware's skew window covered. Either way, re-authentication
-    // is required — redirect throws so this branch never returns.
-    if (response.status === 401) redirect("/login");
-
-    if (!response.ok) {
-      const { code, message, requestId, fields } = body.error as ApiError;
-      return { success: false, error: { code, message, requestId, fields } };
-    }
-
-    return { success: true, data: body.data };
+    response = await fetch(url, init);
   } catch (error) {
     logger.error("Server API request error:", error);
     return {
@@ -70,6 +55,22 @@ async function request<T>(endpoint: string, options: RequestOptions = { method: 
       error: { code: "NETWORK_ERROR", message: "Network error occurred", requestId: "", fields: undefined },
     };
   }
+
+  if (response.status === 204) return { success: true, data: undefined };
+
+  const body = await response.json();
+
+  // 401 here means either the token was revoked server-side or there is a clock
+  // skew past what middleware's skew window covered. Either way, re-authentication
+  // is required — redirect throws so this branch never returns.
+  if (response.status === 401) redirect("/login");
+
+  if (!response.ok) {
+    const { code, message, requestId, fields } = body.error as ApiError;
+    return { success: false, error: { code, message, requestId, fields } };
+  }
+
+  return { success: true, data: body.data };
 }
 
 export const serverApi = {

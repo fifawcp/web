@@ -67,30 +67,32 @@
   },
   "pickStatus": {
     "title": "Pick status",
-    "notLoggedIn": "Pick types",
+    "subtitle": "Track your progress and complete every category.",
+    "notLoggedIn": "Ways to play",
+    "notLoggedInSubtitle": "Predict matches and earn points across three categories.",
     "bracket": {
       "title": "Pick'em Bracket",
-      "description": "3 steps · groups, best thirds, knockout. Locks at kickoff.",
-      "step": "Step {current} of 3",
+      "description": "Groups, best thirds, and knockouts.",
+      "progress": "{current} of 3 steps",
       "continue": "Continue",
       "start": "Start",
-      "see": "See"
+      "see": "View"
     },
     "matchPicks": {
       "title": "Match Picks",
-      "description": "Exact scores per match. Closes before kickoff.",
-      "match": "Match {current} of {total}",
+      "description": "Exact scores per match.",
+      "progress": "{current} of {total} matches",
       "continue": "Continue",
       "start": "Start",
-      "see": "See"
+      "see": "View"
     },
     "awards": {
       "title": "World Cup Awards",
-      "description": "Predict the individual award winners for bonus points.",
-      "picked": "Award {count} of 4",
+      "description": "Predict individual award winners.",
+      "progress": "{current} of {total} awards",
       "continue": "Continue",
       "start": "Start",
-      "see": "See"
+      "see": "View"
     }
   },
   "stats": {
@@ -102,8 +104,15 @@
   },
 
   "leaderboard": {
-    "pickemTitle": "Pick'em Top 5",
-    "matchTitle": "Match Picks Top 5",
+    "title": "Board ranking",
+    "subtitle": "How the top participants are doing.",
+    "tabs": {
+      "pickem": "Pick'em",
+      "match": "Match Picks"
+    },
+    "rank": "Top 5",
+    "player": "Player",
+    "points": "Points",
     "you": "You",
     "pts": "pts",
     "fullRanking": "Full ranking",

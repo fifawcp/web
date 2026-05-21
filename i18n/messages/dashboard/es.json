@@ -74,38 +74,47 @@
   },
   "pickStatus": {
     "title": "Estado de picks",
-    "notLoggedIn": "Tipos de picks",
+    "subtitle": "Sigue tu progreso y completa todas las categorías.",
+    "notLoggedIn": "Formas de jugar",
+    "notLoggedInSubtitle": "Predice partidos y suma puntos en tres categorías.",
     "bracket": {
       "title": "Bracket Pick'em",
-      "description": "3 pasos · grupos, mejores terceros, eliminatorias. Cierra al inicio.",
-      "step": "Paso {current} de 3",
+      "description": "Grupos, mejores terceros y eliminatorias.",
+      "progress": "{current} de 3 pasos",
       "continue": "Continuar",
       "start": "Empezar",
       "see": "Ver"
     },
     "matchPicks": {
       "title": "Picks de Partidos",
-      "description": "Marcadores exactos por partido. Cierra antes del inicio de cada uno.",
-      "match": "Partido {current} de {total}",
+      "description": "Marcadores exactos por partido.",
+      "progress": "{current} de {total} partidos",
       "continue": "Continuar",
       "start": "Empezar",
       "see": "Ver"
     },
     "awards": {
       "title": "Premios del Mundial",
-      "description": "Predice los ganadores de premios individuales para puntos bonus.",
-      "picked": "Premio {count} de 4",
+      "description": "Predice los ganadores de premios individuales.",
+      "progress": "{current} de {total} premios",
       "continue": "Continuar",
       "start": "Empezar",
       "see": "Ver"
     }
   },
   "leaderboard": {
-    "pickemTitle": "Top 5 Pick'em",
-    "matchTitle": "Top 5 Picks de Partidos",
+    "title": "Ranking del board",
+    "subtitle": "Así van los mejores participantes.",
+    "tabs": {
+      "pickem": "Pick'em",
+      "match": "Picks de Partidos"
+    },
+    "rank": "Top 5",
+    "player": "Jugador",
+    "points": "Puntos",
     "you": "Tú",
     "pts": "pts",
-    "fullRanking": "Ranking completo",
+    "fullRanking": "Ver ranking completo",
     "empty": {
       "title": "Sin rankings aún",
       "description": "Los rankings aparecerán cuando inicie el mundial."

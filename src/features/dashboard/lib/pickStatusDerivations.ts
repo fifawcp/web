@@ -2,18 +2,16 @@ import type { PickemProgress, StepProgress } from "../types/dashboard.types";
 
 const isStepDone = (s: StepProgress): boolean => s.total > 0 && s.completed >= s.total;
 
-// Combined groups + best-thirds + bracket completion as a 0–100 percentage.
-export function getBracketProgressPercent(progress: PickemProgress): number {
-  const total = progress.groups.total + progress.best_thirds.total + progress.bracket.total;
-  const completed = progress.groups.completed + progress.best_thirds.completed + progress.bracket.completed;
-  return total > 0 ? (completed / total) * 100 : 0;
+// How many of the three pick'em stages are fully done. A stage counts only
+// when its `completed === total` — partial picks don't move the needle.
+export function getBracketCompletedStages(progress: PickemProgress): number {
+  return [progress.groups, progress.best_thirds, progress.bracket].filter(isStepDone).length;
 }
 
-// The 1-indexed pick'em step the user is currently on (groups → best thirds → bracket).
-export function getCurrentBracketStep(progress: PickemProgress): number {
-  if (!isStepDone(progress.groups)) return 1;
-  if (!isStepDone(progress.best_thirds)) return 2;
-  return 3;
+// Bracket progress as a 0/33/66/100 step-based percentage so the bar mirrors
+// the completed-stage count rather than raw item totals.
+export function getBracketProgressPercent(progress: PickemProgress): number {
+  return (getBracketCompletedStages(progress) / 3) * 100;
 }
 
 // True only when all three pick'em stages are complete.

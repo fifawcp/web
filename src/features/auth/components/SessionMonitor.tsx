@@ -7,8 +7,9 @@ import { useSession } from "next-auth/react";
 import { isTokenStale } from "@/shared/lib/api/jwt";
 import { refreshBackendAccessToken } from "@/shared/lib/api/refresh";
 
-// Paths where an unauthenticated session is expected -> no redirect should fire
-const GUEST_PATHS = new Set(["/", "/schedule", "/login", "/register", "/callback"]);
+// Paths where an unauthenticated session is expected -> no redirect should fire.
+// Mirror proxy.ts PUBLIC_ROUTES + GUEST_ONLY_ROUTES.
+const GUEST_PATHS = new Set(["/", "/schedule", "/login", "/register", "/callback", "/how-it-works", "/rules", "/privacy", "/terms", "/faq"]);
 
 // SessionMonitor covers one specific gap: the user stays on the same page long
 // enough for the access token to expire without any navigation occurring

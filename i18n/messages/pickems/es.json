@@ -1,0 +1,83 @@
+{
+  "title": "Pick'em",
+  "locked": "Las predicciones están bloqueadas. El torneo ya comenzó",
+  "lockedDescription": "Puedes ver tus picks, pero no podrás hacer más cambios.",
+  "stepper": {
+    "1": "Fase de grupos",
+    "2": "Mejores terceros",
+    "3": "Eliminatoria"
+  },
+  "stepCrumb": "Paso {n} de {total}",
+  "common": {
+    "back": "Atrás",
+    "continue": "Continuar",
+    "continueToStep2": "Paso 2",
+    "continueToStep3": "Paso 3",
+    "saveDraft": "Guardar borrador",
+    "saving": "Guardando..."
+  },
+  "groups": {
+    "title": "Pronostica la fase de grupos",
+    "subtitleMobile": "Arrastra los equipos para ordenar cada grupo. 1° y 2° avanzan directo; el 3° pasa al siguiente paso.",
+    "sectionLabel": "Grupos",
+    "reset": "Reiniciar",
+    "expandAll": "Expandir todo",
+    "collapseAll": "Contraer todo",
+    "tipsBody": "Arrastra el <handle></handle> para reordenar los equipos dentro de cada grupo.",
+    "tipsLockBody": "Toca el <lockIcon></lockIcon> en cada grupo cuando estés seguro del orden.",
+    "tipsDismiss": "Ocultar consejo",
+    "groupLabel": "Grupo {code}",
+    "lockAction": "Bloquear grupo {code}",
+    "unlockAction": "Desbloquear grupo {code}",
+    "badges": {
+      "qualify": "Q",
+      "third": "3°",
+      "out": "Out"
+    }
+  },
+  "bestThirds": {
+    "title": "Mejores terceros",
+    "subtitle": "De los 12 equipos en tercer lugar, elige los {total} que crees que pasarán a Octavos de Final.",
+    "moreNeeded": "{n, plural, one {Falta # selección} other {Faltan # selecciones}}",
+    "groupTag": "Grupo {code}"
+  },
+  "bracket": {
+    "title": "Arma tu llave",
+    "subtitleDesktop": "Elige al ganador de cada partido eliminatorio desde Dieciseisavos hasta la Final.",
+    "picksLeft": "Faltan {n}",
+    "pickWinner": "Elegir ganador",
+    "champion": "Campeón",
+    "pickFinalWinner": "Elige al campeón",
+    "submit": "Guardar picks",
+    "rounds": {
+      "round_of_32": "Dieciseisavos",
+      "round_of_16": "Octavos",
+      "quarterfinals": "Cuartos",
+      "semifinals": "Semifinales",
+      "third_place": "Tercer puesto",
+      "final": "Final"
+    },
+    "roundsShort": {
+      "round_of_32": "R32",
+      "round_of_16": "R16",
+      "quarterfinals": "QF",
+      "semifinals": "SF",
+      "third_place": "3°",
+      "final": "Final"
+    },
+    "roundLeft": "Faltan {n}",
+    "pickRoundCount": "Elige {n} ganadores"
+  },
+  "toasts": {
+    "groupsSaved": "Grupos guardados",
+    "thirdsSaved": "Mejores terceros guardados",
+    "bracketSubmitted": "Picks guardados",
+    "picksClearedByGroupChange": "{n, plural, one {Tu llave cambió: # pick fue limpiado.} other {Tu llave cambió: # picks fueron limpiados.}}",
+    "groupsChangedReset": "Orden de grupos cambiado. Se reiniciaron los mejores terceros y los picks de la llave.",
+    "thirdsChangedReset": "Mejores terceros cambiados. Se reiniciaron los picks de la llave.",
+    "groupLocked": "Grupo {code} bloqueado",
+    "groupUnlocked": "Grupo {code} desbloqueado",
+    "saveFailed": "No se pudo guardar. Inténtalo de nuevo.",
+    "submitFailed": "No se pudo enviar tu llave. Inténtalo de nuevo."
+  }
+}
