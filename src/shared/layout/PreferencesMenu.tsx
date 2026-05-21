@@ -20,14 +20,17 @@ export function PreferencesMenu() {
           <Settings className="size-5" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="mt-1 w-48 gap-0 p-2">
+      {/* Same width as `UserMenu`'s popover so the guest and authed
+          preferences panels feel visually consistent. Both segmented
+          controls use the `expanded` variant for icon + label / code + name. */}
+      <PopoverContent align="end" className="mt-1 w-64 gap-0 p-2">
         <span className="px-1 pb-1.5 text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("theme")}</span>
-        <ThemeSwitch />
+        <ThemeSwitch variant="expanded" />
 
         <div className="my-2 border-t border-border" />
 
         <span className="px-1 pb-1.5 text-2xs font-medium uppercase tracking-wider text-muted-foreground">{tLang("label")}</span>
-        <LanguageSwitch />
+        <LanguageSwitch variant="expanded" />
       </PopoverContent>
     </Popover>
   );

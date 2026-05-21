@@ -89,22 +89,24 @@ export function MobileMenu({ user }: MobileMenuProps) {
             <NavLinks variant="drawer" onNavigate={close} />
           </section>
 
-          {/* Settings */}
-          <section className="flex flex-col overflow-y-auto gap-3  px-3 pt-2 border-t border-border">
+          {/* Settings — label-left + compact pill control on the right.
+              Inner `px-3` shifts the rows to line up with the navigation
+              items above (which carry their own internal `px-3`). */}
+          <section className="flex flex-col gap-3 overflow-y-auto border-t border-border px-3 pt-4">
             <span className={sectionLabel}>{tPref("title")}</span>
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <div className="flex w-1/3 items-center gap-2 text-sm text-foreground">
+            <div className="flex flex-col gap-2 px-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-sm text-foreground">
                   <Palette className="size-4 text-muted-foreground" />
-                  <span className="font-semibold">{tPref("theme")}:</span>
+                  <span className="font-medium">{tPref("theme")}</span>
                 </div>
                 <ThemeSwitch />
               </div>
 
-              <div className="flex gap-2">
-                <div className="flex w-1/3 items-center gap-2 text-sm text-foreground">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-sm text-foreground">
                   <Globe className="size-4 text-muted-foreground" />
-                  <span className="font-semibold">{tLang("label")}:</span>
+                  <span className="font-medium">{tLang("label")}</span>
                 </div>
                 <LanguageSwitch />
               </div>
@@ -142,13 +144,20 @@ export function MobileMenu({ user }: MobileMenuProps) {
               </button>
             </div>
           ) : (
-            <div className="flex flex-col gap-2 px-1">
-              <Button asChild variant="outline" onClick={close}>
-                <Link href="/login">{t("login")}</Link>
+            // Guest invitation card — replaces the profile/sign-out pair an
+            // authed user gets. Pitch (subtitle) + sign-in CTA tinted with
+            // the route accent + soft sign-up link in the same footprint.
+            <div className="flex flex-col gap-3 px-4 py-4">
+              <p className="text-center text-xs leading-relaxed text-muted-foreground">{tUser("guestCard.subtitle")}</p>
+              <Button asChild className="h-10 w-full bg-page-accent text-white hover:bg-page-accent/90" onClick={close}>
+                <Link href="/login">{tUser("guestCard.cta")}</Link>
               </Button>
-              <Button asChild onClick={close}>
-                <Link href="/register">{t("register")}</Link>
-              </Button>
+              <p className="text-center text-xs text-muted-foreground">
+                {tUser("guestCard.noAccount")}{" "}
+                <Link href="/register" onClick={close} className="font-medium text-foreground underline underline-offset-2 hover:text-page-accent-strong">
+                  {tUser("guestCard.signupCta")}
+                </Link>
+              </p>
             </div>
           )}
         </div>

@@ -7,7 +7,7 @@
     "standings": "Standings",
     "bracket": "Bracket",
     "login": "Log in",
-    "register": "Sign up",
+    "register": "Create account",
     "menuLabel": "Navigation",
     "menuDescription": "Main navigation menu",
     "openMenu": "Open menu",
@@ -16,8 +16,14 @@
   "userMenu": {
     "accountMenu": "Account menu",
     "profile": "Profile",
-    "signOut": "Sign out",
-    "signingOut": "Signing out…"
+    "signOut": "Log out",
+    "signingOut": "Logging out…",
+    "guestCard": {
+      "subtitle": "Join to save your predictions, compete, and climb the leaderboards.",
+      "cta": "Log in",
+      "noAccount": "Don't have an account?",
+      "signupCta": "Create account"
+    }
   },
   "language": {
     "label": "Language"

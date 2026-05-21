@@ -12,8 +12,10 @@ async function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <Suspense fallback={<DashboardLoading />}>
-      <DashboardContent />
-    </Suspense>
+    <div data-accent="neutral" className="contents">
+      <Suspense fallback={<DashboardLoading />}>
+        <DashboardContent />
+      </Suspense>
+    </div>
   );
 }

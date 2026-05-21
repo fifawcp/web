@@ -14,38 +14,38 @@ type Props = {
   isLoggedIn: boolean;
 };
 
-type PickStatusItemProps = {
+type PickStatusCardProps = {
   icon: LucideIcon;
   id: string;
   progress: number;
   statusText: string;
   buttonHref: string;
-  isLast?: boolean;
   isLoggedIn: boolean;
 };
 
-async function PickStatusItem({ icon: Icon, id, progress, statusText, buttonHref, isLast, isLoggedIn }: PickStatusItemProps) {
+async function PickStatusCard({ icon: Icon, id, progress, statusText, buttonHref, isLoggedIn }: PickStatusCardProps) {
   const t = await getTranslations("dashboard.pickStatus");
-
   const ctaKey = !isLoggedIn || progress === 0 ? "start" : progress >= 100 ? "see" : "continue";
 
   return (
-    <div className={`flex items-start gap-3 p-3 sm:p-4 ${!isLast ? "border-b border-border" : ""}`}>
-      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+    <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3 sm:p-4">
+      <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-page-accent-soft text-page-accent-strong">
         <Icon className="size-5" />
       </div>
-      <div className="flex flex-col gap-1 flex-1 min-w-0">
-        <span className="text-sm font-medium">{t(`${id}.title`)}</span>
-        <span className="text-xs text-muted-foreground">{t(`${id}.description`)}</span>
+      <div className="flex min-w-0 flex-1 flex-col gap-2">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-sm font-semibold leading-tight">{t(`${id}.title`)}</span>
+          <span className="text-xs leading-snug text-muted-foreground">{t(`${id}.description`)}</span>
+        </div>
         {isLoggedIn && (
-          <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-            <div className="h-full bg-lime-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+            <div className="h-full rounded-full bg-page-accent transition-all" style={{ width: `${progress}%` }} />
           </div>
         )}
       </div>
-      <div className="flex flex-col items-end gap-2 shrink-0">
-        {isLoggedIn && statusText && <span className="text-xs text-muted-foreground">● {statusText}</span>}
-        <Button asChild variant="outline" size="sm" className="px-0 min-w-22 sm:px-2 sm:min-w-32">
+      <div className="flex shrink-0 flex-col items-end gap-1.5">
+        {isLoggedIn && statusText && <span className="text-xs font-medium tabular-nums text-foreground">{statusText}</span>}
+        <Button asChild variant="outline" size="sm" className="min-w-22 sm:min-w-28">
           <Link href={buttonHref}>{t(`${id}.${ctaKey}`)}</Link>
         </Button>
       </div>
@@ -71,7 +71,7 @@ export async function PickStatusSection({ progress, isLoggedIn }: Props) {
       icon: GitBranch,
       progress: bracketPercent,
       statusText: pickemProgress ? t("bracket.step", { current: bracketStep }) : "",
-      buttonHref: "/bracket",
+      buttonHref: "/pickems",
     },
     {
       id: "matchPicks",
@@ -90,22 +90,30 @@ export async function PickStatusSection({ progress, isLoggedIn }: Props) {
   ];
 
   return (
-    <CardReveal className="bg-card h-full flex-1 opacity-0">
-      <div className="flex px-4 py-3 border-b border-border">
-        <span className="text-sm font-medium">{isLoggedIn ? t("title") : t("notLoggedIn")}</span>
+    <CardReveal className="flex h-full flex-1 flex-col gap-4 bg-card p-4 opacity-0 sm:p-5">
+      <div className="flex flex-col gap-1">
+        <span className="text-base font-semibold">{isLoggedIn ? t("title") : t("notLoggedIn")}</span>
+        <span className="text-xs text-muted-foreground">{isLoggedIn ? t("subtitle") : t("notLoggedInSubtitle")}</span>
       </div>
-      {picksStatus.map((pick, index) => (
-        <PickStatusItem
-          key={pick.id}
-          icon={pick.icon}
-          id={pick.id}
-          progress={pick.progress}
-          statusText={pick.statusText}
-          buttonHref={pick.buttonHref}
-          isLast={index === picksStatus.length - 1}
-          isLoggedIn={isLoggedIn}
-        />
-      ))}
+      {/* Spacing matches LeaderboardSection's Tabs: Card's `gap-4` already
+          provides 16px above this container; `mt-4` adds another 16px so the
+          first sub-card top aligns with the TabsList top in the sibling card
+          (which gets the same compound gap via Card.gap + Tabs.mt-4).
+          Horizontal `px-[3px]` aligns sub-card borders with the active tile
+          inside that TabsList (it carries a `p-[3px]` inner inset). */}
+      <div className="mt-4 flex flex-col gap-3 px-[3px]">
+        {picksStatus.map((pick) => (
+          <PickStatusCard
+            key={pick.id}
+            icon={pick.icon}
+            id={pick.id}
+            progress={pick.progress}
+            statusText={pick.statusText}
+            buttonHref={pick.buttonHref}
+            isLoggedIn={isLoggedIn}
+          />
+        ))}
+      </div>
     </CardReveal>
   );
 }

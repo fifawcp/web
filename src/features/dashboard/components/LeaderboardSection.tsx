@@ -1,9 +1,12 @@
-import { ArrowRight, Users } from "lucide-react";
+"use client";
+
+import { ArrowRight, Target, Trophy, Users } from "lucide-react";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
-import { getInitials, getRankColor } from "@/shared/lib/ui";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
+import { getInitials } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
 import type { CompetitionLeaderboard, DashboardLeaderboard } from "../types/dashboard.types";
@@ -15,87 +18,102 @@ type Props = {
   currentUserId: string | null;
 };
 
-type ColumnProps = {
-  data: CompetitionLeaderboard | null;
-  currentUserId: string | null;
-  title: string;
-  href: string;
-  fullRankingLabel: string;
-  youLabel: string;
-  ptsLabel: string;
-  emptyTitle: string;
-  emptyDescription: string;
-};
+// Match the accent treatment used in PreferenceControls' segmented control so
+// the active tab tile lifts visibly and tints with the route accent. The base
+// `Tabs` component already sets `data-active:bg-card` — we add the strong
+// accent text, soft drop shadow, and a hair of accent ring on top.
+const accentTab = "data-active:text-page-accent-strong data-active:shadow-sm data-active:ring-1 data-active:ring-page-accent/20";
 
-function LeaderboardColumn({ data, currentUserId, title, href, fullRankingLabel, youLabel, ptsLabel, emptyTitle, emptyDescription }: ColumnProps) {
-  const isEmpty = !data || data.entries.length === 0;
+export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
+  const t = useTranslations("dashboard.leaderboard");
 
   return (
-    <div className="flex flex-col flex-1 min-w-0">
-      <div className="px-4 py-3 border-b border-border">
-        <span className="text-sm font-medium">{title}</span>
+    <CardReveal className="flex h-full flex-col bg-card p-4 opacity-0 sm:p-5">
+      <div className="flex flex-col gap-1">
+        <span className="text-base font-semibold">{t("title")}</span>
+        <span className="text-xs text-muted-foreground">{t("subtitle")}</span>
       </div>
 
-      {isEmpty ? (
-        <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
-          <div className="flex size-10 items-center justify-center rounded-full bg-muted mb-2">
-            <Users className="size-4 text-muted-foreground" />
-          </div>
-          <span className="text-sm font-medium">{emptyTitle}</span>
-          <span className="text-xs text-muted-foreground mt-1">{emptyDescription}</span>
-        </div>
-      ) : (
-        <>
-          <div className="flex flex-col">
-            {data.entries.map((entry) => {
-              const isMe = entry.member.user_id === currentUserId;
-              return (
-                <div key={entry.member.user_id} className={cn("flex items-center gap-2.5 px-4 py-2.5 border-b border-border", isMe && "bg-lime-50 dark:bg-lime-950/20")}>
-                  <span className={`w-4 text-xs tabular-nums font-medium shrink-0 ${getRankColor(entry.rank, "text")}`}>{entry.rank}</span>
-                  <Avatar className="size-7">
-                    <AvatarFallback className={cn("text-2xs", getRankColor(entry.rank, "text"))}>{getInitials(entry.member.username)}</AvatarFallback>
-                  </Avatar>
-                  <span className={cn("flex-1 text-sm truncate", isMe && "font-medium")}>{isMe ? youLabel : entry.member.username}</span>
-                  <span className="text-xs font-medium tabular-nums shrink-0">
-                    {entry.points} <span className="text-muted-foreground font-normal">{ptsLabel}</span>
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="flex items-center justify-end px-4 py-3 mt-auto">
-            <Link href={href} className="flex items-center gap-1 text-xs font-medium hover:underline">
-              {fullRankingLabel}
-              <ArrowRight className="size-3" />
-            </Link>
-          </div>
-        </>
-      )}
-    </div>
+      <Tabs defaultValue="pickem" className="mt-4 flex flex-1 flex-col gap-3">
+        <TabsList className="w-full">
+          <TabsTrigger value="pickem" className={accentTab}>
+            <Trophy className="size-3.5" />
+            {t("tabs.pickem")}
+          </TabsTrigger>
+          <TabsTrigger value="match" className={accentTab}>
+            <Target className="size-3.5" />
+            {t("tabs.match")}
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="pickem">
+          <LeaderboardEntries data={leaderboard?.pickem ?? null} currentUserId={currentUserId} />
+        </TabsContent>
+        <TabsContent value="match">
+          <LeaderboardEntries data={leaderboard?.match ?? null} currentUserId={currentUserId} />
+        </TabsContent>
+      </Tabs>
+
+      {/* TODO: Update the redirection once the boards page is ready */}
+      <div className="mt-auto flex items-center justify-end pt-3">
+        <Link
+          href="/boards/global"
+          className="flex items-center gap-1 text-xs font-medium text-page-accent-strong transition-colors hover:text-page-accent hover:underline"
+        >
+          {t("fullRanking")}
+          <ArrowRight className="size-3" />
+        </Link>
+      </div>
+    </CardReveal>
   );
 }
 
-export async function LeaderboardSection({ leaderboard, currentUserId }: Props) {
-  const pickem = leaderboard?.pickem ?? null;
-  const match = leaderboard?.match ?? null;
-  const t = await getTranslations("dashboard.leaderboard");
+function LeaderboardEntries({ data, currentUserId }: { data: CompetitionLeaderboard | null; currentUserId: string | null }) {
+  const t = useTranslations("dashboard.leaderboard");
+  const isEmpty = !data || data.entries.length === 0;
 
-  const columnProps = {
-    currentUserId,
-    fullRankingLabel: t("fullRanking"),
-    youLabel: t("you"),
-    ptsLabel: t("pts"),
-    emptyTitle: t("empty.title"),
-    emptyDescription: t("empty.description"),
-  };
+  if (isEmpty) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-2 px-4 py-10 text-center">
+        <div className="flex size-10 items-center justify-center rounded-full bg-muted">
+          <Users className="size-4 text-muted-foreground" />
+        </div>
+        <span className="text-sm font-medium">{t("empty.title")}</span>
+        <span className="text-xs text-muted-foreground">{t("empty.description")}</span>
+      </div>
+    );
+  }
+
+  // Cap to top 5 — keeps the section short on the dashboard.
+  const entries = data.entries.slice(0, 5);
 
   return (
-    //TODO: Update the redirection once the boards page is ready
-    <CardReveal className="bg-card h-full opacity-0">
-      <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-border flex-1">
-        <LeaderboardColumn {...columnProps} data={pickem} title={t("pickemTitle")} href="/boards/global?tab=pickem" />
-        <LeaderboardColumn {...columnProps} data={match} title={t("matchTitle")} href="/boards/global?tab=match" />
+    <div className="flex flex-col">
+      {/* Three-column header: rank / player / points. Same grid template as
+          the rows below so columns line up cleanly. */}
+      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-border px-2 pb-2 text-2xs font-medium uppercase tracking-wider text-muted-foreground">
+        <span>{t("rank")}</span>
+        <span>{t("player")}</span>
+        <span>{t("points")}</span>
       </div>
-    </CardReveal>
+      <ul className="divide-y divide-border">
+        {entries.map((entry) => {
+          const isMe = entry.member.user_id === currentUserId;
+          return (
+            <li key={entry.member.user_id} className={cn("grid grid-cols-[auto_1fr_auto] items-center gap-3 px-2 py-2.5", isMe && "bg-page-accent-soft/60")}>
+              <span className="w-4 shrink-0 text-center text-xs font-medium tabular-nums text-muted-foreground">{entry.rank}</span>
+              <div className="flex min-w-0 items-center gap-2.5">
+                <Avatar className="size-7">
+                  <AvatarFallback className="text-2xs">{getInitials(entry.member.username)}</AvatarFallback>
+                </Avatar>
+                <span className={cn("min-w-0 truncate text-sm", isMe && "font-semibold text-page-accent-strong")}>{isMe ? t("you") : entry.member.username}</span>
+              </div>
+              <span className="shrink-0 text-xs font-medium tabular-nums">
+                {entry.points} <span className="font-normal text-muted-foreground">{t("pts")}</span>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }

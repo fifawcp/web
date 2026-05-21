@@ -33,7 +33,6 @@ type Props = {
 export function StepBracket({ data, step, onStep, progress, canNavigateTo, userId }: Props) {
   const t = useTranslations("pickems.bracket");
   const tRounds = useTranslations("pickems.bracket.rounds");
-  const tCommon = useTranslations("pickems");
   const { draft: rawDraft, pick } = useBracketDraft(userId);
   const { submit, isSubmitting } = useSubmitBracket();
   // Active stage is owned here so the mobile CTA bar can react to it (per-stage
@@ -118,8 +117,6 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
 
       <BracketDesktop bracket={projected} champion={champion} disabled={data.is_locked} onPick={pick} />
       <BracketMobile bracket={projected} champion={champion} disabled={data.is_locked} onPick={pick} activeStage={activeStage} onStageChange={setActiveStage} />
-
-      <p className="text-center text-xs text-muted-foreground">{tCommon("bracket.hint")}</p>
 
       <PickemsCTABar action={mobileAction} onBack={mobileBack} />
     </section>

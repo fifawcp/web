@@ -17,7 +17,13 @@
     "accountMenu": "Menú de cuenta",
     "profile": "Perfil",
     "signOut": "Cerrar sesión",
-    "signingOut": "Cerrando sesión…"
+    "signingOut": "Cerrando sesión…",
+    "guestCard": {
+      "subtitle": "Únete para guardar tus predicciones, competir y subir en los tableros.",
+      "cta": "Iniciar sesión",
+      "noAccount": "¿No tienes cuenta?",
+      "signupCta": "Crear cuenta"
+    }
   },
   "language": {
     "label": "Idioma"

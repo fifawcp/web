@@ -23,7 +23,7 @@ export function HeroSkeleton() {
           <Skeleton className="h-9 w-full sm:w-36" />
           <Skeleton className="h-9 w-full sm:w-36" />
         </div>
-        <div className="flex flex-col sm:flex-row items-stretch sm:divide-x divide-border border-t border-border pt-2 mt-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:divide-x divide-border border-t border-border pt-4 sm:pt-5">
           {[...Array(4)].map((_, i) => (
             <div key={i} className="flex items-center gap-3 px-2 sm:px-4 py-2 sm:py-3 flex-1 border-b sm:border-b-0 border-border">
               <Skeleton className="h-10 w-10 rounded-full shrink-0" />

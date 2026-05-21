@@ -77,13 +77,13 @@ export function HeroCard({ badge, primaryCta, bottomContent }: HeroCardProps) {
           <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight max-w-full sm:max-w-3/4">{t("title")}</h1>
           <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-full sm:max-w-1/2">{t("subtitle")}</p>
           <div className="flex flex-col sm:flex-row items-center gap-2">
-            <Button asChild className="w-full sm:w-auto">
+            <Button asChild className="w-full bg-page-accent text-white hover:bg-page-accent/90 sm:w-auto sm:px-6 lg:px-10">
               <Link href={primaryCta.href}>
                 <Sparkles className="size-4" />
                 {primaryCta.label}
               </Link>
             </Button>
-            <Button asChild variant="outline" className="w-full sm:w-auto">
+            <Button asChild variant="outline" className="w-full sm:w-auto sm:px-6 lg:px-10">
               <Link href="/schedule">
                 <Calendar className="size-4" />
                 {t("cta.viewSchedule")}
@@ -91,7 +91,11 @@ export function HeroCard({ badge, primaryCta, bottomContent }: HeroCardProps) {
             </Button>
           </div>
           {bottomContent && (
-            <div className="flex flex-col sm:flex-row items-stretch sm:divide-x divide-border border-t border-foreground/30 dark:border-border pt-2">{bottomContent}</div>
+            // pt matches the parent flex `gap-4 sm:gap-5` so the divider has
+            // equal breathing room above and below it.
+            <div className="flex flex-col sm:flex-row items-stretch sm:divide-x divide-border border-t border-foreground/30 dark:border-border pt-4 sm:pt-5">
+              {bottomContent}
+            </div>
           )}
         </div>
       </Card>

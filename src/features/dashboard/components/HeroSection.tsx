@@ -14,7 +14,7 @@ type Props = {
 export function HeroSection({ isLoggedIn, pickedChampion, stats, nextMatch, pickemProgress }: Props) {
   return (
     <section className="relative overflow-hidden bg-muted/30 dark:bg-zinc-950">
-      <div className="container pt-6 pb-8 lg:pt-8 lg:pb-12">
+      <div className="container py-6 lg:py-8">
         {isLoggedIn ? <AuthHero pickedChampion={pickedChampion} stats={stats} nextMatch={nextMatch} pickemProgress={pickemProgress} /> : <GuestHero />}
       </div>
     </section>

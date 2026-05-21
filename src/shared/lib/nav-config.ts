@@ -1,13 +1,16 @@
-// Primary navigation items. `key` maps to the `nav` i18n namespace.
+import { BarChart3, Calendar, GitBranch, LayoutDashboard, ListChecks, Users, type LucideIcon } from "lucide-react";
+
+// Primary navigation items. `key` maps to the `nav` i18n namespace; `icon`
+// is rendered in the mobile drawer (desktop bar stays text-only).
 // Only routes that exist in the app today are listed here.
-export const NAV_ITEMS = [
-  { key: "dashboard", href: "/" },
-  { key: "schedule", href: "/schedule" },
-  { key: "pickems", href: "/pickems" },
-  { key: "boards", href: "/boards" },
-  { key: "standings", href: "/standings" },
-  { key: "bracket", href: "/bracket" },
-] as const;
+export const NAV_ITEMS: ReadonlyArray<{ key: string; href: string; icon: LucideIcon }> = [
+  { key: "dashboard", href: "/", icon: LayoutDashboard },
+  { key: "schedule", href: "/schedule", icon: Calendar },
+  { key: "pickems", href: "/pickems", icon: ListChecks },
+  { key: "boards", href: "/boards", icon: Users },
+  { key: "standings", href: "/standings", icon: BarChart3 },
+  { key: "bracket", href: "/bracket", icon: GitBranch },
+];
 
 // About routes — stub pages under src/app, keyed to the `pages` i18n namespace.
 // /faq still exists as a page but is intentionally not linked here.
@@ -26,6 +29,8 @@ export const TBD_LINKS = [
 ] as const;
 
 export type NavItem = (typeof NAV_ITEMS)[number];
+
+export { type LucideIcon } from "lucide-react";
 
 /** Whether `href` is the active route for the current `pathname`. */
 export function isNavItemActive(pathname: string, href: string): boolean {

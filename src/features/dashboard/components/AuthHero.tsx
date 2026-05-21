@@ -36,9 +36,9 @@ export function AuthHero({ pickedChampion, stats, nextMatch, pickemProgress }: P
     stats && isPickemComplete ? (
       <UserStatsRow pickedChampion={pickedChampion} stats={stats} nextMatch={nextMatch} />
     ) : (
-      <div className="flex flex-col gap-2 py-2 sm:py-3">
+      <div className="flex flex-col gap-2">
         <p className="text-sm text-foreground">{t("welcome.subtitle")}</p>
-        <Button onClick={scrollToTutorial} className="w-full md:w-fit">
+        <Button onClick={scrollToTutorial} className="w-full md:w-fit bg-page-accent text-white hover:bg-page-accent/90">
           {t("welcome.cta")}
           <ArrowRight className="size-4" />
         </Button>

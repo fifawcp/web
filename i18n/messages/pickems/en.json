@@ -48,7 +48,6 @@
     "champion": "Champion",
     "pickFinalWinner": "Pick the Final winner",
     "submit": "Submit picks",
-    "hint": "You can change your picks at any time before submitting.",
     "rounds": {
       "round_of_32": "Round of 32",
       "round_of_16": "Round of 16",
