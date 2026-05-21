@@ -1,28 +1,14 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
-import { GitHub } from "@/shared/icons/Github";
-import { LinkedIn } from "@/shared/icons/LinkedIn";
 import { ABOUT_LINKS, NAV_ITEMS, TBD_LINKS } from "@/shared/lib/nav-config";
 
 import { Brand } from "./Brand";
 
 const DEVELOPERS = [
-  {
-    name: "Nicolas Conde",
-    github: "https://github.com/ncondes",
-    linkedin: "https://www.linkedin.com/in/ncondes",
-  },
-  {
-    name: "Julian Pereira",
-    github: "https://github.com/Nzone56",
-    linkedin: "https://www.linkedin.com/in/jpereirap",
-  },
-  {
-    name: "Axel Gomez",
-    github: "https://github.com/Axel072",
-    linkedin: "https://www.linkedin.com/in/axgomezm/",
-  },
+  { name: "Nicolas Conde", linkedin: "https://www.linkedin.com/in/ncondes" },
+  { name: "Julian Pereira", linkedin: "https://www.linkedin.com/in/jpereirap" },
+  { name: "Axel Gomez", linkedin: "https://www.linkedin.com/in/axgomezm/" },
 ] as const;
 
 // Section labels stay quiet/uppercase (they're row headers). Nav links default
@@ -30,7 +16,6 @@ const DEVELOPERS = [
 // convention so the destination feels primary and the column heading recedes.
 const sectionLabel = "text-2xs font-medium uppercase tracking-wider text-muted-foreground/90";
 const navLink = "text-sm text-foreground transition-colors hover:text-muted-foreground";
-const iconLink = "flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground";
 
 export async function Footer() {
   const t = await getTranslations("footer");
@@ -43,26 +28,24 @@ export async function Footer() {
   const contributors = (
     <div className="flex flex-col gap-4">
       <span className={sectionLabel}>{t("developedBy")}</span>
-      <ul className="flex flex-row flex-wrap items-start gap-x-3 gap-y-4">
+      <ul className="flex flex-row flex-wrap items-center gap-x-3 gap-y-2">
         {DEVELOPERS.flatMap((dev, idx) => {
           const card = (
-            <li key={dev.name} className="flex flex-col items-center gap-1.5">
-              <span className="text-sm font-medium text-foreground">{dev.name}</span>
-              <span className="flex items-center gap-0.5">
-                <a href={dev.github} target="_blank" rel="noreferrer" aria-label={t("social.github", { name: dev.name })} className={iconLink}>
-                  <GitHub className="size-4" />
-                </a>
-                <a href={dev.linkedin} target="_blank" rel="noreferrer" aria-label={t("social.linkedin", { name: dev.name })} className={iconLink}>
-                  <LinkedIn className="size-4" />
-                </a>
-              </span>
+            <li key={dev.name}>
+              <a
+                href={dev.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t("social.linkedin", { name: dev.name })}
+                className="text-sm font-medium text-foreground transition-colors hover:text-muted-foreground"
+              >
+                {dev.name}
+              </a>
             </li>
           );
           if (idx === 0) return [card];
-          // pt-1.5 sits the bullet on the name baseline so it separates the
-          // names, not the icon rows below.
           return [
-            <li key={`sep-${dev.name}`} aria-hidden className="self-start pt-1.5 text-muted-foreground/40">
+            <li key={`sep-${dev.name}`} aria-hidden className="text-muted-foreground/40">
               ·
             </li>,
             card,

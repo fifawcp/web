@@ -24,12 +24,14 @@ type Props = {
   progress: PickemProgress;
   canNavigateTo: (step: PickemStep) => boolean;
   onReorder: (groupCode: GroupCode, next: RankedTeam[]) => void;
+  onToggleLock: (groupCode: GroupCode) => void;
+  lockingGroupCode: GroupCode | null;
   onSaveDraft: () => void;
   onContinue: () => void;
   isSaving: boolean;
 };
 
-export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReorder, onSaveDraft, onContinue, isSaving }: Props) {
+export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReorder, onToggleLock, lockingGroupCode, onSaveDraft, onContinue, isSaving }: Props) {
   const t = useTranslations("pickems");
 
   // Backend can return groups in any order; render them A → L.
@@ -54,7 +56,10 @@ export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReor
     setOpenGroups(allOpen ? new Set() : new Set(groups.map((g) => g.group_code)));
   };
 
-  const action: CTAAction = data.is_locked ? { kind: "hidden" } : { kind: "continue", label: t("common.continueToStep2"), loading: isSaving, onClick: onContinue };
+  const allLocked = progress.groups.completed === progress.groups.total;
+  const action: CTAAction = data.is_locked
+    ? { kind: "hidden" }
+    : { kind: "continue", label: t("common.continueToStep2"), loading: isSaving, onClick: onContinue, disabled: !allLocked };
   const saveDraftFn = data.is_locked ? undefined : onSaveDraft;
 
   return (
@@ -91,6 +96,8 @@ export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReor
             key={group.group_code}
             group={group}
             onReorder={onReorder}
+            onToggleLock={onToggleLock}
+            isLocking={lockingGroupCode === group.group_code}
             disabled={data.is_locked}
             open={openGroups.has(group.group_code)}
             onToggle={() => toggleGroup(group.group_code)}

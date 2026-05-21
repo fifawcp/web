@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, CloudUpload } from "lucide-react";
+import { ArrowLeft, ArrowRight, CloudUpload, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/shared/components/ui/button";
@@ -22,6 +22,11 @@ export function PickemsHeaderActions({ onBack, onSaveDraft, action }: Props) {
   const t = useTranslations("pickems.common");
 
   if (action.kind === "hidden" && !onBack && !onSaveDraft) return null;
+
+  // Spinner-not-text: the button's `min-w-*` only enforces a *minimum*, so a
+  // "Guardando..." label was wider than "Paso 2 →" and made the button grow
+  // visibly on every lock click. A fixed-size icon keeps width stable.
+  const spinner = <Loader2 className="size-4 animate-spin" aria-label={t("saving")} />;
 
   return (
     <div className="hidden items-center justify-end gap-2 lg:flex">
@@ -45,7 +50,7 @@ export function PickemsHeaderActions({ onBack, onSaveDraft, action }: Props) {
           className="min-w-28 cursor-pointer gap-1.5 bg-page-accent px-5 text-white hover:bg-page-accent/90"
         >
           {action.loading ? (
-            t("saving")
+            spinner
           ) : (
             <>
               {action.label ?? t("continue")}
@@ -61,7 +66,7 @@ export function PickemsHeaderActions({ onBack, onSaveDraft, action }: Props) {
           disabled={action.disabled || action.loading}
           className="min-w-32 cursor-pointer bg-page-accent px-5 text-white hover:bg-page-accent/90"
         >
-          {action.loading ? t("saving") : (action.label ?? t("continue"))}
+          {action.loading ? spinner : (action.label ?? t("continue"))}
         </Button>
       )}
     </div>

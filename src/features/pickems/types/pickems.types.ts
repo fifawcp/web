@@ -7,6 +7,7 @@ export type RankedTeam = Omit<Team, "group_code"> & {
 
 export type ResolvedGroupPick = {
   group_code: GroupCode;
+  locked: boolean;
   teams: RankedTeam[];
 };
 
@@ -48,6 +49,12 @@ export type GroupPickPayload = {
 
 export type SaveGroupPicksPayload = {
   group_picks: GroupPickPayload[];
+};
+
+export type SetGroupLockPayload = {
+  group_code: GroupCode;
+  locked: boolean;
+  team_fifa_codes: [string, string, string, string];
 };
 
 export type SaveBestThirdsPayload = {

@@ -73,26 +73,26 @@
     "bracket": {
       "title": "Pick'em Bracket",
       "description": "Groups, best thirds, and knockouts.",
-      "step": "{current} / 3",
+      "progress": "{current} of 3 steps",
       "continue": "Continue",
       "start": "Start",
-      "see": "See"
+      "see": "View"
     },
     "matchPicks": {
       "title": "Match Picks",
       "description": "Exact scores per match.",
-      "match": "{current} / {total}",
+      "progress": "{current} of {total} matches",
       "continue": "Continue",
       "start": "Start",
-      "see": "See"
+      "see": "View"
     },
     "awards": {
       "title": "World Cup Awards",
       "description": "Predict individual award winners.",
-      "picked": "{count} / 4",
+      "progress": "{current} of {total} awards",
       "continue": "Continue",
       "start": "Start",
-      "see": "See"
+      "see": "View"
     }
   },
   "stats": {

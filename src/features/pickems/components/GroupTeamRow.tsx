@@ -2,7 +2,7 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Asterisk, Check, GripVertical, X } from "lucide-react";
+import { Check, CircleDashed, GripVertical, X } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
@@ -85,7 +85,7 @@ function badgeFor(position: number): BadgeVariant | null {
  * own position-number circle on the left and inverted the hierarchy.
  *
  *  - qualify (1st/2nd): Check, strong accent      → "advances directly"
- *  - third (3rd):       Asterisk, accent          → "provisional / see footnote"
+ *  - third (3rd):       CircleDashed, accent      → "pending the best-third tiebreak"
  *  - out (4th):         X, muted                  → "didn't make it"
  *
  * `aria-label` carries the localized text so screen readers still
@@ -95,7 +95,7 @@ function PositionBadge({ variant, label }: { variant: BadgeVariant; label: strin
   return (
     <span role="img" aria-label={label} className="inline-flex size-6 items-center justify-center">
       {variant === "qualify" && <Check className="size-4 text-page-accent-strong" aria-hidden />}
-      {variant === "third" && <Asterisk className="size-3.5 text-page-accent-strong" aria-hidden />}
+      {variant === "third" && <CircleDashed className="size-4 text-page-accent-strong" aria-hidden />}
       {variant === "out" && <X className="size-3.5 text-muted-foreground/70" aria-hidden />}
     </span>
   );

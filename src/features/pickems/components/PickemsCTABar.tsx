@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, CloudUpload } from "lucide-react";
+import { ArrowLeft, ArrowRight, CloudUpload, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/shared/components/ui/button";
@@ -16,18 +16,12 @@ type Props = {
   action: CTAAction;
 };
 
-/**
- * Mobile fixed-bottom action bar. Desktop uses `PickemsHeaderActions` which
- * lives in the page header's right slot instead — this component hides itself
- * above `lg:`.
- *
- * `PickemsView` adds `pb-28` to the page container so the last group / tile /
- * bracket card isn't covered by this bar on mobile.
- */
 export function PickemsCTABar({ onBack, onSaveDraft, action }: Props) {
   const t = useTranslations("pickems.common");
 
   if (action.kind === "hidden" && !onBack && !onSaveDraft) return null;
+
+  const spinner = <Loader2 className="size-4 animate-spin" aria-label={t("saving")} />;
 
   return (
     <div
@@ -56,7 +50,7 @@ export function PickemsCTABar({ onBack, onSaveDraft, action }: Props) {
             className="h-10 flex-1 cursor-pointer gap-1.5 bg-page-accent text-white hover:bg-page-accent/90"
           >
             {action.loading ? (
-              t("saving")
+              spinner
             ) : (
               <>
                 {action.label ?? t("continue")}
@@ -72,7 +66,7 @@ export function PickemsCTABar({ onBack, onSaveDraft, action }: Props) {
             disabled={action.disabled || action.loading}
             className="h-10 flex-1 cursor-pointer bg-page-accent text-white hover:bg-page-accent/90"
           >
-            {action.loading ? t("saving") : (action.label ?? t("continue"))}
+            {action.loading ? spinner : (action.label ?? t("continue"))}
           </Button>
         )}
       </div>

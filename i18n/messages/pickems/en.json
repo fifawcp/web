@@ -20,14 +20,15 @@
     "title": "Predict the group stage",
     "subtitleMobile": "Drag teams to set the finishing order for each group. 1st & 2nd advance automatically; 3rd goes to next step.",
     "sectionLabel": "Groups",
-    "dragToOrder": "Drag to order",
     "reset": "Reset",
     "expandAll": "Expand all",
     "collapseAll": "Collapse all",
-    "tipsHeader": "Tip",
     "tipsBody": "Drag the <handle></handle> to reorder teams within each group.",
+    "tipsLockBody": "Tap the <lockIcon></lockIcon> on each group when you're sure about the order.",
     "tipsDismiss": "Dismiss tip",
     "groupLabel": "Group {code}",
+    "lockAction": "Lock group {code}",
+    "unlockAction": "Unlock group {code}",
     "badges": {
       "qualify": "Q",
       "third": "3rd",
@@ -74,6 +75,8 @@
     "picksClearedByGroupChange": "{n, plural, one {Your bracket changed: # pick was cleared.} other {Your bracket changed: # picks were cleared.}}",
     "groupsChangedReset": "Group order changed. Best thirds and bracket picks were reset.",
     "thirdsChangedReset": "Best thirds changed. Bracket picks were reset.",
+    "groupLocked": "Group {code} locked",
+    "groupUnlocked": "Group {code} unlocked",
     "saveFailed": "Could not save. Try again.",
     "submitFailed": "Could not submit your bracket. Try again."
   }

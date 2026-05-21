@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/shared/components/ui/button";
 
-import { getBracketProgressPercent, getCurrentBracketStep } from "../lib/pickStatusDerivations";
+import { getBracketCompletedStages, getBracketProgressPercent } from "../lib/pickStatusDerivations";
 import type { DashboardProgress } from "../types/dashboard.types";
 
 import { CardReveal } from "./CardReveal";
@@ -26,6 +26,9 @@ type PickStatusCardProps = {
 async function PickStatusCard({ icon: Icon, id, progress, statusText, buttonHref, isLoggedIn }: PickStatusCardProps) {
   const t = await getTranslations("dashboard.pickStatus");
   const ctaKey = !isLoggedIn || progress === 0 ? "start" : progress >= 100 ? "see" : "continue";
+  // Status row is a "you're still mid-flow" cue — hide it once the card is
+  // fully done, since the filled bar + 'See' button already say so.
+  const showStatus = isLoggedIn && statusText && progress < 100;
 
   return (
     <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3 sm:p-4">
@@ -44,7 +47,7 @@ async function PickStatusCard({ icon: Icon, id, progress, statusText, buttonHref
         )}
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1.5">
-        {isLoggedIn && statusText && <span className="text-xs font-medium tabular-nums text-foreground">{statusText}</span>}
+        {showStatus && <span className="text-xs font-medium tabular-nums text-muted-foreground">{statusText}</span>}
         <Button asChild variant="outline" size="sm" className="min-w-22 sm:min-w-28">
           <Link href={buttonHref}>{t(`${id}.${ctaKey}`)}</Link>
         </Button>
@@ -61,7 +64,7 @@ export async function PickStatusSection({ progress, isLoggedIn }: Props) {
   const awardsProgress = isLoggedIn && progress ? progress.awards : null;
 
   const bracketPercent = pickemProgress ? getBracketProgressPercent(pickemProgress) : 0;
-  const bracketStep = pickemProgress ? getCurrentBracketStep(pickemProgress) : 0;
+  const bracketCompleted = pickemProgress ? getBracketCompletedStages(pickemProgress) : 0;
   const matchPercent = matchPicks && matchPicks.total > 0 ? (matchPicks.completed / matchPicks.total) * 100 : 0;
   const awardsPercent = awardsProgress && awardsProgress.total > 0 ? (awardsProgress.completed / awardsProgress.total) * 100 : 0;
 
@@ -70,21 +73,21 @@ export async function PickStatusSection({ progress, isLoggedIn }: Props) {
       id: "bracket",
       icon: GitBranch,
       progress: bracketPercent,
-      statusText: pickemProgress ? t("bracket.step", { current: bracketStep }) : "",
+      statusText: pickemProgress ? t("bracket.progress", { current: bracketCompleted }) : "",
       buttonHref: "/pickems",
     },
     {
       id: "matchPicks",
       icon: Target,
       progress: matchPercent,
-      statusText: matchPicks ? t("matchPicks.match", { current: matchPicks.completed, total: matchPicks.total }) : "",
+      statusText: matchPicks ? t("matchPicks.progress", { current: matchPicks.completed, total: matchPicks.total }) : "",
       buttonHref: "/schedule",
     },
     {
       id: "awards",
       icon: Trophy,
       progress: awardsPercent,
-      statusText: awardsProgress ? t("awards.picked", { count: awardsProgress.completed }) : "",
+      statusText: awardsProgress ? t("awards.progress", { current: awardsProgress.completed, total: awardsProgress.total }) : "",
       buttonHref: "/awards",
     },
   ];

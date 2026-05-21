@@ -20,14 +20,15 @@
     "title": "Pronostica la fase de grupos",
     "subtitleMobile": "Arrastra los equipos para ordenar cada grupo. 1° y 2° avanzan directo; el 3° pasa al siguiente paso.",
     "sectionLabel": "Grupos",
-    "dragToOrder": "Arrastra para ordenar",
     "reset": "Reiniciar",
     "expandAll": "Expandir todo",
     "collapseAll": "Contraer todo",
-    "tipsHeader": "Consejo",
     "tipsBody": "Arrastra el <handle></handle> para reordenar los equipos dentro de cada grupo.",
+    "tipsLockBody": "Toca el <lockIcon></lockIcon> en cada grupo cuando estés seguro del orden.",
     "tipsDismiss": "Ocultar consejo",
     "groupLabel": "Grupo {code}",
+    "lockAction": "Bloquear grupo {code}",
+    "unlockAction": "Desbloquear grupo {code}",
     "badges": {
       "qualify": "Q",
       "third": "3°",
@@ -74,6 +75,8 @@
     "picksClearedByGroupChange": "{n, plural, one {Tu llave cambió: # pick fue limpiado.} other {Tu llave cambió: # picks fueron limpiados.}}",
     "groupsChangedReset": "Orden de grupos cambiado. Se reiniciaron los mejores terceros y los picks de la llave.",
     "thirdsChangedReset": "Mejores terceros cambiados. Se reiniciaron los picks de la llave.",
+    "groupLocked": "Grupo {code} bloqueado",
+    "groupUnlocked": "Grupo {code} desbloqueado",
     "saveFailed": "No se pudo guardar. Inténtalo de nuevo.",
     "submitFailed": "No se pudo enviar tu llave. Inténtalo de nuevo."
   }

@@ -89,10 +89,13 @@ function LeaderboardEntries({ data, currentUserId }: { data: CompetitionLeaderbo
   return (
     <div className="flex flex-col">
       {/* Three-column header: rank / player / points. Same grid template as
-          the rows below so columns line up cleanly. */}
+          the rows below so columns line up cleanly. Rank column is fixed at
+          `w-9` in both header and rows so column-2 edges align. The PLAYER
+          label gets a `pl-9.5` inset (avatar size-7 + gap-2.5 = 38px) so it
+          sits over the username, not the avatar. */}
       <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-border px-2 pb-2 text-2xs font-medium uppercase tracking-wider text-muted-foreground">
-        <span>{t("rank")}</span>
-        <span>{t("player")}</span>
+        <span className="w-9">{t("rank")}</span>
+        <span className="pl-9.5">{t("player")}</span>
         <span>{t("points")}</span>
       </div>
       <ul className="divide-y divide-border">
@@ -100,7 +103,7 @@ function LeaderboardEntries({ data, currentUserId }: { data: CompetitionLeaderbo
           const isMe = entry.member.user_id === currentUserId;
           return (
             <li key={entry.member.user_id} className={cn("grid grid-cols-[auto_1fr_auto] items-center gap-3 px-2 py-2.5", isMe && "bg-page-accent-soft/60")}>
-              <span className="w-4 shrink-0 text-center text-xs font-medium tabular-nums text-muted-foreground">{entry.rank}</span>
+              <span className="w-9 shrink-0 text-xs font-medium tabular-nums text-muted-foreground">{entry.rank}</span>
               <div className="flex min-w-0 items-center gap-2.5">
                 <Avatar className="size-7">
                   <AvatarFallback className="text-2xs">{getInitials(entry.member.username)}</AvatarFallback>

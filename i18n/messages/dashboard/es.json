@@ -80,7 +80,7 @@
     "bracket": {
       "title": "Bracket Pick'em",
       "description": "Grupos, mejores terceros y eliminatorias.",
-      "step": "{current} / 3",
+      "progress": "{current} de 3 pasos",
       "continue": "Continuar",
       "start": "Empezar",
       "see": "Ver"
@@ -88,7 +88,7 @@
     "matchPicks": {
       "title": "Picks de Partidos",
       "description": "Marcadores exactos por partido.",
-      "match": "{current} / {total}",
+      "progress": "{current} de {total} partidos",
       "continue": "Continuar",
       "start": "Empezar",
       "see": "Ver"
@@ -96,7 +96,7 @@
     "awards": {
       "title": "Premios del Mundial",
       "description": "Predice los ganadores de premios individuales.",
-      "picked": "{count} / 4",
+      "progress": "{current} de {total} premios",
       "continue": "Continuar",
       "start": "Empezar",
       "see": "Ver"

@@ -45,29 +45,36 @@ export function PickemsView({ initialData, userId }: Props) {
 
   // Progress counts derived from the *local* cache state (or pure server state
   // when locked). The stepper sub-line and the navigability gate both read
-  // from here so they reflect the user's pending edits immediately
+  // from here so they reflect the user's pending edits immediately.
+  //
+  // Groups is the exception: `group_picks` always contains all 12 entries
+  // (defaults included), so its length isn't a usable "completed" signal —
+  // use the server's progress count, which flips 0 → 12 after the first save.
+  // Step 1's navigation gate is hard-coded to `true` regardless, so the lag
+  // between a local reorder and the save doesn't block forward movement.
   const progress: PickemProgress = useMemo(() => {
     const projected = projectBracket(data.bracket, effectiveBracketDraft);
     const bracketCount = projected.reduce((n, slot) => (slot.picked_team ? n + 1 : n), 0);
 
     return {
-      groups: { completed: data.group_picks.length, total: 12 },
+      groups: data.progress.groups,
       best_thirds: { completed: data.best_thirds.length, total: 8 },
       bracket: { completed: bracketCount, total: 32 },
     };
-  }, [data.group_picks.length, data.best_thirds.length, data.bracket, effectiveBracketDraft]);
+  }, [data.progress.groups, data.best_thirds.length, data.bracket, effectiveBracketDraft]);
 
   // Forward navigation is only allowed when the previous step is complete.
-  // Step 1 is always complete (every group has its 4 default teams), so step 2
-  // is always reachable. Step 3 needs step 2 at 8/8. When locked, every step is
-  // reachable for read-only review regardless of completeness.
+  // Step 1 (groups) is the entry point. Step 2 needs all 12 groups *locked*
+  // (server's `progress.groups.completed` == 12). Step 3 needs step 2 at 8/8.
+  // When the tournament is locked, every step is reachable for read-only review.
   const canNavigateTo = useCallback(
     (target: PickemStep): boolean => {
       if (data.is_locked) return true;
-      if (target === "groups" || target === "thirds") return true;
+      if (target === "groups") return true;
+      if (target === "thirds") return progress.groups.completed === progress.groups.total;
       return progress.best_thirds.completed === progress.best_thirds.total;
     },
-    [data.is_locked, progress.best_thirds.completed, progress.best_thirds.total]
+    [data.is_locked, progress.groups.completed, progress.groups.total, progress.best_thirds.completed, progress.best_thirds.total]
   );
 
   // Save-aware navigation. Backend rejects step-2 saves when its picks don't
@@ -131,6 +138,8 @@ export function PickemsView({ initialData, userId }: Props) {
           progress={progress}
           canNavigateTo={canNavigateTo}
           onReorder={groupsSave.reorder}
+          onToggleLock={groupsSave.toggleLock}
+          lockingGroupCode={groupsSave.lockingGroupCode}
           onSaveDraft={groupsSave.saveDraft}
           onContinue={async () => {
             try {
