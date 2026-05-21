@@ -30,13 +30,22 @@
   },
   "footer": {
     "tagline": "Pronostica cada partido del Mundial 2026 y escala la clasificación con tus amigos.",
-    "play": "Juego",
+    "platform": "Plataforma",
     "about": "Acerca de",
     "legal": "Legal",
     "developedBy": "Diseñado y desarrollado por",
-    "disclaimer": "Este es un proyecto no oficial de aficionados, sin afiliación, aval ni vinculación con la FIFA ni sus filiales. «FIFA», «Copa del Mundo», nombres de equipos, marcas de competencias y demás marcas registradas son propiedad de sus respectivos dueños y se mencionan aquí únicamente con fines de identificación.",
-    "copyright": "© {year} World Cup Pick'em",
-    "rights": "Proyecto aficionado independiente con el único fin de entretener."
+    "aboutShort": {
+      "howItWorks": "Cómo funciona",
+      "rules": "Reglas",
+      "privacy": "Privacidad",
+      "terms": "Términos"
+    },
+    "social": {
+      "github": "{name} en GitHub",
+      "linkedin": "{name} en LinkedIn"
+    },
+    "disclaimer": "Proyecto no oficial de aficionados, sin afiliación ni aval de la FIFA. «FIFA», «Copa del Mundo», nombres de equipos y marcas registradas son propiedad de sus respectivos dueños.",
+    "copyright": "© {year} World Cup Pick'em — proyecto independiente con fines de entretenimiento."
   },
   "pages": {
     "comingSoonBadge": "Próximamente",

@@ -113,10 +113,10 @@ export function MobileMenu({ user }: MobileMenuProps) {
         </div>
 
         {/* Footer: identity card + sign out (auth) OR auth CTAs (guest) */}
-        <div className="border-t border-border py-3">
+        <div className="border-t border-border">
           {user ? (
-            <div className="flex flex-col gap-1">
-              <Link href="/profile" onClick={close} className="flex items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-muted">
+            <div className="flex flex-col">
+              <Link href="/profile" onClick={close} className="flex items-center gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-muted">
                 <Avatar className="size-8 shrink-0">
                   <AvatarFallback className="bg-primary-foreground text-primary border border-border dark:bg-primary dark:text-primary-foreground">
                     {getInitials(user.username, user.first_name, user.last_name)}
@@ -133,7 +133,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
                 type="button"
                 onClick={handleSignOut}
                 disabled={loading}
-                className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-destructive transition-colors hover:text-destructive-hover disabled:opacity-50 "
+                className="flex w-full items-center gap-3 rounded-md px-3 py-3 text-sm font-medium text-destructive transition-colors hover:text-destructive-hover disabled:opacity-50 "
               >
                 <div className="flex items-center p-2 bg-destructive/10 rounded-md">
                   <LogOut className="size-4 shrink-0" />

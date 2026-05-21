@@ -31,7 +31,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <Providers messages={messages} locale={locale}>
           <Header />
-          <main className="flex-1 overflow-x-clip">{children}</main>
+          <main className="flex-1 overflow-x-clip min-h-[calc(100dvh-var(--header-height))]">{children}</main>
           <Footer />
         </Providers>
       </body>

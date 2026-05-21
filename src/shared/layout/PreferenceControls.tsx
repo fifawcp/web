@@ -25,7 +25,7 @@ export function ThemeSwitch() {
           key={value}
           type="button"
           onClick={() => setTheme(value)}
-          className={cn(buttonClass, theme === value ? "bg-background text-foreground shadow-sm font-semibold" : "text-muted-foreground hover:text-foreground")}
+          className={cn(buttonClass, theme === value ? "bg-card text-foreground shadow-sm font-semibold" : "text-muted-foreground hover:text-foreground")}
         >
           <Icon className="size-3.5" />
           <span className="hidden lg:inline">{themeLabel[value]}</span>
@@ -53,7 +53,7 @@ export function LanguageSwitch() {
             className={cn(
               buttonClass,
               "disabled:opacity-50",
-              isActive ? "bg-background text-foreground shadow-sm font-semibold" : "text-muted-foreground hover:text-foreground"
+              isActive ? "bg-card text-foreground shadow-sm font-semibold" : "text-muted-foreground hover:text-foreground"
             )}
           >
             <span className="font-mono text-2xs uppercase tracking-wider opacity-70">{lang.code}</span>

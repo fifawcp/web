@@ -45,7 +45,7 @@ export function StepBestThirds({ data, step, onStep, progress, canNavigateTo, on
 
   const helperText = !isReady ? t("bestThirds.moreNeeded", { n: BEST_THIRDS_REQUIRED - count }) : undefined;
   const prev = prevStep("thirds");
-  const backFn = prev ? () => onStep(prev) : undefined;
+  const backFn = !data.is_locked && prev ? () => onStep(prev) : undefined;
   const action: CTAAction = data.is_locked
     ? { kind: "hidden" }
     : {

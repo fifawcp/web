@@ -1,6 +1,3 @@
-import { FloatingShapes } from "@/shared/components/FloatingShapes";
-
-import { floatingShapes } from "../lib/dashboardFloatingShapes";
 import type { DashboardData } from "../types/dashboard.types";
 
 import { HeroSection } from "./HeroSection";
@@ -26,8 +23,7 @@ export function DashboardView({ isLoggedIn, data, currentUserId }: Props) {
       />
 
       <section className="border-t border-border">
-        <div className="container mx-auto px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
-          <FloatingShapes shapes={floatingShapes} />
+        <div className="container py-8 sm:py-12">
           <div className="flex flex-col lg:flex-row gap-6">
             <div className="flex-1">
               <PickStatusSection isLoggedIn={isLoggedIn} progress={data?.progress ?? null} />

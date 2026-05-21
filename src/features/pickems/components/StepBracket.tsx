@@ -62,11 +62,12 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
 
   const prev = prevStep("bracket");
   const helperText = !isReady ? t("picksLeft", { n: TOTAL_BRACKET_PICKS - pickedCount }) : undefined;
-  const desktopBack = prev ? () => onStep(prev) : undefined;
+  const desktopBack = !data.is_locked && prev ? () => onStep(prev) : undefined;
   // Mobile back walks the tabs leftward; once we're at R32, it falls through to
   // the step-level back (→ best thirds). Keeps the gesture meaning "previous"
-  // whether that's a previous round or the previous step.
-  const mobileBack = prevStage ? () => setActiveStage(prevStage) : desktopBack;
+  // whether that's a previous round or the previous step. When locked, we drop
+  // the Back affordance entirely — the stepper is the only navigation.
+  const mobileBack = data.is_locked ? undefined : prevStage ? () => setActiveStage(prevStage) : desktopBack;
 
   const desktopAction: CTAAction = data.is_locked
     ? { kind: "hidden" }

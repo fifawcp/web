@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "./animations.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -103,11 +102,6 @@
   }
 }
 
-/* Dark mode opacity for floating shapes */
-:where(.dark, .dark *) [style*="--dark-opacity"] {
-  opacity: var(--dark-opacity) !important;
-}
-
 .text-gold {
   color: var(--color-gold);
 }
@@ -132,7 +126,7 @@
 
 /* Base colors */
 :root {
-  --background: #ffffff;
+  --background: #fafafa;
   --foreground: #09090b;
   --card: #ffffff;
   --card-foreground: #09090b;
