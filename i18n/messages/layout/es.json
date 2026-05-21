@@ -1,0 +1,71 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "schedule": "Calendario",
+    "boards": "Tableros",
+    "standings": "Posiciones",
+    "bracket": "Eliminatorias",
+    "login": "Iniciar sesión",
+    "register": "Crear cuenta",
+    "menuLabel": "Navegación",
+    "menuDescription": "Menú de navegación principal",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "userMenu": {
+    "accountMenu": "Menú de cuenta",
+    "profile": "Perfil",
+    "signOut": "Cerrar sesión",
+    "signingOut": "Cerrando sesión…"
+  },
+  "language": {
+    "label": "Idioma"
+  },
+  "preferences": {
+    "title": "Preferencias",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro"
+  },
+  "footer": {
+    "tagline": "Pronostica cada partido del Mundial 2026 y escala la clasificación con tus amigos.",
+    "play": "Juego",
+    "about": "Acerca de",
+    "legal": "Legal",
+    "developedBy": "Diseñado y desarrollado por",
+    "disclaimer": "Este es un proyecto no oficial de aficionados, sin afiliación, aval ni vinculación con la FIFA ni sus filiales. «FIFA», «Copa del Mundo», nombres de equipos, marcas de competencias y demás marcas registradas son propiedad de sus respectivos dueños y se mencionan aquí únicamente con fines de identificación.",
+    "copyright": "© {year} World Cup Pick'em",
+    "rights": "Proyecto aficionado independiente con el único fin de entretener."
+  },
+  "pages": {
+    "comingSoonBadge": "Próximamente",
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "body": "Pronto: una guía paso a paso para hacer pronósticos, unirte a tableros y sumar puntos."
+    },
+    "rules": {
+      "title": "Reglas y puntuación",
+      "body": "Pronto: el desglose completo de cómo se otorgan los puntos por cada pronóstico."
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "body": "Pronto: respuestas a las preguntas más frecuentes sobre el Pick'em del Mundial 2026."
+    },
+    "privacy": {
+      "title": "Política de privacidad",
+      "body": "Estamos finalizando nuestra política de privacidad sobre cómo se recopilan y manejan tus datos."
+    },
+    "terms": {
+      "title": "Términos del servicio",
+      "body": "Estamos finalizando los términos del servicio para usar World Cup Pick'em."
+    },
+    "standings": {
+      "title": "Posiciones",
+      "body": "Pronto: tablas de la fase de grupos y posiciones completas del torneo."
+    },
+    "bracket": {
+      "title": "Eliminatorias",
+      "body": "Pronto: el cuadro interactivo de eliminatorias para pronosticar cada ronda."
+    }
+  }
+}

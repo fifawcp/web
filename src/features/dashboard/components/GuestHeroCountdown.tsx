@@ -14,7 +14,7 @@ export function HeroCountdownBadge() {
   const countdown = useCountdown(TOURNAMENT_START_DATE);
 
   return (
-    <span className="w-fit p-1.5 sm:p-3 rounded-lg bg-muted text-xs sm:text-sm text-muted-foreground">
+    <span className="w-fit p-1.5 sm:p-3 rounded-lg bg-muted text-xs sm:text-sm text-muted-foreground" suppressHydrationWarning>
       {!countdown.isExpired ? t("countdown", { days: countdown.days, hours: countdown.hours, minutes: countdown.minutes }) : t("badge")}
     </span>
   );

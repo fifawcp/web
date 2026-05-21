@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import { getLocale, getMessages } from "next-intl/server";
 
 import { Providers } from "@/providers/layout-provider";
-import { Header } from "@/shared/layout/header";
+import { Footer } from "@/shared/layout/Footer";
+import { Header } from "@/shared/layout/Header";
 import { cn } from "@/shared/lib/utils";
 
 import "./globals.css";
@@ -11,7 +12,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "WCP",
+  title: { default: "Pickems · FIFA World Cup 2026", template: "Pickems · %s" },
   description: "Predict match scores and compete with friends in the 2026 World Cup pick'em game",
   icons: {
     icon: "/favicon.svg",
@@ -31,6 +32,7 @@ export default async function RootLayout({
         <Providers messages={messages} locale={locale}>
           <Header />
           <main className="flex-1 overflow-x-clip">{children}</main>
+          <Footer />
         </Providers>
       </body>
     </html>

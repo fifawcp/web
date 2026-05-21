@@ -1,0 +1,71 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "schedule": "Schedule",
+    "boards": "Boards",
+    "standings": "Standings",
+    "bracket": "Bracket",
+    "login": "Log in",
+    "register": "Sign up",
+    "menuLabel": "Navigation",
+    "menuDescription": "Main navigation menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "userMenu": {
+    "accountMenu": "Account menu",
+    "profile": "Profile",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "preferences": {
+    "title": "Preferences",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark"
+  },
+  "footer": {
+    "tagline": "Make your picks for every 2026 World Cup match and climb the leaderboard against friends.",
+    "play": "Play",
+    "about": "About",
+    "legal": "Legal",
+    "developedBy": "Designed & developed by",
+    "disclaimer": "This is an unofficial fan project with no affiliation to, endorsement by, or connection to FIFA or any of its affiliates. \"FIFA\", \"World Cup\", team names, competition marks, and all related trademarks are the property of their respective owners and are referenced here for identification purposes only.",
+    "copyright": "© {year} World Cup Pick'em",
+    "rights": "An independent fan project for entertainment purposes only."
+  },
+  "pages": {
+    "comingSoonBadge": "Coming soon",
+    "howItWorks": {
+      "title": "How it works",
+      "body": "A step-by-step guide to making picks, joining boards, and scoring points is on the way."
+    },
+    "rules": {
+      "title": "Rules & scoring",
+      "body": "The full breakdown of how points are awarded for match and bracket predictions is on the way."
+    },
+    "faq": {
+      "title": "FAQ",
+      "body": "Answers to the most common questions about the 2026 World Cup Pick'em are on the way."
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "body": "Our privacy policy detailing how your data is collected and handled is being finalized."
+    },
+    "terms": {
+      "title": "Terms of service",
+      "body": "The terms of service for using World Cup Pick'em are being finalized."
+    },
+    "standings": {
+      "title": "Standings",
+      "body": "Live group-stage tables and full tournament standings are on the way."
+    },
+    "bracket": {
+      "title": "Bracket",
+      "body": "The interactive knockout bracket for predicting every round is on the way."
+    }
+  }
+}
