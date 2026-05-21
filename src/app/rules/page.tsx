@@ -23,7 +23,7 @@ const KNOCKOUT_ITEMS = [
   { key: "r16", points: 6 },
   { key: "quarterfinals", points: 8 },
   { key: "semifinals", points: 12 },
-  { key: "thirdPlace", points: 6 },
+  { key: "thirdPlace", points: 16 },
   { key: "final", points: 20 },
 ] as const;
 
