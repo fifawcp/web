@@ -27,6 +27,6 @@ describe("isNavItemActive", () => {
 
 describe("NAV_ITEMS", () => {
   it("only lists routes that exist in the app today", () => {
-    expect(NAV_ITEMS.map((item) => item.href)).toEqual(["/", "/schedule", "/boards", "/standings", "/bracket"]);
+    expect(NAV_ITEMS.map((item) => item.href)).toEqual(["/", "/schedule", "/pickems", "/boards", "/standings", "/bracket"]);
   });
 });

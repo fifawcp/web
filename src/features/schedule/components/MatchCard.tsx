@@ -171,8 +171,6 @@ type ScoreAreaProps = {
 };
 
 function ScoreArea({ match, isAuthed, hasTeams, editing, draft, isSaving, onDraftChange, onStartEdit }: ScoreAreaProps) {
-  const t = useTranslations("schedule.card");
-
   if (editing) {
     return <MatchScorePicker home={draft.home_score} away={draft.away_score} onChange={onDraftChange} disabled={isSaving} />;
   }

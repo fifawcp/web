@@ -2,6 +2,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "schedule": "Calendario",
+    "pickems": "Pick'ems",
     "boards": "Tableros",
     "standings": "Posiciones",
     "bracket": "Eliminatorias",

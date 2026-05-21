@@ -7,7 +7,7 @@ import type { Team } from "@/shared/types/wcp.types";
 
 import { BEST_THIRDS_REQUIRED_COUNT } from "../hooks/useSaveBestThirds";
 import { prevStep } from "../lib/pickemStep";
-import type { PickemProgress, PickemStep, UserPickem } from "../types/pickems.types";
+import type { PickemProgress, PickemStep, RankedTeam, UserPickem } from "../types/pickems.types";
 
 import { BestThirdTile } from "./BestThirdTile";
 import { PickemsCTABar, type CTAAction } from "./PickemsCTABar";
@@ -34,8 +34,8 @@ export function StepBestThirds({ data, step, onStep, progress, canNavigateTo, on
 
   // Candidates: every group's 3rd-place team, sorted A → L so the grid is stable
   // regardless of the order group_picks comes back in.
-  const candidates = useMemo<Team[]>(() => {
-    const list = data.group_picks.flatMap((group) => group.teams.filter((team) => team.position === 3) as Team[]);
+  const candidates = useMemo<RankedTeam[]>(() => {
+    const list = data.group_picks.flatMap((group) => group.teams.filter((team) => team.position === 3));
     return list.sort((a, b) => a.group_code.localeCompare(b.group_code));
   }, [data.group_picks]);
 

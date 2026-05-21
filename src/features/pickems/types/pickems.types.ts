@@ -1,6 +1,7 @@
 import type { GroupCode, StageCode, Team } from "@/shared/types/wcp.types";
 
-export type RankedTeam = Team & {
+export type RankedTeam = Omit<Team, "group_code"> & {
+  group_code: GroupCode;
   position: number;
 };
 

@@ -6,10 +6,11 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { getTeamName } from "@/shared/lib/getTeamName";
 import { cn } from "@/shared/lib/utils";
-import type { Team } from "@/shared/types/wcp.types";
+
+import type { RankedTeam } from "../types/pickems.types";
 
 type Props = {
-  team: Team;
+  team: RankedTeam;
   selected: boolean;
   disabled?: boolean;
   onToggle: () => void;
