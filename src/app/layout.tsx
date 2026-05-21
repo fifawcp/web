@@ -12,7 +12,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: { default: "Pickems · FIFA World Cup 2026", template: "Pickems · %s" },
+  title: { default: "Pick'ems · FIFA World Cup 2026", template: "Pickems · %s" },
   description: "Predict match scores and compete with friends in the 2026 World Cup pick'em game",
   icons: {
     icon: "/favicon.svg",

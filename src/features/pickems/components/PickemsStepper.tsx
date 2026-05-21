@@ -27,7 +27,7 @@ export function PickemsStepper({ current, progress, onChange, canNavigateTo = ()
   const currentIdx = stepIndex(current);
 
   return (
-    <div className="flex w-full items-start rounded-xl border bg-card px-3 py-3 sm:px-4">
+    <div className="flex w-full items-center rounded-xl border bg-card px-3 py-3 sm:px-4">
       {PICKEM_STEPS.map((step, i) => {
         const state = stepState(i, currentIdx, progress);
         const isLast = i === PICKEM_STEPS.length - 1;
@@ -35,43 +35,31 @@ export function PickemsStepper({ current, progress, onChange, canNavigateTo = ()
         const isClickable = state !== "active" && reachable;
         const label = t(`${i + 1}`);
         const sub = subline(step, progress);
-        // Line after this step uses the accent when this step is done
-        // (regardless of active/completed) so the accent flows continuously
-        // from the start through every completed segment.
+        // Line after this step uses the accent when this step is done so the
+        // accent flows continuously through every completed segment.
         const stepIsDone = isStepComplete(i, progress);
 
         return (
           <Fragment key={step}>
-            {/* `flex-1 min-w-0` makes every step share an equal slice of the
-                stepper width — combined with `flex-1` connectors below, the
-                middle step's circle sits exactly at the horizontal centre
-                regardless of label length. */}
             <button
               type="button"
               onClick={() => isClickable && onChange(step)}
               disabled={!isClickable}
               aria-current={state === "active" ? "step" : undefined}
               className={cn(
-                "flex min-w-0 flex-1 flex-col items-center gap-1.5 text-center sm:flex-row sm:items-start sm:gap-2.5 sm:text-left",
+                "flex shrink-0 flex-col items-center justify-center gap-2 sm:flex-row",
                 isClickable ? "cursor-pointer" : "cursor-default",
                 !reachable && state !== "active" && "opacity-50"
               )}
             >
               <StepDot index={i} state={state} />
-              <div className="min-w-0">
-                <div
-                  className={cn(
-                    "whitespace-pre-line text-xs font-medium leading-tight sm:whitespace-normal sm:text-sm",
-                    state === "upcoming" ? "text-muted-foreground" : "text-foreground"
-                  )}
-                >
-                  {label}
-                </div>
-                <div className="mt-0.5 font-mono text-2xs uppercase tracking-wider tabular-nums text-muted-foreground">{sub}</div>
+              <div className="text-center sm:text-left">
+                <div className={cn("text-xs font-medium leading-tight sm:text-sm", state === "upcoming" ? "text-muted-foreground" : "text-foreground")}>{label}</div>
+                <div className="font-mono text-2xs uppercase tracking-wider tabular-nums text-muted-foreground">{sub}</div>
               </div>
             </button>
 
-            {!isLast && <span aria-hidden className={cn("mx-2 mt-3.5 h-px flex-1 self-start sm:mx-4", stepIsDone ? "bg-page-accent" : "bg-border")} />}
+            {!isLast && <span aria-hidden className={cn("mx-3 h-0.5 flex-1 sm:mx-4", stepIsDone ? "bg-page-accent" : "bg-border")} />}
           </Fragment>
         );
       })}

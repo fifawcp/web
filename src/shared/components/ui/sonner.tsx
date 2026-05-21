@@ -28,7 +28,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }
       toastOptions={{
         classNames: {
-          toast: "cn-toast",
+          // Title's default line-height (1.5) leaves slack above/below the
+          // text glyphs, so the icon optically sits high vs. a title-only
+          // toast. `leading-4` (16px) matches the icon box exactly.
+          title: "leading-4",
         },
       }}
       {...props}

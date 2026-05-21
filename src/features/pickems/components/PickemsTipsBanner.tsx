@@ -12,28 +12,33 @@ type Props = {
 
 export function PickemsTipsBanner({ className }: Props) {
   const t = useTranslations("pickems.groups");
-  const [dismissed, setDismissed] = useState(false);
+  const [dragDismissed, setDragDismissed] = useState(false);
+  const [lockDismissed, setLockDismissed] = useState(false);
 
-  if (dismissed) return null;
+  if (dragDismissed && lockDismissed) return null;
 
   return (
     <div className={cn("grid grid-cols-1 gap-3 lg:grid-cols-2", className)}>
-      <Tip
-        icon={<Lightbulb className="mt-0.5 size-4 shrink-0 text-amber-500" aria-hidden />}
-        body={t.rich("tipsBody", {
-          handle: () => <GripVertical className="inline size-3.5 align-text-bottom text-foreground" strokeWidth={2.5} aria-hidden />,
-        })}
-        dismissLabel={t("tipsDismiss")}
-        onDismiss={() => setDismissed(true)}
-      />
-      <Tip
-        icon={<Lock className="mt-0.5 size-4 shrink-0 text-page-accent-strong" aria-hidden />}
-        body={t.rich("tipsLockBody", {
-          lockIcon: () => <Lock className="inline size-3.5 align-text-bottom text-foreground" strokeWidth={2.5} aria-hidden />,
-        })}
-        dismissLabel={t("tipsDismiss")}
-        onDismiss={() => setDismissed(true)}
-      />
+      {!dragDismissed && (
+        <Tip
+          icon={<Lightbulb className="mt-0.5 size-4 shrink-0 text-amber-500" aria-hidden />}
+          body={t.rich("tipsBody", {
+            handle: () => <GripVertical className="inline size-3.5 align-text-bottom text-foreground" strokeWidth={2.5} aria-hidden />,
+          })}
+          dismissLabel={t("tipsDismiss")}
+          onDismiss={() => setDragDismissed(true)}
+        />
+      )}
+      {!lockDismissed && (
+        <Tip
+          icon={<Lock className="mt-0.5 size-4 shrink-0 text-page-accent-strong" aria-hidden />}
+          body={t.rich("tipsLockBody", {
+            lockIcon: () => <Lock className="inline size-3.5 align-text-bottom text-foreground" strokeWidth={2.5} aria-hidden />,
+          })}
+          dismissLabel={t("tipsDismiss")}
+          onDismiss={() => setLockDismissed(true)}
+        />
+      )}
     </div>
   );
 }
