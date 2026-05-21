@@ -18,7 +18,7 @@ export function Brand({ href = "/", onClick, className }: BrandProps) {
       </div>
       <span className="flex flex-col leading-none">
         <span className="text-2xs font-medium uppercase tracking-[0.18em] text-muted-foreground">2026</span>
-        <span className="text-sm font-bold tracking-tight">Pickems</span>
+        <span className="text-sm font-bold tracking-tight">Pick&apos;ems</span>
       </span>
     </Link>
   );
