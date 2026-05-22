@@ -45,9 +45,9 @@ export function GroupTeamRow({ team, position, locale, disabled }: Props) {
       {...(disabled ? {} : attributes)}
       {...(disabled ? {} : listeners)}
       className={cn(
-        "flex items-center gap-3 rounded-lg border border-border px-2.5 py-2 outline-none transition-shadow touch-none select-none",
+        "flex items-center gap-3 rounded-lg border border-border px-2.5 py-2 outline-none transition-shadow select-none",
         rowBgClass,
-        !disabled && "cursor-grab focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing",
+        !disabled && "touch-none cursor-grab focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing",
         isDragging && "z-10 shadow-md"
       )}
     >

@@ -9,6 +9,7 @@ type BracketDraftStore = {
   hydrate: (userId: string | undefined) => void;
   pick: (matchId: number, fifaCode: string) => void;
   clearPick: (matchId: number) => void;
+  replaceDraft: (draft: BracketDraft) => void;
   reset: () => void;
 };
 
@@ -35,6 +36,10 @@ export const useBracketDraftStore = create<BracketDraftStore>((set, get) => ({
     delete next[matchId];
     writeBracketDraft(get().userId, next);
     set({ draft: next });
+  },
+  replaceDraft: (draft) => {
+    writeBracketDraft(get().userId, draft);
+    set({ draft });
   },
   reset: () => {
     clearBracketDraft(get().userId);

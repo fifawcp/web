@@ -7,14 +7,17 @@
     "2": "Mejores terceros",
     "3": "Eliminatoria"
   },
-  "stepCrumb": "Paso {n} de {total}",
   "common": {
     "back": "Atrás",
     "continue": "Continuar",
     "continueToStep2": "Paso 2",
     "continueToStep3": "Paso 3",
     "saveDraft": "Guardar borrador",
-    "saving": "Guardando..."
+    "saving": "Guardando...",
+    "readyForStep2": "Todo listo, continúa al paso 2",
+    "readyForStep3": "Todo listo, continúa al paso 3",
+    "readyForRound": "Todo listo, continúa a {round}",
+    "readyToSubmit": "Todo listo, envía tus picks"
   },
   "groups": {
     "title": "Pronostica la fase de grupos",
@@ -29,6 +32,7 @@
     "groupLabel": "Grupo {code}",
     "lockAction": "Bloquear grupo {code}",
     "unlockAction": "Desbloquear grupo {code}",
+    "lockedCount": "{completed} de {total} grupos confirmados",
     "badges": {
       "qualify": "Q",
       "third": "3°",
@@ -37,7 +41,7 @@
   },
   "bestThirds": {
     "title": "Mejores terceros",
-    "subtitle": "De los 12 equipos en tercer lugar, elige los {total} que crees que pasarán a Octavos de Final.",
+    "subtitle": "De tus 12 terceros, elige los {total} que pasarán a Octavos de Final.",
     "moreNeeded": "{n, plural, one {Falta # selección} other {Faltan # selecciones}}",
     "groupTag": "Grupo {code}"
   },
@@ -66,7 +70,8 @@
       "final": "Final"
     },
     "roundLeft": "Faltan {n}",
-    "pickRoundCount": "Elige {n} ganadores"
+    "pickRoundCount": "Elige {n} ganadores",
+    "roundComplete": "Ronda completa"
   },
   "toasts": {
     "groupsSaved": "Grupos guardados",
@@ -78,6 +83,9 @@
     "groupLocked": "Grupo {code} bloqueado",
     "groupUnlocked": "Grupo {code} desbloqueado",
     "saveFailed": "No se pudo guardar. Inténtalo de nuevo.",
-    "submitFailed": "No se pudo enviar tu llave. Inténtalo de nuevo."
+    "submitFailed": "No se pudo enviar tu llave. Inténtalo de nuevo.",
+    "lockAllGroupsFirst": "Confirma los 12 grupos antes de continuar",
+    "selectAllThirdsFirst": "Elige los 8 mejores terceros antes de continuar",
+    "finishRoundFirst": "Termina esta ronda antes de continuar"
   }
 }

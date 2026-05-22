@@ -106,7 +106,11 @@ function TeamRow({ team, picked, density, locale, canPick, onPick }: TeamRowProp
       aria-pressed={picked}
     >
       <div className="shrink-0 overflow-hidden rounded-xs ring-1 ring-border/60">
-        <Image src={team.flag_url} alt="" width={32} height={22} sizes="32px" className={cn("object-cover", density === "dense" ? "h-3.5 w-5" : "h-5 w-8")} />
+        {density === "dense" ? (
+          <Image src={team.flag_url} alt="" width={20} height={14} sizes="20px" className="h-3.5 w-5 object-cover" />
+        ) : (
+          <Image src={team.flag_url} alt="" width={32} height={20} sizes="32px" className="h-5 w-8 object-cover" />
+        )}
       </div>
       <span className={cn("min-w-0 flex-1 truncate text-foreground", density === "dense" ? "text-xs" : "text-sm", picked ? "font-semibold" : "font-medium")}>
         {getTeamName(team, locale)}

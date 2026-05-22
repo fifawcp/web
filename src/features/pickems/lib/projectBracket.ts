@@ -80,3 +80,28 @@ export function projectBracket(serverBracket: BracketMatchSlot[], draft: Bracket
 export function findChampion(bracket: BracketMatchSlot[]): Team | null {
   return bracket.find((slot) => slot.stage_code === "final")?.picked_team ?? null;
 }
+
+/**
+ * Walks the projected bracket and drops any draft picks that no longer
+ * resolve — i.e. the picked team is no longer in the slot's home/away after
+ * projecting against the current server bracket. This happens when group order
+ * or best-thirds were changed on another device, causing the server to
+ * recompute R32 home/away while this device's localStorage still holds the
+ * old picks. Returns the cleaned draft and how many entries were dropped, so
+ * callers can surface a toast.
+ */
+export function pruneBracketDraft(serverBracket: BracketMatchSlot[], draft: BracketDraft): { pruned: BracketDraft; removedCount: number } {
+  const projected = projectBracket(serverBracket, draft);
+  const pruned: BracketDraft = {};
+  let removedCount = 0;
+  for (const slot of projected) {
+    const draftCode = draft[slot.match_id];
+    if (draftCode === undefined) continue;
+    if (slot.picked_team?.fifa_code === draftCode) {
+      pruned[slot.match_id] = draftCode;
+    } else {
+      removedCount++;
+    }
+  }
+  return { pruned, removedCount };
+}

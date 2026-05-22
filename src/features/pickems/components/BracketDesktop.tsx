@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { Trophy } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -283,35 +284,37 @@ type ChampionDisplayProps = {
 };
 
 /**
- * Always-rendered "Champion" slot in the center column. Filled state shows
- * the accent label on top + flag + team name; empty state collapses to just
- * the muted label with a dashed border. Same `min-h` either way — picking the
- * champion swaps the card's content without nudging Final / Third downward.
- *
- * No trophy iconography — the accent border, accent label, and prominent flag
- * carry the "winner" treatment with a cleaner editorial feel.
+ * Always-rendered "Champion" slot in the center column. Same `min-h` filled vs.
+ * empty so picking the champion swaps content without nudging Final / Third.
  */
 function BracketChampionDisplay({ champion, label, locale }: ChampionDisplayProps) {
-  const filled = champion !== null;
+  if (!champion) {
+    return (
+      <div className="flex min-h-28 flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-border bg-card px-2 py-2.5">
+        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">{label}</span>
+      </div>
+    );
+  }
   return (
     <div
       className={cn(
-        "flex min-h-28 flex-col items-center justify-center gap-2 rounded-md bg-card px-2 py-2.5",
-        filled ? "border-2 border-page-accent" : "border-2 border-dashed border-border"
+        "flex min-h-28 flex-col items-center justify-center gap-1.5 rounded-md border-2 bg-card px-2 py-2.5",
+        "border-amber-400/70 dark:border-amber-500/50",
+        "animate-in fade-in zoom-in-95 duration-500"
       )}
     >
-      <span className={cn("font-mono text-[10px] font-semibold uppercase tracking-[0.2em]", filled ? "text-page-accent-strong" : "text-muted-foreground/70")}>
-        {label}
-      </span>
-
-      {filled && (
-        <div className="flex w-full flex-col items-center gap-1">
-          <div className="overflow-hidden rounded-xs ring-1 ring-border/60">
-            <Image src={champion.flag_url} alt="" width={40} height={28} sizes="40px" className="h-5 w-7 object-cover" />
-          </div>
-          <span className="max-w-full truncate text-sm font-semibold text-foreground">{getTeamName(champion, locale)}</span>
+      <div className="flex flex-col items-center gap-1">
+        <div className="flex size-7 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/15">
+          <Trophy className="size-3.5 text-amber-600 dark:text-amber-400" strokeWidth={2.25} aria-hidden />
         </div>
-      )}
+        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-amber-700 dark:text-amber-500">{label}</span>
+      </div>
+      <div className="flex w-full flex-col items-center gap-1">
+        <div className="overflow-hidden rounded-xs ring-1 ring-border/60">
+          <Image src={champion.flag_url} alt="" width={28} height={20} sizes="28px" className="h-5 w-7 object-cover" />
+        </div>
+        <span className="max-w-full truncate text-sm font-semibold tracking-tight text-foreground">{getTeamName(champion, locale)}</span>
+      </div>
     </div>
   );
 }
