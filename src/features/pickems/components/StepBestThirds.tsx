@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import type { Team } from "@/shared/types/wcp.types";
 
@@ -43,9 +44,16 @@ export function StepBestThirds({ data, step, onStep, progress, canNavigateTo, on
   const count = selectedCodes.size;
   const isReady = count === BEST_THIRDS_REQUIRED;
 
-  const helperText = !isReady ? t("bestThirds.moreNeeded", { n: BEST_THIRDS_REQUIRED - count }) : undefined;
+  const helperText = isReady ? t("common.readyForStep3") : t("bestThirds.moreNeeded", { n: BEST_THIRDS_REQUIRED - count });
   const prev = prevStep("thirds");
   const backFn = !data.is_locked && prev ? () => onStep(prev) : undefined;
+  const handleContinue = () => {
+    if (!isReady) {
+      toast(t("toasts.selectAllThirdsFirst"));
+      return;
+    }
+    onContinue();
+  };
   const action: CTAAction = data.is_locked
     ? { kind: "hidden" }
     : {
@@ -54,7 +62,8 @@ export function StepBestThirds({ data, step, onStep, progress, canNavigateTo, on
         disabled: !isReady,
         loading: isSaving,
         helperText,
-        onClick: onContinue,
+        helperTone: isReady ? "ready" : undefined,
+        onClick: handleContinue,
       };
 
   return (
@@ -62,10 +71,16 @@ export function StepBestThirds({ data, step, onStep, progress, canNavigateTo, on
       <PickemsHeader
         step="thirds"
         rightSlot={
-          <>
+          <div className="hidden flex-col items-stretch gap-2.5 lg:flex">
             <PickemsHeaderActions action={action} onBack={backFn} />
-            <PickemsHeaderProgress completed={count} total={BEST_THIRDS_REQUIRED} label={`${count} / ${BEST_THIRDS_REQUIRED}`} />
-          </>
+            <PickemsHeaderProgress
+              completed={count}
+              total={BEST_THIRDS_REQUIRED}
+              label={`${count} / ${BEST_THIRDS_REQUIRED}`}
+              helperText={data.is_locked ? undefined : helperText}
+              helperTone={isReady ? "ready" : undefined}
+            />
+          </div>
         }
       />
 
@@ -81,7 +96,7 @@ export function StepBestThirds({ data, step, onStep, progress, canNavigateTo, on
         </div>
       </div>
 
-      <PickemsCTABar action={action} onBack={backFn} />
+      <PickemsCTABar action={action} onBack={backFn} progress={{ completed: count, total: BEST_THIRDS_REQUIRED }} />
     </section>
   );
 }

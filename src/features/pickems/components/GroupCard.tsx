@@ -54,7 +54,7 @@ export function GroupCard({ group, onReorder, disabled, onToggleLock, isLocking,
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card">
+    <div className={cn("overflow-hidden rounded-xl border bg-card transition-colors", group.locked ? "border-page-accent/40 bg-page-accent-soft/25" : "border-border")}>
       <button
         type="button"
         onClick={onToggle}
@@ -88,11 +88,11 @@ export function GroupCard({ group, onReorder, disabled, onToggleLock, isLocking,
           }}
           className={cn(
             "hidden md:ml-auto md:inline-flex md:size-7 md:shrink-0 md:cursor-pointer md:items-center md:justify-center md:rounded-md md:transition-colors md:pointer-events-auto",
-            group.locked ? "md:bg-page-accent-soft md:text-page-accent-strong md:hover:bg-page-accent-soft/80" : "md:text-muted-foreground md:hover:bg-muted",
+            group.locked ? "md:bg-page-accent-soft md:text-page-accent-strong md:hover:bg-page-accent-soft/80" : "md:text-foreground md:hover:bg-muted",
             (disabled || isLocking) && "md:cursor-not-allowed md:opacity-50 md:hover:bg-transparent"
           )}
         >
-          {group.locked ? <Lock className="size-4" aria-hidden /> : <LockOpen className="size-4" aria-hidden />}
+          {group.locked ? <Lock className="size-4" aria-hidden /> : <LockOpen className="size-4" strokeWidth={2.25} aria-hidden />}
         </span>
 
         <span
@@ -111,11 +111,11 @@ export function GroupCard({ group, onReorder, disabled, onToggleLock, isLocking,
           }}
           className={cn(
             "ml-1 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md transition-colors md:hidden",
-            group.locked ? "bg-page-accent-soft text-page-accent-strong hover:bg-page-accent-soft/80" : "text-muted-foreground hover:bg-muted",
+            group.locked ? "bg-page-accent-soft text-page-accent-strong hover:bg-page-accent-soft/80" : "text-foreground hover:bg-muted",
             (disabled || isLocking) && "cursor-not-allowed opacity-50 hover:bg-transparent"
           )}
         >
-          {group.locked ? <Lock className="size-4" aria-hidden /> : <LockOpen className="size-4" aria-hidden />}
+          {group.locked ? <Lock className="size-4" aria-hidden /> : <LockOpen className="size-4" strokeWidth={2.25} aria-hidden />}
         </span>
 
         <ChevronDown className={cn("ml-2 size-4 shrink-0 text-muted-foreground transition-transform md:hidden", open && "rotate-180")} aria-hidden />

@@ -7,14 +7,17 @@
     "2": "Best thirds",
     "3": "Bracket"
   },
-  "stepCrumb": "Step {n} of {total}",
   "common": {
     "back": "Back",
     "continue": "Continue",
     "continueToStep2": "Step 2",
     "continueToStep3": "Step 3",
     "saveDraft": "Save draft",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "readyForStep2": "All set, continue to step 2",
+    "readyForStep3": "All set, continue to step 3",
+    "readyForRound": "All set, continue to {round}",
+    "readyToSubmit": "All set, submit your picks"
   },
   "groups": {
     "title": "Predict the group stage",
@@ -29,6 +32,7 @@
     "groupLabel": "Group {code}",
     "lockAction": "Lock group {code}",
     "unlockAction": "Unlock group {code}",
+    "lockedCount": "{completed} of {total} groups locked",
     "badges": {
       "qualify": "Q",
       "third": "3rd",
@@ -37,7 +41,7 @@
   },
   "bestThirds": {
     "title": "Best third-place teams",
-    "subtitle": "From the 12 third-placed sides above, pick the {total} you think will advance to the Round of 32.",
+    "subtitle": "From your 12 third-place teams, pick the {total} you think will advance to the Round of 32.",
     "moreNeeded": "{n, plural, one {# more selection needed} other {# more selections needed}}",
     "groupTag": "Group {code}"
   },
@@ -66,7 +70,8 @@
       "final": "Final"
     },
     "roundLeft": "{n} left",
-    "pickRoundCount": "Pick {n} winners"
+    "pickRoundCount": "Pick {n} winners",
+    "roundComplete": "Round complete"
   },
   "toasts": {
     "groupsSaved": "Groups saved",
@@ -78,6 +83,9 @@
     "groupLocked": "Group {code} locked",
     "groupUnlocked": "Group {code} unlocked",
     "saveFailed": "Could not save. Try again.",
-    "submitFailed": "Could not submit your bracket. Try again."
+    "submitFailed": "Could not submit your bracket. Try again.",
+    "lockAllGroupsFirst": "Lock all 12 groups before continuing",
+    "selectAllThirdsFirst": "Pick all 8 best thirds before continuing",
+    "finishRoundFirst": "Finish this round before continuing"
   }
 }

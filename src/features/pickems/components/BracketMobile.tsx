@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { cn } from "@/shared/lib/utils";
@@ -45,6 +46,8 @@ export function BracketMobile({ bracket, champion, disabled, onPick, activeStage
         <div className="grid grid-cols-6 gap-1 rounded-xl border bg-card p-1">
           {tabsMeta.map((meta) => {
             const isActive = meta.stage === activeStage;
+            const isComplete = meta.completed === meta.total;
+            const showCheck = isComplete && !isActive;
             return (
               <button
                 key={meta.stage}
@@ -56,9 +59,13 @@ export function BracketMobile({ bracket, champion, disabled, onPick, activeStage
                 )}
               >
                 <div>{tShort(meta.stage)}</div>
-                <div className={cn("font-mono text-2xs uppercase tracking-wider", isActive ? "text-white/75" : "text-muted-foreground")}>
-                  {meta.completed}/{meta.total}
-                </div>
+                {showCheck ? (
+                  <Check className="mx-auto mt-0.5 size-3 text-page-accent-strong" aria-label={t("roundComplete")} />
+                ) : (
+                  <div className={cn("font-mono text-2xs uppercase tracking-wider", isActive ? "text-white/75" : "text-muted-foreground")}>
+                    {meta.completed}/{meta.total}
+                  </div>
+                )}
               </button>
             );
           })}

@@ -1,8 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowDownUp } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import { Button } from "@/shared/components/ui/button";
 import type { GroupCode } from "@/shared/types/wcp.types";
@@ -57,9 +58,25 @@ export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReor
   };
 
   const allLocked = progress.groups.completed === progress.groups.total;
+  const helperText = allLocked ? t("common.readyForStep2") : t("groups.lockedCount", { completed: progress.groups.completed, total: progress.groups.total });
+  const handleContinue = () => {
+    if (!allLocked) {
+      toast(t("toasts.lockAllGroupsFirst"));
+      return;
+    }
+    onContinue();
+  };
   const action: CTAAction = data.is_locked
     ? { kind: "hidden" }
-    : { kind: "continue", label: t("common.continueToStep2"), loading: isSaving, onClick: onContinue, disabled: !allLocked };
+    : {
+        kind: "continue",
+        label: t("common.continueToStep2"),
+        loading: isSaving,
+        disabled: !allLocked,
+        onClick: handleContinue,
+        helperText,
+        helperTone: allLocked ? "ready" : undefined,
+      };
   const saveDraftFn = data.is_locked ? undefined : onSaveDraft;
 
   return (
@@ -67,14 +84,16 @@ export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReor
       <PickemsHeader
         step="groups"
         rightSlot={
-          <>
+          <div className="hidden flex-col items-stretch gap-2.5 lg:flex">
             <PickemsHeaderActions action={action} onSaveDraft={saveDraftFn} />
             <PickemsHeaderProgress
               completed={progress.groups.completed}
               total={progress.groups.total}
               label={`${progress.groups.completed} / ${progress.groups.total}`}
+              helperText={data.is_locked ? undefined : helperText}
+              helperTone={allLocked ? "ready" : undefined}
             />
-          </>
+          </div>
         }
       />
 
@@ -85,7 +104,7 @@ export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReor
       <div className="flex items-center justify-between pt-1 md:hidden">
         <h3 className="text-xl font-semibold tracking-tight text-foreground">{t("groups.sectionLabel")}</h3>
         <Button variant="outline" size="sm" onClick={toggleAll} className="min-w-32 cursor-pointer gap-1.5">
-          <ArrowDownUp className="size-3.5" aria-hidden />
+          <ChevronsUpDown className="size-3.5" aria-hidden />
           {allOpen ? t("groups.collapseAll") : t("groups.expandAll")}
         </Button>
       </div>
@@ -105,7 +124,7 @@ export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReor
         ))}
       </div>
 
-      <PickemsCTABar action={action} onSaveDraft={saveDraftFn} />
+      <PickemsCTABar action={action} onSaveDraft={saveDraftFn} progress={progress.groups} />
     </section>
   );
 }

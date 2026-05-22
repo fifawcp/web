@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GripVertical, Lightbulb, Lock, X } from "lucide-react";
+import { GripVertical, Lightbulb, Lock, LockOpen, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { cn } from "@/shared/lib/utils";
@@ -21,9 +21,10 @@ export function PickemsTipsBanner({ className }: Props) {
     <div className={cn("grid grid-cols-1 gap-3 lg:grid-cols-2", className)}>
       {!dragDismissed && (
         <Tip
-          icon={<Lightbulb className="mt-0.5 size-4 shrink-0 text-amber-500" aria-hidden />}
+          tone="amber"
+          icon={<Lightbulb className="mt-0.5 size-5 shrink-0 text-amber-500" strokeWidth={2.25} aria-hidden />}
           body={t.rich("tipsBody", {
-            handle: () => <GripVertical className="inline size-3.5 align-text-bottom text-foreground" strokeWidth={2.5} aria-hidden />,
+            handle: () => <GripVertical className="inline size-4 align-text-bottom text-foreground" strokeWidth={2.5} aria-hidden />,
           })}
           dismissLabel={t("tipsDismiss")}
           onDismiss={() => setDragDismissed(true)}
@@ -31,9 +32,10 @@ export function PickemsTipsBanner({ className }: Props) {
       )}
       {!lockDismissed && (
         <Tip
-          icon={<Lock className="mt-0.5 size-4 shrink-0 text-page-accent-strong" aria-hidden />}
+          tone="accent"
+          icon={<Lock className="mt-0.5 size-5 shrink-0 text-page-accent-strong" strokeWidth={2.25} aria-hidden />}
           body={t.rich("tipsLockBody", {
-            lockIcon: () => <Lock className="inline size-3.5 align-text-bottom text-foreground" strokeWidth={2.5} aria-hidden />,
+            lockIcon: () => <LockOpen className="inline size-4 align-text-bottom text-foreground" strokeWidth={2.5} aria-hidden />,
           })}
           dismissLabel={t("tipsDismiss")}
           onDismiss={() => setLockDismissed(true)}
@@ -43,11 +45,31 @@ export function PickemsTipsBanner({ className }: Props) {
   );
 }
 
-function Tip({ icon, body, dismissLabel, onDismiss }: { icon: React.ReactNode; body: React.ReactNode; dismissLabel: string; onDismiss: () => void }) {
+type TipTone = "amber" | "accent";
+
+function Tip({
+  tone,
+  icon,
+  body,
+  dismissLabel,
+  onDismiss,
+}: {
+  tone: TipTone;
+  icon: React.ReactNode;
+  body: React.ReactNode;
+  dismissLabel: string;
+  onDismiss: () => void;
+}) {
   return (
-    <div className="flex items-start gap-2.5 rounded-xl border border-border bg-card px-3 py-3">
+    <div
+      className={cn(
+        "flex items-start gap-2.5 rounded-xl border px-3 py-3",
+        tone === "amber" && "border-amber-300/70 bg-amber-100/80 dark:border-amber-500/30 dark:bg-amber-500/15",
+        tone === "accent" && "border-page-accent/20 bg-page-accent-soft"
+      )}
+    >
       {icon}
-      <span className="min-w-0 flex-1 text-xs leading-relaxed text-muted-foreground">{body}</span>
+      <span className="min-w-0 flex-1 text-sm leading-snug text-foreground/85">{body}</span>
       <button
         type="button"
         onClick={onDismiss}

@@ -29,21 +29,26 @@ export function PickemsSkeleton({ step = "groups" }: Props = {}) {
 }
 
 function PageHeaderSkeleton() {
+  // Mirrors the live desktop rail: two same-width buttons over a helper line /
+  // count / bar. Every step uses w-44 sm-height buttons so the skeleton stays
+  // identical regardless of which step is loading.
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div className="min-w-0 flex-1 space-y-2">
-        <Skeleton className="h-3 w-32" />
         <Skeleton className="h-8 w-72 sm:h-9 sm:w-80" />
         <Skeleton className="h-4 w-full max-w-2xl" />
       </div>
-      <div className="hidden flex-col items-end gap-3 lg:flex">
-        <div className="flex items-center gap-2">
-          <Skeleton className="h-9 w-32 rounded-md" />
-          <Skeleton className="h-9 w-28 rounded-md" />
+      <div className="hidden flex-col items-stretch gap-2.5 lg:flex">
+        <div className="flex items-center justify-end gap-2">
+          <Skeleton className="h-8 w-44 rounded-md" />
+          <Skeleton className="h-8 w-44 rounded-md" />
         </div>
-        <div className="flex flex-col items-end gap-1">
-          <Skeleton className="h-4 w-12" />
-          <Skeleton className="h-1.5 w-44 rounded-full" />
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between gap-3">
+            <Skeleton className="h-3 w-40" />
+            <Skeleton className="h-4 w-12" />
+          </div>
+          <Skeleton className="h-1.5 w-full rounded-full" />
         </div>
       </div>
     </div>
@@ -245,10 +250,22 @@ function BracketChampionSkeleton() {
 
 function TipsCardSkeleton() {
   return (
-    <div className="flex items-start gap-2.5 rounded-xl border border-border bg-card px-3 py-3 lg:hidden">
-      <Skeleton className="mt-0.5 size-4 shrink-0 rounded-sm" />
-      <Skeleton className="mt-0.5 h-3 w-10 shrink-0" />
-      <Skeleton className="mt-0.5 h-3 max-w-md flex-1" />
+    <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+      <TipCardSkeleton />
+      <TipCardSkeleton />
+    </div>
+  );
+}
+
+function TipCardSkeleton() {
+  return (
+    <div className="flex items-start gap-2.5 rounded-xl border border-border bg-card px-3 py-3">
+      <Skeleton className="mt-0.5 size-5 shrink-0 rounded-sm" />
+      <div className="min-w-0 flex-1 space-y-1.5 pt-1">
+        <Skeleton className="h-3.5 w-full max-w-xs" />
+        <Skeleton className="h-3.5 w-3/4 max-w-[12rem]" />
+      </div>
+      <Skeleton className="size-6 shrink-0 rounded-md" />
     </div>
   );
 }

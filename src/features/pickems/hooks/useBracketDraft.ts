@@ -17,11 +17,14 @@ export function useBracketDraft(userId: string | undefined) {
   const hydrate = useBracketDraftStore((s) => s.hydrate);
   const pick = useBracketDraftStore((s) => s.pick);
   const clearPick = useBracketDraftStore((s) => s.clearPick);
+  const replaceDraft = useBracketDraftStore((s) => s.replaceDraft);
   const reset = useBracketDraftStore((s) => s.reset);
 
   useIsomorphicLayoutEffect(() => {
     if (storedUserId !== userId) hydrate(userId);
   }, [storedUserId, userId, hydrate]);
 
-  return { draft, pick, clearPick, reset };
+  const isHydrated = storedUserId === userId;
+
+  return { draft, pick, clearPick, replaceDraft, reset, isHydrated };
 }

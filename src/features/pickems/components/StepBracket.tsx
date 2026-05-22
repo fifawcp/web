@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import { useBracketDraft } from "../hooks/useBracketDraft";
 import { useSubmitBracket } from "../hooks/useSubmitBracket";
@@ -33,11 +34,20 @@ type Props = {
 export function StepBracket({ data, step, onStep, progress, canNavigateTo, userId }: Props) {
   const t = useTranslations("pickems.bracket");
   const tRounds = useTranslations("pickems.bracket.rounds");
+  const tCommon = useTranslations("pickems.common");
+  const tToasts = useTranslations("pickems.toasts");
   const { draft: rawDraft, pick } = useBracketDraft(userId);
   const { submit, isSubmitting } = useSubmitBracket();
   // Active stage is owned here so the mobile CTA bar can react to it (per-stage
   // counter, "Next: <round>" button). BracketMobile reads + writes through props.
   const [activeStage, setActiveStage] = useState<BracketStageCode>("round_of_32");
+
+  const goToStage = (stage: BracketStageCode) => {
+    setActiveStage(stage);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   // When locked, ignore the local draft — only show what the user committed.
   const draft = data.is_locked ? EMPTY_DRAFT : rawDraft;
@@ -60,13 +70,13 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
   const prevStage = stageIdx > 0 ? STAGES[stageIdx - 1] : null;
 
   const prev = prevStep("bracket");
-  const helperText = !isReady ? t("picksLeft", { n: TOTAL_BRACKET_PICKS - pickedCount }) : undefined;
+  const helperText = isReady ? tCommon("readyToSubmit") : t("picksLeft", { n: TOTAL_BRACKET_PICKS - pickedCount });
   const desktopBack = !data.is_locked && prev ? () => onStep(prev) : undefined;
   // Mobile back walks the tabs leftward; once we're at R32, it falls through to
   // the step-level back (→ best thirds). Keeps the gesture meaning "previous"
   // whether that's a previous round or the previous step. When locked, we drop
   // the Back affordance entirely — the stepper is the only navigation.
-  const mobileBack = data.is_locked ? undefined : prevStage ? () => setActiveStage(prevStage) : desktopBack;
+  const mobileBack = data.is_locked ? undefined : prevStage ? () => goToStage(prevStage) : desktopBack;
 
   const desktopAction: CTAAction = data.is_locked
     ? { kind: "hidden" }
@@ -76,6 +86,7 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
         disabled: !isReady,
         loading: isSubmitting,
         helperText,
+        helperTone: isReady ? "ready" : undefined,
         onClick: () => submit(draft),
       };
 
@@ -90,8 +101,15 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
           kind: "continue",
           label: tRounds(nextStage),
           disabled: !stageStats.isComplete,
-          helperText: stageStats.isComplete ? undefined : t("roundLeft", { n: stageStats.remaining }),
-          onClick: () => setActiveStage(nextStage),
+          helperText: stageStats.isComplete ? tCommon("readyForRound", { round: tRounds(nextStage) }) : t("roundLeft", { n: stageStats.remaining }),
+          helperTone: stageStats.isComplete ? "ready" : undefined,
+          onClick: () => {
+            if (!stageStats.isComplete) {
+              toast(tToasts("finishRoundFirst"));
+              return;
+            }
+            goToStage(nextStage);
+          },
         }
       : {
           kind: "submit",
@@ -99,14 +117,21 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
           disabled: !isReady,
           loading: isSubmitting,
           helperText,
+          helperTone: isReady ? "ready" : undefined,
           onClick: () => submit(draft),
         };
 
   const rightSlot = (
-    <>
+    <div className="hidden flex-col items-stretch gap-2.5 lg:flex">
       <PickemsHeaderActions action={desktopAction} onBack={desktopBack} />
-      <PickemsHeaderProgress completed={pickedCount} total={TOTAL_BRACKET_PICKS} label={`${pickedCount} / ${TOTAL_BRACKET_PICKS}`} />
-    </>
+      <PickemsHeaderProgress
+        completed={pickedCount}
+        total={TOTAL_BRACKET_PICKS}
+        label={`${pickedCount} / ${TOTAL_BRACKET_PICKS}`}
+        helperText={data.is_locked ? undefined : helperText}
+        helperTone={isReady ? "ready" : undefined}
+      />
+    </div>
   );
 
   return (
@@ -116,9 +141,13 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
       <PickemsStepper current={step} progress={progress} onChange={onStep} canNavigateTo={canNavigateTo} />
 
       <BracketDesktop bracket={projected} champion={champion} disabled={data.is_locked} onPick={pick} />
-      <BracketMobile bracket={projected} champion={champion} disabled={data.is_locked} onPick={pick} activeStage={activeStage} onStageChange={setActiveStage} />
+      <BracketMobile bracket={projected} champion={champion} disabled={data.is_locked} onPick={pick} activeStage={activeStage} onStageChange={goToStage} />
 
-      <PickemsCTABar action={mobileAction} onBack={mobileBack} />
+      <PickemsCTABar
+        action={mobileAction}
+        onBack={mobileBack}
+        progress={nextStage ? { completed: stageStats.completed, total: stageStats.total } : { completed: pickedCount, total: TOTAL_BRACKET_PICKS }}
+      />
     </section>
   );
 }

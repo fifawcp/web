@@ -1,6 +1,8 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import { useHydrated } from "@/shared/hooks/useHydrated";
 
@@ -12,7 +14,7 @@ import { useStep } from "../hooks/useStep";
 import { readBestThirdsDraft } from "../lib/bestThirdsDraftStorage";
 import { readGroupsDraft } from "../lib/groupsDraftStorage";
 import { stepIndex } from "../lib/pickemStep";
-import { projectBracket } from "../lib/projectBracket";
+import { projectBracket, pruneBracketDraft } from "../lib/projectBracket";
 import type { BracketDraft, PickemProgress, PickemStep, UserPickem } from "../types/pickems.types";
 
 import { PickemsLockedBanner } from "./PickemsLockedBanner";
@@ -32,9 +34,10 @@ const EMPTY_BRACKET_DRAFT: BracketDraft = {};
 
 export function PickemsView({ initialData, userId }: Props) {
   const hydrated = useHydrated();
+  const tToasts = useTranslations("pickems.toasts");
   const { data = initialData } = usePickems(initialData);
   const [step, rawSetStep] = useStep();
-  const { draft: bracketDraft } = useBracketDraft(userId);
+  const { draft: bracketDraft, replaceDraft: replaceBracketDraft, isHydrated: bracketDraftHydrated } = useBracketDraft(userId);
   const groupsSave = useSaveGroups(userId);
   const bestThirdsSave = useSaveBestThirds(userId);
   const [navigating, setNavigating] = useState(false);
@@ -42,6 +45,20 @@ export function PickemsView({ initialData, userId }: Props) {
   // When the pickem is locked the server is read-only; localStorage drafts can
   // never sync, so ignore them and project against the server-saved state only
   const effectiveBracketDraft = data.is_locked ? EMPTY_BRACKET_DRAFT : bracketDraft;
+
+  // Cross-device drift: another browser may have changed group order or best
+  // thirds, which on the server cascades into the R32 home/away pairings. The
+  // local draft on *this* device can still hold picks for teams that no longer
+  // belong in those slots. Walk the projected bracket and drop the now-invalid
+  // entries — otherwise the stepper count, the per-stage tabs and the saved
+  // picks all disagree (e.g. R32 shows 15/16 yet QF onward read as complete).
+  useEffect(() => {
+    if (!bracketDraftHydrated || data.is_locked) return;
+    const { pruned, removedCount } = pruneBracketDraft(data.bracket, bracketDraft);
+    if (removedCount === 0) return;
+    replaceBracketDraft(pruned);
+    toast.warning(tToasts("picksClearedByGroupChange", { n: removedCount }));
+  }, [bracketDraftHydrated, data.is_locked, data.bracket, bracketDraft, replaceBracketDraft, tToasts]);
 
   // Progress counts derived from the *local* cache state (or pure server state
   // when locked). The stepper sub-line and the navigability gate both read
@@ -143,7 +160,9 @@ export function PickemsView({ initialData, userId }: Props) {
           onSaveDraft={groupsSave.saveDraft}
           onContinue={async () => {
             try {
-              await groupsSave.saveAndAwait();
+              if (readGroupsDraft(userId)) {
+                await groupsSave.saveAndAwait();
+              }
               rawSetStep("thirds");
             } catch {
               // Toast already surfaced.
@@ -162,7 +181,9 @@ export function PickemsView({ initialData, userId }: Props) {
           onToggle={bestThirdsSave.toggle}
           onContinue={async () => {
             try {
-              await bestThirdsSave.saveAndAwait();
+              if (readBestThirdsDraft(userId)) {
+                await bestThirdsSave.saveAndAwait();
+              }
               rawSetStep("bracket");
             } catch {
               // Toast already surfaced
