@@ -1,0 +1,36 @@
+{
+  "title": "Posiciones",
+  "stageHeading": "Fase de grupos · 12 grupos",
+  "description": "Los dos mejores de cada grupo avanzan directo a los Dieciseisavos de final. Los ocho mejores terceros clasifican mediante un playoff de seeding.",
+  "groupLabel": "Grupo",
+  "matchday": "Jornada {current} / {total}",
+  "comparingWithMyPicks": "Comparando con mis pronósticos",
+  "groupAccuracyLabel": "{correct} de {total} posiciones correctas en este grupo",
+  "columns": {
+    "team": "Equipo",
+    "played": "PJ",
+    "won": "PG",
+    "drawn": "PE",
+    "lost": "PP",
+    "goalsForAgainst": "GF:GC",
+    "goalDifference": "DG",
+    "points": "PTS",
+    "you": "TÚ",
+    "delta": "Δ"
+  },
+  "columnLabels": {
+    "played": "Partidos jugados",
+    "won": "Ganados",
+    "drawn": "Empatados",
+    "lost": "Perdidos",
+    "goalsForAgainst": "Goles a favor / en contra",
+    "goalDifference": "Diferencia de goles",
+    "points": "Puntos",
+    "you": "Tu posición predicha",
+    "delta": "Diferencia de posición"
+  },
+  "legend": {
+    "advancesToR32": "Avanza a Dieciseisavos",
+    "bestThirdPlayoff": "Playoff de mejor tercero"
+  }
+}

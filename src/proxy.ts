@@ -11,7 +11,7 @@ import { isTokenStale } from "@/shared/lib/api/jwt";
 const GUEST_ONLY_ROUTES = new Set(["/login", "/register", "/callback"]);
 
 // Accessible to everyone - no redirect in either direction
-const PUBLIC_ROUTES = new Set(["/", "/schedule", "/how-it-works", "/rules", "/privacy", "/terms", "/faq"]);
+const PUBLIC_ROUTES = new Set(["/", "/schedule", "/standings", "/how-it-works", "/rules", "/privacy", "/terms", "/faq"]);
 
 // Mirror next-auth's session cookie name convention
 const SESSION_COOKIE = process.env.NODE_ENV === "production" ? "__Secure-next-auth.session-token" : "next-auth.session-token";

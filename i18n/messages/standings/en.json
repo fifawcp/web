@@ -1,0 +1,36 @@
+{
+  "title": "Standings",
+  "stageHeading": "Group stage · 12 groups",
+  "description": "Top two teams from each group advance directly to the Round of 32. The eight best third-placed teams join them via a playoff seeding.",
+  "groupLabel": "Group",
+  "matchday": "Matchday {current} / {total}",
+  "comparingWithMyPicks": "Comparing with my picks",
+  "groupAccuracyLabel": "{correct} of {total} positions correct in this group",
+  "columns": {
+    "team": "Team",
+    "played": "P",
+    "won": "W",
+    "drawn": "D",
+    "lost": "L",
+    "goalsForAgainst": "GF:GA",
+    "goalDifference": "GD",
+    "points": "PTS",
+    "you": "YOU",
+    "delta": "Δ"
+  },
+  "columnLabels": {
+    "played": "Played",
+    "won": "Won",
+    "drawn": "Drawn",
+    "lost": "Lost",
+    "goalsForAgainst": "Goals for / against",
+    "goalDifference": "Goal difference",
+    "points": "Points",
+    "you": "Your predicted position",
+    "delta": "Position delta"
+  },
+  "legend": {
+    "advancesToR32": "Advances to R32",
+    "bestThirdPlayoff": "Best 3rd-place playoff"
+  }
+}

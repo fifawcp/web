@@ -5,7 +5,7 @@ export default getRequestConfig(async () => {
   const cookieStore = await cookies();
   const locale = cookieStore.get("NEXT_LOCALE")?.value || "en";
 
-  const [authMessages, layoutMessages, apiErrorsMessages, scheduleMessages, pickemsMessages, errorMessages, dashboardMessages] = await Promise.all([
+  const [authMessages, layoutMessages, apiErrorsMessages, scheduleMessages, pickemsMessages, errorMessages, dashboardMessages, standingsMessages] = await Promise.all([
     import(`./messages/auth/${locale}.json`),
     import(`./messages/layout/${locale}.json`),
     import(`./messages/api-errors/${locale}.json`),
@@ -13,6 +13,7 @@ export default getRequestConfig(async () => {
     import(`./messages/pickems/${locale}.json`),
     import(`./messages/error/${locale}.json`),
     import(`./messages/dashboard/${locale}.json`),
+    import(`./messages/standings/${locale}.json`),
   ]);
 
   return {
@@ -25,6 +26,7 @@ export default getRequestConfig(async () => {
       pickems: pickemsMessages.default,
       error: errorMessages.default,
       dashboard: dashboardMessages.default,
+      standings: standingsMessages.default,
     },
     timeZone: "UTC",
   };

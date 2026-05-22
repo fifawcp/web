@@ -280,10 +280,6 @@
         }
       }
     },
-    "standings": {
-      "title": "Posiciones",
-      "body": "Pronto: tablas de la fase de grupos y posiciones completas del torneo."
-    },
     "bracket": {
       "title": "Eliminatorias",
       "body": "Pronto: el cuadro interactivo de eliminatorias para pronosticar cada ronda."
