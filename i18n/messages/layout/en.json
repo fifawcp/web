@@ -156,10 +156,10 @@
         "heading": "Knockout bracket points",
         "items": {
           "bestThird": { "label": "Best third-place", "description": "Per correct team in the 8 best-thirds list" },
-          "r32": { "label": "Round of 32", "description": "Per correct winner" },
-          "r16": { "label": "Round of 16", "description": "Per correct winner" },
-          "quarterfinals": { "label": "Quarterfinals", "description": "Per correct winner" },
-          "semifinals": { "label": "Semifinals", "description": "Per correct winner" },
+          "r32": { "label": "Round of 32", "description": "Per correct team that reaches this round" },
+          "r16": { "label": "Round of 16", "description": "Per correct team that reaches this round" },
+          "quarterfinals": { "label": "Quarterfinals", "description": "Per correct team that reaches this round" },
+          "semifinals": { "label": "Semifinals", "description": "Per correct team that reaches this round" },
           "thirdPlace": { "label": "Third-place match", "description": "Correct third-place winner" },
           "final": { "label": "Final (champion)", "description": "Correct tournament winner" }
         }
@@ -176,8 +176,8 @@
             "body": "Picks stay editable until they lock. Update them anytime before then — only the latest version counts."
           },
           "fullTime": {
-            "title": "Regulation time scores",
-            "body": "Points use the 90-minute result. Extra time and penalty winners count for bracket picks only — a 1-1 game that ends in penalties still scores 1-1 for match-score picks."
+            "title": "Match-score picks",
+            "body": "Match-score picks use the final result, including extra time. Penalty shootouts only determine which team advances from a round — they don't affect match-score picks."
           },
           "tiebreakers": {
             "title": "Tiebreakers",

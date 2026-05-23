@@ -156,10 +156,10 @@
         "heading": "Eliminatorias",
         "items": {
           "bestThird": { "label": "Mejor tercero", "description": "Por cada equipo correcto entre los 8 mejores terceros" },
-          "r32": { "label": "Dieciseisavos", "description": "Por ganador acertado" },
-          "r16": { "label": "Octavos de final", "description": "Por ganador acertado" },
-          "quarterfinals": { "label": "Cuartos de final", "description": "Por ganador acertado" },
-          "semifinals": { "label": "Semifinales", "description": "Por ganador acertado" },
+          "r32": { "label": "Dieciseisavos", "description": "Por equipo acertado que alcanza esta ronda" },
+          "r16": { "label": "Octavos de final", "description": "Por equipo acertado que alcanza esta ronda" },
+          "quarterfinals": { "label": "Cuartos de final", "description": "Por equipo acertado que alcanza esta ronda" },
+          "semifinals": { "label": "Semifinales", "description": "Por equipo acertado que alcanza esta ronda" },
           "thirdPlace": { "label": "Tercer puesto", "description": "Acertaste al ganador del partido por el tercer puesto" },
           "final": { "label": "Final (campeón)", "description": "Acertaste al campeón del torneo" }
         }
@@ -176,8 +176,8 @@
             "body": "Los pronósticos quedan abiertos hasta el cierre. Actualízalos cuando quieras antes del inicio — solo cuenta la última versión."
           },
           "fullTime": {
-            "title": "Puntos a los 90 minutos",
-            "body": "La puntuación usa el resultado al minuto 90. El tiempo extra y los penales solo cuentan para los pronósticos del cuadro — un 1-1 que termina en penales sigue siendo 1-1 para los pronósticos por partido."
+            "title": "Puntuación de los partidos",
+            "body": "Los pronósticos toman en cuenta el resultado final del partido, incluyendo tiempo extra. Las tandas de penales solo determinan qué equipo avanza de ronda."
           },
           "tiebreakers": {
             "title": "Desempates",

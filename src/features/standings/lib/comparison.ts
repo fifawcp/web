@@ -1,15 +1,41 @@
-import type { GroupComparison, PickAccuracy, PickemState, PickIndex, RowComparison, TeamStandingRow } from "../types/standings.types";
+import type { UserPickem } from "@/features/pickems/types/pickems.types";
 
-/** Build a 2-level lookup: group_code -> fifa_code -> predicted position. */
-export function buildPickIndex(state: PickemState | null): PickIndex {
+import type {
+  GroupComparison,
+  PickAccuracy,
+  PickIndex,
+  RowComparison,
+  TeamStandingRow,
+  ThirdPlaceAccuracy,
+  ThirdPlaceComparison,
+  ThirdPlaceRow,
+} from "../types/standings.types";
+
+import { maxGroupPoints, pointsForRow } from "./scoring";
+
+/**
+ * Build a 2-level lookup: group_code -> fifa_code -> predicted position.
+ * Reads the pickem owned by the `pickems` feature so standings never needs
+ * its own pickem shape.
+ *
+ * Unlocked groups are skipped — an unlocked pick is the pickem feature's
+ * "not committed yet" state, so we treat it the same as no pick at all.
+ */
+export function buildPickIndex(pickem: UserPickem | null): PickIndex {
   const index: PickIndex = new Map();
-  if (!state?.group_picks) return index;
-  for (const gp of state.group_picks) {
+  if (!pickem?.group_picks) return index;
+  for (const group of pickem.group_picks) {
+    if (!group.locked) continue;
     const teamMap = new Map<string, number>();
-    for (const t of gp.teams) teamMap.set(t.fifa_code, t.position);
-    index.set(gp.group_code, teamMap);
+    for (const team of group.teams) teamMap.set(team.fifa_code, team.position);
+    index.set(group.group_code, teamMap);
   }
   return index;
+}
+
+/** Set of FIFA codes the user picked as their eight best third-placed teams. */
+export function buildBestThirdsSet(pickem: UserPickem | null): Set<string> {
+  return new Set((pickem?.best_thirds ?? []).map((team) => team.fifa_code));
 }
 
 function classify(delta: number): PickAccuracy {
@@ -22,22 +48,25 @@ function classify(delta: number): PickAccuracy {
 export function computeRowComparison(row: TeamStandingRow, groupPicks: Map<string, number> | null | undefined): RowComparison {
   const predicted = groupPicks?.get(row.team.fifa_code) ?? null;
   if (predicted == null) {
-    return { predicted_position: null, delta: null, accuracy: "not_picked" };
+    return { predicted_position: null, accuracy: "not_picked" };
   }
-  const delta = predicted - row.position;
-  return { predicted_position: predicted, delta, accuracy: classify(delta) };
+  return { predicted_position: predicted, accuracy: classify(predicted - row.position) };
 }
 
 export function computeGroupComparison(rows: TeamStandingRow[], groupPicks: Map<string, number> | null | undefined): GroupComparison {
+  const total = rows.length;
+  const maxPoints = maxGroupPoints(total);
   if (!groupPicks || groupPicks.size === 0) {
-    return { correct: 0, total: rows.length, isPerfect: false };
+    return { correct: 0, total, isPerfect: false, points: 0, maxPoints };
   }
   let correct = 0;
+  let points = 0;
   for (const row of rows) {
     const predicted = groupPicks.get(row.team.fifa_code);
     if (predicted === row.position) correct += 1;
+    points += pointsForRow(row, predicted);
   }
-  return { correct, total: rows.length, isPerfect: correct === rows.length };
+  return { correct, total, isPerfect: correct === total, points, maxPoints };
 }
 
 /** Tailwind classes for the small pill rendering the user's predicted position. */
@@ -48,6 +77,58 @@ export function getAccuracyPillClass(accuracy: PickAccuracy): string {
     case "off_by_1":
       return "bg-amber-500/15 border-amber-500/30 text-amber-700 dark:text-amber-400";
     case "off_by_2_plus":
+      return "bg-rose-500/15 border-rose-500/30 text-rose-700 dark:text-rose-400";
+    case "not_picked":
+    default:
+      return "bg-muted border-border text-muted-foreground";
+  }
+}
+
+// Third-place comparison ------------------------------------------------------
+
+/**
+ * Compare a third-placed team against the user's best-thirds picks:
+ * - `correct`    — picked, and the team advances
+ * - `wrong`      — picked, but the team misses the cut
+ * - `missed`     — not picked, yet the team advances
+ * - `not_picked` — not picked and the team misses (neutral)
+ */
+export function computeThirdPlaceComparison(row: ThirdPlaceRow, bestThirds: Set<string> | null): ThirdPlaceComparison {
+  if (!bestThirds) return { picked: false, accuracy: "not_picked" };
+  const picked = bestThirds.has(row.team.fifa_code);
+  if (picked) return { picked, accuracy: row.advances ? "correct" : "wrong" };
+  return { picked, accuracy: row.advances ? "missed" : "not_picked" };
+}
+
+/**
+ * Count how many of the user's best-thirds picks actually advance.
+ * Scoring: +2 points per correct pick, max 16 (8 teams × 2).
+ */
+export function computeThirdPlaceAccuracy(rows: ThirdPlaceRow[], bestThirds: Set<string> | null): GroupComparison {
+  if (!bestThirds || bestThirds.size === 0) {
+    return { correct: 0, total: 0, isPerfect: false, points: 0, maxPoints: 0 };
+  }
+  let correct = 0;
+  for (const row of rows) {
+    if (bestThirds.has(row.team.fifa_code) && row.advances) correct += 1;
+  }
+  const points = correct * 2;
+  const maxPoints = bestThirds.size * 2;
+  return { correct, total: bestThirds.size, isPerfect: correct === bestThirds.size, points, maxPoints };
+}
+
+/**
+ * Tailwind classes for the small pill in the third-place "You" column.
+ * `missed` (the team advanced but the user didn't pick it) shares the same
+ * red as `wrong` — both signal a mistake. The icon (✓ vs ✕) carries the
+ * direction.
+ */
+export function getThirdPlacePillClass(accuracy: ThirdPlaceAccuracy): string {
+  switch (accuracy) {
+    case "correct":
+      return "bg-lime-500/15 border-lime-500/30 text-lime-700 dark:text-lime-400";
+    case "wrong":
+    case "missed":
       return "bg-rose-500/15 border-rose-500/30 text-rose-700 dark:text-rose-400";
     case "not_picked":
     default:

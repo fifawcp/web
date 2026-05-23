@@ -1,4 +1,4 @@
-import type { GroupCode, Team } from "@/features/schedule/types/schedule.types";
+import type { GroupCode, Team } from "@/shared/types/wcp.types";
 
 export type QualificationStatus = "advances_to_r32" | "best_third_playoff" | "eliminated";
 
@@ -29,33 +29,35 @@ export type GroupStandings = {
   rows: TeamStandingRow[];
 };
 
-// Pickems / comparison ------------------------------------------------------
+// Third-place playoff group ---------------------------------------------------
 
-export type PickPosition = {
-  fifa_code: string;
-  flag_url: string;
-  group_code: string;
-  name: Record<string, string>;
-  position: number;
+/** A third-placed team enriched with its cross-group ranking. */
+export type ThirdPlaceRow = TeamStandingRow & {
+  /** Rank among all 12 third-placed teams (1 = best). */
+  third_place_rank: number;
+  /** True when the team ranks in the qualifying slots and advances to the R32. */
+  advances: boolean;
 };
 
-export type GroupPick = {
-  group_code: string;
-  teams: PickPosition[];
+export type ThirdPlaceStandings = {
+  rows: ThirdPlaceRow[];
+  /** Third-placed teams that advance — 8 in the 48-team format. */
+  qualifying_slots: number;
 };
 
-export type PickemState = {
-  stage_code?: string;
-  group_picks: GroupPick[];
-  is_locked?: boolean;
-};
+// Comparison with the user's pickem ------------------------------------------
+//
+// The pickem itself is typed by the `pickems` feature (`UserPickem`). Standings
+// only consumes it through `buildPickIndex` / `buildBestThirdsSet`, so the
+// types below describe the *derived* comparison state, not the raw pickem.
+
+/** Which standings view is active. Persisted in the URL (`?view=compare`). */
+export type StandingsViewMode = "normal" | "compare";
 
 export type PickAccuracy = "exact" | "off_by_1" | "off_by_2_plus" | "not_picked";
 
 export type RowComparison = {
   predicted_position: number | null;
-  /** predicted - actual: positive = team finished worse than predicted; negative = better. */
-  delta: number | null;
   accuracy: PickAccuracy;
 };
 
@@ -63,7 +65,20 @@ export type GroupComparison = {
   correct: number;
   total: number;
   isPerfect: boolean;
+  /** Points earned in this group under the pickem scoring rules (see `lib/scoring`). */
+  points: number;
+  /** Maximum possible points for this group (4 teams × +3 exact). */
+  maxPoints: number;
 };
 
 /** Per-group lookup of predicted positions, keyed by FIFA code. */
 export type PickIndex = Map<string, Map<string, number>>;
+
+/** Best-thirds accuracy for a single third-placed team. */
+export type ThirdPlaceAccuracy = "correct" | "wrong" | "missed" | "not_picked";
+
+export type ThirdPlaceComparison = {
+  /** True when the user picked this team among their best thirds. */
+  picked: boolean;
+  accuracy: ThirdPlaceAccuracy;
+};

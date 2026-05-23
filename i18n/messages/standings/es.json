@@ -4,8 +4,39 @@
   "description": "Los dos mejores de cada grupo avanzan directo a los Dieciseisavos de final. Los ocho mejores terceros clasifican mediante un playoff de seeding.",
   "groupLabel": "Grupo",
   "matchday": "Jornada {current} / {total}",
-  "comparingWithMyPicks": "Comparando con mis pronósticos",
-  "groupAccuracyLabel": "{correct} de {total} posiciones correctas en este grupo",
+  "matchdayNotStarted": "Sin comenzar",
+  "groupBadgeText": "{correct}/{total} · {points} pts",
+  "groupSummaryLabel": "{correct} de {total} posiciones correctas, {points} de {max} puntos",
+  "compare": {
+    "label": "Vista de posiciones",
+    "normal": "Posiciones",
+    "compare": "Comparar"
+  },
+  "comparisonLegend": {
+    "title": "Cómo leerlo · Grupos",
+    "youColumn": "Columna TÚ",
+    "youColumnHelp": "Tu posición predicha",
+    "exact": "Posición exacta",
+    "offBy1": "A 1 posición",
+    "offBy2Plus": "A 2 o más posiciones",
+    "notPicked": "Sin pronosticar",
+    "scoringTitle": "Puntaje de fase de grupos",
+    "scoreExact": "Posición exacta",
+    "scoreTop2": "Top 2, orden incorrecto",
+    "scoreOther": "Cualquier otra"
+  },
+  "thirdsLegend": {
+    "title": "Cómo leerlo · Mejores terceros",
+    "youColumn": "Columna Tú",
+    "youColumnHelp": "¿Quedó entre los 8 mejores?",
+    "correct": "Pronosticado y avanzó",
+    "wrong": "Pronosticado pero no avanzó",
+    "missed": "Avanzó pero no pronosticado",
+    "notPicked": "No pronosticado, no avanzó",
+    "scoringTitle": "Puntaje de mejores terceros",
+    "scoreCorrect": "Por equipo correcto en el top 8"
+  },
+  "pickemError": "No pudimos cargar tu pickem — mostramos las posiciones sin tus pronósticos.",
   "columns": {
     "team": "Equipo",
     "played": "PJ",
@@ -15,8 +46,7 @@
     "goalsForAgainst": "GF:GC",
     "goalDifference": "DG",
     "points": "PTS",
-    "you": "TÚ",
-    "delta": "Δ"
+    "you": "TÚ"
   },
   "columnLabels": {
     "played": "Partidos jugados",
@@ -26,11 +56,20 @@
     "goalsForAgainst": "Goles a favor / en contra",
     "goalDifference": "Diferencia de goles",
     "points": "Puntos",
-    "you": "Tu posición predicha",
-    "delta": "Diferencia de posición"
+    "you": "Tu posición predicha"
   },
   "legend": {
     "advancesToR32": "Avanza a Dieciseisavos",
     "bestThirdPlayoff": "Playoff de mejor tercero"
+  },
+  "thirdPlace": {
+    "title": "Mejores terceros",
+    "description": "Los ocho mejores terceros avanzan a los Dieciseisavos de final junto a los ganadores y segundos de grupo.",
+    "rank": "#",
+    "yourPick": "Tú",
+    "yourPickLabel": "Entre tus pronósticos de terceros",
+    "accuracyLabel": "{correct}/{total} · {points} pts",
+    "accuracySummary": "{correct} de {total} mejores terceros acertados, {points} de {max} puntos",
+    "advancesLegend": "Los {count} mejores avanzan a Dieciseisavos"
   }
 }
