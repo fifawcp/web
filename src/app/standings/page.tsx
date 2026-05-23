@@ -9,6 +9,8 @@ import type { StandingRow } from "@/features/standings/types/standings.types";
 import { getCurrentUser } from "@/lib/auth";
 import { serverApi } from "@/shared/lib/api/server";
 
+import StandingsLoading from "./loading";
+
 export const metadata: Metadata = { title: "Standings" };
 
 export default async function StandingsPage() {
@@ -39,9 +41,11 @@ export default async function StandingsPage() {
   }
 
   // StandingsView reads the compare toggle from the URL via useSearchParams,
-  // which Next.js requires under a Suspense boundary.
+  // which Next.js requires under a Suspense boundary. The route-level
+  // `loading.tsx` covers the *initial* paint; this fallback covers any later
+  // client transition that suspends — without it the page would blank out.
   return (
-    <Suspense>
+    <Suspense fallback={<StandingsLoading />}>
       <StandingsView initialStandings={standingsRes.data} initialPickem={pickem} pickemFailed={pickemFailed} isAuthed={Boolean(user)} />
     </Suspense>
   );

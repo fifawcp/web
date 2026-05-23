@@ -82,3 +82,23 @@ export type ThirdPlaceComparison = {
   picked: boolean;
   accuracy: ThirdPlaceAccuracy;
 };
+
+/**
+ * Aggregate score for the best-thirds picks. Same *shape* as
+ * `GroupComparison` but the semantics differ enough that they need
+ * separate types: `total` is the number of *picks* (up to 8), not the
+ * number of positions (always 4); `points` follows the +2-per-correct
+ * thirds rule, not the +3/+1/0 group rule.
+ */
+export type ThirdPlaceSummary = {
+  /** How many of the user's picks actually advance. */
+  correct: number;
+  /** How many teams the user picked (= bestThirds.size). */
+  total: number;
+  /** True when every pick advances. */
+  isPerfect: boolean;
+  /** Points earned under the best-thirds scoring rules (+2 per correct). */
+  points: number;
+  /** Max possible points for this set of picks (total × 2). */
+  maxPoints: number;
+};

@@ -43,7 +43,9 @@ export function groupAndEnrichStandings(rows: StandingRow[]): GroupStandings[] {
   const byGroup = new Map<GroupCode, StandingRow[]>();
 
   for (const raw of rows ?? []) {
-    const groupCode = raw.team.group_code as GroupCode | null;
+    // `group_code` is already `GroupCode | null` in the Team type — no cast
+    // needed. Skip rows that the API hasn't grouped yet (pre-tournament).
+    const groupCode = raw.team.group_code;
     if (!groupCode) continue;
     const arr = byGroup.get(groupCode);
     if (arr) arr.push(raw);

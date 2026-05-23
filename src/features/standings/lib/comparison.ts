@@ -9,6 +9,7 @@ import type {
   ThirdPlaceAccuracy,
   ThirdPlaceComparison,
   ThirdPlaceRow,
+  ThirdPlaceSummary,
 } from "../types/standings.types";
 
 import { maxGroupPoints, pointsForRow } from "./scoring";
@@ -103,8 +104,12 @@ export function computeThirdPlaceComparison(row: ThirdPlaceRow, bestThirds: Set<
 /**
  * Count how many of the user's best-thirds picks actually advance.
  * Scoring: +2 points per correct pick, max 16 (8 teams × 2).
+ *
+ * Returns `ThirdPlaceSummary`, not `GroupComparison` — same shape, different
+ * semantics. Keeping them as separate types prevents a future field added
+ * to one from silently changing the contract of the other.
  */
-export function computeThirdPlaceAccuracy(rows: ThirdPlaceRow[], bestThirds: Set<string> | null): GroupComparison {
+export function computeThirdPlaceAccuracy(rows: ThirdPlaceRow[], bestThirds: Set<string> | null): ThirdPlaceSummary {
   if (!bestThirds || bestThirds.size === 0) {
     return { correct: 0, total: 0, isPerfect: false, points: 0, maxPoints: 0 };
   }
