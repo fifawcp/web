@@ -33,40 +33,22 @@ export function ComparisonLegend() {
         <p className="text-xs font-semibold text-foreground">
           {t("youColumn")} <span className="font-normal text-muted-foreground">— {t("youColumnHelp")}</span>
         </p>
-        <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground">
+        <ul className="grid grid-cols-1 gap-2 text-xs text-muted-foreground sm:grid-cols-2 xl:grid-cols-4">
           <li className="flex items-center gap-2">
-            <AccuracyPill accuracy="exact" content="1" />
-            {t("exact")}
+            <AccuracyPill accuracy="exact_3pts" content="1" />
+            {t("exact3pts")}
           </li>
           <li className="flex items-center gap-2">
-            <AccuracyPill accuracy="off_by_1" content="1" />
-            {t("offBy1")}
+            <AccuracyPill accuracy="top2_1pt" content="1" />
+            {t("top21pt")}
           </li>
           <li className="flex items-center gap-2">
-            <AccuracyPill accuracy="off_by_2_plus" content="1" />
-            {t("offBy2Plus")}
+            <AccuracyPill accuracy="wrong_0pts" content="1" />
+            {t("wrong0pts")}
           </li>
           <li className="flex items-center gap-2">
             <AccuracyPill accuracy="not_picked" content="—" />
             {t("notPicked")}
-          </li>
-        </ul>
-      </div>
-
-      <div className="flex flex-col gap-2 border-t border-border pt-3">
-        <p className="text-xs font-semibold text-foreground">{t("scoringTitle")}</p>
-        <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-muted-foreground">
-          <li className="flex items-center gap-1.5">
-            <span className="inline-block w-5 text-center font-bold tabular-nums text-foreground">+3</span>
-            {t("scoreExact")}
-          </li>
-          <li className="flex items-center gap-1.5">
-            <span className="inline-block w-5 text-center font-bold tabular-nums text-foreground">+1</span>
-            {t("scoreTop2")}
-          </li>
-          <li className="flex items-center gap-1.5">
-            <span className="inline-block w-5 text-center font-bold tabular-nums text-foreground">0</span>
-            {t("scoreOther")}
           </li>
         </ul>
       </div>

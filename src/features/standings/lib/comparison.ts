@@ -39,11 +39,16 @@ export function buildBestThirdsSet(pickem: UserPickem | null): Set<string> {
   return new Set((pickem?.best_thirds ?? []).map((team) => team.fifa_code));
 }
 
-function classify(delta: number): PickAccuracy {
-  const abs = Math.abs(delta);
-  if (abs === 0) return "exact";
-  if (abs === 1) return "off_by_1";
-  return "off_by_2_plus";
+/**
+ * Classify a pick based on points earned (scoring-based, not proximity-based):
+ * - `exact_3pts`: Exact position → +3 points
+ * - `top2_1pt`: Both predicted and actual are in top 2, but wrong order → +1 point
+ * - `wrong_0pts`: Any other case → 0 points
+ */
+function classifyByScoring(predicted: number, actual: number): PickAccuracy {
+  if (predicted === actual) return "exact_3pts";
+  if (predicted <= 2 && actual > 0 && actual <= 2) return "top2_1pt";
+  return "wrong_0pts";
 }
 
 export function computeRowComparison(row: TeamStandingRow, groupPicks: Map<string, number> | null | undefined): RowComparison {
@@ -51,7 +56,7 @@ export function computeRowComparison(row: TeamStandingRow, groupPicks: Map<strin
   if (predicted == null) {
     return { predicted_position: null, accuracy: "not_picked" };
   }
-  return { predicted_position: predicted, accuracy: classify(predicted - row.position) };
+  return { predicted_position: predicted, accuracy: classifyByScoring(predicted, row.position) };
 }
 
 export function computeGroupComparison(rows: TeamStandingRow[], groupPicks: Map<string, number> | null | undefined): GroupComparison {
@@ -73,11 +78,11 @@ export function computeGroupComparison(rows: TeamStandingRow[], groupPicks: Map<
 /** Tailwind classes for the small pill rendering the user's predicted position. */
 export function getAccuracyPillClass(accuracy: PickAccuracy): string {
   switch (accuracy) {
-    case "exact":
+    case "exact_3pts":
       return "bg-lime-500/15 border-lime-500/30 text-lime-700 dark:text-lime-400";
-    case "off_by_1":
+    case "top2_1pt":
       return "bg-amber-500/15 border-amber-500/30 text-amber-700 dark:text-amber-400";
-    case "off_by_2_plus":
+    case "wrong_0pts":
       return "bg-rose-500/15 border-rose-500/30 text-rose-700 dark:text-rose-400";
     case "not_picked":
     default:
@@ -124,17 +129,17 @@ export function computeThirdPlaceAccuracy(rows: ThirdPlaceRow[], bestThirds: Set
 
 /**
  * Tailwind classes for the small pill in the third-place "You" column.
- * `missed` (the team advanced but the user didn't pick it) shares the same
- * red as `wrong` — both signal a mistake. The icon (✓ vs ✕) carries the
- * direction.
+ * - `correct`: green — picked and advanced
+ * - `wrong`: red — picked but didn't advance
+ * - `missed` / `not_picked`: muted — not picked (neutral, not an error)
  */
 export function getThirdPlacePillClass(accuracy: ThirdPlaceAccuracy): string {
   switch (accuracy) {
     case "correct":
       return "bg-lime-500/15 border-lime-500/30 text-lime-700 dark:text-lime-400";
     case "wrong":
-    case "missed":
       return "bg-rose-500/15 border-rose-500/30 text-rose-700 dark:text-rose-400";
+    case "missed":
     case "not_picked":
     default:
       return "bg-muted border-border text-muted-foreground";

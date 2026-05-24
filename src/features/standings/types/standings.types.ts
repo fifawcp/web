@@ -54,7 +54,7 @@ export type ThirdPlaceStandings = {
 /** Which standings view is active. Persisted in the URL (`?view=compare`). */
 export type StandingsViewMode = "normal" | "compare";
 
-export type PickAccuracy = "exact" | "off_by_1" | "off_by_2_plus" | "not_picked";
+export type PickAccuracy = "exact_3pts" | "top2_1pt" | "wrong_0pts" | "not_picked";
 
 export type RowComparison = {
   predicted_position: number | null;

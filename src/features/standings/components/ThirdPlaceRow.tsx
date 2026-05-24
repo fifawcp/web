@@ -53,20 +53,14 @@ export function ThirdPlaceRow({ row, bestThirds, cutLine }: Props) {
       <td className={cn("px-2 py-2.5 text-sm font-semibold tabular-nums text-foreground", showComparison ? "text-center" : "text-right")}>{row.points}</td>
       {comparison && (
         <td className="px-2 py-2.5 text-center">
-          {comparison.picked || comparison.accuracy === "missed" ? (
-            <span
-              className={cn(
-                "inline-flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-2xs font-semibold",
-                getThirdPlacePillClass(comparison.accuracy)
-              )}
-            >
-              {/* picked → ✓ (lime if it advanced, rose if not). missed → ✕ in
-                  rose so an unpicked advancer reads as a clear mistake. */}
-              {comparison.picked ? "✓" : "✕"}
-            </span>
-          ) : (
-            <span className="text-2xs text-muted-foreground">—</span>
-          )}
+          <span
+            className={cn(
+              "inline-flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-2xs font-semibold",
+              getThirdPlacePillClass(comparison.accuracy)
+            )}
+          >
+            {comparison.picked ? (comparison.accuracy === "correct" ? "✓" : "✕") : "—"}
+          </span>
         </td>
       )}
     </tr>

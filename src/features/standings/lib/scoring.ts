@@ -12,12 +12,13 @@ const POINTS_QUALIFIES_TOP_2 = 1;
  *   - Anything else                                     →  0
  *
  * `predicted === undefined` means the user didn't lock a pick for this team,
- * which also scores 0.
+ * which also scores 0. `row.position === 0` is the API's "unresolved" sentinel
+ * and must not award points.
  */
 export function pointsForRow(row: TeamStandingRow, predicted: number | undefined): number {
   if (predicted === undefined) return 0;
   if (predicted === row.position) return POINTS_EXACT;
-  if (predicted <= 2 && row.position <= 2) return POINTS_QUALIFIES_TOP_2;
+  if (predicted <= 2 && row.position > 0 && row.position <= 2) return POINTS_QUALIFIES_TOP_2;
   return 0;
 }
 
