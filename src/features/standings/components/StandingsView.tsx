@@ -33,7 +33,7 @@ export function StandingsView({ initialStandings, initialPickem, pickemFailed, i
   const t = useTranslations("standings");
   const { data: standings = [] } = useStandings(initialStandings);
 
-  const [view, setView] = useCompareView();
+  const [view, setView] = useCompareView(isAuthed);
   const comparing = view === "compare";
 
   // Derive the view models from the raw rows — same shape as ScheduleView.

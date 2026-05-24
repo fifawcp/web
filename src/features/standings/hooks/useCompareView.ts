@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import type { StandingsViewMode } from "../types/standings.types";
@@ -9,16 +9,25 @@ import type { StandingsViewMode } from "../types/standings.types";
  * URL-backed compare-view state. Returns a `[view, setView]` tuple shaped like
  * `useState` so call sites read naturally — mirrors `useScheduleFilters`.
  *
- * Anyone (including users without a complete pickem) can flip into compare
- * mode. When their pickem is missing or partial the table renders every row
- * with the "not picked" pill — see `buildPickIndex`.
+ * Compare mode requires authentication. Guests who navigate to `?view=compare`
+ * are redirected to plain standings. Authenticated users without a complete pickem still
+ * see compare mode — every row renders with the "not picked" pill.
  */
-export function useCompareView(): [StandingsViewMode, (next: StandingsViewMode) => void] {
+export function useCompareView(isAuthed: boolean): [StandingsViewMode, (next: StandingsViewMode) => void] {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
 
-  const view: StandingsViewMode = params.get("view") === "compare" ? "compare" : "normal";
+  const rawView = params.get("view") === "compare" ? "compare" : "normal";
+  // Guests cannot access compare mode — force normal view while redirect fires.
+  const view: StandingsViewMode = isAuthed ? rawView : "normal";
+
+  // Redirect guests who land on ?view=compare to plain standings.
+  useEffect(() => {
+    if (!isAuthed && rawView === "compare") {
+      router.replace(pathname);
+    }
+  }, [isAuthed, rawView, router, pathname]);
 
   const setView = useCallback(
     (next: StandingsViewMode) => {
