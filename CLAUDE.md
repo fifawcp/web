@@ -25,6 +25,7 @@ This document serves as the source of truth for AI instructions and developer st
     - `hooks/`: Every `use*` hook.
     - `lib/`: Pure helpers (formatters, predicates, derivations).
     - `types/`: Feature-specific interfaces.
+    - `animations/`: GSAP timeline factories. Optional — present only when the feature has reveal/transition animations (e.g. `dashboard/`, `standings/`). Each file exports pure functions that take DOM targets and return a cleanup; components own the refs and `useGSAP` calls.
   - `src/shared`: Cross-feature primitives — `shared/components/ui` (shadcn base, do not edit), `shared/lib/api`, `shared/lib/query`.
   - `src/lib`: Cross-feature utilities not specific to any feature.
   - `i18n/messages/<feature>/{en,es}.json`: Feature-scoped translations, registered in `i18n/request.ts`.
@@ -66,6 +67,7 @@ For mutations whose effects must be visible after the next RSC navigation:
   - `rounded-xl` — top-level surfaces (Card, Dialog, Drawer, full-card click targets)
   - `rounded-lg` — decorative containers nested in cards (icon holders, status pills, stat tiles)
   - `rounded-md` — interactive form controls (Button, Input, Select, filter triggers)
+  - `rounded-xs` — icon-scale objects (flag images, tiny inline thumbnails). A flag at 20×14px with `rounded-sm` reads as a notch; `rounded-xs` keeps the corner subtle at that size.
   - `rounded-full` — identity primitives (avatars, indicator dots, drawer handle)
 
   Avoid `rounded-xl` on small elements inside a card — at 40px it reads as ~35% radius and echoes the card's own corner.
