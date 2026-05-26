@@ -28,7 +28,9 @@ const trackExpanded = "flex w-full rounded-md bg-muted p-0.5";
 /** Segmented light/dark theme control. Variant decides icon-only vs icon+label. */
 export function ThemeSwitch({ variant = "compact" }: SwitchProps = {}) {
   const t = useTranslations("preferences");
-  const { theme, setTheme } = useTheme();
+  // `resolvedTheme` collapses "system" → the concrete "light"/"dark" the OS reports,
+  // so the right pill highlights when no preference is saved. `theme` would be "system".
+  const { resolvedTheme, setTheme } = useTheme();
 
   const themeLabel: Record<string, string> = {
     light: t("themeLight"),
@@ -42,9 +44,9 @@ export function ThemeSwitch({ variant = "compact" }: SwitchProps = {}) {
           key={value}
           type="button"
           onClick={() => setTheme(value)}
-          aria-pressed={theme === value}
+          aria-pressed={resolvedTheme === value}
           aria-label={themeLabel[value]}
-          className={cn(pillButton, theme === value ? pillActive : pillInactive)}
+          className={cn(pillButton, resolvedTheme === value ? pillActive : pillInactive)}
         >
           <Icon className="size-4" />
           {variant === "expanded" && <span>{themeLabel[value]}</span>}
