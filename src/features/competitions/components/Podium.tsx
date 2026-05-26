@@ -31,7 +31,7 @@ export function Podium({ entries }: Props) {
   return (
     <Card className="relative h-full overflow-hidden py-5">
       <span className="pointer-events-none absolute top-3 left-4 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("title")}</span>
-      <CardContent className="mx-auto grid h-full w-full grid-cols-3 items-end gap-2 px-3 pt-8 pb-0 xl:w-4/5">
+      <CardContent className="mx-auto grid h-full w-full grid-cols-3 items-end gap-2 px-3 pt-6 pb-0 lg:pt-8 xl:w-4/5">
         {ORDER.map((index) => {
           const entry = top[index];
           if (!entry) return <span key={index} aria-hidden />;
@@ -45,7 +45,9 @@ export function Podium({ entries }: Props) {
 type MedalTone = "gold" | "silver" | "bronze";
 
 const TONE_BY_RANK: Record<1 | 2 | 3, MedalTone> = { 1: "gold", 2: "silver", 3: "bronze" };
-const PEDESTAL_HEIGHT: Record<1 | 2 | 3, string> = { 1: "h-32", 2: "h-24", 3: "h-20" };
+// Compact below lg (where the card stacks and hugs its content); full height on desktop, where
+// the card stretches to match the selectors column.
+const PEDESTAL_HEIGHT: Record<1 | 2 | 3, string> = { 1: "h-20 lg:h-32", 2: "h-16 lg:h-24", 3: "h-14 lg:h-20" };
 
 const TONE_PEDESTAL: Record<MedalTone, string> = {
   gold: "bg-amber-100 text-amber-700 ring-1 ring-inset ring-amber-300/60 dark:bg-amber-500/15 dark:text-amber-300 dark:ring-amber-400/30",

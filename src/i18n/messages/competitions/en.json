@@ -5,14 +5,13 @@
     "pickem": "Pick'em",
     "match": "Match"
   },
+  "defaultNames": {
+    "fullTournament": "Full tournament"
+  },
   "tabs": {
     "createCompetition": "New competition"
   },
   "info": {
-    "subtitle": {
-      "pickem": "Pick'em competition",
-      "match": "Match competition"
-    },
     "change": "Switch competition",
     "switcher": {
       "heading": "Competitions",
@@ -22,7 +21,7 @@
       "delete": "Delete competition",
       "deleteSubtitle": "Remove it permanently"
     },
-    "scope": "Scope",
+    "scope": "Included stages",
     "teamsIncluded": "Included teams",
     "stagesCount": "{count, plural, one {# stage} other {# stages}}",
     "teamsCount": "{count, plural, one {# team} other {# teams}}",

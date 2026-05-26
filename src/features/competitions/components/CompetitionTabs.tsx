@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
 
+import { useCompetitionName } from "../hooks/useCompetitionName";
 import type { Competition } from "../types/competitions.types";
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
 
 export function CompetitionTabs({ competitions, activeCompetitionId, onSelect, canCreate, onCreate }: Props) {
   const t = useTranslations("competitions");
+  const competitionName = useCompetitionName();
 
   return (
     <div className="border-b border-border">
@@ -39,7 +41,7 @@ export function CompetitionTabs({ competitions, activeCompetitionId, onSelect, c
                   aria-pressed={isActive}
                 >
                   <Icon className="size-3.5" aria-hidden />
-                  <span>{competition.name}</span>
+                  <span>{competitionName(competition.name)}</span>
                 </button>
               );
             })}

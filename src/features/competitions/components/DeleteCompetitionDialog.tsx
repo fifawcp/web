@@ -8,6 +8,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 import { translateApiError } from "@/shared/lib/api/errors";
 
+import { useCompetitionName } from "../hooks/useCompetitionName";
 import { useDeleteCompetition } from "../hooks/useDeleteCompetition";
 import type { Competition } from "../types/competitions.types";
 
@@ -21,6 +22,7 @@ type Props = {
 export function DeleteCompetitionDialog({ boardId, competition, open, onOpenChange }: Props) {
   const t = useTranslations("competitions.delete");
   const tApiErrors = useTranslations("apiErrors");
+  const competitionName = useCompetitionName();
   const router = useRouter();
   const mutation = useDeleteCompetition(boardId);
 
@@ -40,7 +42,7 @@ export function DeleteCompetitionDialog({ boardId, competition, open, onOpenChan
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("description", { name: competition.name })}</DialogDescription>
+          <DialogDescription>{t("description", { name: competitionName(competition.name) })}</DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex-col sm:flex-row-reverse sm:justify-start">
           <Button variant="destructive" onClick={handleConfirm} disabled={mutation.isPending}>

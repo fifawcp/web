@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, ChevronDown, LogOut, Plus, Settings2, Ticket, UserPlus } from "lucide-react";
+import { Check, ChevronDown, LogOut, Plus, Settings2, Ticket, UserPlus, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { useRouter } from "@/i18n/navigation";
@@ -78,7 +78,13 @@ export function BoardSwitcher({ boards, activeBoard, onInvite, onManage, onLeave
           <span className="flex min-w-0 flex-1 flex-col leading-tight">
             <span className="text-2xs font-medium uppercase tracking-wide text-muted-foreground">{t("label")}</span>
             <span className="truncate font-heading text-sm font-semibold">{activeBoard.name}</span>
-            <span className="text-xs text-muted-foreground">{t("members", { count: activeBoard.member_count })}</span>
+          </span>
+          <span
+            className="flex shrink-0 items-center gap-1 rounded-md bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground tabular-nums"
+            title={t("members", { count: activeBoard.member_count })}
+          >
+            <Users className="size-3" aria-hidden />
+            {activeBoard.member_count.toLocaleString()}
           </span>
           <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform group-aria-expanded:rotate-180" aria-hidden />
         </PopoverTrigger>

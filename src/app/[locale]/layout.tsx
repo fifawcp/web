@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import { Providers } from "@/providers/layout-provider";
 import { Footer } from "@/shared/layout/Footer";
 import { Header } from "@/shared/layout/Header";
+import { ScrollToTop } from "@/shared/layout/ScrollToTop";
 import { cn } from "@/shared/lib/utils";
 
 import "../globals.css";
@@ -37,6 +38,7 @@ export default async function LocaleLayout({
     <html lang={locale} className={cn("h-full antialiased", "font-sans", inter.variable)} suppressHydrationWarning>
       <body className="min-h-full flex flex-col">
         <Providers messages={messages} locale={locale}>
+          <ScrollToTop />
           <Header />
           <main className="flex-1 overflow-x-clip min-h-[calc(100dvh-var(--header-height))]">{children}</main>
           <Footer />

@@ -5,14 +5,13 @@
     "pickem": "Pick'em",
     "match": "Partidos"
   },
+  "defaultNames": {
+    "fullTournament": "Torneo completo"
+  },
   "tabs": {
     "createCompetition": "Nueva competencia"
   },
   "info": {
-    "subtitle": {
-      "pickem": "Competencia Pick'em",
-      "match": "Competencia de partidos"
-    },
     "change": "Cambiar competencia",
     "switcher": {
       "heading": "Competencias",
@@ -22,7 +21,7 @@
       "delete": "Eliminar competencia",
       "deleteSubtitle": "Quitarla permanentemente"
     },
-    "scope": "Alcance",
+    "scope": "Fases incluidas",
     "teamsIncluded": "Equipos incluidos",
     "stagesCount": "{count, plural, one {# fase} other {# fases}}",
     "teamsCount": "{count, plural, one {# equipo} other {# equipos}}",

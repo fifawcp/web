@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/
 import { cn } from "@/shared/lib/utils";
 import type { Team } from "@/shared/types/wcp.types";
 
+import { useCompetitionName } from "../hooks/useCompetitionName";
 import { ALL_STAGES, resolveScope } from "../lib/formatScope";
 import type { Competition } from "../types/competitions.types";
 
@@ -32,6 +33,7 @@ export function CompetitionInfoCard({ boardId, competition, competitions, teamsB
   const t = useTranslations("competitions.info");
   const tRoot = useTranslations("competitions");
   const tStages = useTranslations("schedule.filters.stage");
+  const competitionName = useCompetitionName();
   const scope = resolveScope(competition);
   const Icon = competition.type === "pickem" ? ListChecks : Trophy;
   const [open, setOpen] = useState(false);
@@ -65,8 +67,10 @@ export function CompetitionInfoCard({ boardId, competition, competitions, teamsB
             </span>
             <span className="flex min-w-0 flex-1 flex-col leading-tight">
               <span className="text-2xs font-medium uppercase tracking-wide text-page-accent-strong/70">{tRoot("label")}</span>
-              <span className="truncate font-heading text-sm font-semibold">{competition.name}</span>
-              <span className="text-xs text-muted-foreground">{t(`subtitle.${competition.type}`)}</span>
+              <span className="truncate font-heading text-sm font-semibold">{competitionName(competition.name)}</span>
+            </span>
+            <span className="shrink-0 rounded-md bg-card px-1.5 py-0.5 text-xs font-medium text-page-accent-strong shadow-xs ring-1 ring-foreground/5">
+              {tRoot(`type.${competition.type}`)}
             </span>
             <ChevronDown className="size-4 shrink-0 text-page-accent-strong transition-transform group-aria-expanded:rotate-180" aria-hidden />
           </PopoverTrigger>
@@ -122,6 +126,7 @@ export function CompetitionInfoCard({ boardId, competition, competitions, teamsB
 
 function SwitcherList({ competitions, activeId, onSelect }: { competitions: Competition[]; activeId: number; onSelect: (id: number) => void }) {
   const t = useTranslations("competitions.info.switcher");
+  const competitionName = useCompetitionName();
   return (
     <div className="flex flex-col p-3">
       <p className="px-1 pb-2 text-2xs font-medium uppercase tracking-wide text-muted-foreground">{t("heading")}</p>
@@ -134,10 +139,12 @@ function SwitcherList({ competitions, activeId, onSelect }: { competitions: Comp
               key={c.id}
               type="button"
               onClick={() => onSelect(c.id)}
-              className={cn("flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-muted", isActive && "bg-muted")}
+              className={cn("flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-muted", isActive && "bg-muted")}
             >
-              <CIcon className="size-3.5 shrink-0 text-muted-foreground" aria-hidden />
-              <span className={cn("min-w-0 flex-1 truncate text-sm", isActive ? "font-semibold" : "font-medium")}>{c.name}</span>
+              <span className="grid size-7 shrink-0 place-items-center rounded-md bg-card text-page-accent-strong shadow-xs ring-1 ring-foreground/5">
+                <CIcon className="size-3.5" aria-hidden />
+              </span>
+              <span className={cn("min-w-0 flex-1 truncate text-sm", isActive ? "font-semibold" : "font-medium")}>{competitionName(c.name)}</span>
               {isActive ? <Check className="size-3.5 shrink-0 text-page-accent-strong" aria-hidden /> : null}
             </button>
           );
@@ -201,7 +208,7 @@ function ScopeSection({
         <span className="text-sm font-medium text-foreground">{label}</span>
         <span className="ml-auto text-xs text-muted-foreground tabular-nums">{count}</span>
       </div>
-      <div className="min-w-0 pl-6 text-sm text-foreground">{children}</div>
+      <div className="flex min-h-6 min-w-0 items-center pl-6 text-sm text-foreground">{children}</div>
     </div>
   );
 }
@@ -231,7 +238,7 @@ function AccentChip({ label }: { label: string }) {
 
 function ScrollableRow({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none">{children}</div>
       <span className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-linear-to-l from-card to-transparent" aria-hidden />
     </div>

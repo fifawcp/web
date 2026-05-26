@@ -16,8 +16,8 @@ export default function BoardLoading() {
               <div className="flex flex-1 flex-col gap-1.5">
                 <Skeleton className="h-2.5 w-12" />
                 <Skeleton className="h-4 w-28" />
-                <Skeleton className="h-3 w-20" />
               </div>
+              <Skeleton className="h-5 w-12 shrink-0 rounded-md" />
               <Skeleton className="size-4 shrink-0 rounded-sm" />
             </div>
 
@@ -27,8 +27,8 @@ export default function BoardLoading() {
                 <div className="flex flex-1 flex-col gap-1.5">
                   <Skeleton className="h-2.5 w-16" />
                   <Skeleton className="h-4 w-24" />
-                  <Skeleton className="h-3 w-28" />
                 </div>
+                <Skeleton className="h-5 w-16 shrink-0 rounded-md" />
                 <Skeleton className="size-4 shrink-0 rounded-sm" />
               </div>
               <ScopeRowSkeleton labelWidth="w-16">
@@ -48,15 +48,15 @@ export default function BoardLoading() {
             </Card>
           </div>
 
-          <div className="lg:w-120 lg:shrink-0">
+          <div className="lg:flex-1">
             <Card className="relative h-full overflow-hidden py-5">
               <span className="absolute top-3 left-4">
                 <Skeleton className="h-3 w-12" />
               </span>
-              <CardContent className="mx-auto grid h-full w-full grid-cols-3 items-end gap-2 px-3 pt-8 pb-0">
-                <PodiumStepSkeleton avatar="size-12" pedestal="h-24" />
-                <PodiumStepSkeleton avatar="size-14" pedestal="h-32" />
-                <PodiumStepSkeleton avatar="size-12" pedestal="h-20" />
+              <CardContent className="mx-auto grid h-full w-full grid-cols-3 items-end gap-2 px-3 pt-6 pb-0 lg:pt-8 xl:w-4/5">
+                <PodiumStepSkeleton avatar="size-12" pedestal="h-16 lg:h-24" />
+                <PodiumStepSkeleton avatar="size-14" pedestal="h-20 lg:h-32" />
+                <PodiumStepSkeleton avatar="size-12" pedestal="h-14 lg:h-20" />
               </CardContent>
             </Card>
           </div>
@@ -149,7 +149,7 @@ function ScopeRowSkeleton({ labelWidth, children }: { labelWidth: string; childr
         <Skeleton className={cn("h-3.5", labelWidth)} />
         <Skeleton className="ml-auto h-3 w-12" />
       </div>
-      <div className="pl-6">{children}</div>
+      <div className="flex min-h-6 items-center pl-6">{children}</div>
     </div>
   );
 }
