@@ -1,9 +1,10 @@
 import "server-only";
 
-import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
+import { getLocale } from "next-intl/server";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "@/i18n/navigation";
 import { env } from "@/lib/env";
 
 import { logger } from "../logger";
@@ -31,7 +32,7 @@ async function request<T>(endpoint: string, options: RequestOptions = { method: 
     const session = await getServerSession(authOptions);
     const accessToken = session?.access_token;
 
-    if (!accessToken) redirect("/login");
+    if (!accessToken) redirect({ href: "/login", locale: await getLocale() });
 
     headers.set("Authorization", `Bearer ${accessToken}`);
   }
@@ -63,14 +64,14 @@ async function request<T>(endpoint: string, options: RequestOptions = { method: 
   // 401 here means either the token was revoked server-side or there is a clock
   // skew past what middleware's skew window covered. Either way, re-authentication
   // is required — redirect throws so this branch never returns.
-  if (response.status === 401) redirect("/login");
+  if (response.status === 401) redirect({ href: "/login", locale: await getLocale() });
 
   if (!response.ok) {
     const { code, message, requestId, fields } = body.error as ApiError;
     return { success: false, error: { code, message, requestId, fields } };
   }
 
-  return { success: true, data: body.data };
+  return { success: true, data: body.data, pagination: body.pagination };
 }
 
 export const serverApi = {

@@ -1,7 +1,7 @@
 import { LogIn } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 

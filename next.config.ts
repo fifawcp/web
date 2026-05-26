@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
-const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   images: {
@@ -19,13 +19,21 @@ const nextConfig: NextConfig = {
         { source: "/api/auth/otp/:path*", destination: `${upstream}/api/auth/otp/:path*` },
         { source: "/api/auth/logout/all", destination: `${upstream}/api/auth/logout/all` },
         { source: "/api/auth/sessions", destination: `${upstream}/api/auth/sessions` },
-        { source: "/api/oauth/:path*", destination: `${upstream}/api/oauth/:path*` },
+        // /api/oauth/google/callback is omitted — it has a dedicated route handler that
+        // reconciles the refresh-token cookie (rewrites to Path=/ and clears Path=/api/auth)
+        // so a stale previous-session cookie can't survive an OAuth login.
+        { source: "/api/oauth/:path((?!google/callback).*)", destination: `${upstream}/api/oauth/:path*` },
       ],
 
       // afterFiles: proxy non-auth API routes to the backend
-      // Excludes paths owned by custom route handlers (e.g. matches/:id/pick, pickems/{groups,best-thirds,bracket}) —
+      // Excludes paths owned by custom route handlers (e.g. matches/:id/pick, pickems/{groups,best-thirds,bracket}, boards/*, competitions/*) —
       // afterFiles rewrites run before dynamic routes, so a match here would swallow them
-      afterFiles: [{ source: "/api/:path((?!auth/|matches/[^/]+/pick|pickems/(?:groups|best-thirds|bracket)).*)", destination: `${upstream}/api/:path*` }],
+      afterFiles: [
+        {
+          source: "/api/:path((?!auth/|matches/[^/]+/pick|pickems/(?:groups|best-thirds|bracket)|boards(?:/.*)?|competitions(?:/.*)?).*)",
+          destination: `${upstream}/api/:path*`,
+        },
+      ],
 
       fallback: [],
     };

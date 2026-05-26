@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 
@@ -9,6 +8,7 @@ import { exchangeToken, requestOtp } from "@/features/auth/api/client";
 import { useCountdown } from "@/features/auth/hooks/useCountdown";
 import { otpSchema, type OtpFormData } from "@/features/auth/schemas/auth.schema";
 import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useRouter } from "@/i18n/navigation";
 import { useApiError } from "@/shared/hooks/useApiError";
 
 export function useLoginOtpStep() {

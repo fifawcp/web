@@ -21,11 +21,12 @@ export const ABOUT_LINKS = [
   { key: "terms", href: "/terms" },
 ] as const;
 
-export const TBD_LINKS = [
-  { key: "tbd", href: "/" },
-  { key: "tbd2", href: "/" },
-  { key: "tbd3", href: "/" },
-  { key: "tbd4", href: "/" },
+// Community routes. All land on /boards: the global board, or the index with a
+// query param that auto-opens the create / join dialog (see useBoardDialogParam).
+export const COMMUNITY_LINKS = [
+  { key: "globalBoard", href: "/boards?board=global" },
+  { key: "createBoard", href: "/boards?dialog=create" },
+  { key: "joinBoard", href: "/boards?dialog=join" },
 ] as const;
 
 export type NavItem = (typeof NAV_ITEMS)[number];

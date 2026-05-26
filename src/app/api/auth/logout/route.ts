@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { LAST_BOARD_COOKIE } from "@/features/boards/lib/lastBoardCookie";
+
 import { forwardedClientHeaders, REFRESH_COOKIE, UPSTREAM } from "../_lib/token-proxy";
 
 // The backend sets the cookie at Path=/api/auth; the BFF rewrites it to Path=/.
@@ -30,6 +32,7 @@ export async function POST(req: NextRequest) {
   for (const path of REFRESH_COOKIE_PATHS) {
     res.headers.append("Set-Cookie", `${REFRESH_COOKIE}=; Path=${path}; Max-Age=0; HttpOnly; SameSite=Lax${secureSuffix}`);
   }
+  res.headers.append("Set-Cookie", `${LAST_BOARD_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax${secureSuffix}`);
 
   return res;
 }

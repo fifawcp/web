@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Command as CommandPrimitive } from "cmdk";
-import { SearchIcon, CheckIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 import { InputGroup, InputGroupAddon } from "@/shared/components/ui/input-group";
@@ -92,7 +92,7 @@ function CommandSeparator({ className, ...props }: React.ComponentProps<typeof C
   return <CommandPrimitive.Separator data-slot="command-separator" className={cn("-mx-1 h-px w-auto bg-border", className)} {...props} />;
 }
 
-function CommandItem({ className, children, ...props }: React.ComponentProps<typeof CommandPrimitive.Item>) {
+function CommandItem({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Item>) {
   return (
     <CommandPrimitive.Item
       data-slot="command-item"
@@ -101,10 +101,7 @@ function CommandItem({ className, children, ...props }: React.ComponentProps<typ
         className
       )}
       {...props}
-    >
-      {children}
-      <CheckIcon className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
-    </CommandPrimitive.Item>
+    />
   );
 }
 

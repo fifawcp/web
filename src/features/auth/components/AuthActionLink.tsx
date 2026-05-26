@@ -1,6 +1,6 @@
 import { LucideIcon } from "lucide-react";
-import Link from "next/link";
 
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
 

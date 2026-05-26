@@ -1,0 +1,150 @@
+{
+  "title": "Boards",
+  "label": "Board",
+  "notFound": "No encontramos ese board",
+  "members": "{count, plural, one {# miembro} other {# miembros}}",
+  "privacy": {
+    "public": "Público",
+    "private": "Privado",
+    "global": "Global"
+  },
+  "role": {
+    "owner": "Dueño",
+    "admin": "Admin",
+    "member": "Miembro"
+  },
+  "switcher": {
+    "trigger": "Cambiar de board",
+    "search": "Busca un board…",
+    "noResults": "Sin coincidencias",
+    "sections": {
+      "yourBoards": "Tus boards",
+      "global": "Board global",
+      "actions": "Acciones del board",
+      "more": "Agregar un board"
+    },
+    "manage": "Gestionar board",
+    "create": "Crear board",
+    "join": "Unirme con código",
+    "createSubtitle": "Arma uno nuevo",
+    "joinSubtitle": "Introduce un código",
+    "invite": "Invitar amigos",
+    "inviteSubtitle": "Suma miembros a {name}",
+    "manageSubtitle": "Miembros y roles",
+    "leave": "Salir del board",
+    "leaveSubtitle": "Sal de este board"
+  },
+  "invite": {
+    "trigger": "Invitar amigos",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "copiedToast": "Código copiado",
+    "title": "Invitar a {name}",
+    "description": "Comparte este código con quien quieras invitar.",
+    "close": "Listo"
+  },
+  "empty": {
+    "title": "Aún no estás en ningún board",
+    "description": "Arma uno con tus amigos o únete con un código.",
+    "create": "Crear board",
+    "join": "Unirme con código"
+  },
+  "create": {
+    "title": "Crear board",
+    "description": "Los boards son privados. Comparte el código para invitar amigos.",
+    "name": "Nombre",
+    "namePlaceholder": "p. ej. Mongs FC",
+    "cancel": "Cancelar",
+    "submit": "Crear",
+    "success": "Board creado"
+  },
+  "join": {
+    "title": "Unirme con código",
+    "description": "Pega el código de 8 caracteres que te compartieron.",
+    "code": "Código",
+    "cancel": "Cancelar",
+    "submit": "Unirme",
+    "success": "Te uniste al board",
+    "invalid": "Ese código no funcionó"
+  },
+  "manage": {
+    "title": "Gestionar {name}",
+    "tabs": {
+      "general": "General",
+      "members": "Miembros"
+    },
+    "forbidden": "Ya no tienes permisos para gestionar este board",
+    "general": {
+      "name": "Nombre del board",
+      "nameSubtitle": "Cambia el nombre de tu board.",
+      "characters": "caracteres",
+      "save": "Guardar cambios",
+      "cancel": "Cancelar",
+      "renameSuccess": "Board renombrado",
+      "joinCode": "Código de invitación",
+      "joinCodeSubtitle": "Comparte este código para que otros se unan.",
+      "regenerate": "Regenerar código",
+      "regenerateWarning": "Al generar un código nuevo, el anterior dejará de funcionar.",
+      "regenerateConfirm": "Regenerar código",
+      "regenerateSuccess": "Nuevo código generado",
+      "dangerZone": "Zona peligrosa",
+      "delete": {
+        "description": "Al eliminar el board se borrarán sus miembros, competencias y resultados. Esta acción no se puede deshacer.",
+        "cta": "Eliminar board",
+        "confirm": "¿Eliminar {name}?",
+        "confirmDescription": "Escribe el nombre del board para confirmar.",
+        "cancel": "Cancelar",
+        "success": "Board eliminado"
+      }
+    },
+    "members": {
+      "search": "Busca miembros",
+      "actions": "Acciones del miembro",
+      "you": "Tú",
+      "promote": "Hacer admin",
+      "promoteSubtitle": "Podrá gestionar miembros y competencias",
+      "demote": "Hacer miembro",
+      "demoteSubtitle": "Le quita el acceso de admin",
+      "remove": "Expulsar",
+      "removeSubtitle": "Le quita el acceso a este board",
+      "removed": "Miembro expulsado",
+      "promoted": "Ahora es admin",
+      "demoted": "Ahora es miembro",
+      "removeConfirm": {
+        "title": "¿Expulsar a {name}?",
+        "description": "Perderá el acceso a las competencias de este board. Podrá volver con el código.",
+        "cancel": "Cancelar",
+        "submit": "Expulsar"
+      },
+      "transfer": "Transferir propiedad",
+      "transferSubtitle": "Cede el board; quedarás como admin",
+      "transferConfirm": {
+        "title": "¿Transferir el board a {name}?",
+        "description": "Escribe {username} para confirmar. Pasarás a ser admin.",
+        "placeholder": "Escribe el usuario",
+        "cancel": "Cancelar",
+        "submit": "Transferir",
+        "success": "Propiedad transferida"
+      },
+      "empty": "Sin coincidencias",
+      "pagination": {
+        "prev": "Página anterior",
+        "next": "Página siguiente",
+        "page": "Página {page} de {total}"
+      }
+    },
+    "danger": {
+      "cancel": "Cancelar",
+      "leave": {
+        "title": "Salir del board",
+        "description": "Dejarás de ver sus competencias. Podrás volver con el código.",
+        "cta": "Salir",
+        "confirm": "¿Salir del board?",
+        "success": "Saliste del board"
+      }
+    }
+  },
+  "errors": {
+    "generic": "Algo salió mal"
+  }
+}

@@ -60,29 +60,27 @@ export function PickemsView({ initialData, userId }: Props) {
     toast.warning(tToasts("picksClearedByGroupChange", { n: removedCount }));
   }, [bracketDraftHydrated, data.is_locked, data.bracket, bracketDraft, replaceBracketDraft, tToasts]);
 
-  // Progress counts derived from the *local* cache state (or pure server state
-  // when locked). The stepper sub-line and the navigability gate both read
-  // from here so they reflect the user's pending edits immediately.
-  //
-  // Groups is the exception: `group_picks` always contains all 12 entries
-  // (defaults included), so its length isn't a usable "completed" signal —
-  // use the server's progress count, which flips 0 → 12 after the first save.
-  // Step 1's navigation gate is hard-coded to `true` regardless, so the lag
-  // between a local reorder and the save doesn't block forward movement.
+  // Progress counts derived from the *local* cache state. The stepper sub-line and
+  // the navigability gate both read from here so they reflect the user's pending edits
+  // immediately. Groups counts the locally-set `locked` flags — locking is local-first,
+  // so a tap flips this count instantly, before the next bulk save persists it. Once the
+  // tournament is locked every group reads as final (see GroupCard), so the count is
+  // pinned to total/total to match that frozen presentation.
   const progress: PickemProgress = useMemo(() => {
     const projected = projectBracket(data.bracket, effectiveBracketDraft);
     const bracketCount = projected.reduce((n, slot) => (slot.picked_team ? n + 1 : n), 0);
+    const groupsTotal = data.group_picks.length;
 
     return {
-      groups: data.progress.groups,
+      groups: { completed: data.is_locked ? groupsTotal : data.group_picks.filter((g) => g.locked).length, total: groupsTotal },
       best_thirds: { completed: data.best_thirds.length, total: 8 },
       bracket: { completed: bracketCount, total: 32 },
     };
-  }, [data.progress.groups, data.best_thirds.length, data.bracket, effectiveBracketDraft]);
+  }, [data.is_locked, data.group_picks, data.best_thirds.length, data.bracket, effectiveBracketDraft]);
 
   // Forward navigation is only allowed when the previous step is complete.
   // Step 1 (groups) is the entry point. Step 2 needs all 12 groups *locked*
-  // (server's `progress.groups.completed` == 12). Step 3 needs step 2 at 8/8.
+  // (the locally-counted lock flags == 12). Step 3 needs step 2 at 8/8.
   // When the tournament is locked, every step is reachable for read-only review.
   const canNavigateTo = useCallback(
     (target: PickemStep): boolean => {
@@ -156,7 +154,6 @@ export function PickemsView({ initialData, userId }: Props) {
           canNavigateTo={canNavigateTo}
           onReorder={groupsSave.reorder}
           onToggleLock={groupsSave.toggleLock}
-          lockingGroupCode={groupsSave.lockingGroupCode}
           onSaveDraft={groupsSave.saveDraft}
           onContinue={async () => {
             try {

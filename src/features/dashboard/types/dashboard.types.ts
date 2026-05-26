@@ -53,6 +53,8 @@ export type LeaderboardEntry = {
 };
 
 export type CompetitionLeaderboard = {
+  competition_id: number;
+  board_id: number;
   competition_name: string;
   entries: LeaderboardEntry[];
 };

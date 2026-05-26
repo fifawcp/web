@@ -287,6 +287,13 @@
   }
 }
 
+/* Caps the height of a cmdk group's item list so the scroll lives inside the group
+   instead of the surrounding popover. Apply via the `cmdk-scroll-group` class on a CommandGroup. */
+.cmdk-scroll-group [cmdk-group-items] {
+  max-height: 10rem !important;
+  overflow-y: auto !important;
+}
+
 @layer base {
   button:not([disabled]),
   [role="button"]:not([disabled]) {

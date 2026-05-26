@@ -1,0 +1,125 @@
+{
+  "label": "Competition",
+  "notFound": "We couldn't find that competition",
+  "type": {
+    "pickem": "Pick'em",
+    "match": "Match"
+  },
+  "defaultNames": {
+    "fullTournament": "Full tournament"
+  },
+  "tabs": {
+    "createCompetition": "New competition"
+  },
+  "info": {
+    "change": "Switch competition",
+    "switcher": {
+      "heading": "Competitions",
+      "actions": "Competition actions",
+      "add": "Create competition",
+      "addSubtitle": "Add another one to this board",
+      "delete": "Delete competition",
+      "deleteSubtitle": "Remove it permanently"
+    },
+    "scope": "Included stages",
+    "teamsIncluded": "Included teams",
+    "stagesCount": "{count, plural, one {# stage} other {# stages}}",
+    "teamsCount": "{count, plural, one {# team} other {# teams}}",
+    "allStages": "All stages",
+    "allTeams": "All teams",
+    "rank": "Your position",
+    "points": "Your points",
+    "pts": "pts"
+  },
+  "podium": {
+    "title": "Top 3",
+    "first": "1st",
+    "second": "2nd",
+    "third": "3rd",
+    "points": "{points} pts",
+    "empty": "No standings yet"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "memberCount": "{count, plural, one {# member} other {# members}}",
+    "search": "Search members",
+    "columns": {
+      "rank": "#",
+      "member": "Member",
+      "total": "Total",
+      "groupExact": "G.Exact",
+      "groupQualifiers": "Quals",
+      "bestThirds": "B.3rds",
+      "bracket": "Bracket",
+      "exactHits": "Exact hits",
+      "outcomes": "Outcomes"
+    },
+    "you": "You",
+    "empty": "No entries yet",
+    "noResults": "No members match your search",
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "page": "Page {page} of {total}",
+      "showing": "{shown} of {total}"
+    },
+    "mobile": {
+      "prevColumn": "Show {name}",
+      "nextColumn": "Show {name}"
+    }
+  },
+  "emptyCompetitions": {
+    "title": "No competitions yet",
+    "descriptionAdmin": "Create the first match competition for this board.",
+    "descriptionMember": "Wait for an admin to add a competition.",
+    "cta": "New competition"
+  },
+  "create": {
+    "title": "New competition",
+    "description": "Score a slice of the tournament with custom stages and teams.",
+    "steps": {
+      "name": "Name",
+      "scope": "Scope",
+      "summary": "Summary"
+    },
+    "name": {
+      "label": "Name",
+      "placeholder": "e.g. Knockout run",
+      "helper": "Up to 20 characters"
+    },
+    "scope": {
+      "stages": "Stages",
+      "stagesHelper": "Pick at least one stage.",
+      "teams": "Teams",
+      "teamsHelper": "Pick at least one team.",
+      "selectGroup": "Select whole group",
+      "unselectGroup": "Unselect group",
+      "selectAllStages": "Select all",
+      "unselectAllStages": "Clear all",
+      "selectAllTeams": "Select all",
+      "unselectAllTeams": "Clear all",
+      "selectedTeams": "{count, plural, one {# team} other {# teams}}",
+      "selectedStages": "{count, plural, one {# stage} other {# stages}}"
+    },
+    "summary": {
+      "name": "Name",
+      "stages": "Stages",
+      "teams": "Teams"
+    },
+    "back": "Back",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "submit": "Create competition",
+    "success": "Competition created"
+  },
+  "delete": {
+    "title": "Delete competition?",
+    "description": "{name} and all its picks will be removed for everyone on the board. This can't be undone.",
+    "confirm": "Delete competition",
+    "cancel": "Cancel",
+    "success": "Competition deleted"
+  },
+  "errors": {
+    "generic": "Something went wrong"
+  }
+}

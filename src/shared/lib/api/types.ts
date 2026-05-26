@@ -1,7 +1,15 @@
 export type ApiResponse<T = void> = {
   success: boolean;
   data?: T;
+  pagination?: Pagination;
   error?: ApiError;
+};
+
+export type Pagination = {
+  page: number;
+  limit: number;
+  total: number;
+  has_more: boolean;
 };
 
 export type ApiError = {

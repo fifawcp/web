@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { ChevronDown, ChevronRight, LogOut, User } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { logoutAndSignOut } from "@/features/auth/lib/logout";
+import { Link } from "@/i18n/navigation";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { getInitials } from "@/shared/lib/ui";

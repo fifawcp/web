@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -8,12 +8,12 @@ import { toast } from "sonner";
 import { useIsomorphicLayoutEffect } from "@/shared/hooks/useIsomorphicLayoutEffect";
 import type { GroupCode } from "@/shared/types/wcp.types";
 
-import { PICKEMS_QUERY_KEY, saveGroupPicks, setGroupLock } from "../api/pickems";
+import { PICKEMS_QUERY_KEY, saveGroupPicks } from "../api/pickems";
 import { clearBestThirdsDraft } from "../lib/bestThirdsDraftStorage";
 import { readBracketDraft } from "../lib/bracketDraftStorage";
 import { clearGroupsDraft, readGroupsDraft, writeGroupsDraft, type GroupsDraft } from "../lib/groupsDraftStorage";
 import { useBracketDraftStore } from "../store/bracketDraft.store";
-import type { BracketMatchSlot, RankedTeam, ResolvedGroupPick, SaveGroupPicksPayload, SetGroupLockPayload, UserPickem } from "../types/pickems.types";
+import type { BracketMatchSlot, RankedTeam, ResolvedGroupPick, SaveGroupPicksPayload, UserPickem } from "../types/pickems.types";
 
 import { usePickemMutation } from "./usePickemMutation";
 
@@ -26,18 +26,21 @@ function payloadFromGroups(groups: ResolvedGroupPick[]): SaveGroupPicksPayload {
     group_picks: groups.map((group) => ({
       group_code: group.group_code,
       team_fifa_codes: group.teams.map((team) => team.fifa_code) as [string, string, string, string],
+      locked: group.locked,
     })),
   };
 }
 
 function draftFromGroups(groups: ResolvedGroupPick[]): GroupsDraft {
-  return Object.fromEntries(groups.map((group) => [group.group_code, group.teams.map((team) => team.fifa_code)])) as GroupsDraft;
+  return Object.fromEntries(groups.map((group) => [group.group_code, { order: group.teams.map((team) => team.fifa_code), locked: group.locked }])) as GroupsDraft;
 }
 
 function applyDraftToGroups(groups: ResolvedGroupPick[], draft: GroupsDraft): ResolvedGroupPick[] {
   return groups.map((group) => {
-    const order = draft[group.group_code];
+    const entry = draft[group.group_code];
+    if (!entry) return group;
 
+    const { order, locked } = entry;
     if (!order || order.length !== group.teams.length) return group;
 
     const byCode = new Map(group.teams.map((team) => [team.fifa_code, team]));
@@ -49,7 +52,7 @@ function applyDraftToGroups(groups: ResolvedGroupPick[], draft: GroupsDraft): Re
       reordered.push({ ...team, position: i + 1 });
     }
 
-    return { ...group, teams: reordered };
+    return { ...group, teams: reordered, locked };
   });
 }
 
@@ -69,7 +72,6 @@ export function useSaveGroups(userId: string | undefined) {
   const qc = useQueryClient();
   const tToasts = useTranslations("pickems.toasts");
   const hydratedRef = useRef(false);
-  const [lockingGroupCode, setLockingGroupCode] = useState<GroupCode | null>(null);
 
   const mutation = usePickemMutation<SaveGroupPicksPayload>({
     mutationFn: saveGroupPicks,
@@ -105,25 +107,6 @@ export function useSaveGroups(userId: string | undefined) {
 
     qc.setQueryData<UserPickem>(PICKEMS_QUERY_KEY, { ...cache, group_picks: applyDraftToGroups(cache.group_picks, draft) });
   }, [qc, userId]);
-
-  // Locking persists order AND sets locked=true in one round-trip; unlocking only flips
-  // the flag. Server response replaces downstream slices so any cascade reaches the cache.
-  const lockMutation = usePickemMutation<SetGroupLockPayload>({
-    mutationFn: setGroupLock,
-    applyOptimistic: (prev, input) => ({
-      ...prev,
-      group_picks: prev.group_picks.map((g) => (g.group_code === input.group_code ? { ...g, locked: input.locked } : g)),
-    }),
-    mergeServerResponse: (current, response) => ({
-      ...current,
-      group_picks: response.group_picks,
-      bracket: response.bracket,
-      best_thirds: response.best_thirds,
-      progress: response.progress,
-      is_locked: response.is_locked,
-    }),
-    detectCascade: true,
-  });
 
   const reorder = useCallback(
     (groupCode: GroupCode, newOrder: RankedTeam[]) => {
@@ -184,39 +167,22 @@ export function useSaveGroups(userId: string | undefined) {
     clearGroupsDraft(userId);
   }, [mutation, qc, userId]);
 
+  // Local-first, like reorder: flip the group's lock in the cache and mirror it into the
+  // draft. Nothing hits the server here — the lock state rides along with team order in the
+  // next bulk save ("Save draft" / "Continue"), so a tap is instant and a slow connection
+  // never blocks the toggle. No bracket cascade: locking doesn't change order.
   const toggleLock = useCallback(
-    async (groupCode: GroupCode) => {
-      const current = qc.getQueryData<UserPickem>(PICKEMS_QUERY_KEY);
-      if (!current) return;
-      const group = current.group_picks.find((g) => g.group_code === groupCode);
-      if (!group) return;
+    (groupCode: GroupCode) => {
+      const prev = qc.getQueryData<UserPickem>(PICKEMS_QUERY_KEY);
+      if (!prev) return;
+      const target = prev.group_picks.find((g) => g.group_code === groupCode);
+      if (!target) return;
 
-      const nextLocked = !group.locked;
-      const teamCodes = group.teams.map((t) => t.fifa_code) as [string, string, string, string];
-
-      setLockingGroupCode(groupCode);
-      try {
-        await lockMutation.mutateAsync({ group_code: groupCode, locked: nextLocked, team_fifa_codes: teamCodes });
-      } finally {
-        setLockingGroupCode(null);
-      }
-
-      // Locking makes the server state authoritative for this group; drop its draft entry.
-      if (nextLocked) {
-        const draft = readGroupsDraft(userId);
-        if (draft && groupCode in draft) {
-          const rest = { ...draft };
-          delete rest[groupCode];
-          const remaining = Object.keys(rest);
-          if (remaining.length === 0) {
-            clearGroupsDraft(userId);
-          } else {
-            writeGroupsDraft(userId, rest as GroupsDraft);
-          }
-        }
-      }
+      const nextGroups = prev.group_picks.map((g) => (g.group_code === groupCode ? { ...g, locked: !g.locked } : g));
+      qc.setQueryData<UserPickem>(PICKEMS_QUERY_KEY, { ...prev, group_picks: nextGroups });
+      writeGroupsDraft(userId, draftFromGroups(nextGroups));
     },
-    [qc, lockMutation, userId]
+    [qc, userId]
   );
 
   return {
@@ -224,9 +190,8 @@ export function useSaveGroups(userId: string | undefined) {
     saveDraft,
     saveAndAwait,
     toggleLock,
-    lockingGroupCode,
-    isSaving: mutation.isPending || lockMutation.isPending,
-    isError: mutation.isError || lockMutation.isError,
+    isSaving: mutation.isPending,
+    isError: mutation.isError,
     isSuccess: mutation.isSuccess,
   };
 }

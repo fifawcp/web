@@ -1,12 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { ArrowRight, Target, Trophy, Users } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
+import { Link } from "@/i18n/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
-import { getInitials } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
 import type { CompetitionLeaderboard, DashboardLeaderboard } from "../types/dashboard.types";
@@ -24,8 +23,16 @@ type Props = {
 // accent text, soft drop shadow, and a hair of accent ring on top.
 const accentTab = "data-active:text-page-accent-strong data-active:shadow-sm data-active:ring-1 data-active:ring-page-accent/20";
 
+type LeaderboardTab = "pickem" | "match";
+
 export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
   const t = useTranslations("dashboard.leaderboard");
+  // Controlled so the "Full ranking" link can follow the active tab to that
+  // competition on the global board.
+  const [tab, setTab] = useState<LeaderboardTab>("pickem");
+
+  const activeCompetition = tab === "pickem" ? leaderboard?.pickem : leaderboard?.match;
+  const fullRankingHref = activeCompetition ? `/boards/${activeCompetition.board_id}?competition=${activeCompetition.competition_id}` : "/boards?board=global";
 
   return (
     <CardReveal className="flex h-full flex-col bg-card p-4 opacity-0 sm:p-5">
@@ -34,7 +41,7 @@ export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
         <span className="text-xs text-muted-foreground">{t("subtitle")}</span>
       </div>
 
-      <Tabs defaultValue="pickem" className="mt-4 flex flex-1 flex-col gap-3">
+      <Tabs value={tab} onValueChange={(value) => setTab(value as LeaderboardTab)} className="mt-4 flex flex-1 flex-col gap-3">
         <TabsList className="w-full">
           <TabsTrigger value="pickem" className={accentTab}>
             <Trophy className="size-3.5" />
@@ -53,10 +60,9 @@ export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
         </TabsContent>
       </Tabs>
 
-      {/* TODO: Update the redirection once the boards page is ready */}
       <div className="mt-auto flex items-center justify-end pt-3">
         <Link
-          href="/boards/global"
+          href={fullRankingHref}
           className="flex items-center gap-1 text-xs font-medium text-page-accent-strong transition-colors hover:text-page-accent hover:underline"
         >
           {t("fullRanking")}
@@ -95,7 +101,7 @@ function LeaderboardEntries({ data, currentUserId }: { data: CompetitionLeaderbo
           sits over the username, not the avatar. */}
       <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-border px-2 pb-2 text-2xs font-medium uppercase tracking-wider text-muted-foreground">
         <span className="w-9">{t("rank")}</span>
-        <span className="pl-9.5">{t("player")}</span>
+        <span>{t("player")}</span>
         <span>{t("points")}</span>
       </div>
       <ul className="divide-y divide-border">
@@ -104,12 +110,7 @@ function LeaderboardEntries({ data, currentUserId }: { data: CompetitionLeaderbo
           return (
             <li key={entry.member.user_id} className={cn("grid grid-cols-[auto_1fr_auto] items-center gap-3 px-2 py-2.5", isMe && "bg-page-accent-soft/60")}>
               <span className="w-9 shrink-0 text-xs font-medium tabular-nums text-muted-foreground">{entry.rank}</span>
-              <div className="flex min-w-0 items-center gap-2.5">
-                <Avatar className="size-7">
-                  <AvatarFallback className="text-2xs">{getInitials(entry.member.username)}</AvatarFallback>
-                </Avatar>
-                <span className={cn("min-w-0 truncate text-sm", isMe && "font-semibold text-page-accent-strong")}>{isMe ? t("you") : entry.member.username}</span>
-              </div>
+              <span className={cn("min-w-0 truncate text-sm", isMe && "font-semibold text-page-accent-strong")}>{isMe ? t("you") : entry.member.username}</span>
               <span className="shrink-0 text-xs font-medium tabular-nums">
                 {entry.points} <span className="font-normal text-muted-foreground">{t("pts")}</span>
               </span>

@@ -1,13 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 
 import { exchangeToken } from "@/features/auth/api/client";
 import { profileSchema, type ProfileFormData } from "@/features/auth/schemas/auth.schema";
 import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useRouter } from "@/i18n/navigation";
 import { useApiError } from "@/shared/hooks/useApiError";
 
 export function useRegisterProfileStep() {
