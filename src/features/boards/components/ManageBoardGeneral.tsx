@@ -80,26 +80,28 @@ export function ManageBoardGeneral({ board, onClose, onPermissionLost }: Props) 
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <form onSubmit={handleRename} className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
+      <SettingCard>
         <SectionHeader icon={SquarePen} title={t("name")} description={t("nameSubtitle")} />
-        <Input id="manage-name" value={name} maxLength={NAME_MAX} onChange={(event) => setName(event.target.value)} disabled={!canManage} aria-label={t("name")} />
-        <span className="text-2xs text-muted-foreground tabular-nums">
-          {trimmed.length}/{NAME_MAX} {t("characters")}
-        </span>
-        <Button
-          type="submit"
-          size="sm"
-          disabled={!canManage || !isDirty || rename.isPending}
-          className="w-full gap-1.5 bg-page-accent text-white hover:bg-page-accent/90"
-        >
-          <Check className="size-3.5" aria-hidden />
-          {t("save")}
-        </Button>
-      </form>
+        <form onSubmit={handleRename} className="flex flex-col gap-2.5">
+          <Input id="manage-name" value={name} maxLength={NAME_MAX} onChange={(event) => setName(event.target.value)} disabled={!canManage} aria-label={t("name")} />
+          <span className="self-end text-2xs text-muted-foreground tabular-nums">
+            {trimmed.length}/{NAME_MAX} {t("characters")}
+          </span>
+          <Button
+            type="submit"
+            size="sm"
+            disabled={!canManage || !isDirty || rename.isPending}
+            className="w-full gap-1.5 bg-page-accent text-white hover:bg-page-accent/90"
+          >
+            <Check className="size-3.5" aria-hidden />
+            {t("save")}
+          </Button>
+        </form>
+      </SettingCard>
 
       {board.join_code ? (
-        <section className="flex flex-col gap-3 border-t pt-6">
+        <SettingCard>
           <SectionHeader icon={Link2} title={t("joinCode")} description={t("joinCodeSubtitle")} />
           <div className="flex min-w-0 items-center justify-between gap-3 rounded-lg border border-page-accent/20 bg-page-accent-soft px-4 py-3 font-mono text-base tracking-widest text-page-accent-strong">
             <span className="truncate">{board.join_code}</span>
@@ -114,11 +116,11 @@ export function ManageBoardGeneral({ board, onClose, onPermissionLost }: Props) 
               <p className="text-2xs leading-snug text-muted-foreground">{t("regenerateWarning")}</p>
             </>
           ) : null}
-        </section>
+        </SettingCard>
       ) : null}
 
       {canDelete ? (
-        <section className="flex flex-col gap-3 border-t pt-6">
+        <SettingCard tone="danger">
           <SectionHeader icon={TriangleAlert} title={t("dangerZone")} description={t("delete.description")} tone="danger" />
           <Button
             variant="outline"
@@ -129,7 +131,7 @@ export function ManageBoardGeneral({ board, onClose, onPermissionLost }: Props) 
             <Trash2 className="size-3.5" aria-hidden />
             {t("delete.cta")}
           </Button>
-        </section>
+        </SettingCard>
       ) : null}
 
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
@@ -176,14 +178,23 @@ export function ManageBoardGeneral({ board, onClose, onPermissionLost }: Props) 
   );
 }
 
-// Icon + title + one-line description, repeated atop each settings section.
+// Each settings action lives in its own card so it reads as a self-contained unit.
+// The danger zone tints its border to signal the destructive region without shouting.
+function SettingCard({ children, tone = "default" }: { children: React.ReactNode; tone?: "default" | "danger" }) {
+  return (
+    <section className={cn("flex flex-col gap-3 rounded-xl border bg-card p-4 shadow-xs", tone === "danger" ? "border-destructive/30" : "border-foreground/10")}>
+      {children}
+    </section>
+  );
+}
+
+// Icon + title + one-line description, atop each card. The accent-soft tile mirrors
+// CompetitionInfoCard so the sheet feels part of the board's themed surfaces.
 function SectionHeader({ icon: Icon, title, description, tone = "default" }: { icon: LucideIcon; title: string; description: string; tone?: "default" | "danger" }) {
   const isDanger = tone === "danger";
   return (
     <div className="flex items-start gap-3">
-      <span
-        className={cn("flex size-9 shrink-0 items-center justify-center rounded-lg", isDanger ? "bg-destructive/10 text-destructive" : "bg-muted text-muted-foreground")}
-      >
+      <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg", isDanger ? "bg-destructive/10 text-destructive" : "bg-muted text-page-accent-strong")}>
         <Icon className="size-4" aria-hidden />
       </span>
       <div className="flex min-w-0 flex-col gap-0.5 pt-0.5">
