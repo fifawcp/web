@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ArrowRight, Target, Trophy, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -22,8 +23,16 @@ type Props = {
 // accent text, soft drop shadow, and a hair of accent ring on top.
 const accentTab = "data-active:text-page-accent-strong data-active:shadow-sm data-active:ring-1 data-active:ring-page-accent/20";
 
+type LeaderboardTab = "pickem" | "match";
+
 export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
   const t = useTranslations("dashboard.leaderboard");
+  // Controlled so the "Full ranking" link can follow the active tab to that
+  // competition on the global board.
+  const [tab, setTab] = useState<LeaderboardTab>("pickem");
+
+  const activeCompetition = tab === "pickem" ? leaderboard?.pickem : leaderboard?.match;
+  const fullRankingHref = activeCompetition ? `/boards/${activeCompetition.board_id}?competition=${activeCompetition.competition_id}` : "/boards?board=global";
 
   return (
     <CardReveal className="flex h-full flex-col bg-card p-4 opacity-0 sm:p-5">
@@ -32,7 +41,7 @@ export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
         <span className="text-xs text-muted-foreground">{t("subtitle")}</span>
       </div>
 
-      <Tabs defaultValue="pickem" className="mt-4 flex flex-1 flex-col gap-3">
+      <Tabs value={tab} onValueChange={(value) => setTab(value as LeaderboardTab)} className="mt-4 flex flex-1 flex-col gap-3">
         <TabsList className="w-full">
           <TabsTrigger value="pickem" className={accentTab}>
             <Trophy className="size-3.5" />
@@ -51,10 +60,9 @@ export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
         </TabsContent>
       </Tabs>
 
-      {/* TODO: Update the redirection once the boards page is ready */}
       <div className="mt-auto flex items-center justify-end pt-3">
         <Link
-          href="/boards/global"
+          href={fullRankingHref}
           className="flex items-center gap-1 text-xs font-medium text-page-accent-strong transition-colors hover:text-page-accent hover:underline"
         >
           {t("fullRanking")}

@@ -98,29 +98,31 @@ export function BoardHomeView({
     <>
       <section className="container pt-6 pb-8 lg:pt-8">
         {activeCompetition ? (
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-            <div className="flex w-full flex-col gap-4 lg:sticky lg:top-(--boards-rail-offset) lg:w-100 lg:shrink-0 lg:self-start">
-              <BoardHeader boards={boards} activeBoard={activeBoard} currentUserId={currentUserId} />
-              <CompetitionInfoCard
-                boardId={activeBoard.id}
-                competition={activeCompetition}
-                competitions={competitions}
-                teamsByCode={teamsByCode}
-                canCreate={canCreate}
-                onSelect={selectCompetition}
-                onCreate={() => setWizardOpen(true)}
-              />
-              <Podium entries={initialLeaderboard?.items ?? []} />
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch lg:gap-6">
+              <div className="flex flex-col gap-4 lg:flex-1">
+                <BoardHeader boards={boards} activeBoard={activeBoard} currentUserId={currentUserId} />
+                <CompetitionInfoCard
+                  boardId={activeBoard.id}
+                  competition={activeCompetition}
+                  competitions={competitions}
+                  teamsByCode={teamsByCode}
+                  canCreate={canCreate}
+                  onSelect={selectCompetition}
+                  onCreate={() => setWizardOpen(true)}
+                />
+              </div>
+              <div className="lg:flex-1">
+                <Podium entries={initialLeaderboard?.items ?? []} />
+              </div>
             </div>
-            <div className="min-w-0 flex-1">
-              <LeaderboardSection
-                key={activeCompetition.id}
-                boardId={activeBoard.id}
-                competition={activeCompetition}
-                currentUserId={currentUserId}
-                initialData={initialLeaderboard}
-              />
-            </div>
+            <LeaderboardSection
+              key={activeCompetition.id}
+              boardId={activeBoard.id}
+              competition={activeCompetition}
+              currentUserId={currentUserId}
+              initialData={initialLeaderboard}
+            />
           </div>
         ) : (
           <div className="flex flex-col gap-6">

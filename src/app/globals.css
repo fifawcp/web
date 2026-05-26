@@ -25,9 +25,6 @@
   /* Offset used when scrolling the tutorial section into view (header + breathing room). */
   --tutorial-scroll-offset: var(--header-height);
 
-  /* Sticky top for the boards left rail (board + competition + podium): header + breathing room. */
-  --boards-rail-offset: calc(var(--header-height) + 1.5rem);
-
   --text-2xs: 0.625rem;
   --text-2xs--line-height: 0.875rem;
 

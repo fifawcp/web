@@ -22,16 +22,16 @@ export function Podium({ entries }: Props) {
 
   if (top.length === 0) {
     return (
-      <Card>
-        <CardContent className="flex items-center justify-center py-5 text-sm text-muted-foreground">{t("empty")}</CardContent>
+      <Card className="h-full">
+        <CardContent className="flex h-full items-center justify-center py-5 text-sm text-muted-foreground">{t("empty")}</CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="relative overflow-hidden py-5">
+    <Card className="relative h-full overflow-hidden py-5">
       <span className="pointer-events-none absolute top-3 left-4 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("title")}</span>
-      <CardContent className="mx-auto grid w-full max-w-md grid-cols-3 items-end gap-2 px-3 pt-8 pb-0">
+      <CardContent className="mx-auto grid h-full w-full grid-cols-3 items-end gap-2 px-3 pt-8 pb-0 xl:w-4/5">
         {ORDER.map((index) => {
           const entry = top[index];
           if (!entry) return <span key={index} aria-hidden />;
@@ -45,7 +45,7 @@ export function Podium({ entries }: Props) {
 type MedalTone = "gold" | "silver" | "bronze";
 
 const TONE_BY_RANK: Record<1 | 2 | 3, MedalTone> = { 1: "gold", 2: "silver", 3: "bronze" };
-const PEDESTAL_HEIGHT: Record<1 | 2 | 3, string> = { 1: "h-20", 2: "h-14", 3: "h-11" };
+const PEDESTAL_HEIGHT: Record<1 | 2 | 3, string> = { 1: "h-32", 2: "h-24", 3: "h-20" };
 
 const TONE_PEDESTAL: Record<MedalTone, string> = {
   gold: "bg-amber-100 text-amber-700 ring-1 ring-inset ring-amber-300/60 dark:bg-amber-500/15 dark:text-amber-300 dark:ring-amber-400/30",
