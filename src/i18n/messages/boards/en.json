@@ -1,0 +1,146 @@
+{
+  "title": "Boards",
+  "label": "Board",
+  "notFound": "We couldn't find that board",
+  "members": "{count, plural, one {# member} other {# members}}",
+  "privacy": {
+    "public": "Public",
+    "private": "Private",
+    "global": "Global"
+  },
+  "role": {
+    "owner": "Owner",
+    "admin": "Admin",
+    "member": "Member"
+  },
+  "switcher": {
+    "trigger": "Switch board",
+    "search": "Find a board…",
+    "noResults": "No boards match",
+    "sections": {
+      "yourBoards": "Your boards",
+      "global": "Global board",
+      "actions": "Board actions",
+      "more": "Add a board"
+    },
+    "manage": "Manage board",
+    "create": "Create board",
+    "join": "Join with code",
+    "createSubtitle": "Start a new board",
+    "joinSubtitle": "Enter a code",
+    "invite": "Invite friends",
+    "inviteSubtitle": "Add members to {name}",
+    "manageSubtitle": "Members & roles",
+    "leave": "Leave board",
+    "leaveSubtitle": "Step away from this board"
+  },
+  "invite": {
+    "trigger": "Invite friends",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copiedToast": "Join code copied",
+    "title": "Invite to {name}",
+    "description": "Share this code with anyone you want on this board.",
+    "close": "Done"
+  },
+  "empty": {
+    "title": "You're not on any board yet",
+    "description": "Start your own board for friends, or join one with a code.",
+    "create": "Create board",
+    "join": "Join with code"
+  },
+  "create": {
+    "title": "Create board",
+    "description": "Boards are private. Share the join code to invite friends.",
+    "name": "Name",
+    "namePlaceholder": "e.g. Mongs FC",
+    "cancel": "Cancel",
+    "submit": "Create",
+    "success": "Board created"
+  },
+  "join": {
+    "title": "Join with code",
+    "description": "Paste the 8-character code your friend shared with you.",
+    "code": "Join code",
+    "cancel": "Cancel",
+    "submit": "Join",
+    "success": "Welcome to the board",
+    "invalid": "That code didn't work"
+  },
+  "manage": {
+    "title": "Manage {name}",
+    "tabs": {
+      "general": "General",
+      "members": "Members"
+    },
+    "forbidden": "You no longer have permission to manage this board",
+    "general": {
+      "name": "Board name",
+      "nameSubtitle": "Change your board's name.",
+      "characters": "characters",
+      "save": "Save changes",
+      "cancel": "Cancel",
+      "renameSuccess": "Board renamed",
+      "joinCode": "Join code",
+      "joinCodeSubtitle": "Share this code so others can join.",
+      "regenerate": "Regenerate code",
+      "regenerateWarning": "Generating a new code invalidates the previous one — the old code stops working.",
+      "regenerateConfirm": "Regenerate code",
+      "regenerateSuccess": "New join code generated",
+      "dangerZone": "Danger zone",
+      "delete": {
+        "description": "Deleting the board removes all its members, competitions, and results. This can't be undone.",
+        "cta": "Delete board",
+        "confirm": "Delete {name}?",
+        "confirmDescription": "Type the board name to confirm.",
+        "cancel": "Cancel",
+        "success": "Board deleted"
+      }
+    },
+    "members": {
+      "search": "Search members",
+      "actions": "Member actions",
+      "you": "You",
+      "promote": "Make admin",
+      "demote": "Make member",
+      "remove": "Remove",
+      "removed": "Member removed",
+      "promoted": "Promoted to admin",
+      "demoted": "Changed to member",
+      "removeConfirm": {
+        "title": "Remove {name}?",
+        "description": "They'll lose access to this board's competitions. They can rejoin with the code.",
+        "cancel": "Cancel",
+        "submit": "Remove"
+      },
+      "transfer": "Transfer ownership",
+      "transferConfirm": {
+        "title": "Transfer ownership to {name}?",
+        "description": "Type {username} below to confirm. You'll become an admin afterwards.",
+        "placeholder": "Type the username",
+        "cancel": "Cancel",
+        "submit": "Transfer ownership",
+        "success": "Ownership transferred"
+      },
+      "empty": "No members match",
+      "pagination": {
+        "prev": "Previous page",
+        "next": "Next page",
+        "page": "Page {page} of {total}"
+      }
+    },
+    "danger": {
+      "cancel": "Cancel",
+      "leave": {
+        "title": "Leave board",
+        "description": "You won't see this board's competitions anymore. You can rejoin with the code.",
+        "cta": "Leave",
+        "confirm": "Leave board?",
+        "success": "You left the board"
+      }
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong"
+  }
+}

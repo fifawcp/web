@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { ChevronRight, Globe, LogOut, Palette } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { logoutAndSignOut } from "@/features/auth/lib/logout";
+import { Link } from "@/i18n/navigation";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Button } from "@/shared/components/ui/button";
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerTitle, DrawerTrigger } from "@/shared/components/ui/drawer";
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerTitle } from "@/shared/components/ui/drawer";
 import { HamburgerIcon } from "@/shared/icons/HamburgerIcon";
 import { patchReleasePointerCapture } from "@/shared/lib/patch-pointer-capture";
 import { getInitials } from "@/shared/lib/ui";
@@ -53,16 +53,15 @@ export function MobileMenu({ user }: MobileMenuProps) {
 
   return (
     <Drawer open={open} onOpenChange={setOpen} direction="left" noBodyStyles>
-      <DrawerTrigger asChild>
-        <button
-          type="button"
-          aria-label={open ? t("closeMenu") : t("openMenu")}
-          aria-expanded={open}
-          className="flex size-9 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted"
-        >
-          <HamburgerIcon open={open} />
-        </button>
-      </DrawerTrigger>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label={t("openMenu")}
+        aria-expanded={open}
+        className="flex size-9 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted"
+      >
+        <HamburgerIcon open={false} />
+      </button>
       <DrawerContent className="data-[vaul-drawer-direction=left]:w-80">
         <DrawerTitle className="sr-only">{t("menuLabel")}</DrawerTitle>
         <DrawerDescription className="sr-only">{t("menuDescription")}</DrawerDescription>

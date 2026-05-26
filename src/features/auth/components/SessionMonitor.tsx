@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { isTokenStale } from "@/shared/lib/api/jwt";
 import { refreshBackendAccessToken } from "@/shared/lib/api/refresh";
 

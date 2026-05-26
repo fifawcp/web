@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
-import { ABOUT_LINKS, NAV_ITEMS, TBD_LINKS } from "@/shared/lib/nav-config";
+import { Link } from "@/i18n/navigation";
+import { ABOUT_LINKS, COMMUNITY_LINKS, NAV_ITEMS } from "@/shared/lib/nav-config";
 
 import { Brand } from "./Brand";
 
@@ -89,13 +89,13 @@ export async function Footer() {
                 </ul>
               </nav>
 
-              <nav className="flex min-w-0 flex-col gap-3" aria-label={TBD_LINKS[0].key}>
-                <span className={sectionLabel}>{TBD_LINKS[0].key}</span>
+              <nav className="flex min-w-0 flex-col gap-3" aria-label={t("community")}>
+                <span className={sectionLabel}>{t("community")}</span>
                 <ul className="flex flex-col gap-2.5">
-                  {TBD_LINKS.map((link) => (
+                  {COMMUNITY_LINKS.map((link) => (
                     <li key={link.key}>
                       <Link href={link.href} className={navLink}>
-                        TBD
+                        {t(`communityLinks.${link.key}`)}
                       </Link>
                     </li>
                   ))}

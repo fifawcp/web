@@ -1,20 +1,25 @@
 "use client";
 
 import { useTransition } from "react";
+import { useSearchParams } from "next/navigation";
 import { useLocale } from "next-intl";
 
-const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
+import { usePathname, useRouter } from "@/i18n/navigation";
 
-/** Current locale plus a cookie-backed switcher that reloads to apply the change. */
+/** Current locale + a switcher that swaps the URL locale prefix, keeping path & query. */
 export function useLanguage() {
   const locale = useLocale();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const changeLanguage = (next: string) => {
     if (next === locale) return;
+    const qs = searchParams.toString();
+    const href = qs ? `${pathname}?${qs}` : pathname;
     startTransition(() => {
-      document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=${LOCALE_COOKIE_MAX_AGE}`;
-      window.location.reload();
+      router.replace(href, { locale: next });
     });
   };
 

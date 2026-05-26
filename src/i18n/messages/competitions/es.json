@@ -1,0 +1,126 @@
+{
+  "label": "Competencia",
+  "notFound": "No encontramos esa competencia",
+  "type": {
+    "pickem": "Pick'em",
+    "match": "Partidos"
+  },
+  "tabs": {
+    "createCompetition": "Nueva competencia"
+  },
+  "info": {
+    "subtitle": {
+      "pickem": "Competencia Pick'em",
+      "match": "Competencia de partidos"
+    },
+    "change": "Cambiar competencia",
+    "switcher": {
+      "heading": "Competencias",
+      "actions": "Acciones de competencia",
+      "add": "Crear competencia",
+      "addSubtitle": "Agrega otra a este board",
+      "delete": "Eliminar competencia",
+      "deleteSubtitle": "Quitarla permanentemente"
+    },
+    "scope": "Alcance",
+    "teamsIncluded": "Equipos incluidos",
+    "stagesCount": "{count, plural, one {# fase} other {# fases}}",
+    "teamsCount": "{count, plural, one {# equipo} other {# equipos}}",
+    "allStages": "Todas las fases",
+    "allTeams": "Todos los equipos",
+    "rank": "Tu posición",
+    "points": "Tus puntos",
+    "pts": "pts"
+  },
+  "podium": {
+    "title": "Top 3",
+    "first": "1°",
+    "second": "2°",
+    "third": "3°",
+    "points": "{points} pts",
+    "empty": "Aún no hay tabla"
+  },
+  "leaderboard": {
+    "title": "Tabla",
+    "memberCount": "{count, plural, one {# miembro} other {# miembros}}",
+    "search": "Busca miembros",
+    "columns": {
+      "rank": "#",
+      "member": "Miembro",
+      "total": "Total",
+      "groupExact": "G.Exact",
+      "groupQualifiers": "Class.",
+      "bestThirds": "3eros",
+      "bracket": "Bracket",
+      "exactHits": "Exactos",
+      "outcomes": "Resultados"
+    },
+    "you": "Tú",
+    "empty": "Aún no hay entradas",
+    "noResults": "Sin coincidencias",
+    "pagination": {
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {page} de {total}",
+      "showing": "{shown} de {total}"
+    },
+    "mobile": {
+      "prevColumn": "Mostrar {name}",
+      "nextColumn": "Mostrar {name}"
+    }
+  },
+  "emptyCompetitions": {
+    "title": "Aún no hay competencias",
+    "descriptionAdmin": "Crea la primera competencia de partidos para este board.",
+    "descriptionMember": "Espera a que un admin cree una competencia.",
+    "cta": "Nueva competencia"
+  },
+  "create": {
+    "title": "Nueva competencia",
+    "description": "Puntúa una parte del torneo con fases y equipos a tu medida.",
+    "steps": {
+      "name": "Nombre",
+      "scope": "Alcance",
+      "summary": "Resumen"
+    },
+    "name": {
+      "label": "Nombre",
+      "placeholder": "p. ej. Eliminatorias",
+      "helper": "Hasta 20 caracteres"
+    },
+    "scope": {
+      "stages": "Fases",
+      "stagesHelper": "Elige al menos una fase.",
+      "teams": "Equipos",
+      "teamsHelper": "Elige al menos un equipo.",
+      "selectGroup": "Marcar grupo entero",
+      "unselectGroup": "Desmarcar grupo",
+      "selectAllStages": "Marcar todas",
+      "unselectAllStages": "Quitar todas",
+      "selectAllTeams": "Marcar todos",
+      "unselectAllTeams": "Quitar todos",
+      "selectedTeams": "{count, plural, one {# equipo} other {# equipos}}",
+      "selectedStages": "{count, plural, one {# fase} other {# fases}}"
+    },
+    "summary": {
+      "name": "Nombre",
+      "stages": "Fases",
+      "teams": "Equipos"
+    },
+    "back": "Volver",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "submit": "Crear competencia",
+    "success": "Competencia creada"
+  },
+  "delete": {
+    "title": "¿Eliminar competencia?",
+    "description": "Se borrarán {name} y todas sus picks para todos los miembros del board. No se puede deshacer.",
+    "confirm": "Eliminar competencia",
+    "cancel": "Cancelar",
+    "success": "Competencia eliminada"
+  },
+  "errors": {
+    "generic": "Algo salió mal"
+  }
+}

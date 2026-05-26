@@ -1,12 +1,10 @@
 "use client";
 
 import { ArrowRight, Target, Trophy, Users } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
+import { Link } from "@/i18n/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
-import { getInitials } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
 import type { CompetitionLeaderboard, DashboardLeaderboard } from "../types/dashboard.types";
@@ -95,7 +93,7 @@ function LeaderboardEntries({ data, currentUserId }: { data: CompetitionLeaderbo
           sits over the username, not the avatar. */}
       <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-border px-2 pb-2 text-2xs font-medium uppercase tracking-wider text-muted-foreground">
         <span className="w-9">{t("rank")}</span>
-        <span className="pl-9.5">{t("player")}</span>
+        <span>{t("player")}</span>
         <span>{t("points")}</span>
       </div>
       <ul className="divide-y divide-border">
@@ -104,12 +102,7 @@ function LeaderboardEntries({ data, currentUserId }: { data: CompetitionLeaderbo
           return (
             <li key={entry.member.user_id} className={cn("grid grid-cols-[auto_1fr_auto] items-center gap-3 px-2 py-2.5", isMe && "bg-page-accent-soft/60")}>
               <span className="w-9 shrink-0 text-xs font-medium tabular-nums text-muted-foreground">{entry.rank}</span>
-              <div className="flex min-w-0 items-center gap-2.5">
-                <Avatar className="size-7">
-                  <AvatarFallback className="text-2xs">{getInitials(entry.member.username)}</AvatarFallback>
-                </Avatar>
-                <span className={cn("min-w-0 truncate text-sm", isMe && "font-semibold text-page-accent-strong")}>{isMe ? t("you") : entry.member.username}</span>
-              </div>
+              <span className={cn("min-w-0 truncate text-sm", isMe && "font-semibold text-page-accent-strong")}>{isMe ? t("you") : entry.member.username}</span>
               <span className="shrink-0 text-xs font-medium tabular-nums">
                 {entry.points} <span className="font-normal text-muted-foreground">{t("pts")}</span>
               </span>
