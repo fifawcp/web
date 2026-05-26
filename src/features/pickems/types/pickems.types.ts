@@ -45,16 +45,11 @@ export type PickemStep = "groups" | "thirds" | "bracket";
 export type GroupPickPayload = {
   group_code: GroupCode;
   team_fifa_codes: [string, string, string, string];
+  locked: boolean;
 };
 
 export type SaveGroupPicksPayload = {
   group_picks: GroupPickPayload[];
-};
-
-export type SetGroupLockPayload = {
-  group_code: GroupCode;
-  locked: boolean;
-  team_fifa_codes: [string, string, string, string];
 };
 
 export type SaveBestThirdsPayload = {

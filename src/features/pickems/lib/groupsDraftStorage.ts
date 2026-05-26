@@ -1,9 +1,14 @@
 import type { GroupCode } from "@/shared/types/wcp.types";
 
-/** Ordered FIFA codes per group, e.g. `{ A: ["CAN", "MEX", "JAM", "UZB"], ... }`. */
-export type GroupsDraft = Record<GroupCode, string[]>;
+/** Per-group draft entry: the ordered FIFA codes plus the user's lock state. */
+export type GroupDraftEntry = { order: string[]; locked: boolean };
 
-const KEY_PREFIX = "wcp.pickems.groupsDraft";
+/** Pending step-1 state per group, e.g. `{ A: { order: ["CAN", "MEX", ...], locked: true }, ... }`. */
+export type GroupsDraft = Record<GroupCode, GroupDraftEntry>;
+
+// v2: entries changed from `string[]` (order only) to `{ order, locked }`. The bump
+// makes any old array-shaped draft fall out of scope instead of being mis-parsed.
+const KEY_PREFIX = "wcp.pickems.groupsDraft.v2";
 
 export function groupsDraftKey(userId: string | undefined): string {
   return `${KEY_PREFIX}.${userId ?? "anonymous"}`;

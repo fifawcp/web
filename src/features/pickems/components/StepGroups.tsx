@@ -26,13 +26,12 @@ type Props = {
   canNavigateTo: (step: PickemStep) => boolean;
   onReorder: (groupCode: GroupCode, next: RankedTeam[]) => void;
   onToggleLock: (groupCode: GroupCode) => void;
-  lockingGroupCode: GroupCode | null;
   onSaveDraft: () => void;
   onContinue: () => void;
   isSaving: boolean;
 };
 
-export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReorder, onToggleLock, lockingGroupCode, onSaveDraft, onContinue, isSaving }: Props) {
+export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReorder, onToggleLock, onSaveDraft, onContinue, isSaving }: Props) {
   const t = useTranslations("pickems");
 
   // Backend can return groups in any order; render them A → L.
@@ -84,7 +83,11 @@ export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReor
       <PickemsHeader
         step="groups"
         rightSlot={
-          <div className="hidden flex-col items-stretch gap-2.5 lg:flex">
+          // Fixed-width rail (= Save draft + Step 2 buttons: 2×w-44 + gap-2) so the progress
+          // bar keeps the same width whether or not the buttons render. When the tournament
+          // is locked the buttons self-hide and the helper text drops, but the count stays
+          // visible (12/12) — consistent with the other steps' header counts.
+          <div className="hidden flex-col items-stretch gap-2.5 lg:flex lg:w-90">
             <PickemsHeaderActions action={action} onSaveDraft={saveDraftFn} />
             <PickemsHeaderProgress
               completed={progress.groups.completed}
@@ -116,7 +119,6 @@ export function StepGroups({ data, step, onStep, progress, canNavigateTo, onReor
             group={group}
             onReorder={onReorder}
             onToggleLock={onToggleLock}
-            isLocking={lockingGroupCode === group.group_code}
             disabled={data.is_locked}
             open={openGroups.has(group.group_code)}
             onToggle={() => toggleGroup(group.group_code)}
