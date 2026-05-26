@@ -1,18 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Crown, Search, ShieldOff, ShieldUser, UserX } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Crown, Search, ShieldOff, ShieldUser, UserX } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
 import { Input } from "@/shared/components/ui/input";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useAutoFocusUnlessMobile } from "@/shared/hooks/useAutoFocusUnlessMobile";
 import { useDebounce } from "@/shared/hooks/useDebounce";
+import { cn } from "@/shared/lib/utils";
 
 import { BOARD_MEMBERS_PAGE_SIZE } from "../api/boards";
 import { useBoardActionError } from "../hooks/useBoardActionError";
@@ -56,6 +56,8 @@ export function ManageBoardMembers({ board, currentUserId, enabled, onPermission
 
   const [transferTarget, setTransferTarget] = useState<BoardMember | null>(null);
   const [removeTarget, setRemoveTarget] = useState<BoardMember | null>(null);
+  // Inline-expand accordion: at most one member's actions panel is open at a time.
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const viewerRole = board.viewer.role;
   const canManage = canManageBoard(viewerRole);
 
@@ -112,50 +114,77 @@ export function ManageBoardMembers({ board, currentUserId, enabled, onPermission
             // Only an owner may act on an admin; admins can manage members only.
             const canActOnTarget = viewerRole === "owner" || member.role === "member";
             const showActions = canManage && !isSelf && member.role !== "owner" && canActOnTarget;
+            const isOpen = expandedId === member.user_id;
 
             return (
-              <li key={member.user_id} className="flex min-w-0 items-center gap-2 rounded-lg border bg-card px-3 py-2.5">
-                <div className="flex min-w-0 flex-1 flex-col leading-tight">
-                  <span className="flex min-w-0 items-center gap-1.5 text-sm font-medium">
-                    <span className="truncate">{displayName}</span>
-                    {isSelf ? <span className="shrink-0 text-2xs uppercase tracking-wide text-muted-foreground">· {t("you")}</span> : null}
-                  </span>
-                  <span className="truncate text-2xs text-muted-foreground">@{member.username}</span>
-                </div>
-                <RoleChip role={member.role} className="shrink-0" />
-                {/* Fixed slot keeps the badge column aligned whether or not the row has actions (owner/self have none). */}
-                <div className="flex w-8 shrink-0 items-center justify-center">
-                  {showActions ? (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon-sm" aria-label={t("actions")} className="group">
-                          <ChevronDown className="size-4 group-data-[state=open]:hidden" aria-hidden />
-                          <ChevronUp className="hidden size-4 group-data-[state=open]:block" aria-hidden />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-auto min-w-44">
-                        {member.role === "member" ? (
-                          <DropdownMenuItem className="cursor-pointer" onSelect={() => handlePromote(member)}>
-                            <ShieldUser className="size-4" aria-hidden /> {t("promote")}
-                          </DropdownMenuItem>
-                        ) : (
-                          <DropdownMenuItem className="cursor-pointer" onSelect={() => handleDemote(member)}>
-                            <ShieldOff className="size-4" aria-hidden /> {t("demote")}
-                          </DropdownMenuItem>
-                        )}
-                        {viewerRole === "owner" ? (
-                          <DropdownMenuItem className="cursor-pointer" onSelect={() => setTransferTarget(member)}>
-                            <Crown className="size-4" aria-hidden /> {t("transfer")}
-                          </DropdownMenuItem>
-                        ) : null}
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="cursor-pointer" variant="destructive" onSelect={() => setRemoveTarget(member)}>
-                          <UserX className="size-4" aria-hidden /> {t("remove")}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  ) : null}
-                </div>
+              <li key={member.user_id} className={cn("overflow-hidden rounded-lg border bg-card transition-colors", isOpen && "border-page-accent/40")}>
+                {showActions ? (
+                  <button
+                    type="button"
+                    onClick={() => setExpandedId(isOpen ? null : member.user_id)}
+                    aria-expanded={isOpen}
+                    aria-label={t("actions")}
+                    className="flex w-full min-w-0 items-center gap-2 px-3 py-2.5 text-left transition-colors hover:bg-muted"
+                  >
+                    <MemberIdentity displayName={displayName} username={member.username} isSelf={isSelf} youLabel={t("you")} />
+                    <RoleChip role={member.role} className="shrink-0" />
+                    <ChevronDown className={cn("size-4 shrink-0 text-muted-foreground transition-transform", isOpen && "rotate-180")} aria-hidden />
+                  </button>
+                ) : (
+                  <div className="flex min-w-0 items-center gap-2 px-3 py-2.5">
+                    <MemberIdentity displayName={displayName} username={member.username} isSelf={isSelf} youLabel={t("you")} />
+                    <RoleChip role={member.role} className="shrink-0" />
+                    {/* Spacer matches the chevron width so role chips stay column-aligned with actionable rows. */}
+                    <span className="size-4 shrink-0" aria-hidden />
+                  </div>
+                )}
+
+                {showActions && isOpen ? (
+                  <div className="flex flex-col gap-0.5 border-t border-border/60 bg-muted/40 p-1.5">
+                    {member.role === "member" ? (
+                      <MemberActionRow
+                        icon={ShieldUser}
+                        title={t("promote")}
+                        subtitle={t("promoteSubtitle")}
+                        onClick={() => {
+                          setExpandedId(null);
+                          handlePromote(member);
+                        }}
+                      />
+                    ) : (
+                      <MemberActionRow
+                        icon={ShieldOff}
+                        title={t("demote")}
+                        subtitle={t("demoteSubtitle")}
+                        onClick={() => {
+                          setExpandedId(null);
+                          handleDemote(member);
+                        }}
+                      />
+                    )}
+                    {viewerRole === "owner" ? (
+                      <MemberActionRow
+                        icon={Crown}
+                        title={t("transfer")}
+                        subtitle={t("transferSubtitle")}
+                        onClick={() => {
+                          setExpandedId(null);
+                          setTransferTarget(member);
+                        }}
+                      />
+                    ) : null}
+                    <MemberActionRow
+                      icon={UserX}
+                      title={t("remove")}
+                      subtitle={t("removeSubtitle")}
+                      tone="destructive"
+                      onClick={() => {
+                        setExpandedId(null);
+                        setRemoveTarget(member);
+                      }}
+                    />
+                  </div>
+                ) : null}
               </li>
             );
           })}
@@ -202,6 +231,56 @@ export function ManageBoardMembers({ board, currentUserId, enabled, onPermission
 
       <RemoveMemberDialog target={removeTarget} onOpenChange={(open) => !open && setRemoveTarget(null)} onSubmit={handleRemove} isPending={removeMember.isPending} />
     </div>
+  );
+}
+
+type ActionIcon = React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+
+function MemberIdentity({ displayName, username, isSelf, youLabel }: { displayName: string; username: string; isSelf: boolean; youLabel: string }) {
+  return (
+    <span className="flex min-w-0 flex-1 flex-col leading-tight">
+      <span className="flex min-w-0 items-center gap-1.5 text-sm font-medium">
+        <span className="truncate">{displayName}</span>
+        {isSelf ? <span className="shrink-0 text-2xs uppercase tracking-wide text-muted-foreground">· {youLabel}</span> : null}
+      </span>
+      <span className="truncate text-2xs text-muted-foreground">@{username}</span>
+    </span>
+  );
+}
+
+// Borderless action row for the expanded panel — icon tile + title + subtitle, echoing the board
+// actions cards but nested inside the member card, so it stays flat (no card-in-card double border).
+function MemberActionRow({
+  icon: Icon,
+  title,
+  subtitle,
+  onClick,
+  tone = "default",
+}: {
+  icon: ActionIcon;
+  title: string;
+  subtitle: string;
+  onClick: () => void;
+  tone?: "default" | "destructive";
+}) {
+  const destructive = tone === "destructive";
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex w-full min-w-0 items-center gap-2.5 rounded-md px-2 py-2 text-left transition-colors hover:bg-card focus-visible:bg-card focus-visible:outline-none",
+        destructive && "hover:bg-destructive/5 focus-visible:bg-destructive/5"
+      )}
+    >
+      <span className={cn("grid size-8 shrink-0 place-items-center rounded-md", destructive ? "bg-destructive/10" : "bg-page-accent-soft")}>
+        <Icon className={cn("size-4", destructive ? "text-destructive" : "text-page-accent-strong")} aria-hidden />
+      </span>
+      <span className="flex min-w-0 flex-1 flex-col leading-tight">
+        <span className={cn("truncate text-sm font-medium", destructive && "text-destructive")}>{title}</span>
+        <span className="truncate text-2xs text-muted-foreground">{subtitle}</span>
+      </span>
+    </button>
   );
 }
 

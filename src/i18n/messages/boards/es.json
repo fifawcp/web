@@ -102,8 +102,11 @@
       "actions": "Acciones del miembro",
       "you": "Tú",
       "promote": "Hacer admin",
+      "promoteSubtitle": "Podrá gestionar miembros y competencias",
       "demote": "Hacer miembro",
+      "demoteSubtitle": "Le quita el acceso de admin",
       "remove": "Expulsar",
+      "removeSubtitle": "Le quita el acceso a este board",
       "removed": "Miembro expulsado",
       "promoted": "Ahora es admin",
       "demoted": "Ahora es miembro",
@@ -114,6 +117,7 @@
         "submit": "Expulsar"
       },
       "transfer": "Transferir propiedad",
+      "transferSubtitle": "Cede el board; quedarás como admin",
       "transferConfirm": {
         "title": "¿Transferir el board a {name}?",
         "description": "Escribe {username} para confirmar. Pasarás a ser admin.",

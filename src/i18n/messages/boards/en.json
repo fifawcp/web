@@ -102,8 +102,11 @@
       "actions": "Member actions",
       "you": "You",
       "promote": "Make admin",
+      "promoteSubtitle": "Let them manage members and competitions",
       "demote": "Make member",
+      "demoteSubtitle": "Revoke their admin access",
       "remove": "Remove",
+      "removeSubtitle": "Revoke access to this board",
       "removed": "Member removed",
       "promoted": "Promoted to admin",
       "demoted": "Changed to member",
@@ -114,6 +117,7 @@
         "submit": "Remove"
       },
       "transfer": "Transfer ownership",
+      "transferSubtitle": "Hand over the board — you'll stay as admin",
       "transferConfirm": {
         "title": "Transfer ownership to {name}?",
         "description": "Type {username} below to confirm. You'll become an admin afterwards.",

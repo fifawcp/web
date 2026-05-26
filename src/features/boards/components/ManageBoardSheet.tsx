@@ -39,7 +39,7 @@ export function ManageBoardSheet({ board, currentUserId, open, onOpenChange }: P
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-      <DrawerContent className="flex h-full max-h-screen flex-col data-[vaul-drawer-direction=right]:w-80">
+      <DrawerContent className="flex h-full max-h-screen flex-col data-[vaul-drawer-direction=right]:w-80 sm:data-[vaul-drawer-direction=right]:w-96">
         <DrawerHeader className="border-b pb-4">
           <DrawerTitle>{t("title", { name: board.name })}</DrawerTitle>
           <DrawerDescription className="sr-only">{board.name}</DrawerDescription>

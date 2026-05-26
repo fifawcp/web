@@ -30,7 +30,7 @@ export function Podium({ entries }: Props) {
 
   return (
     <Card className="relative h-full overflow-hidden py-5">
-      <span className="pointer-events-none absolute top-3 left-4 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("title")}</span>
+      <span className="pointer-events-none absolute top-3 left-4 font-heading text-base font-semibold">{t("title")}</span>
       <CardContent className="mx-auto grid h-full w-full grid-cols-3 items-end gap-2 px-3 pt-6 pb-0 lg:pt-8 xl:w-4/5">
         {ORDER.map((index) => {
           const entry = top[index];
