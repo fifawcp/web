@@ -13,7 +13,6 @@
     "firstName": "Nombre",
     "lastName": "Apellido",
     "username": "Usuario",
-    "usernameHint": "Letras, números, punto, guion y guion bajo.",
     "save": "Guardar cambios",
     "saving": "Guardando…",
     "cancel": "Cancelar",

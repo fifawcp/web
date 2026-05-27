@@ -30,5 +30,9 @@
   "profile": {
     "title": "Tu Perfil",
     "description": "Tu perfil de Pick'ems del Mundial 2026: revisa tu cuadro de un vistazo, administra tus dispositivos conectados y ajusta tus preferencias."
+  },
+  "faq": {
+    "title": "FAQ — Pick'ems del Mundial 2026",
+    "description": "Preguntas frecuentes sobre Pick'ems: cómo jugar, reglas de puntuación, tableros y todo lo que necesitas saber sobre el juego de pronósticos del Mundial 2026."
   }
 }

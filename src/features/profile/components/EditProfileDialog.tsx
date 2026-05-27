@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { profileSchema, type ProfileFormData } from "@/features/auth/schemas/auth.schema";
 import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@/shared/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 
 import type { EditableProfileFields } from "../api/profile";
@@ -65,7 +65,6 @@ function EditProfileForm({ initial, onSaved, onClose }: { initial: EditableProfi
     };
 
     try {
-      console.log(payload);
       const saved = await mutation.mutateAsync(payload);
       toast.success(t("success"));
       onSaved?.(saved);
@@ -137,11 +136,7 @@ function EditProfileForm({ initial, onSaved, onClose }: { initial: EditableProfi
                 aria-invalid={fieldState.invalid}
                 className="focus-visible:border-page-accent-strong focus-visible:ring-page-accent-strong/30"
               />
-              {fieldState.invalid && fieldState.error?.message ? (
-                <FieldError errors={[{ message: tAuth(fieldState.error.message) }]} />
-              ) : (
-                <FieldDescription>{t("usernameHint")}</FieldDescription>
-              )}
+              {fieldState.invalid && fieldState.error?.message ? <FieldError errors={[{ message: tAuth(fieldState.error.message) }]} /> : null}
             </Field>
           )}
         />

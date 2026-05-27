@@ -13,7 +13,6 @@
     "firstName": "First name",
     "lastName": "Last name",
     "username": "Username",
-    "usernameHint": "Letters, numbers, dot, dash and underscore.",
     "save": "Save changes",
     "saving": "Saving…",
     "cancel": "Cancel",
