@@ -1,0 +1,70 @@
+{
+  "title": "Standings",
+  "stageHeading": "Group stage · 12 groups",
+  "description": "Top two teams from each group advance directly to the Round of 32. The eight best third-placed teams join them via a playoff seeding.",
+  "groupLabel": "Group",
+  "matchday": "Matchday {current} / {total}",
+  "matchdayNotStarted": "Not started",
+  "groupBadgeText": "{correct}/{total} · {points} pts",
+  "groupSummaryLabel": "{correct} of {total} positions correct, {points} of {max} points earned",
+  "compare": {
+    "label": "Standings view",
+    "normal": "Standings",
+    "compare": "Compare"
+  },
+  "comparisonLegend": {
+    "title": "How to read · Groups",
+    "youColumn": "YOU column",
+    "youColumnHelp": "Your predicted position",
+    "exact3pts": "Exact position (+3 pts)",
+    "top21pt": "Top 2, wrong order (+1 pt)",
+    "wrong0pts": "Wrong (0 pts)",
+    "notPicked": "Not picked"
+  },
+  "thirdsLegend": {
+    "title": "How to read · Best thirds",
+    "youColumn": "You column",
+    "youColumnHelp": "Did the team make the top 8?",
+    "correct": "Picked and advanced (+2 pts)",
+    "wrong": "Picked but missed the cut (0 pts)",
+    "notPicked": "Not picked",
+    "scoringTitle": "Best-thirds scoring",
+    "scoreCorrect": "Per correct team in top 8"
+  },
+  "pickemError": "Couldn't load your pickem — showing standings without your picks.",
+  "columns": {
+    "team": "Team",
+    "played": "P",
+    "won": "W",
+    "drawn": "D",
+    "lost": "L",
+    "goalsForAgainst": "GF:GA",
+    "goalDifference": "GD",
+    "points": "PTS",
+    "you": "YOU"
+  },
+  "columnLabels": {
+    "played": "Played",
+    "won": "Won",
+    "drawn": "Drawn",
+    "lost": "Lost",
+    "goalsForAgainst": "Goals for / against",
+    "goalDifference": "Goal difference",
+    "points": "Points",
+    "you": "Your predicted position"
+  },
+  "legend": {
+    "advancesToR32": "Advances to R32",
+    "bestThirdPlayoff": "Best 3rd-place playoff"
+  },
+  "thirdPlace": {
+    "title": "Best third-placed teams",
+    "description": "The eight best third-placed teams advance to the Round of 32 alongside the group winners and runners-up.",
+    "rank": "#",
+    "yourPick": "You",
+    "yourPickLabel": "Among your best-thirds picks",
+    "accuracyLabel": "{correct}/{total} · {points} pts",
+    "accuracySummary": "{correct} of {total} best thirds correct, {points} of {max} points earned",
+    "advancesLegend": "Top {count} advance to R32"
+  }
+}

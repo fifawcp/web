@@ -1,0 +1,91 @@
+{
+  "title": "Hola, {name}",
+  "eyebrow": "Tu perfil",
+  "subtitle": "Tu identidad, tus pronósticos del torneo y un cajón de ajustes — todo en un solo lugar.",
+  "identity": {
+    "joinedLabel": "Te uniste el {date}",
+    "adminBadge": "Admin",
+    "editDetails": "Editar datos"
+  },
+  "editDialog": {
+    "title": "Editar tus datos",
+    "description": "Actualiza tu nombre y usuario. El correo no cambia.",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "username": "Usuario",
+    "save": "Guardar cambios",
+    "saving": "Guardando…",
+    "cancel": "Cancelar",
+    "success": "Perfil actualizado.",
+    "error": "No pudimos guardar los cambios — inténtalo de nuevo."
+  },
+  "pickemPeek": {
+    "title": "Tu pickem",
+    "subtitle": "Grupos, mejores terceros y eliminatorias — de un vistazo.",
+    "subtitleLocked": "El torneo está en marcha — tus pronósticos quedaron sellados.",
+    "lockedPill": "Cerrado",
+    "groupsLabel": "Grupos cerrados",
+    "thirdsLabel": "Mejores terceros",
+    "bracketLabel": "Pronósticos del cuadro",
+    "championLabel": "Campeón pronosticado",
+    "noChampion": "Termina tu cuadro para coronar a un campeón.",
+    "lockedNoChampionTitle": "Cuadro sin terminar",
+    "lockedNoChampionDescription": "No coronaste a un campeón antes del cierre del torneo.",
+    "lockedGroupsLabel": "grupos",
+    "lockedThirdsLabel": "mejores terceros",
+    "lockedBracketLabel": "del cuadro",
+    "cta": "Abrir pickem",
+    "ctaLocked": "Ver pickem"
+  },
+  "boardsPeek": {
+    "title": "Tus tableros",
+    "subtitle": "Las ligas donde estás compitiendo.",
+    "countLabel": "Inscrito",
+    "openBoard": "Abrir {name}",
+    "cta": "Ver todos los tableros",
+    "seeMore": "Ver {count} más",
+    "emptyTitle": "Aún no tienes tableros",
+    "emptyDescription": "Únete al tablero de un amigo con un código o crea tu propia liga.",
+    "emptyCta": "Ver tableros",
+    "loadError": "No pudimos cargar tus tableros. Recarga para reintentar."
+  },
+  "calendarPeek": {
+    "title": "Tu calendario",
+    "subtitle": "Lo último que se jugó y lo que viene.",
+    "labelLast": "Último jugado",
+    "labelNext": "Próximo",
+    "vs": "vs",
+    "yourPick": "Tu marcador: {home}–{away}",
+    "noPickLast": "Sin pronóstico",
+    "awaitingResult": "Resultado pendiente",
+    "pickThis": "Pronosticar →",
+    "exactBadge": "Exacto",
+    "ctaOpenSchedule": "Abrir calendario",
+    "empty": "Aún no hay partidos — el torneo no ha empezado."
+  },
+  "management": {
+    "title": "Administra tu cuenta",
+    "subtitle": "Preferencias y dispositivos conectados.",
+    "tabPreferences": "Preferencias",
+    "tabSessions": "Dispositivos"
+  },
+  "preferences": {
+    "themeLabel": "Tema",
+    "languageLabel": "Idioma"
+  },
+  "sessions": {
+    "subtitle": "Sesiones donde tu cuenta está activa ahora.",
+    "thisDevice": "Este dispositivo",
+    "lastUsed": "Usado {when}",
+    "revoke": "Cerrar sesión",
+    "revokeAria": "Cerrar sesión en {device}",
+    "signOutThis": "Cerrar esta sesión",
+    "signingOutThis": "Cerrando…",
+    "signOutAll": "Cerrar todas",
+    "signingOutAll": "Cerrando…",
+    "empty": "Sin sesiones activas.",
+    "loadError": "No pudimos cargar tus sesiones. Recarga para reintentar.",
+    "revokeError": "No pudimos cerrar esa sesión — inténtalo de nuevo.",
+    "revokeAllError": "No pudimos cerrar todas las sesiones — inténtalo de nuevo."
+  }
+}

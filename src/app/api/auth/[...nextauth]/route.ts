@@ -1,0 +1,116 @@
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+
+import { env } from "@/lib/env";
+import { User } from "@/shared/types/interfaces";
+
+export const authOptions: NextAuthOptions = {
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        access_token: { label: "Access Token", type: "text" },
+        expires_at: { label: "Expires At", type: "text" },
+        user: { label: "User Data", type: "text" },
+      },
+      async authorize(credentials) {
+        if (!credentials) return null;
+
+        const creds = credentials as Record<string, string>;
+        if (!creds.access_token || !creds.expires_at || !creds.user) return null;
+
+        // OTP was already verified by backend, just create session
+        let user: User;
+
+        try {
+          user = JSON.parse(creds.user) as User;
+        } catch {
+          return null;
+        }
+
+        if (!user.id || !user.username || !user.email || !user.first_name || !user.last_name || !user.created_at || !user.updated_at) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          username: user.username,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email,
+          created_at: user.created_at,
+          updated_at: user.updated_at,
+          access_token: creds.access_token,
+          expires_at: creds.expires_at,
+        };
+      },
+    }),
+  ],
+  session: {
+    strategy: "jwt",
+    maxAge: env.NEXTAUTH_SESSION_MAX_AGE,
+  },
+  callbacks: {
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.id = user.id;
+        token.username = user.username;
+        token.first_name = user.first_name;
+        token.last_name = user.last_name;
+        token.email = user.email;
+        token.created_at = user.created_at;
+        token.updated_at = user.updated_at;
+        token.access_token = user.access_token;
+        token.expires_at = user.expires_at;
+      }
+
+      // `update()` calls from the client funnel through here with
+      // `trigger === "update"` and the payload bound to `session`. Two
+      // shapes are supported:
+      //   - `{ access_token, expires_at }` — refresh flows
+      //   - `{ user: { first_name?, last_name?, username?, updated_at? } }`
+      //     — profile edit, dispatched from `useUpdateProfile` so the
+      //     Header (and anything else reading the JWT) reflects the new
+      //     identity without a reload.
+      if (trigger === "update" && session) {
+        if (typeof session.access_token === "string") {
+          token.access_token = session.access_token;
+          token.expires_at = session.expires_at;
+        }
+        if (session.user && typeof session.user === "object") {
+          const u = session.user as Partial<Pick<User, "first_name" | "last_name" | "username" | "updated_at">>;
+          if (typeof u.first_name === "string") token.first_name = u.first_name;
+          if (typeof u.last_name === "string") token.last_name = u.last_name;
+          if (typeof u.username === "string") token.username = u.username;
+          if (typeof u.updated_at === "string") token.updated_at = u.updated_at;
+        }
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id as string;
+        session.user.username = token.username as string;
+        session.user.first_name = token.first_name as string;
+        session.user.last_name = token.last_name as string;
+        session.user.email = token.email as string;
+        session.user.created_at = token.created_at as string;
+        session.user.updated_at = token.updated_at as string;
+        session.access_token = token.access_token as string;
+        session.expires_at = token.expires_at as string;
+      }
+
+      return session;
+    },
+  },
+  pages: {
+    signIn: "/login",
+    signOut: "/",
+    error: "/login",
+  },
+  secret: env.NEXTAUTH_SECRET,
+};
+
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

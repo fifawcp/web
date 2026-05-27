@@ -1,26 +1,367 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Custom */
+  --color-wc-red: #731312;
+  --color-wc-purple: #4b2c87;
+  --color-wc-orange: #ff6e3f;
+  --color-wc-red-light: #d40100;
+
+  --color-gold: theme(colors.amber.500);
+  --color-silver: theme(colors.gray.400);
+  --color-bronze: theme(colors.amber.700);
+
+  /* Layout dimensions */
+  --header-height: 65px;
+
+  /* Offset used when scrolling a date-group into view on /schedule.
+    header (65px) + sticky filter+tabs bar (~108px when authed, 52px otherwise) + section gap (11px) */
+  --schedule-scroll-offset: calc(var(--header-height) + 108px + 11px);
+
+  /* Offset used when scrolling the tutorial section into view (header + breathing room). */
+  --tutorial-scroll-offset: var(--header-height);
+
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 0.875rem;
+
+  /* Gradient definitions for light and dark modes */
+  --gradient-secondary: linear-gradient(to right, var(--color-wc-red), var(--color-wc-orange), var(--color-wc-purple));
+
+  /* Default */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-hover: var(--destructive-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-page-accent-soft: var(--page-accent-soft);
+  --color-page-accent: var(--page-accent);
+  --color-page-accent-strong: var(--page-accent-strong);
+  --color-missed-track: var(--missed-track);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Override dark variant to use class selector for manual toggle */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* The page rail shared by /schedule, /pickems, /boards, the landing sections,
+   and any future top-level route. Tailwind v4's built-in `container` is just
+   `width: 100%`; we extend it here to center, cap at 1440px on ultrawide
+   displays, and step the horizontal gutter 16 → 24 → 32px. Pages add their
+   own vertical padding on top of this. */
+@utility container {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 90rem;
+  padding-inline: 1rem;
+
+  @media (min-width: 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 64rem) {
+    padding-inline: 2rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.text-gold {
+  color: var(--color-gold);
+}
+.text-silver {
+  color: var(--color-silver);
+}
+.text-bronze {
+  color: var(--color-bronze);
+}
+
+/* Gradient utility classes */
+.bg-gradient-secondary {
+  background-image: var(--gradient-secondary);
+}
+
+.text-gradient-secondary {
+  background-image: var(--gradient-secondary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Base colors */
+:root {
+  --background: #fafafa;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: #09090b;
+  --primary-foreground: #fafafa;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717b;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
+  --destructive: #e40014;
+  --destructive-foreground: #fafafa;
+  --destructive-hover: #e40014;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #9f9fa9;
+  --missed-track: var(--color-gray-300);
+  --chart-1: #09090b;
+  --chart-2: #3f3f46;
+  --chart-3: #71717b;
+  --chart-4: #9f9fa9;
+  --chart-5: #d4d4d8;
+  --radius: 0.625rem;
+  --sidebar: #fafafa;
+  --sidebar-foreground: #09090b;
+  --sidebar-primary: #09090b;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #f4f4f5;
+  --sidebar-accent-foreground: #18181b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #9f9fa9;
+}
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #121317;
+  --card-foreground: #fafafa;
+  --popover: #121317;
+  --popover-foreground: #fafafa;
+  --primary: #fafafa;
+  --primary-foreground: #09090b;
+  --secondary: #1c1c20;
+  --secondary-foreground: #fafafa;
+  --muted: #18181b;
+  --muted-foreground: #8c8d95;
+  --accent: #1c1c20;
+  --accent-foreground: #fafafa;
+  --destructive: #e40014;
+  --destructive-foreground: #fafafa;
+  --border: #ffffff14;
+  --input: #ffffff1f;
+  --ring: #71717b;
+  --missed-track: var(--color-gray-600);
+  --chart-1: #fafafa;
+  --chart-2: #d4d4d8;
+  --chart-3: #a1a1aa;
+  --chart-4: #71717b;
+  --chart-5: #3f3f46;
+  --sidebar: #121317;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #fafafa;
+  --sidebar-primary-foreground: #09090b;
+  --sidebar-accent: #1c1c20;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #ffffff14;
+  --sidebar-ring: #71717b;
+}
+
+/* Palettes */
+:root {
+  --wcp-neutral-soft: var(--color-zinc-100);
+  --wcp-neutral: var(--color-zinc-600);
+  --wcp-neutral-strong: var(--color-zinc-800);
+
+  --wcp-green-soft: var(--color-lime-100);
+  --wcp-green: var(--color-lime-600);
+  --wcp-green-strong: var(--color-lime-700);
+
+  --wcp-purple-soft: var(--color-violet-100);
+  --wcp-purple: var(--color-violet-600);
+  --wcp-purple-strong: var(--color-violet-700);
+
+  --wcp-red-soft: var(--color-red-100);
+  --wcp-red: var(--color-red-600);
+  --wcp-red-strong: var(--color-red-700);
+
+  --wcp-blue-soft: var(--color-sky-100);
+  --wcp-blue: var(--color-sky-600);
+  --wcp-blue-strong: var(--color-sky-700);
+
+  --wcp-orange-soft: var(--color-orange-100);
+  --wcp-orange: var(--color-orange-600);
+  --wcp-orange-strong: var(--color-orange-700);
+
+  --wcp-teal-soft: var(--color-teal-100);
+  --wcp-teal: var(--color-teal-600);
+  --wcp-teal-strong: var(--color-teal-700);
+
+  --wcp-pink-soft: var(--color-pink-100);
+  --wcp-pink: var(--color-pink-600);
+  --wcp-pink-strong: var(--color-pink-700);
+
+  --wcp-amber-soft: var(--color-amber-100);
+  --wcp-amber: var(--color-amber-600);
+  --wcp-amber-strong: var(--color-amber-700);
+
+  --wcp-indigo-soft: var(--color-indigo-100);
+  --wcp-indigo: var(--color-indigo-600);
+  --wcp-indigo-strong: var(--color-indigo-700);
+}
+.dark {
+  --wcp-neutral-soft: var(--color-zinc-900);
+  --wcp-neutral: var(--color-zinc-400);
+  --wcp-neutral-strong: var(--color-zinc-200);
+
+  --wcp-green-soft: var(--color-green-950);
+  --wcp-green: var(--color-green-400);
+  --wcp-green-strong: var(--color-green-300);
+
+  --wcp-purple-soft: var(--color-violet-950);
+  --wcp-purple: var(--color-violet-500);
+  --wcp-purple-strong: var(--color-violet-300);
+
+  --wcp-red-soft: var(--color-red-950);
+  --wcp-red: var(--color-red-500);
+  --wcp-red-strong: var(--color-red-300);
+
+  --wcp-blue-soft: var(--color-sky-950);
+  --wcp-blue: var(--color-sky-400);
+  --wcp-blue-strong: var(--color-sky-300);
+
+  --wcp-orange-soft: var(--color-orange-950);
+  --wcp-orange: var(--color-orange-400);
+  --wcp-orange-strong: var(--color-orange-300);
+
+  --wcp-teal-soft: var(--color-teal-950);
+  --wcp-teal: var(--color-teal-500);
+  --wcp-teal-strong: var(--color-teal-300);
+
+  --wcp-pink-soft: var(--color-pink-950);
+  --wcp-pink: var(--color-pink-400);
+  --wcp-pink-strong: var(--color-pink-300);
+
+  --wcp-amber-soft: var(--color-amber-950);
+  --wcp-amber: var(--color-amber-400);
+  --wcp-amber-strong: var(--color-amber-300);
+
+  --wcp-indigo-soft: var(--color-indigo-950);
+  --wcp-indigo: var(--color-indigo-500);
+  --wcp-indigo-strong: var(--color-indigo-300);
+}
+
+/* Active accent (default = neutral; pages opt-in via data-accent) */
+:root {
+  --page-accent-soft: var(--wcp-neutral-soft);
+  --page-accent: var(--wcp-neutral);
+  --page-accent-strong: var(--wcp-neutral-strong);
+}
+:root:has([data-accent="neutral"]) {
+  --page-accent-soft: var(--wcp-neutral-soft);
+  --page-accent: var(--wcp-neutral);
+  --page-accent-strong: var(--wcp-neutral-strong);
+}
+:root:has([data-accent="green"]) {
+  --page-accent-soft: var(--wcp-green-soft);
+  --page-accent: var(--wcp-green);
+  --page-accent-strong: var(--wcp-green-strong);
+}
+:root:has([data-accent="purple"]) {
+  --page-accent-soft: var(--wcp-purple-soft);
+  --page-accent: var(--wcp-purple);
+  --page-accent-strong: var(--wcp-purple-strong);
+}
+:root:has([data-accent="red"]) {
+  --page-accent-soft: var(--wcp-red-soft);
+  --page-accent: var(--wcp-red);
+  --page-accent-strong: var(--wcp-red-strong);
+}
+:root:has([data-accent="blue"]) {
+  --page-accent-soft: var(--wcp-blue-soft);
+  --page-accent: var(--wcp-blue);
+  --page-accent-strong: var(--wcp-blue-strong);
+}
+:root:has([data-accent="orange"]) {
+  --page-accent-soft: var(--wcp-orange-soft);
+  --page-accent: var(--wcp-orange);
+  --page-accent-strong: var(--wcp-orange-strong);
+}
+:root:has([data-accent="teal"]) {
+  --page-accent-soft: var(--wcp-teal-soft);
+  --page-accent: var(--wcp-teal);
+  --page-accent-strong: var(--wcp-teal-strong);
+}
+:root:has([data-accent="pink"]) {
+  --page-accent-soft: var(--wcp-pink-soft);
+  --page-accent: var(--wcp-pink);
+  --page-accent-strong: var(--wcp-pink-strong);
+}
+:root:has([data-accent="amber"]) {
+  --page-accent-soft: var(--wcp-amber-soft);
+  --page-accent: var(--wcp-amber);
+  --page-accent-strong: var(--wcp-amber-strong);
+}
+:root:has([data-accent="indigo"]) {
+  --page-accent-soft: var(--wcp-indigo-soft);
+  --page-accent: var(--wcp-indigo);
+  --page-accent-strong: var(--wcp-indigo-strong);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Caps the height of a cmdk group's item list so the scroll lives inside the group
+   instead of the surrounding popover. Apply via the `cmdk-scroll-group` class on a CommandGroup. */
+.cmdk-scroll-group [cmdk-group-items] {
+  max-height: 10rem !important;
+  overflow-y: auto !important;
+}
+
+@layer base {
+  button:not([disabled]),
+  [role="button"]:not([disabled]) {
+    cursor: pointer;
+  }
 }

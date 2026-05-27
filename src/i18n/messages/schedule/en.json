@@ -1,0 +1,83 @@
+{
+  "title": "Schedule",
+  "filters": {
+    "openButton": "Filters",
+    "title": "Filters",
+    "description": "Refine which matches show",
+    "noResults": "No matches",
+    "stage": {
+      "label": "Stage",
+      "all": "All",
+      "group_stage": "Group stage",
+      "round_of_32": "Round of 32",
+      "round_of_16": "Round of 16",
+      "quarterfinals": "Quarterfinals",
+      "semifinals": "Semifinals",
+      "third_place": "Third place",
+      "final": "Final"
+    },
+    "group": {
+      "label": "Group",
+      "all": "All"
+    },
+    "team": {
+      "label": "Team",
+      "all": "All",
+      "search": "Search team..."
+    },
+    "matchStatus": {
+      "label": "Status",
+      "all": "All",
+      "scheduled": "Scheduled",
+      "finished": "Finished"
+    },
+    "reset": "Reset",
+    "done": "Done"
+  },
+  "card": {
+    "yourPick": "Your pick",
+    "noPickMade": "No pick made",
+    "tapToPick": "Tap to pick",
+    "closesIn": "Closes in {time}",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "matchCount": "{count, plural, one {# match} other {# matches}}",
+  "badge": {
+    "picked": "Picked",
+    "locked": "Locked"
+  },
+  "empty": {
+    "title": "No matches found",
+    "description": "Try adjusting your filters"
+  },
+  "progress": {
+    "label": "Overall progress",
+    "picked": "{count} picked",
+    "missed": "{count} missed"
+  },
+  "board": {
+    "today": "Today's pending picks",
+    "missed": "No pick",
+    "correctScore": "Exact score",
+    "correctOutcome": "Correct outcome"
+  },
+  "pending": {
+    "matches": "{count, plural, one {You have <highlight>#</highlight> match to pick} other {You have <highlight>#</highlight> matches to pick}}",
+    "subtitle": "Pick before they kick off"
+  },
+  "upToDate": {
+    "title": "You're all caught up!",
+    "nextMatch": "Next match in {time}"
+  },
+  "tabs": {
+    "all": "All",
+    "pending": "Pending",
+    "picked": "Picked"
+  },
+  "signedOut": {
+    "title": "Sign in to track your picks",
+    "description": "Make picks, follow your progress, and see your stats",
+    "cta": "Sign in"
+  }
+}

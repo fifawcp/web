@@ -1,0 +1,64 @@
+{
+  "login": {
+    "title": "Bienvenido de nuevo",
+    "subtitle": "Ingresa tu correo o usuario registrado y te enviaremos un código de un solo uso para iniciar sesión.",
+    "identifier": "Identificador",
+    "identifierPlaceholder": "Correo o usuario",
+    "googleSignIn": "Iniciar sesión con Google",
+    "orContinueWithEmail": "O continuar con",
+    "step_identifier": "Identificador",
+    "step_verify": "Verificar",
+    "noAccount": "¿Eres nuevo?",
+    "createOne": "Crea una cuenta",
+    "continue": "Continuar"
+  },
+  "register": {
+    "title": "Crea tu cuenta",
+    "subtitle": "Ingresa tu correo y te enviaremos un código de un solo uso para verificarlo.",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@correo.com",
+    "continue": "Continuar",
+    "googleSignIn": "Registrarse con Google",
+    "orContinueWithEmail": "O continuar con",
+    "step_identifier": "Identificador",
+    "step_verify": "Verificar",
+    "step_profile": "Perfil",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "signIn": "Iniciar sesión"
+  },
+  "otp": {
+    "title": "Revisa tu correo",
+    "subtitle": "Enviamos un código de 6 dígitos a ",
+    "verifyCode": "Verificar código",
+    "resendCode": "Reenviar código",
+    "resendIn": "Reenviar código en {time}",
+    "resend": "¿No recibiste el código?",
+    "or": "O",
+    "useDifferentEmail": "Usar un correo diferente"
+  },
+  "profile": {
+    "title": "Cuéntanos sobre ti",
+    "subtitle": "Termina de configurar tu cuenta. Puedes cambiar esto más tarde en ajustes.",
+    "firstName": "Nombre",
+    "firstNamePlaceholder": "Juan",
+    "lastName": "Apellido",
+    "lastNamePlaceholder": "Pérez",
+    "username": "Usuario",
+    "usernamePlaceholder": "juanperez123",
+    "createAccount": "Crear cuenta",
+    "back": "Atrás"
+  },
+  "callback": {
+    "backToLogin": "Volver a iniciar sesión"
+  },
+  "errors": {
+    "identifierRequired": "Ingresa tu correo o usuario",
+    "invalidEmail": "Correo electrónico inválido",
+    "usernameMinLength": "El usuario debe tener al menos 1 caracter",
+    "usernameMaxLength": "El usuario debe tener como máximo 20 caracteres",
+    "firstNameRequired": "El nombre debe tener al menos 2 caracteres",
+    "lastNameRequired": "El apellido debe tener al menos 2 caracteres",
+    "otpLength": "El código debe tener exactamente 6 dígitos",
+    "otpDigitsOnly": "El código solo puede contener dígitos"
+  }
+}
