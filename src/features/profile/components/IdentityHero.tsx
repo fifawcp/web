@@ -9,7 +9,6 @@ import { Button } from "@/shared/components/ui/button";
 import { getInitials } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
-import type { EditableProfileFields } from "../api/profile";
 import { formatJoinedDate } from "../lib/formatJoinedDate";
 import type { UserRole } from "../types/profile.types";
 
@@ -30,28 +29,18 @@ type Props = {
  * tournament's. The card uses the accent-tinted background flourish like
  * the dashboard's hero so the page reads as a player card on first glance.
  *
- * The "Edit details" button opens `EditProfileDialog`. Edits are optimistic:
- * a successful save updates the local `current` state immediately so the
- * card reflects the new name/username without waiting for a server round-
- * trip (currently a no-op placeholder; see `api/profile.ts`).
+ * The "Edit details" button opens `EditProfileDialog`. On successful save,
+ * `useUpdateProfile` patches the React Query cache, updates the JWT session,
+ * and triggers `router.refresh()` to re-render this RSC with fresh props.
  */
 export function IdentityHero({ username, firstName, lastName, email, createdAt, role }: Props) {
   const t = useTranslations("profile.identity");
   const locale = useLocale();
 
-  // Local state seeded from props so the dialog's optimistic save can be
-  // reflected without a full server refresh. When the backend endpoint
-  // ships, swap this for `useQuery` against `/api/users/profile` seeded
-  // with the server-fetched values from the page.
-  const [current, setCurrent] = useState<EditableProfileFields>({
-    first_name: firstName,
-    last_name: lastName,
-    username,
-  });
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const initials = getInitials(current.username, current.first_name, current.last_name);
-  const fullName = [current.first_name, current.last_name].filter(Boolean).join(" ") || current.username;
+  const initials = getInitials(username, firstName, lastName);
+  const fullName = [firstName, lastName].filter(Boolean).join(" ") || username;
   const joinedDate = formatJoinedDate(createdAt, locale);
 
   return (
@@ -82,7 +71,7 @@ export function IdentityHero({ username, firstName, lastName, email, createdAt, 
               {/* Meta rows — icon + value so each line carries a visual cue.
                   Stacks on mobile, becomes a single flex row at sm. */}
               <ul className="flex flex-col items-center gap-1 text-sm text-muted-foreground sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-1">
-                <MetaItem icon={AtSign} value={current.username} />
+                <MetaItem icon={AtSign} value={username} />
                 <MetaItem icon={Mail} value={email} />
               </ul>
 
@@ -103,7 +92,7 @@ export function IdentityHero({ username, firstName, lastName, email, createdAt, 
         </div>
       </article>
 
-      <EditProfileDialog open={dialogOpen} onOpenChange={setDialogOpen} initial={current} onSaved={setCurrent} />
+      <EditProfileDialog open={dialogOpen} onOpenChange={setDialogOpen} initial={{ first_name: firstName, last_name: lastName, username }} />
     </>
   );
 }

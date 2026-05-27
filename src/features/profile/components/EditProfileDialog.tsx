@@ -20,8 +20,6 @@ type Props = {
   onOpenChange: (open: boolean) => void;
   /** Current values used as the form's initial state — read once per open cycle. */
   initial: EditableProfileFields;
-  /** Fires after a successful save so the parent can patch local UI state. */
-  onSaved?: (next: EditableProfileFields) => void;
 };
 
 /**
@@ -32,15 +30,15 @@ type Props = {
  * dialog is open. This way every open cycle gets a fresh form state
  * seeded from the latest `initial` prop.
  */
-export function EditProfileDialog({ open, onOpenChange, initial, onSaved }: Props) {
+export function EditProfileDialog({ open, onOpenChange, initial }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>{open && <EditProfileForm initial={initial} onSaved={onSaved} onClose={() => onOpenChange(false)} />}</DialogContent>
+      <DialogContent>{open && <EditProfileForm initial={initial} onClose={() => onOpenChange(false)} />}</DialogContent>
     </Dialog>
   );
 }
 
-function EditProfileForm({ initial, onSaved, onClose }: { initial: EditableProfileFields; onSaved?: (next: EditableProfileFields) => void; onClose: () => void }) {
+function EditProfileForm({ initial, onClose }: { initial: EditableProfileFields; onClose: () => void }) {
   const t = useTranslations("profile.editDialog");
   const tAuth = useTranslations("auth");
   const mutation = useUpdateProfile();
@@ -65,13 +63,8 @@ function EditProfileForm({ initial, onSaved, onClose }: { initial: EditableProfi
     };
 
     try {
-      const saved = await mutation.mutateAsync(payload);
+      await mutation.mutateAsync(payload);
       toast.success(t("success"));
-      // `saved` is the full `ApiUserProfile` from the server — pass only
-      // the editable subset so the parent's `setCurrent` (typed as
-      // `EditableProfileFields`) stays narrow and doesn't pick up stale
-      // metadata.
-      onSaved?.({ first_name: saved.first_name, last_name: saved.last_name, username: saved.username });
       onClose();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : t("error"));

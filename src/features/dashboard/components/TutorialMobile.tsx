@@ -64,9 +64,14 @@ export function TutorialMobile({ isLoggedIn }: { isLoggedIn: boolean }) {
                 size="sm"
                 className="flex flex-col items-stretch overflow-hidden opacity-0"
               >
-                <div className="relative h-32 w-full shrink-0 overflow-hidden bg-muted">
-                  <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-primary/5" />
-                  <img src={stepImageSrc(locale, index)} alt={t(`steps.${step.key}.title`)} className="size-full object-contain" loading="lazy" decoding="async" />
+                <div className="relative h-56 w-full shrink-0 overflow-hidden rounded-t-lg bg-zinc-900">
+                  <img
+                    src={stepImageSrc(locale, index)}
+                    alt={t(`steps.${step.key}.title`)}
+                    className="size-full object-contain opacity-90"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
                 <div className="flex flex-1 items-start gap-4 p-5">
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
