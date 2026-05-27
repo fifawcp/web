@@ -17,11 +17,8 @@ type Props = {
   currentUserId: string | null;
 };
 
-// Match the accent treatment used in PreferenceControls' segmented control so
-// the active tab tile lifts visibly and tints with the route accent. The base
-// `Tabs` component already sets `data-active:bg-card` — we add the strong
-// accent text, soft drop shadow, and a hair of accent ring on top.
-const accentTab = "data-active:text-page-accent-strong data-active:shadow-sm data-active:ring-1 data-active:ring-page-accent/20";
+const accentTab =
+  "data-active:text-page-accent-strong data-active:shadow-sm data-active:ring-1 data-active:ring-page-accent/20 dark:data-active:border-transparent dark:data-active:bg-card dark:data-active:text-page-accent-strong";
 
 type LeaderboardTab = "pickem" | "match";
 

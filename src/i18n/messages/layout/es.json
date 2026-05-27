@@ -333,6 +333,10 @@
     "bracket": {
       "title": "Eliminatorias",
       "body": "Pronto: el cuadro interactivo de eliminatorias para pronosticar cada ronda."
+    },
+    "awards": {
+      "title": "Premios",
+      "body": "Pronto: pronósticos para los ganadores de premios individuales."
     }
   }
 }

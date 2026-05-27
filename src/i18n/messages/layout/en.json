@@ -333,6 +333,10 @@
     "bracket": {
       "title": "Bracket",
       "body": "The interactive knockout bracket for predicting every round is on the way."
+    },
+    "awards": {
+      "title": "Awards",
+      "body": "Predictions for individual award winners are on the way."
     }
   }
 }
