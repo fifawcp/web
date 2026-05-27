@@ -7,6 +7,7 @@ import { CopyButton } from "@/shared/components/CopyButton";
 import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 
+import { BOARD_DIALOG_WIDTH } from "../lib/boardDialog";
 import type { Board } from "../types/boards.types";
 
 type Props = {
@@ -20,7 +21,7 @@ export function InviteDialog({ board, open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className={BOARD_DIALOG_WIDTH}>
         <DialogHeader>
           <DialogTitle>{t("title", { name: board.name })}</DialogTitle>
           <DialogDescription>{t("description")}</DialogDescription>

@@ -35,6 +35,7 @@
     "done": "Done"
   },
   "card": {
+    "group": "Group",
     "yourPick": "Your pick",
     "noPickMade": "No pick made",
     "tapToPick": "Tap to pick",
