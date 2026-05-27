@@ -49,6 +49,7 @@
     "aboutShort": {
       "howItWorks": "How it works",
       "rules": "Rules",
+      "faq": "FAQ",
       "privacy": "Privacy",
       "terms": "Terms"
     },
@@ -193,8 +194,51 @@
       }
     },
     "faq": {
-      "title": "FAQ",
-      "body": "Answers to the most common questions about the 2026 World Cup Pick'em are on the way."
+      "title": "Frequently Asked Questions",
+      "eyebrow": "FAQ",
+      "intro": "Everything you need to know about the World Cup 2026 Pick'em game.",
+      "items": {
+        "whatIs": {
+          "question": "What is Pick'ems?",
+          "answer": "Pick'ems is a free prediction game for the FIFA World Cup 2026. You predict match scores, group standings, and the knockout bracket, then compete with friends on leaderboards. Learn more on <howItWorksLink>How it works</howItWorksLink>."
+        },
+        "howToPlay": {
+          "question": "How do I play?",
+          "answer": "Create an account, make your predictions for group standings and the bracket before the tournament starts, then predict each match score before kickoff. Points are awarded based on accuracy. See the full guide on <howItWorksLink>How it works</howItWorksLink>."
+        },
+        "whenLock": {
+          "question": "When do picks lock?",
+          "answer": "Match-score picks lock at each match's kickoff. Global predictions (groups, best thirds, bracket) lock when the first match of the tournament begins."
+        },
+        "editPicks": {
+          "question": "Can I edit my picks?",
+          "answer": "Yes! You can edit any prediction as many times as you want until it locks. Only your final pick before the lock counts."
+        },
+        "scoring": {
+          "question": "How does scoring work?",
+          "answer": "Exact match scores earn 5 points, correct outcomes earn 2 points. Group and bracket predictions have their own point values — check the <rulesLink>Rules page</rulesLink> for the full breakdown."
+        },
+        "boards": {
+          "question": "What are boards?",
+          "answer": "Boards are private groups where you compete with friends. Each board has its own leaderboard. You can join as many boards as you like using an 8-character invite code. Explore them on the <boardsLink>Boards page</boardsLink>."
+        },
+        "joinMultiple": {
+          "question": "Can I join multiple boards?",
+          "answer": "Absolutely! Join as many boards as you want. Your predictions are the same across all boards — only the leaderboards differ."
+        },
+        "createBoard": {
+          "question": "How do I create a board?",
+          "answer": "Go to the <boardsLink>Boards page</boardsLink> and click 'Create board'. You'll get an invite code to share with friends. You can also set the board to public or private."
+        },
+        "free": {
+          "question": "Is Pick'ems free?",
+          "answer": "Yes, Pick'ems is completely free. No ads, no premium tiers, no hidden costs. It's a fan project for entertainment only."
+        },
+        "prizes": {
+          "question": "Are there prizes?",
+          "answer": "Pick'ems is for fun and bragging rights only. There's no real-money wagering or prizes. It's purely a prediction game among friends."
+        }
+      }
     },
     "privacy": {
       "title": "Privacy policy",

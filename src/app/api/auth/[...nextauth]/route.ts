@@ -64,9 +64,26 @@ export const authOptions: NextAuthOptions = {
         token.expires_at = user.expires_at;
       }
 
-      if (trigger === "update" && session?.access_token) {
-        token.access_token = session.access_token;
-        token.expires_at = session.expires_at;
+      // `update()` calls from the client funnel through here with
+      // `trigger === "update"` and the payload bound to `session`. Two
+      // shapes are supported:
+      //   - `{ access_token, expires_at }` — refresh flows
+      //   - `{ user: { first_name?, last_name?, username?, updated_at? } }`
+      //     — profile edit, dispatched from `useUpdateProfile` so the
+      //     Header (and anything else reading the JWT) reflects the new
+      //     identity without a reload.
+      if (trigger === "update" && session) {
+        if (typeof session.access_token === "string") {
+          token.access_token = session.access_token;
+          token.expires_at = session.expires_at;
+        }
+        if (session.user && typeof session.user === "object") {
+          const u = session.user as Partial<Pick<User, "first_name" | "last_name" | "username" | "updated_at">>;
+          if (typeof u.first_name === "string") token.first_name = u.first_name;
+          if (typeof u.last_name === "string") token.last_name = u.last_name;
+          if (typeof u.username === "string") token.username = u.username;
+          if (typeof u.updated_at === "string") token.updated_at = u.updated_at;
+        }
       }
 
       return token;

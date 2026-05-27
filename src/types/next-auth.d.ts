@@ -1,18 +1,10 @@
 import "next-auth";
 import { DefaultSession } from "next-auth";
 
-// Shared user fields to avoid repetition
-interface UserFields {
-  id: string;
-  username: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
-}
+import type { User as DomainUser } from "@/shared/types/interfaces";
 
-// Shared auth fields
+// Shared auth fields — these only exist on the next-auth session, never
+// on the upstream `domain.User` shape, so they stay local.
 interface AuthFields {
   access_token: string;
   expires_at: string;
@@ -20,14 +12,14 @@ interface AuthFields {
 
 declare module "next-auth" {
   interface Session {
-    user: UserFields & DefaultSession["user"];
+    user: DomainUser & DefaultSession["user"];
     access_token: string;
     expires_at: string;
   }
 
-  interface User extends UserFields, AuthFields {}
+  interface User extends DomainUser, AuthFields {}
 }
 
 declare module "next-auth/jwt" {
-  interface JWT extends UserFields, AuthFields {}
+  interface JWT extends DomainUser, AuthFields {}
 }

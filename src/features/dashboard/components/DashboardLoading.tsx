@@ -11,7 +11,7 @@ function PickStatusSkeleton() {
         <Skeleton className="h-4 w-32" />
         <Skeleton className="h-3 w-56" />
       </div>
-      <div className="mt-4 flex flex-col gap-3 px-[3px]">
+      <div className="mt-4 flex flex-col gap-3 px-0.75">
         {[...Array(3)].map((_, i) => (
           <div key={i} className="flex items-start gap-3 rounded-xl border border-border bg-card p-3 sm:p-4">
             <Skeleton className="size-12 shrink-0 rounded-lg" />

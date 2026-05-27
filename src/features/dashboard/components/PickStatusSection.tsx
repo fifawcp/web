@@ -102,9 +102,9 @@ export async function PickStatusSection({ progress, isLoggedIn }: Props) {
           provides 16px above this container; `mt-4` adds another 16px so the
           first sub-card top aligns with the TabsList top in the sibling card
           (which gets the same compound gap via Card.gap + Tabs.mt-4).
-          Horizontal `px-[3px]` aligns sub-card borders with the active tile
+          Horizontal `px-0.75` aligns sub-card borders with the active tile
           inside that TabsList (it carries a `p-[3px]` inner inset). */}
-      <div className="mt-4 flex flex-col gap-3 px-[3px]">
+      <div className="mt-4 flex flex-col gap-3 px-0.75">
         {picksStatus.map((pick) => (
           <PickStatusCard
             key={pick.id}

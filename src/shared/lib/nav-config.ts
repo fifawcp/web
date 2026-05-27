@@ -13,10 +13,10 @@ export const NAV_ITEMS: ReadonlyArray<{ key: string; href: string; icon: LucideI
 ];
 
 // About routes — stub pages under src/app, keyed to the `pages` i18n namespace.
-// /faq still exists as a page but is intentionally not linked here.
 export const ABOUT_LINKS = [
   { key: "howItWorks", href: "/how-it-works" },
   { key: "rules", href: "/rules" },
+  { key: "faq", href: "/faq" },
   { key: "privacy", href: "/privacy" },
   { key: "terms", href: "/terms" },
 ] as const;

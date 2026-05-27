@@ -49,6 +49,7 @@
     "aboutShort": {
       "howItWorks": "Cómo funciona",
       "rules": "Reglas",
+      "faq": "FAQ",
       "privacy": "Privacidad",
       "terms": "Términos"
     },
@@ -194,7 +195,50 @@
     },
     "faq": {
       "title": "Preguntas frecuentes",
-      "body": "Pronto: respuestas a las preguntas más frecuentes sobre el Pick'em del Mundial 2026."
+      "eyebrow": "FAQ",
+      "intro": "Todo lo que necesitas saber sobre el juego de pronósticos del Mundial 2026.",
+      "items": {
+        "whatIs": {
+          "question": "¿Qué es Pick'ems?",
+          "answer": "Pick'ems es un juego gratuito de pronósticos para el Mundial FIFA 2026. Predices marcadores, posiciones de grupos y el cuadro de eliminatorias, y compites con amigos en clasificaciones. Más información en <howItWorksLink>Cómo funciona</howItWorksLink>."
+        },
+        "howToPlay": {
+          "question": "¿Cómo juego?",
+          "answer": "Crea una cuenta, haz tus pronósticos de grupos y eliminatorias antes de que empiece el torneo, y predice cada marcador antes del pitido inicial. Los puntos se otorgan según tu precisión. Consulta la guía completa en <howItWorksLink>Cómo funciona</howItWorksLink>."
+        },
+        "whenLock": {
+          "question": "¿Cuándo se cierran los pronósticos?",
+          "answer": "Los pronósticos de partido se cierran al inicio de cada partido. Los pronósticos globales (grupos, mejores terceros, eliminatorias) se cierran cuando empieza el primer partido del torneo."
+        },
+        "editPicks": {
+          "question": "¿Puedo editar mis pronósticos?",
+          "answer": "¡Sí! Puedes editar cualquier pronóstico tantas veces como quieras hasta que se cierre. Solo cuenta tu última predicción antes del cierre."
+        },
+        "scoring": {
+          "question": "¿Cómo funciona la puntuación?",
+          "answer": "Los marcadores exactos suman 5 puntos, los resultados correctos suman 2 puntos. Los pronósticos de grupos y eliminatorias tienen sus propios valores — consulta la <rulesLink>página de Reglas</rulesLink> para ver el desglose completo."
+        },
+        "boards": {
+          "question": "¿Qué son los tableros?",
+          "answer": "Los tableros son grupos privados donde compites con amigos. Cada tablero tiene su propia clasificación. Puedes unirte a tantos tableros como quieras usando un código de invitación de 8 caracteres. Explóralos en la <boardsLink>página de Tableros</boardsLink>."
+        },
+        "joinMultiple": {
+          "question": "¿Puedo unirme a varios tableros?",
+          "answer": "¡Por supuesto! Únete a todos los tableros que quieras. Tus pronósticos son los mismos en todos los tableros — solo cambian las clasificaciones."
+        },
+        "createBoard": {
+          "question": "¿Cómo creo un tablero?",
+          "answer": "Ve a la <boardsLink>página de Tableros</boardsLink> y haz clic en 'Crear tablero'. Obtendrás un código de invitación para compartir con amigos. También puedes configurarlo como público o privado."
+        },
+        "free": {
+          "question": "¿Pick'ems es gratis?",
+          "answer": "Sí, Pick'ems es completamente gratis. Sin anuncios, sin planes premium, sin costos ocultos. Es un proyecto de fans solo para entretenimiento."
+        },
+        "prizes": {
+          "question": "¿Hay premios?",
+          "answer": "Pick'ems es solo por diversión y derecho a presumir. No hay apuestas con dinero real ni premios. Es puramente un juego de pronósticos entre amigos."
+        }
+      }
     },
     "privacy": {
       "title": "Política de privacidad",

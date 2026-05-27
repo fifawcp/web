@@ -1,0 +1,91 @@
+{
+  "title": "Hi, {name}",
+  "eyebrow": "Your profile",
+  "subtitle": "Your identity, your picks across the tournament, and a settings drawer — all in one place.",
+  "identity": {
+    "joinedLabel": "Joined {date}",
+    "adminBadge": "Admin",
+    "editDetails": "Edit details"
+  },
+  "editDialog": {
+    "title": "Edit your details",
+    "description": "Update your name and username. Email stays the same.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "username": "Username",
+    "save": "Save changes",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "success": "Profile updated.",
+    "error": "Couldn't save your changes — please try again."
+  },
+  "pickemPeek": {
+    "title": "Your pickem",
+    "subtitle": "Groups, best thirds and bracket — at a glance.",
+    "subtitleLocked": "The tournament is live — your picks are sealed.",
+    "lockedPill": "Locked",
+    "groupsLabel": "Groups locked",
+    "thirdsLabel": "Best thirds",
+    "bracketLabel": "Bracket picks",
+    "championLabel": "Predicted champion",
+    "noChampion": "Finish your bracket to crown a champion.",
+    "lockedNoChampionTitle": "Bracket not finished",
+    "lockedNoChampionDescription": "You didn't crown a champion before the tournament locked.",
+    "lockedGroupsLabel": "groups",
+    "lockedThirdsLabel": "best thirds",
+    "lockedBracketLabel": "bracket picks",
+    "cta": "Open pickem",
+    "ctaLocked": "View pickem"
+  },
+  "boardsPeek": {
+    "title": "Your boards",
+    "subtitle": "Every league you're competing in.",
+    "countLabel": "Joined",
+    "openBoard": "Open {name}",
+    "cta": "Browse all boards",
+    "seeMore": "See {count} more",
+    "emptyTitle": "No boards yet",
+    "emptyDescription": "Join a friend's board with a code or start your own league.",
+    "emptyCta": "Browse boards",
+    "loadError": "Couldn't load your boards. Refresh to try again."
+  },
+  "calendarPeek": {
+    "title": "Your calendar",
+    "subtitle": "Last played and what's next.",
+    "labelLast": "Last played",
+    "labelNext": "Next up",
+    "vs": "vs",
+    "yourPick": "Your pick: {home}–{away}",
+    "noPickLast": "No pick made",
+    "awaitingResult": "Awaiting result",
+    "pickThis": "Pick this match →",
+    "exactBadge": "Exact",
+    "ctaOpenSchedule": "Open schedule",
+    "empty": "No matches available yet — the tournament hasn't started."
+  },
+  "management": {
+    "title": "Manage your account",
+    "subtitle": "Preferences and signed-in devices.",
+    "tabPreferences": "Preferences",
+    "tabSessions": "Devices"
+  },
+  "preferences": {
+    "themeLabel": "Theme",
+    "languageLabel": "Language"
+  },
+  "sessions": {
+    "subtitle": "Sessions where your account is currently active.",
+    "thisDevice": "This device",
+    "lastUsed": "Last used {when}",
+    "revoke": "Sign out",
+    "revokeAria": "Sign out of {device}",
+    "signOutThis": "Sign out this device",
+    "signingOutThis": "Signing out…",
+    "signOutAll": "Sign out everywhere",
+    "signingOutAll": "Signing out…",
+    "empty": "No active sessions.",
+    "loadError": "Couldn't load your sessions. Refresh to try again.",
+    "revokeError": "Couldn't sign that device out — please try again.",
+    "revokeAllError": "Couldn't sign out from all devices — please try again."
+  }
+}
