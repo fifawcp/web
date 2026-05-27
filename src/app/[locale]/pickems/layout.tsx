@@ -1,6 +1,6 @@
 export default function PickemsLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div data-accent="blue" className="contents">
+    <div data-accent="indigo" className="contents">
       {/* Route-scoped offsets so the mobile CTA bar doesn't sit on top of the
           global footer or sonner toasts. The bar measures itself and writes
           --pickems-cta-height on <body>, so padding matches the bar exactly

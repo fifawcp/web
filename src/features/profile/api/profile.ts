@@ -1,3 +1,6 @@
+import { api } from "@/shared/lib/api/client";
+import type { User } from "@/shared/types/interfaces";
+
 import type { UserRole } from "../types/profile.types";
 
 /**
@@ -8,35 +11,28 @@ import type { UserRole } from "../types/profile.types";
 export const USER_PROFILE_QUERY_KEY = ["users", "profile"] as const;
 
 /** Subset of `domain.User` the edit form is allowed to update. */
-export type EditableProfileFields = {
-  first_name: string;
-  last_name: string;
-  username: string;
-};
+export type EditableProfileFields = Pick<User, "first_name" | "last_name" | "username">;
 
-/** Shape we expect `/api/users/profile` to return — mirrors `domain.User` + role. */
-export type ApiUserProfile = EditableProfileFields & {
-  id: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
-  role: UserRole;
-};
+/** Shape `/api/users/profile` returns — `domain.User` + the role enum
+ *  that isn't on the next-auth session. Canonical location for this
+ *  type; previously also redeclared in `app/[locale]/profile/page.tsx`. */
+export type ApiUserProfile = User & { role: UserRole };
 
 /**
- * Placeholder updater. The backend endpoint doesn't ship yet, so this fakes
- * a successful round-trip (200ms artificial latency so the loading state in
- * the dialog isn't instant). When the real endpoint lands, swap the body
- * for an actual `api.patch<ApiUserProfile>('/api/users/profile', input,
- * { authenticated: true })` call and surface its `ApiClientError` on failure.
+ * Partial-update of the authenticated user's profile. Only the fields
+ * present in `input` are sent — email is mutated through a dedicated
+ * endpoint and `role` is server-managed (never updatable from the UI).
  *
- * TODO(backend): replace with the real `PATCH /api/users/profile` (or
- * whichever verb the API team decides on) once the endpoint is exposed.
- * The current form already builds the exact payload shape we expect.
+ * The backend wraps the user in `{ data: { ... } }`; `api.patch` already
+ * unwraps that envelope. On failure (validation, conflict, network) we
+ * throw so the caller's `try/catch` (or react-query's `onError`) can
+ * surface the message — the shared `ApiClientError` shape isn't used
+ * here because the `api` client returns a discriminated `ApiResponse`.
  */
-export async function updateUserProfile(input: EditableProfileFields): Promise<EditableProfileFields> {
-  await new Promise((resolve) => setTimeout(resolve, 200));
-  // TODO(backend): replace with `api.patch<ApiUserProfile>('/api/users/profile', input, { authenticated: true })`
-  // and translate failures via `ApiClientError`.
-  return input;
+export async function updateUserProfile(input: EditableProfileFields): Promise<ApiUserProfile> {
+  const res = await api.patch<ApiUserProfile>("/api/users/profile", input, { authenticated: true });
+  if (!res.success || !res.data) {
+    throw new Error(res.error?.message ?? "Failed to update profile");
+  }
+  return res.data;
 }

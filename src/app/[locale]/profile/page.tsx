@@ -4,24 +4,20 @@ import { getLocale } from "next-intl/server";
 import { BOARDS_LIST_TAG } from "@/features/boards/api/boards";
 import type { BoardListItem } from "@/features/boards/types/boards.types";
 import { getDashboard } from "@/features/dashboard/api/dashboard.api";
+import type { ApiUserProfile } from "@/features/profile/api/profile";
 import { ProfileView } from "@/features/profile/components/ProfileView";
 import { deriveMatchPair } from "@/features/profile/lib/deriveMatchPair";
-import type { UserRole } from "@/features/profile/types/profile.types";
 import { MATCHES_CACHE_TAG } from "@/features/schedule/api/matches";
 import type { Match } from "@/features/schedule/types/schedule.types";
 import { redirect } from "@/i18n/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { serverApi } from "@/shared/lib/api/server";
 import { buildPageMetadata } from "@/shared/seo/metadata";
-import type { User } from "@/shared/types/interfaces";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   return buildPageMetadata({ locale, namespace: "seo.profile", path: "/profile" });
 }
-
-/** Domain.User extends the session shape with the role enum. */
-type ApiUser = User & { role: UserRole };
 
 export default async function ProfilePage() {
   const [session, locale] = await Promise.all([getCurrentUser(), getLocale()]);
@@ -42,7 +38,7 @@ export default async function ProfilePage() {
   // Sessions stay client-side via `useSessions` — only loaded when the
   // user opens the "Devices" tab inside ManagementTabs.
   const [userRes, dashboard, matchesRes, boardsRes] = await Promise.all([
-    serverApi.get<ApiUser>("/api/users/profile", { authenticated: true }),
+    serverApi.get<ApiUserProfile>("/api/users/profile", { authenticated: true }),
     getDashboard(true),
     serverApi.get<Match[]>("/api/matches", {
       authenticated: true,

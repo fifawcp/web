@@ -67,7 +67,11 @@ function EditProfileForm({ initial, onSaved, onClose }: { initial: EditableProfi
     try {
       const saved = await mutation.mutateAsync(payload);
       toast.success(t("success"));
-      onSaved?.(saved);
+      // `saved` is the full `ApiUserProfile` from the server — pass only
+      // the editable subset so the parent's `setCurrent` (typed as
+      // `EditableProfileFields`) stays narrow and doesn't pick up stale
+      // metadata.
+      onSaved?.({ first_name: saved.first_name, last_name: saved.last_name, username: saved.username });
       onClose();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : t("error"));

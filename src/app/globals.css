@@ -219,6 +219,26 @@
   --wcp-blue-soft: var(--color-sky-100);
   --wcp-blue: var(--color-sky-600);
   --wcp-blue-strong: var(--color-sky-700);
+
+  --wcp-orange-soft: var(--color-orange-100);
+  --wcp-orange: var(--color-orange-600);
+  --wcp-orange-strong: var(--color-orange-700);
+
+  --wcp-teal-soft: var(--color-teal-100);
+  --wcp-teal: var(--color-teal-600);
+  --wcp-teal-strong: var(--color-teal-700);
+
+  --wcp-pink-soft: var(--color-pink-100);
+  --wcp-pink: var(--color-pink-600);
+  --wcp-pink-strong: var(--color-pink-700);
+
+  --wcp-amber-soft: var(--color-amber-100);
+  --wcp-amber: var(--color-amber-600);
+  --wcp-amber-strong: var(--color-amber-700);
+
+  --wcp-indigo-soft: var(--color-indigo-100);
+  --wcp-indigo: var(--color-indigo-600);
+  --wcp-indigo-strong: var(--color-indigo-700);
 }
 .dark {
   --wcp-neutral-soft: var(--color-zinc-900);
@@ -230,16 +250,36 @@
   --wcp-green-strong: var(--color-green-300);
 
   --wcp-purple-soft: var(--color-violet-950);
-  --wcp-purple: var(--color-violet-400);
+  --wcp-purple: var(--color-violet-500);
   --wcp-purple-strong: var(--color-violet-300);
 
   --wcp-red-soft: var(--color-red-950);
-  --wcp-red: var(--color-red-400);
+  --wcp-red: var(--color-red-500);
   --wcp-red-strong: var(--color-red-300);
 
   --wcp-blue-soft: var(--color-sky-950);
   --wcp-blue: var(--color-sky-400);
   --wcp-blue-strong: var(--color-sky-300);
+
+  --wcp-orange-soft: var(--color-orange-950);
+  --wcp-orange: var(--color-orange-400);
+  --wcp-orange-strong: var(--color-orange-300);
+
+  --wcp-teal-soft: var(--color-teal-950);
+  --wcp-teal: var(--color-teal-500);
+  --wcp-teal-strong: var(--color-teal-300);
+
+  --wcp-pink-soft: var(--color-pink-950);
+  --wcp-pink: var(--color-pink-400);
+  --wcp-pink-strong: var(--color-pink-300);
+
+  --wcp-amber-soft: var(--color-amber-950);
+  --wcp-amber: var(--color-amber-400);
+  --wcp-amber-strong: var(--color-amber-300);
+
+  --wcp-indigo-soft: var(--color-indigo-950);
+  --wcp-indigo: var(--color-indigo-500);
+  --wcp-indigo-strong: var(--color-indigo-300);
 }
 
 /* Active accent (default = neutral; pages opt-in via data-accent) */
@@ -272,6 +312,31 @@
   --page-accent-soft: var(--wcp-blue-soft);
   --page-accent: var(--wcp-blue);
   --page-accent-strong: var(--wcp-blue-strong);
+}
+:root:has([data-accent="orange"]) {
+  --page-accent-soft: var(--wcp-orange-soft);
+  --page-accent: var(--wcp-orange);
+  --page-accent-strong: var(--wcp-orange-strong);
+}
+:root:has([data-accent="teal"]) {
+  --page-accent-soft: var(--wcp-teal-soft);
+  --page-accent: var(--wcp-teal);
+  --page-accent-strong: var(--wcp-teal-strong);
+}
+:root:has([data-accent="pink"]) {
+  --page-accent-soft: var(--wcp-pink-soft);
+  --page-accent: var(--wcp-pink);
+  --page-accent-strong: var(--wcp-pink-strong);
+}
+:root:has([data-accent="amber"]) {
+  --page-accent-soft: var(--wcp-amber-soft);
+  --page-accent: var(--wcp-amber);
+  --page-accent-strong: var(--wcp-amber-strong);
+}
+:root:has([data-accent="indigo"]) {
+  --page-accent-soft: var(--wcp-indigo-soft);
+  --page-accent: var(--wcp-indigo);
+  --page-accent-strong: var(--wcp-indigo-strong);
 }
 
 @layer base {

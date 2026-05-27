@@ -63,7 +63,8 @@
         "description": "Usa el modo Calendario para predecir el marcador de cada partido. Gana puntos por predecir correctamente al ganador y puntos bonus por el marcador exacto."
       }
     },
-    "cta": "Crea tu cuenta"
+    "cta": "Crea tu cuenta",
+    "scrollHint": "Desliza"
   },
   "stats": {
     "predictedChampion": "Campeón predicho",

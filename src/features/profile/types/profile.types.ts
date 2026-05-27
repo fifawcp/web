@@ -23,6 +23,3 @@ export type ParsedDevice = {
 
 /** Role enum from `domain.UserRole`. */
 export type UserRole = "user" | "admin";
-
-/** Which management section the user is on. Drives the segmented control inside `ManagementTabs`. */
-export type ManagementTab = "preferences" | "sessions" | "account";

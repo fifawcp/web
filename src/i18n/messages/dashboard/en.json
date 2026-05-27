@@ -63,7 +63,8 @@
         "description": "Use the Schedule mode to predict the score of every match. Earn points for correctly predicting the winner and bonus points for the exact final score."
       }
     },
-    "cta": "Create your account"
+    "cta": "Create your account",
+    "scrollHint": "Scroll down"
   },
   "pickStatus": {
     "title": "Pick status",

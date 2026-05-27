@@ -35,7 +35,7 @@ async function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <div data-accent="neutral" className="contents">
+    <div data-accent="purple" className="contents">
       <JsonLd data={structuredData} />
       <Suspense fallback={<DashboardLoading />}>
         <DashboardContent />
