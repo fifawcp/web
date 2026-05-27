@@ -17,6 +17,7 @@ import { cn } from "@/shared/lib/utils";
 import { BOARD_MEMBERS_PAGE_SIZE } from "../api/boards";
 import { useBoardActionError } from "../hooks/useBoardActionError";
 import { useBoardMembers, useRemoveMember, useTransferOwnership, useUpdateMemberRole } from "../hooks/useBoardMembers";
+import { BOARD_DIALOG_WIDTH } from "../lib/boardDialog";
 import { canManageBoard } from "../lib/boardRole";
 import type { Board, BoardMember } from "../types/boards.types";
 
@@ -296,7 +297,7 @@ function RemoveMemberDialog({ target, onOpenChange, onSubmit, isPending }: Remov
 
   return (
     <Dialog open={Boolean(target)} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className={BOARD_DIALOG_WIDTH}>
         {target ? (
           <>
             <DialogHeader>
@@ -304,10 +305,10 @@ function RemoveMemberDialog({ target, onOpenChange, onSubmit, isPending }: Remov
               <DialogDescription>{t("description")}</DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>
+              <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isPending} className="sm:min-w-24 sm:px-6">
                 {t("cancel")}
               </Button>
-              <Button variant="destructive" onClick={onSubmit} disabled={isPending}>
+              <Button variant="destructive" onClick={onSubmit} disabled={isPending} className="sm:min-w-24 sm:px-6">
                 {t("submit")}
               </Button>
             </DialogFooter>
@@ -341,7 +342,7 @@ function TransferOwnershipDialog({ target, onOpenChange, onSubmit, isPending }: 
         onOpenChange(next);
       }}
     >
-      <DialogContent onOpenAutoFocus={focus.onOpenAutoFocus}>
+      <DialogContent onOpenAutoFocus={focus.onOpenAutoFocus} className={BOARD_DIALOG_WIDTH}>
         {target ? (
           <>
             <DialogHeader>
@@ -350,10 +351,10 @@ function TransferOwnershipDialog({ target, onOpenChange, onSubmit, isPending }: 
             </DialogHeader>
             <Input value={typed} onChange={(event) => setTyped(event.target.value)} placeholder={t("placeholder")} autoFocus={focus.autoFocus} />
             <DialogFooter>
-              <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>
+              <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isPending} className="sm:min-w-24 sm:px-6">
                 {t("cancel")}
               </Button>
-              <Button variant="destructive" onClick={onSubmit} disabled={!isValid || isPending}>
+              <Button variant="destructive" onClick={onSubmit} disabled={!isValid || isPending} className="sm:min-w-24 sm:px-6">
                 {t("submit")}
               </Button>
             </DialogFooter>

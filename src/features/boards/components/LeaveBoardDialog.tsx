@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { translateApiError } from "@/shared/lib/api/errors";
 
 import { useLeaveBoard } from "../hooks/useBoardMutations";
+import { BOARD_DIALOG_WIDTH } from "../lib/boardDialog";
 import type { Board } from "../types/boards.types";
 
 type Props = {
@@ -37,16 +38,16 @@ export function LeaveBoardDialog({ board, open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className={BOARD_DIALOG_WIDTH}>
         <DialogHeader>
           <DialogTitle>{t("leave.confirm")}</DialogTitle>
           <DialogDescription>{t("leave.description")}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={leave.isPending}>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={leave.isPending} className="sm:min-w-24 sm:px-6">
             {t("cancel")}
           </Button>
-          <Button variant="destructive" onClick={handleLeave} disabled={leave.isPending}>
+          <Button variant="destructive" onClick={handleLeave} disabled={leave.isPending} className="sm:min-w-24 sm:px-6">
             {t("leave.cta")}
           </Button>
         </DialogFooter>
