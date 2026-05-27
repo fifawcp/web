@@ -26,5 +26,9 @@
   "terms": {
     "title": "Terms of Service",
     "description": "The terms governing your use of Pick'ems, the free FIFA World Cup 2026 prediction game."
+  },
+  "profile": {
+    "title": "Your Profile",
+    "description": "Your World Cup 2026 Pick'ems profile — see your bracket at a glance, manage signed-in devices, and adjust your preferences."
   }
 }

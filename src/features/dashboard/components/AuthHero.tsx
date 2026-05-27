@@ -31,9 +31,10 @@ export function AuthHero({ pickedChampion, stats, nextMatch, pickemProgress }: P
 
   const isPickemComplete = pickemProgress ? isAllPickemComplete(pickemProgress) : false;
   const primaryCtaLabel = isPickemComplete || countdown.isExpired ? t("cta.seeMyBrackets") : t("cta.finishBracket");
+  const primaryCtaHref = isPickemComplete || countdown.isExpired ? "/bracket" : "/pickems";
 
   const bottomContent =
-    stats && isPickemComplete ? (
+    stats && (isPickemComplete || countdown.isExpired) ? (
       <UserStatsRow pickedChampion={pickedChampion} stats={stats} nextMatch={nextMatch} />
     ) : (
       <div className="flex flex-col gap-2">
@@ -45,5 +46,5 @@ export function AuthHero({ pickedChampion, stats, nextMatch, pickemProgress }: P
       </div>
     );
 
-  return <HeroCard badge={<HeroCountdownBadge />} primaryCta={{ href: "/bracket", label: primaryCtaLabel }} bottomContent={bottomContent} />;
+  return <HeroCard badge={<HeroCountdownBadge />} primaryCta={{ href: primaryCtaHref, label: primaryCtaLabel }} bottomContent={bottomContent} />;
 }

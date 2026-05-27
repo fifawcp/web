@@ -26,5 +26,9 @@
   "terms": {
     "title": "Términos del Servicio",
     "description": "Los términos que rigen el uso de Pick'ems, el juego gratuito de pronósticos del Mundial FIFA 2026."
+  },
+  "profile": {
+    "title": "Tu Perfil",
+    "description": "Tu perfil de Pick'ems del Mundial 2026: revisa tu cuadro de un vistazo, administra tus dispositivos conectados y ajusta tus preferencias."
   }
 }

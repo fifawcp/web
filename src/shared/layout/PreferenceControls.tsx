@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
+import { useHydrated } from "@/shared/hooks/useHydrated";
 import { useLanguage } from "@/shared/hooks/useLanguage";
 import { LANGUAGES, THEMES } from "@/shared/lib/preferences";
 import { cn } from "@/shared/lib/utils";
@@ -25,12 +26,26 @@ const pillInactive = "text-muted-foreground hover:text-foreground";
 const trackCompact = "inline-flex w-36 shrink-0 rounded-md bg-muted p-0.5";
 const trackExpanded = "flex w-full rounded-md bg-muted p-0.5";
 
-/** Segmented light/dark theme control. Variant decides icon-only vs icon+label. */
+/**
+ * Segmented light/dark theme control. Variant decides icon-only vs icon+label.
+ *
+ * `next-themes` returns `undefined` for `theme` during SSR and the real
+ * value on the client, which would flip `aria-pressed` + the active class
+ * between renders and trigger a hydration warning. We gate the active
+ * state on `useHydrated` so the server renders every button as inactive
+ * (deterministic) and the client swaps to the real selection after mount.
+ */
 export function ThemeSwitch({ variant = "compact" }: SwitchProps = {}) {
   const t = useTranslations("preferences");
   // `resolvedTheme` collapses "system" → the concrete "light"/"dark" the OS reports,
   // so the right pill highlights when no preference is saved. `theme` would be "system".
+  // Gate on `useHydrated`: `resolvedTheme` is `undefined` during SSR (next-themes
+  // can't read the OS preference on the server), which would flip `aria-pressed`
+  // + the active class between server and client renders and trip a hydration
+  // warning. Server renders all buttons inactive; client swaps on mount.
   const { resolvedTheme, setTheme } = useTheme();
+  const hydrated = useHydrated();
+  const activeTheme = hydrated ? resolvedTheme : undefined;
 
   const themeLabel: Record<string, string> = {
     light: t("themeLight"),
@@ -39,19 +54,22 @@ export function ThemeSwitch({ variant = "compact" }: SwitchProps = {}) {
 
   return (
     <div className={variant === "expanded" ? trackExpanded : trackCompact}>
-      {THEMES.map(({ value, icon: Icon }) => (
-        <button
-          key={value}
-          type="button"
-          onClick={() => setTheme(value)}
-          aria-pressed={resolvedTheme === value}
-          aria-label={themeLabel[value]}
-          className={cn(pillButton, resolvedTheme === value ? pillActive : pillInactive)}
-        >
-          <Icon className="size-4" />
-          {variant === "expanded" && <span>{themeLabel[value]}</span>}
-        </button>
-      ))}
+      {THEMES.map(({ value, icon: Icon }) => {
+        const isActive = activeTheme === value;
+        return (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setTheme(value)}
+            aria-pressed={isActive}
+            aria-label={themeLabel[value]}
+            className={cn(pillButton, isActive ? pillActive : pillInactive)}
+          >
+            <Icon className="size-4" />
+            {variant === "expanded" && <span>{themeLabel[value]}</span>}
+          </button>
+        );
+      })}
     </div>
   );
 }

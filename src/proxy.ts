@@ -14,7 +14,7 @@ const GUEST_ONLY_ROUTES = new Set(["/login", "/register", "/callback"]);
 // Routes that require a session. Everything else is public (the SEO-safe default —
 // new public pages like /standings need no change here). Compared against locale-stripped paths.
 function isProtectedPath(path: string): boolean {
-  return path === "/pickems" || path === "/boards" || path.startsWith("/boards/");
+  return path === "/pickems" || path === "/profile" || path === "/boards" || path.startsWith("/boards/");
 }
 
 // Mirror next-auth's session cookie name convention
