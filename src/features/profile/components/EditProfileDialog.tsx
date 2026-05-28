@@ -11,6 +11,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
+import { translateApiError } from "@/shared/lib/api/errors";
 
 import type { EditableProfileFields } from "../api/profile";
 import { useUpdateProfile } from "../hooks/useUpdateProfile";
@@ -41,6 +42,11 @@ export function EditProfileDialog({ open, onOpenChange, initial }: Props) {
 function EditProfileForm({ initial, onClose }: { initial: EditableProfileFields; onClose: () => void }) {
   const t = useTranslations("profile.editDialog");
   const tAuth = useTranslations("auth");
+  // `apiErrors.*` carries the same locale-aware mapping the registration
+  // flow uses (`USERNAME_ALREADY_EXISTS`, validation codes, etc.). Without
+  // this the toast would surface the raw backend message, which is always
+  // English regardless of the active locale.
+  const tApiErrors = useTranslations("apiErrors");
   const mutation = useUpdateProfile();
 
   const form = useForm<ProfileFormData>({
@@ -67,7 +73,10 @@ function EditProfileForm({ initial, onClose }: { initial: EditableProfileFields;
       toast.success(t("success"));
       onClose();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : t("error"));
+      // `translateApiError` reads `.code` off `ApiClientError` (thrown by
+      // `updateUserProfile`) and falls back to `UNKNOWN_ERROR` for anything
+      // it can't recognise — including the rare non-Error throw.
+      toast.error(translateApiError(e, tApiErrors));
     }
   });
 

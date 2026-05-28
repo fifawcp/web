@@ -1,4 +1,5 @@
 import { api } from "@/shared/lib/api/client";
+import { ApiClientError } from "@/shared/lib/api/errors";
 import type { User } from "@/shared/types/interfaces";
 
 import type { UserRole } from "../types/profile.types";
@@ -24,15 +25,18 @@ export type ApiUserProfile = User & { role: UserRole };
  * endpoint and `role` is server-managed (never updatable from the UI).
  *
  * The backend wraps the user in `{ data: { ... } }`; `api.patch` already
- * unwraps that envelope. On failure (validation, conflict, network) we
- * throw so the caller's `try/catch` (or react-query's `onError`) can
- * surface the message — the shared `ApiClientError` shape isn't used
- * here because the `api` client returns a discriminated `ApiResponse`.
+ * unwraps that envelope. On failure we throw `ApiClientError` so the
+ * caller (`useUpdateProfile` → `EditProfileDialog`) can run the code
+ * through `translateApiError` and surface a locale-aware message — the
+ * raw `res.error.message` is always backend-locale (English) and would
+ * leak through to Spanish UIs otherwise. This mirrors how the
+ * registration flow handles the same family of errors
+ * (`USERNAME_ALREADY_EXISTS`, validation failures, etc.).
  */
 export async function updateUserProfile(input: EditableProfileFields): Promise<ApiUserProfile> {
   const res = await api.patch<ApiUserProfile>("/api/users/profile", input, { authenticated: true });
   if (!res.success || !res.data) {
-    throw new Error(res.error?.message ?? "Failed to update profile");
+    throw new ApiClientError(res.error?.code ?? "UNKNOWN_ERROR", res.error?.message ?? "Failed to update profile");
   }
   return res.data;
 }

@@ -51,6 +51,27 @@
   "callback": {
     "backToLogin": "Back to login"
   },
+  "panel": {
+    "brand": "FIFA World Cup Pick'ems",
+    "headlineLine1": "Make your picks.",
+    "headlineLine2": "Climb your board.",
+    "subtitle": "Predict every match, track the bracket, and compete with your friends throughout the FIFA World Cup 2026.",
+    "explore": "Explore how it works",
+    "features": {
+      "knockout": {
+        "title": "Predict the knockout",
+        "description": "Build your championship bracket before the tournament starts."
+      },
+      "scores": {
+        "title": "Pick every score",
+        "description": "Lock in exact scores for every group-stage and knockout match."
+      },
+      "compete": {
+        "title": "Compete with your board",
+        "description": "Earn points and climb every leaderboard you join."
+      }
+    }
+  },
   "errors": {
     "identifierRequired": "Enter your email or username",
     "invalidEmail": "Invalid email address",
