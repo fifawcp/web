@@ -149,10 +149,12 @@ function ScoreCenter({ match, kind }: { match: Match; kind: "last" | "next" }) {
 
   if (match.user_score_pick) {
     const { home_score, away_score } = match.user_score_pick;
+
     return (
-      <span className="shrink-0 rounded-md border border-page-accent/30 bg-page-accent-soft px-2 py-0.5 text-sm font-bold tabular-nums text-page-accent-strong">
+      <div className="flex items-center gap-1 shrink-0 rounded-md border border-page-accent/30 bg-page-accent-soft px-2 py-0.5 text-sm font-bold tabular-nums text-page-accent-strong">
+        <Sparkles className="size-3" />
         {home_score}–{away_score}
-      </span>
+      </div>
     );
   }
 

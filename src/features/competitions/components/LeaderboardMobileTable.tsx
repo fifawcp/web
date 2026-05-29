@@ -93,7 +93,7 @@ export function LeaderboardMobileTable({ rows, cyclableColumns, currentUserId, i
                 <div className="flex min-w-0 flex-col leading-tight">
                   <span className="flex min-w-0 items-center gap-1.5">
                     <span className={cn("truncate text-sm font-medium", isMe && "text-page-accent-strong")}>{displayName}</span>
-                    {isMe ? <span className="rounded-md bg-page-accent px-1 py-px text-[0.6rem] font-medium uppercase tracking-wide text-white">{t("you")}</span> : null}
+                    {isMe ? <span className="rounded-md bg-page-accent p-1 text-2xs font-medium uppercase tracking-wide text-white">{t("you")}</span> : null}
                   </span>
                   <span className="truncate text-xs text-muted-foreground">@{entry.member.username}</span>
                 </div>
