@@ -1,4 +1,4 @@
-import { BarChart3, Calendar, GitBranch, LayoutDashboard, ListChecks, Users, type LucideIcon } from "lucide-react";
+import { BarChart3, Calendar, GitBranch, LayoutDashboard, ListChecks, Trophy, Users, type LucideIcon } from "lucide-react";
 
 // Primary navigation items. `key` maps to the `nav` i18n namespace; `icon`
 // is rendered in the mobile drawer (desktop bar stays text-only).
@@ -11,6 +11,11 @@ export const NAV_ITEMS: ReadonlyArray<{ key: string; href: string; icon: LucideI
   { key: "standings", href: "/standings", icon: BarChart3 },
   { key: "bracket", href: "/bracket", icon: GitBranch },
 ];
+
+// Footer "Platform" column. Awards is a bonus prediction type reached from the
+// dashboard and pickems rather than the primary nav bar, so it lives here (and
+// only here) to keep the header from overflowing with a 7th item.
+export const FOOTER_NAV_ITEMS: ReadonlyArray<{ key: string; href: string; icon: LucideIcon }> = [...NAV_ITEMS, { key: "awards", href: "/pickems/awards", icon: Trophy }];
 
 // About routes — stub pages under src/app, keyed to the `pages` i18n namespace.
 export const ABOUT_LINKS = [

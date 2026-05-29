@@ -33,6 +33,13 @@ const KNOCKOUT_ITEMS = [
   { key: "final", points: 20 },
 ] as const;
 
+const AWARD_ITEMS = [
+  { key: "goldenBoot", points: 20 },
+  { key: "goldenBall", points: 20 },
+  { key: "goldenGlove", points: 20 },
+  { key: "youngPlayer", points: 20 },
+] as const;
+
 const GENERAL_RULES = ["picksLock", "keepEditing", "fullTime", "tiebreakers"] as const;
 
 const eyebrow = "text-2xs font-medium uppercase tracking-wider text-muted-foreground";
@@ -75,6 +82,14 @@ export default async function RulesPage({ params }: Props) {
             items={KNOCKOUT_ITEMS.map(({ key, points }) => ({
               label: t(`knockouts.items.${key}.label`),
               description: t(`knockouts.items.${key}.description`),
+              points,
+            }))}
+          />
+          <ScoringSection
+            heading={t("awards.heading")}
+            items={AWARD_ITEMS.map(({ key, points }) => ({
+              label: t(`awards.items.${key}.label`),
+              description: t(`awards.items.${key}.description`),
               points,
             }))}
           />

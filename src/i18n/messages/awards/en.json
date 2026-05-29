@@ -1,0 +1,67 @@
+{
+  "eyebrow": "Bonus picks",
+  "title": "Tournament awards",
+  "subtitle": "Predict the four individual honors. Each correct pick is worth a flat +{points} pts on top of your bracket score.",
+  "picked": "Picked",
+  "locks": "Locks",
+  "resetAll": "Reset",
+  "saving": "Saving…",
+  "save": "Save",
+  "saved": "Awards saved",
+  "backToPickems": "Back to Pick'ems",
+  "remaining": "{n, plural, =0 {All four picks made} one {# award still needs a pick} other {# awards still need a pick}}",
+  "locked": "Awards are locked",
+  "lockedDescription": "The tournament has started — award picks can no longer be changed.",
+  "footnote": "Winners are graded when the tournament ends. Each award is worth a flat +20 points.",
+  "disclaimer": {
+    "body": "The player list isn't final yet — it can take a few days to sync after the official 2026 squad announcements, so some players may be missing or change.",
+    "dismiss": "Dismiss"
+  },
+  "types": {
+    "golden_boot": {
+      "title": "Golden Boot",
+      "description": "Top scorer"
+    },
+    "golden_ball": {
+      "title": "Golden Ball",
+      "description": "Best overall player"
+    },
+    "golden_glove": {
+      "title": "Golden Glove",
+      "description": "Best goalkeeper"
+    },
+    "young_player": {
+      "title": "Young Player",
+      "description": "Best player aged 21 or under"
+    }
+  },
+  "card": {
+    "pick": "Pick a player",
+    "change": "Change",
+    "remove": "Remove pick",
+    "lockedIn": "Locked in",
+    "noPick": "No pick"
+  },
+  "picker": {
+    "title": "Pick the {award}",
+    "description": "Search by name and filter by position.",
+    "descriptionLocked": "Goalkeepers only — search by name.",
+    "descriptionAge": "Players aged {age} or under only — search by name.",
+    "searchPlaceholder": "Search players…",
+    "idle": "Start typing a player's name to search.",
+    "empty": "No players found.",
+    "error": "Couldn't load players. Try again.",
+    "refine": "Showing the top results — refine your search to narrow down.",
+    "positions": {
+      "goalkeeper": "Goalkeeper",
+      "defender": "Defender",
+      "midfielder": "Midfielder",
+      "attacker": "Attacker"
+    }
+  },
+  "crossSell": {
+    "title": "Bonus: Tournament awards",
+    "description": "Predict the Golden Boot, Ball, Glove and Young Player — worth +20 pts each.",
+    "cta": "Pick awards"
+  }
+}

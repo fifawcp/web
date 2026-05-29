@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { AwardsCrossSell } from "@/features/awards/components/AwardsCrossSell";
 import { useHydrated } from "@/shared/hooks/useHydrated";
 
 import { useBracketDraft } from "../hooks/useBracketDraft";
@@ -144,6 +145,10 @@ export function PickemsView({ initialData, userId }: Props) {
   return (
     <div className={CONTAINER}>
       {data.is_locked && <PickemsLockedBanner />}
+
+      {/* Secondary entry point into the bonus awards feature — kept above the
+          step header + stepper so it stays prominent regardless of step. */}
+      <AwardsCrossSell />
 
       {step === "groups" && (
         <StepGroups

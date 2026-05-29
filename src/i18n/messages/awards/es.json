@@ -1,0 +1,67 @@
+{
+  "eyebrow": "Picks bonus",
+  "title": "Premios del torneo",
+  "subtitle": "Predice los cuatro premios individuales. Cada acierto suma +{points} pts sobre tu puntaje del bracket.",
+  "picked": "Elegidos",
+  "locks": "Cierra",
+  "resetAll": "Reiniciar",
+  "saving": "Guardando…",
+  "save": "Guardar",
+  "saved": "Premios guardados",
+  "backToPickems": "Volver a Pick'ems",
+  "remaining": "{n, plural, =0 {Los cuatro premios elegidos} one {Falta # premio por elegir} other {Faltan # premios por elegir}}",
+  "locked": "Premios bloqueados",
+  "lockedDescription": "El torneo ya comenzó — los premios ya no se pueden cambiar.",
+  "footnote": "Los ganadores se evalúan al terminar el torneo. Cada premio vale +20 puntos.",
+  "disclaimer": {
+    "body": "La lista de jugadores aún no es definitiva — puede tardar unos días en sincronizarse tras el anuncio oficial de las convocatorias 2026, así que algunos jugadores podrían faltar o cambiar.",
+    "dismiss": "Cerrar"
+  },
+  "types": {
+    "golden_boot": {
+      "title": "Bota de Oro",
+      "description": "Máximo goleador"
+    },
+    "golden_ball": {
+      "title": "Balón de Oro",
+      "description": "Mejor jugador del torneo"
+    },
+    "golden_glove": {
+      "title": "Guante de Oro",
+      "description": "Mejor portero"
+    },
+    "young_player": {
+      "title": "Jugador Joven",
+      "description": "Mejor jugador de 21 años o menos"
+    }
+  },
+  "card": {
+    "pick": "Elige un jugador",
+    "change": "Cambiar",
+    "remove": "Quitar elección",
+    "lockedIn": "Confirmado",
+    "noPick": "Sin elección"
+  },
+  "picker": {
+    "title": "Elige el {award}",
+    "description": "Busca por nombre y filtra por posición.",
+    "descriptionLocked": "Solo porteros — busca por nombre.",
+    "descriptionAge": "Solo jugadores de {age} años o menos — busca por nombre.",
+    "searchPlaceholder": "Buscar jugadores…",
+    "idle": "Escribe el nombre de un jugador para buscar.",
+    "empty": "No se encontraron jugadores.",
+    "error": "No se pudieron cargar los jugadores. Inténtalo de nuevo.",
+    "refine": "Mostrando los primeros resultados — afina tu búsqueda para acotar.",
+    "positions": {
+      "goalkeeper": "Portero",
+      "defender": "Defensa",
+      "midfielder": "Mediocampista",
+      "attacker": "Delantero"
+    }
+  },
+  "crossSell": {
+    "title": "Bonus: Premios del torneo",
+    "description": "Predice la Bota, el Balón, el Guante de Oro y el Jugador Joven — +20 pts cada uno.",
+    "cta": "Elegir premios"
+  }
+}
