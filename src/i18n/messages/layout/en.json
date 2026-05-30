@@ -6,6 +6,7 @@
     "boards": "Boards",
     "standings": "Standings",
     "bracket": "Bracket",
+    "awards": "Awards",
     "login": "Log in",
     "register": "Create account",
     "menuLabel": "Navigation",
@@ -169,6 +170,15 @@
           "semifinals": { "label": "Semifinals", "description": "Per correct team that reaches this round" },
           "thirdPlace": { "label": "Third-place match", "description": "Correct third-place winner" },
           "final": { "label": "Final (champion)", "description": "Correct tournament winner" }
+        }
+      },
+      "awards": {
+        "heading": "Tournament award points",
+        "items": {
+          "goldenBoot": { "label": "Golden Boot", "description": "Correctly predicted the top scorer" },
+          "goldenBall": { "label": "Golden Ball", "description": "Correctly predicted the best overall player" },
+          "goldenGlove": { "label": "Golden Glove", "description": "Correctly predicted the best goalkeeper" },
+          "youngPlayer": { "label": "Young Player", "description": "Correctly predicted the best player aged 21 or under" }
         }
       },
       "general": {

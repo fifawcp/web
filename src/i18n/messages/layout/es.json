@@ -6,6 +6,7 @@
     "boards": "Tableros",
     "standings": "Posiciones",
     "bracket": "Eliminatorias",
+    "awards": "Premios",
     "login": "Iniciar sesión",
     "register": "Crear cuenta",
     "menuLabel": "Navegación",
@@ -169,6 +170,15 @@
           "semifinals": { "label": "Semifinales", "description": "Por equipo acertado que alcanza esta ronda" },
           "thirdPlace": { "label": "Tercer puesto", "description": "Acertaste al ganador del partido por el tercer puesto" },
           "final": { "label": "Final (campeón)", "description": "Acertaste al campeón del torneo" }
+        }
+      },
+      "awards": {
+        "heading": "Puntos de premios del torneo",
+        "items": {
+          "goldenBoot": { "label": "Bota de Oro", "description": "Acertaste al máximo goleador" },
+          "goldenBall": { "label": "Balón de Oro", "description": "Acertaste al mejor jugador del torneo" },
+          "goldenGlove": { "label": "Guante de Oro", "description": "Acertaste al mejor portero" },
+          "youngPlayer": { "label": "Jugador Joven", "description": "Acertaste al mejor jugador de 21 años o menos" }
         }
       },
       "general": {
