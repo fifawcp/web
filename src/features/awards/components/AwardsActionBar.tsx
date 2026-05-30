@@ -44,11 +44,17 @@ export function AwardsActionBar({ remaining, canReset, isSaving, isLocked, onRes
             {t("remaining", { n: remaining })}
           </p>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={onReset} disabled={!canReset || isSaving} className="gap-1.5">
+            <Button variant="outline" size="sm" onClick={onReset} disabled={!canReset || isSaving} className="flex-1 gap-1.5 sm:flex-none sm:min-w-40 sm:px-5">
               <RotateCcw className="size-3.5" />
               {t("resetAll")}
             </Button>
-            <Button size="sm" onClick={onSave} disabled={isSaving} className="gap-1.5 bg-page-accent text-white hover:bg-page-accent/90 sm:min-w-32">
+            {/* min-width fits the longer "saving…" label so the button doesn't jump on save. */}
+            <Button
+              size="sm"
+              onClick={onSave}
+              disabled={isSaving}
+              className="flex-1 gap-1.5 bg-page-accent text-white hover:bg-page-accent/90 sm:flex-none sm:min-w-40 sm:px-5"
+            >
               {isSaving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-3.5" />}
               {isSaving ? t("saving") : t("save")}
             </Button>

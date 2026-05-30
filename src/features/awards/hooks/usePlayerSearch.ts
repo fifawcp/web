@@ -5,35 +5,33 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@/shared/hooks/useDebounce";
 
 import { fetchPlayers, PLAYERS_QUERY_KEY } from "../api/awards";
-import { playerSearchDebounceMs } from "../lib/awards";
+import { PLAYER_SEARCH_DEBOUNCE_MS } from "../lib/awards";
 import type { PlayerPosition } from "../types/awards.types";
 
 type Params = {
   q: string;
   positions: PlayerPosition[];
+  /** Selected country FIFA codes (AND with positions / query server-side). */
+  teamFifaCodes: string[];
   /** Picker open — gates the request so closed pickers don't fetch. */
   enabled: boolean;
 };
 
 /**
- * Debounced player search. The text query is debounced on a tiered delay
- * (see `playerSearchDebounceMs`); position filters apply immediately. The
- * request only fires once there's something to narrow on — a text query or a
- * position filter — so we never dump the full 1600-row catalog on open.
- *
- * `placeholderData: keepPreviousData` keeps the previous results on screen
- * while the next debounced query resolves, so the list doesn't flash empty on
- * every keystroke.
+ * Debounced player search. The text query is debounced; filters apply
+ * immediately. The request only fires once there's something to narrow on, and
+ * `keepPreviousData` holds the prior results on screen while the next query
+ * resolves so the list never flashes empty between keystrokes.
  */
-export function usePlayerSearch({ q, positions, enabled }: Params) {
-  const debouncedQ = useDebounce(q, playerSearchDebounceMs(q));
+export function usePlayerSearch({ q, positions, teamFifaCodes, enabled }: Params) {
+  const debouncedQ = useDebounce(q, PLAYER_SEARCH_DEBOUNCE_MS);
   const trimmed = debouncedQ.trim();
 
-  const hasCriteria = trimmed.length > 0 || positions.length > 0;
+  const hasCriteria = trimmed.length > 0 || positions.length > 0 || teamFifaCodes.length > 0;
 
   const query = useQuery({
-    queryKey: [...PLAYERS_QUERY_KEY, { q: trimmed, positions }],
-    queryFn: () => fetchPlayers({ q: trimmed, positions }),
+    queryKey: [...PLAYERS_QUERY_KEY, { q: trimmed, positions, teamFifaCodes }],
+    queryFn: ({ signal }) => fetchPlayers({ q: trimmed, positions, team_fifa_codes: teamFifaCodes }, signal),
     enabled: enabled && hasCriteria,
     placeholderData: keepPreviousData,
     staleTime: 60_000,
@@ -41,8 +39,8 @@ export function usePlayerSearch({ q, positions, enabled }: Params) {
 
   return {
     ...query,
-    /** True before any criteria are entered — drives the "start typing" prompt. */
-    isIdle: enabled && !hasCriteria,
+    /** True when the picker is open but no criteria are entered yet. */
+    hasCriteria,
     /** True while the debounce is pending (user typed but request not yet sent). */
     isDebouncing: q.trim() !== trimmed,
   };

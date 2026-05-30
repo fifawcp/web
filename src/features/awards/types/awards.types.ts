@@ -6,10 +6,9 @@ export type AwardType = "golden_boot" | "golden_ball" | "golden_glove" | "young_
 /** `domain.PlayerPosition` enum. */
 export type PlayerPosition = "goalkeeper" | "defender" | "midfielder" | "attacker";
 
-/** `domain.PlayerClub` — the player's domestic club (logo + name). */
+/** `domain.PlayerClub` — the player's domestic club. */
 export type PlayerClub = {
   name: string;
-  logo_url: string;
 };
 
 /**
@@ -17,18 +16,20 @@ export type PlayerClub = {
  * `fifa_code` / `flag_url` / localized `name` fields the rest of the app
  * already renders), so the country flag pulls from `team.flag_url` exactly
  * like `GroupTeamRow` / `MatchCard`.
+ *
+ * `age` and `club` are `omitempty` upstream, so both may be absent. The
+ * catalog no longer carries `nationality` / `photo_url` — country is read off
+ * `team`, and the flag stands in for a player photo.
  */
 export type Player = {
   id: number;
   name: string;
   first_name: string;
   last_name: string;
-  age: number;
-  nationality: string;
-  photo_url: string;
+  age?: number;
   position: PlayerPosition;
   team: Team;
-  club: PlayerClub;
+  club?: PlayerClub;
 };
 
 /** `domain.StepProgress` — shared shape across pickems/awards. */
@@ -86,3 +87,19 @@ export type PlayerSearchResult = {
   players: Player[];
   hasMore: boolean;
 };
+
+/**
+ * `domain.PopularAwardPick` — one row in an award's most-picked ranking.
+ * `picks_count` is the running tally across all users (0 for eligible players
+ * who simply haven't been picked yet).
+ */
+export type PopularAwardPick = {
+  player: Player;
+  picks_count: number;
+};
+
+/**
+ * `domain.PopularPicksByAward` — GET /awards/popular response. One ranked list
+ * per award type, eligibility already enforced server-side.
+ */
+export type PopularPicksByAward = Record<AwardType, PopularAwardPick[]>;
