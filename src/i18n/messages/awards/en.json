@@ -2,8 +2,10 @@
   "eyebrow": "Bonus picks",
   "title": "Tournament awards",
   "subtitle": "Predict the four individual honors. Each correct pick is worth a flat +{points} pts on top of your bracket score.",
+  "subtitleLocked": "Awards are locked. See the four winners you picked — worth +{points} pts each if correct.",
   "picked": "Picked",
   "locks": "Locks",
+  "lockedLabel": "Locked",
   "resetAll": "Reset",
   "saving": "Saving…",
   "save": "Save",
@@ -62,6 +64,8 @@
   "crossSell": {
     "title": "Bonus: Tournament awards",
     "description": "Predict the Golden Boot, Ball, Glove and Young Player — worth +20 pts each.",
-    "cta": "Pick awards"
+    "descriptionLocked": "See the Golden Boot, Ball, Glove and Young Player winners you picked.",
+    "cta": "Pick awards",
+    "ctaLocked": "See awards"
   }
 }

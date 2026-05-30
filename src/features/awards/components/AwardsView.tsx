@@ -27,6 +27,7 @@ const CONTAINER = "container flex flex-col gap-6 pt-6 pb-10 lg:pt-8 lg:pb-12";
  * draft, so a fresh page load always reflects the server's authoritative
  * picks (no cross-device staleness).
  */
+
 export function AwardsView({ initialData }: Props) {
   const t = useTranslations("awards");
   const { data = initialData } = useAwards(initialData);
@@ -38,13 +39,18 @@ export function AwardsView({ initialData }: Props) {
 
   return (
     <div className={CONTAINER}>
-      <AwardsHeader completed={completed} total={total} locksAt={TOURNAMENT_START_DATE} />
+      <AwardsHeader completed={completed} total={total} locksAt={TOURNAMENT_START_DATE} isLocked={isLocked} />
 
-      {isLocked ? <AwardsLockedBanner /> : <AwardsActionBar remaining={total - completed} canReset={completed > 0} isSaving={isSaving} onReset={reset} onSave={save} />}
+      <AwardsActionBar remaining={total - completed} canReset={completed > 0} isSaving={isSaving} isLocked={isLocked} onReset={reset} onSave={save} />
 
-      <DismissibleNotice tone="amber" dismissLabel={t("disclaimer.dismiss")}>
-        {t("disclaimer.body")}
-      </DismissibleNotice>
+      {isLocked && <AwardsLockedBanner />}
+
+      {/* The "list isn't final yet" note only matters while picks are editable. */}
+      {!isLocked && (
+        <DismissibleNotice tone="amber" dismissLabel={t("disclaimer.dismiss")}>
+          {t("disclaimer.body")}
+        </DismissibleNotice>
+      )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {AWARD_TYPES.map((awardType) => (

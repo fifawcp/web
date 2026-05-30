@@ -148,7 +148,7 @@ export function PickemsView({ initialData, userId }: Props) {
 
       {/* Secondary entry point into the bonus awards feature — kept above the
           step header + stepper so it stays prominent regardless of step. */}
-      <AwardsCrossSell />
+      <AwardsCrossSell isLocked={data.is_locked} />
 
       {step === "groups" && (
         <StepGroups

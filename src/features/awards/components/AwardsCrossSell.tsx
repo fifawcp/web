@@ -4,13 +4,18 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/shared/components/ui/button";
 
+type Props = {
+  /** Tournament locked — the callout flips from "pick" to "see your picks". */
+  isLocked?: boolean;
+};
+
 /**
  * Compact "bonus awards" callout. Rendered inside pickems (and reusable
  * elsewhere) as a secondary entry point into `/pickems/awards`. Amber-tinted trophy
  * keeps it visually distinct from the host page's own accent so it reads as a
  * separate, optional bonus rather than another pickems step.
  */
-export function AwardsCrossSell() {
+export function AwardsCrossSell({ isLocked = false }: Props) {
   const t = useTranslations("awards.crossSell");
 
   return (
@@ -21,12 +26,12 @@ export function AwardsCrossSell() {
         </span>
         <div className="flex flex-col gap-0.5">
           <span className="text-sm font-semibold leading-tight">{t("title")}</span>
-          <span className="text-xs leading-snug text-muted-foreground">{t("description")}</span>
+          <span className="text-xs leading-snug text-muted-foreground">{t(isLocked ? "descriptionLocked" : "description")}</span>
         </div>
       </div>
       <Button asChild variant="outline" size="sm" className="shrink-0 gap-1.5 sm:self-auto">
         <Link href="/pickems/awards">
-          {t("cta")}
+          {t(isLocked ? "ctaLocked" : "cta")}
           <ArrowRight className="size-4" />
         </Link>
       </Button>

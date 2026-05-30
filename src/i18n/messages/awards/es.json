@@ -2,8 +2,10 @@
   "eyebrow": "Picks bonus",
   "title": "Premios del torneo",
   "subtitle": "Predice los cuatro premios individuales. Cada acierto suma +{points} pts sobre tu puntaje del bracket.",
+  "subtitleLocked": "Los premios están bloqueados. Mira los cuatro ganadores que elegiste — +{points} pts por cada acierto.",
   "picked": "Elegidos",
   "locks": "Cierra",
+  "lockedLabel": "Bloqueado",
   "resetAll": "Reiniciar",
   "saving": "Guardando…",
   "save": "Guardar",
@@ -62,6 +64,8 @@
   "crossSell": {
     "title": "Bonus: Premios del torneo",
     "description": "Predice la Bota, el Balón, el Guante de Oro y el Jugador Joven — +20 pts cada uno.",
-    "cta": "Elegir premios"
+    "descriptionLocked": "Mira los ganadores que elegiste para la Bota, el Balón, el Guante de Oro y el Jugador Joven.",
+    "cta": "Elegir premios",
+    "ctaLocked": "Ver premios"
   }
 }
