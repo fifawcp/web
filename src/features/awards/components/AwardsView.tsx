@@ -7,7 +7,7 @@ import { DismissibleNotice } from "@/shared/components/DismissibleNotice";
 
 import { useAwards } from "../hooks/useAwards";
 import { useAwardsEditor } from "../hooks/useAwardsEditor";
-import { AWARD_TYPES, AWARDS_TOTAL, filledPicks, findPick } from "../lib/awards";
+import { awardsLocked, AWARD_TYPES, AWARDS_TOTAL, filledPicks, findPick } from "../lib/awards";
 import type { UserAwards } from "../types/awards.types";
 
 import { AwardCard } from "./AwardCard";
@@ -33,7 +33,7 @@ export function AwardsView({ initialData }: Props) {
   const { data = initialData } = useAwards(initialData);
   const { select, clear, reset, save, isSaving } = useAwardsEditor();
 
-  const isLocked = data.is_locked;
+  const isLocked = awardsLocked(data.is_locked, TOURNAMENT_START_DATE);
   const total = data.progress?.total ?? AWARDS_TOTAL;
   const completed = filledPicks(data.picks).length;
 

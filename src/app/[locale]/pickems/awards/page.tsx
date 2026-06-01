@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 
-import { AWARDS_CACHE_TAG } from "@/features/awards/api/awards";
 import { AwardsView } from "@/features/awards/components/AwardsView";
 import type { UserAwards } from "@/features/awards/types/awards.types";
 import { serverApi } from "@/shared/lib/api/server";
@@ -14,9 +13,13 @@ export async function generateMetadata() {
 export default async function AwardsPage() {
   const t = await getTranslations("awards");
 
+  // Per-user data whose lock is a time-based transition (kickoff) with no
+  // mutation event — caching it would serve a stale `is_locked`, so always
+  // read fresh. The client-clock fallback in AwardsView covers an already-open
+  // session that crosses kickoff without a reload.
   const res = await serverApi.get<UserAwards>("/api/awards", {
     authenticated: true,
-    next: { revalidate: 60, tags: [AWARDS_CACHE_TAG] },
+    cache: "no-store",
   });
 
   if (!res.success || !res.data) {

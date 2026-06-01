@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { AwardType, FilledAwardPick, Player, ResolvedAwardPick } from "../types/awards.types";
 
-import { AWARD_TYPES, findPick, playerSearchDebounceMs, removePick, toPickInputs, upsertPick } from "./awards";
+import { AWARD_TYPES, findPick, removePick, toPickInputs, upsertPick } from "./awards";
 
 function makePlayer(id: number): Player {
   return {
@@ -11,11 +11,9 @@ function makePlayer(id: number): Player {
     first_name: "Player",
     last_name: String(id),
     age: 25,
-    nationality: "ESP",
-    photo_url: "",
     position: "attacker",
     team: { fifa_code: "ESP", name: { en: "Spain" }, flag_url: "", group_code: null },
-    club: { name: "FC", logo_url: "" },
+    club: { name: "FC" },
   };
 }
 
@@ -73,17 +71,5 @@ describe("toPickInputs", () => {
       { award_type: "young_player", player: null },
     ];
     expect(toPickInputs(canonical)).toEqual([{ award_type: "golden_boot", player_id: 7 }]);
-  });
-});
-
-describe("playerSearchDebounceMs", () => {
-  it("waits longer for short/broad queries and shortens as the query grows", () => {
-    expect(playerSearchDebounceMs("me")).toBe(120);
-    expect(playerSearchDebounceMs("mess")).toBe(60);
-    expect(playerSearchDebounceMs("messi")).toBe(30);
-  });
-
-  it("ignores surrounding whitespace when sizing the delay", () => {
-    expect(playerSearchDebounceMs("  ab  ")).toBe(120);
   });
 });

@@ -42,12 +42,22 @@ export function findPick(picks: ResolvedAwardPick[], type: AwardType): ResolvedA
 }
 
 /**
- * Localized country label for a player. Falls back to the raw `nationality`
- * string when the upstream catalog omits the `team` object — guards against
- * the null-team crash the flag avatar also defends against.
+ * Whether awards editing is locked. The server flag is authoritative, but it
+ * rides a cacheable response and the lock is a purely time-based transition
+ * (kickoff) with no mutation event to bust caches — so also lock once the
+ * client clock passes `lockAt`. Keeps the UI correct even on a stale seed.
+ */
+export function awardsLocked(serverLocked: boolean, lockAt: Date, now: number = Date.now()): boolean {
+  return serverLocked || now >= lockAt.getTime();
+}
+
+/**
+ * Localized country label for a player. Returns an empty string when the
+ * upstream catalog omits the `team` object — guards against the null-team
+ * crash the flag also defends against.
  */
 export function playerCountry(player: Player, locale: string): string {
-  return player.team ? getTeamName(player.team, locale) : (player.nationality ?? "");
+  return player.team ? getTeamName(player.team, locale) : "";
 }
 
 /**
@@ -102,14 +112,29 @@ export function canonicalSlots(filled: FilledAwardPick[]): ResolvedAwardPick[] {
 }
 
 /**
- * Tiered debounce for the player search input. Short/broad queries wait a
- * little longer (the user is likely still typing and a 1–2 char query matches
- * thousands of rows); longer, more specific queries fire almost immediately so
- * results feel instant. Keeps requests cheap without a sluggish feel.
+ * Debounce for the player search input. A single steady delay: long enough
+ * that typing a name at a normal pace fires one request (not one per
+ * keystroke), short enough to still feel responsive. Superseded requests are
+ * aborted via the query's `AbortSignal`, so a fast burst costs at most one
+ * live request.
  */
-export function playerSearchDebounceMs(query: string): number {
-  const len = query.trim().length;
-  if (len <= 2) return 120;
-  if (len <= 4) return 60;
-  return 30;
+export const PLAYER_SEARCH_DEBOUNCE_MS = 250;
+
+/**
+ * Tailwind classes for a position chip, using the widely-recognized FUT/EA
+ * card colour scheme so the position reads at a glance: goalkeeper amber,
+ * defender sky, midfielder emerald, attacker red. Soft tinted fill + matching
+ * text, dark-mode aware.
+ */
+export function positionChipClasses(position: PlayerPosition): string {
+  switch (position) {
+    case "goalkeeper":
+      return "bg-amber-100 text-amber-700 dark:bg-amber-400/15 dark:text-amber-300";
+    case "defender":
+      return "bg-sky-100 text-sky-700 dark:bg-sky-400/15 dark:text-sky-300";
+    case "midfielder":
+      return "bg-emerald-100 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300";
+    case "attacker":
+      return "bg-red-100 text-red-700 dark:bg-red-400/15 dark:text-red-300";
+  }
 }
