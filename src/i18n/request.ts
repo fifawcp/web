@@ -20,6 +20,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     standingsMessages,
     seoMessages,
     profileMessages,
+    awardsMessages,
   ] = await Promise.all([
     import(`./messages/auth/${locale}.json`),
     import(`./messages/layout/${locale}.json`),
@@ -33,6 +34,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     import(`./messages/standings/${locale}.json`),
     import(`./messages/seo/${locale}.json`),
     import(`./messages/profile/${locale}.json`),
+    import(`./messages/awards/${locale}.json`),
   ]);
 
   return {
@@ -50,6 +52,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       standings: standingsMessages.default,
       seo: seoMessages.default,
       profile: profileMessages.default,
+      awards: awardsMessages.default,
     },
     timeZone: "UTC",
   };

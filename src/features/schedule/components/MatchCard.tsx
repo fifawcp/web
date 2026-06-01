@@ -52,7 +52,7 @@ export function MatchCard({ match, isAuthed }: Props) {
   return (
     <Card data-match-id={match.id} className={cn("relative gap-3 px-4 py-4", editing && "ring-2 ring-page-accent")} size="sm">
       <header className="flex items-center justify-between text-xs text-muted-foreground">
-        <span className="font-medium uppercase tracking-wide">{stageHeaderLabel(match, stageT)}</span>
+        <span className="font-medium uppercase tracking-wide">{stageHeaderLabel(match, t, stageT)}</span>
         <KickoffTime kickoffAt={match.kickoff_at} />
       </header>
 
@@ -100,8 +100,8 @@ export function MatchCard({ match, isAuthed }: Props) {
   );
 }
 
-function stageHeaderLabel(match: Match, stageT: (key: string) => string): string {
-  if (match.stage_code === "group_stage" && match.group_code) return `Group ${match.group_code} · M${match.id}`;
+function stageHeaderLabel(match: Match, t: (key: string) => string, stageT: (key: string) => string): string {
+  if (match.stage_code === "group_stage" && match.group_code) return `${t("group")} ${match.group_code} · M${match.id}`;
   return `${stageT(match.stage_code)} · M${match.id}`;
 }
 

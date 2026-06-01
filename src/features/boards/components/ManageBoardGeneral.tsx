@@ -15,6 +15,7 @@ import { cn } from "@/shared/lib/utils";
 
 import { useBoardActionError } from "../hooks/useBoardActionError";
 import { useDeleteBoard, useRegenerateJoinCode, useRenameBoard } from "../hooks/useBoardMutations";
+import { BOARD_DIALOG_WIDTH } from "../lib/boardDialog";
 import { canDeleteBoard, canManageBoard, isGlobalBoard } from "../lib/boardRole";
 import type { Board } from "../types/boards.types";
 
@@ -135,16 +136,16 @@ export function ManageBoardGeneral({ board, onClose, onPermissionLost }: Props) 
       ) : null}
 
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent>
+        <DialogContent className={BOARD_DIALOG_WIDTH}>
           <DialogHeader>
             <DialogTitle>{t("regenerateConfirm")}</DialogTitle>
             <DialogDescription>{t("regenerateWarning")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setConfirmOpen(false)}>
+            <Button variant="outline" onClick={() => setConfirmOpen(false)} className="sm:min-w-24 sm:px-6">
               {t("cancel")}
             </Button>
-            <Button onClick={handleRegenerate} disabled={regenerate.isPending} className="bg-page-accent text-white hover:bg-page-accent/90">
+            <Button onClick={handleRegenerate} disabled={regenerate.isPending} className="bg-page-accent text-white hover:bg-page-accent/90 sm:min-w-24 sm:px-6">
               {t("regenerate")}
             </Button>
           </DialogFooter>
@@ -158,17 +159,17 @@ export function ManageBoardGeneral({ board, onClose, onPermissionLost }: Props) 
           setConfirmDelete(next);
         }}
       >
-        <DialogContent onOpenAutoFocus={deleteFocus.onOpenAutoFocus}>
+        <DialogContent onOpenAutoFocus={deleteFocus.onOpenAutoFocus} className={BOARD_DIALOG_WIDTH}>
           <DialogHeader>
             <DialogTitle>{t("delete.confirm", { name: board.name })}</DialogTitle>
             <DialogDescription>{t("delete.confirmDescription")}</DialogDescription>
           </DialogHeader>
           <Input value={deleteTyped} onChange={(event) => setDeleteTyped(event.target.value)} autoFocus={deleteFocus.autoFocus} />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setConfirmDelete(false)}>
+            <Button variant="outline" onClick={() => setConfirmDelete(false)} className="sm:min-w-24 sm:px-6">
               {t("delete.cancel")}
             </Button>
-            <Button variant="destructive" disabled={deleteTyped !== board.name || remove.isPending} onClick={handleDelete}>
+            <Button variant="destructive" disabled={deleteTyped !== board.name || remove.isPending} onClick={handleDelete} className="sm:min-w-24 sm:px-6">
               {t("delete.cta")}
             </Button>
           </DialogFooter>

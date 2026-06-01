@@ -77,7 +77,14 @@ export function HeroCard({ badge, primaryCta, bottomContent }: HeroCardProps) {
           <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight max-w-full sm:max-w-3/4">{t("title")}</h1>
           <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-full sm:max-w-1/2">{t("subtitle")}</p>
           <div className="flex flex-col sm:flex-row items-center gap-2">
-            <Button asChild className="w-full bg-page-accent text-white hover:bg-page-accent/90 sm:w-auto sm:px-6 lg:px-10 md:w-54">
+            <Button
+              asChild
+              // `-strong` matches the `AuthHero` primary CTA so the call to
+              // action carries the same weight across all dashboard hero
+              // variants. Strong flips to a lighter swatch in dark mode
+              // (violet-300 etc.), so the label switches to dark to stay legible.
+              className="w-full bg-page-accent dark:bg-page-accent-strong text-white hover:bg-page-accent-strong/90 dark:text-zinc-950 sm:w-auto sm:px-6 md:w-54 lg:px-10"
+            >
               <Link href={primaryCta.href}>
                 <Sparkles className="size-4" />
                 {primaryCta.label}

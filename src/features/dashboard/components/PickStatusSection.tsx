@@ -88,7 +88,7 @@ export async function PickStatusSection({ progress, isLoggedIn }: Props) {
       icon: Trophy,
       progress: awardsPercent,
       statusText: awardsProgress ? t("awards.progress", { current: awardsProgress.completed, total: awardsProgress.total }) : "",
-      buttonHref: "/awards",
+      buttonHref: "/pickems/awards",
     },
   ];
 
