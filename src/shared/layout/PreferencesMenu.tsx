@@ -9,14 +9,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/
 import { LanguageSwitch, ThemeSwitch } from "./PreferenceControls";
 
 /** Single header control that bundles theme + language so the bar stays uncluttered. */
-export function PreferencesMenu() {
+export function PreferencesMenu({ variant = "outline" }: { variant?: "outline" | "ghost" }) {
   const t = useTranslations("preferences");
   const tLang = useTranslations("language");
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button aria-label={t("title")} size="sm" variant="outline" className="flex items-center justify-center rounded-md p-2">
+        <Button aria-label={t("title")} size="sm" variant={variant} className="flex items-center justify-center rounded-md p-2">
           <Settings className="size-5" />
         </Button>
       </PopoverTrigger>

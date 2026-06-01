@@ -83,6 +83,7 @@ async function request<T>(endpoint: string, options: RequestOptions = { method: 
       method: options.method,
       headers: { "Content-Type": "application/json", ...options.headers },
       update: options.update,
+      signal: options.signal,
     };
     if (options.body != null) fetchOptions.body = JSON.stringify(options.body);
 
@@ -99,6 +100,10 @@ async function request<T>(endpoint: string, options: RequestOptions = { method: 
 
     return { success: true, data: body.data, pagination: body.pagination };
   } catch (error) {
+    // A request aborted via its signal (e.g. React Query cancelling a superseded
+    // or unmounted query) is not a failure — rethrow so the caller treats it as
+    // a cancellation instead of logging noise / surfacing a NETWORK_ERROR.
+    if (options.signal?.aborted) throw error;
     logger.error("API request error:", error);
     return {
       success: false,

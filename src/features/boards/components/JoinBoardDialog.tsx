@@ -13,6 +13,7 @@ import { useAutoFocusUnlessMobile } from "@/shared/hooks/useAutoFocusUnlessMobil
 import { translateApiError } from "@/shared/lib/api/errors";
 
 import { useJoinBoard } from "../hooks/useBoardMutations";
+import { BOARD_DIALOG_WIDTH } from "../lib/boardDialog";
 import { rememberLastBoard } from "../lib/lastBoardCookie";
 
 type Props = {
@@ -71,7 +72,7 @@ export function JoinBoardDialog({ open, onOpenChange }: Props) {
         onOpenChange(next);
       }}
     >
-      <DialogContent onOpenAutoFocus={focus.onOpenAutoFocus}>
+      <DialogContent onOpenAutoFocus={focus.onOpenAutoFocus} className={BOARD_DIALOG_WIDTH}>
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>{t("description")}</DialogDescription>
@@ -101,10 +102,10 @@ export function JoinBoardDialog({ open, onOpenChange }: Props) {
             </div>
           </Field>
           <DialogFooter className="w-full flex-col sm:flex-row-reverse sm:justify-start">
-            <Button type="submit" disabled={!isValid || isPending} className="bg-page-accent text-white hover:bg-page-accent/90">
+            <Button type="submit" disabled={!isValid || isPending} className="bg-page-accent text-white hover:bg-page-accent/90 sm:min-w-24 sm:px-6">
               {t("submit")}
             </Button>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending} className="sm:min-w-24 sm:px-6">
               {t("cancel")}
             </Button>
           </DialogFooter>

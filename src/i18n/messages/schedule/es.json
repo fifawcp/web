@@ -35,6 +35,7 @@
     "done": "Listo"
   },
   "card": {
+    "group": "Grupo",
     "yourPick": "Tu pick",
     "noPickMade": "No hiciste tu pick",
     "tapToPick": "Haz tu pick",

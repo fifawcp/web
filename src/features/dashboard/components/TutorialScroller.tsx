@@ -120,18 +120,18 @@ export function TutorialScroller({ isLoggedIn }: { isLoggedIn: boolean }) {
                   >
                     <div className="flex flex-col gap-3">
                       <div className="flex items-center gap-3">
-                        <span className="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-sm">
+                        <span className="flex size-9 items-center justify-center rounded-full bg-page-accent text-sm font-bold text-white shadow-sm">
                           {t(`steps.${step.key}.step`)}
                         </span>
                         <span className="flex size-9 items-center justify-center rounded-lg border border-border bg-background">
-                          <Icon className="size-4 text-primary" />
+                          <Icon className="size-4 text-page-accent-strong" />
                         </span>
                       </div>
                       <h3 className="text-xl font-bold tracking-tight lg:text-2xl">{t(`steps.${step.key}.title`)}</h3>
                       <p className="text-sm leading-relaxed text-muted-foreground">{t(`steps.${step.key}.description`)}</p>
                       {isLast && !isLoggedIn && (
                         <div className="pt-1">
-                          <Button asChild>
+                          <Button asChild className="bg-page-accent text-white hover:bg-page-accent/90">
                             <Link href="/register">
                               <Sparkles className="size-4" />
                               {t("cta")}

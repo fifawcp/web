@@ -17,7 +17,7 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
 
         return (
           <div key={label} className="flex items-center flex-1 last:flex-none">
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex flex-col items-center gap-1 shrink-0">
               <div
                 className={cn(
                   "flex items-center justify-center w-8 h-8 rounded-full text-sm transition-all",

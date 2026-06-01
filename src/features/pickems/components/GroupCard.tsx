@@ -63,11 +63,15 @@ export function GroupCard({ group, onReorder, disabled, onToggleLock, open, onTo
         className="flex w-full items-center gap-3 px-4 py-3 text-left md:pointer-events-none md:cursor-default"
         aria-expanded={open}
       >
-        <h3 className="shrink-0 text-base font-semibold tracking-tight text-foreground">{t("groupLabel", { code: group.group_code })}</h3>
+        {/* Fixed 62px on mobile so the team-code grid starts at the same x
+            across every group; natural width on md+ where the grid is hidden. */}
+        <h3 className="w-[62px] shrink-0 text-base font-semibold tracking-tight text-foreground md:w-auto">{t("groupLabel", { code: group.group_code })}</h3>
 
         <div className={cn("grid min-w-0 flex-1 grid-cols-4 items-center gap-1.5 pl-3 md:hidden", open && "invisible")}>
           {group.teams.map((team, idx) => (
-            <span key={team.fifa_code} className="flex min-w-0 items-center justify-center gap-1 font-mono text-2xs">
+            // Fixed 42px box (position + code), centered in its grid column, so
+            // the pairs line up across groups regardless of per-glyph width.
+            <span key={team.fifa_code} className="mx-auto flex w-[42px] items-center gap-1 font-mono text-2xs">
               <span className="text-muted-foreground">{idx + 1}</span>
               <span className="font-semibold uppercase tracking-wider text-foreground/85">{team.fifa_code}</span>
             </span>

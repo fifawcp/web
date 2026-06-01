@@ -5,6 +5,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 
 import { routing } from "@/i18n/routing";
 import { Providers } from "@/providers/layout-provider";
+import { AuthRouteGate } from "@/shared/layout/AuthRouteGate";
 import { Footer } from "@/shared/layout/Footer";
 import { Header } from "@/shared/layout/Header";
 import { ScrollToTop } from "@/shared/layout/ScrollToTop";
@@ -39,7 +40,9 @@ export default async function LocaleLayout({
       <body className="min-h-full flex flex-col">
         <Providers messages={messages} locale={locale}>
           <ScrollToTop />
-          <Header />
+          <AuthRouteGate>
+            <Header />
+          </AuthRouteGate>
           <main className="flex-1 overflow-x-clip min-h-[calc(100dvh-var(--header-height))]">{children}</main>
           <Footer />
         </Providers>

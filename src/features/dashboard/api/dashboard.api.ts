@@ -13,7 +13,12 @@ export async function getDashboard(isAuthenticated: boolean): Promise<DashboardD
 
   if (!response.success || !response.data) return null;
 
-  // `awards` is not yet returned by /api/dashboard — hardcode until endpoint ships.
   // TODO: remove the override once the backend includes `progress.awards`.
-  return { ...response.data, progress: { ...response.data.progress, awards: { completed: 1, total: 4 } } };
+  return {
+    ...response.data,
+    progress: {
+      ...response.data.progress,
+      awards: response.data.progress?.awards ? response.data.progress.awards : { completed: 1, total: 4 },
+    },
+  };
 }

@@ -74,12 +74,12 @@ export function TutorialMobile({ isLoggedIn }: { isLoggedIn: boolean }) {
                   />
                 </div>
                 <div className="flex flex-1 items-start gap-4 p-5">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-page-accent text-sm font-bold text-white">
                     {t(`steps.${step.key}.step`)}
                   </div>
                   <div className="flex flex-1 flex-col gap-1.5">
                     <div className="flex items-center gap-2">
-                      <Icon className="size-4 text-primary" />
+                      <Icon className="size-4 text-page-accent-strong" />
                       <span className="font-semibold">{t(`steps.${step.key}.title`)}</span>
                     </div>
                     <p className="text-sm leading-relaxed text-muted-foreground">{t(`steps.${step.key}.description`)}</p>
@@ -92,7 +92,7 @@ export function TutorialMobile({ isLoggedIn }: { isLoggedIn: boolean }) {
 
         {!isLoggedIn && (
           <div ref={ctaRef} className="flex justify-center opacity-0">
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="bg-page-accent text-white hover:bg-page-accent/90">
               <Link href="/register">
                 <Sparkles className="size-4" />
                 {t("cta")}
