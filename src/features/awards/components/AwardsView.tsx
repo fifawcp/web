@@ -3,7 +3,6 @@
 import { useTranslations } from "next-intl";
 
 import { TOURNAMENT_START_DATE } from "@/features/dashboard/lib/tournamentConfig";
-import { DismissibleNotice } from "@/shared/components/DismissibleNotice";
 
 import { useAwards } from "../hooks/useAwards";
 import { useAwardsEditor } from "../hooks/useAwardsEditor";
@@ -44,13 +43,6 @@ export function AwardsView({ initialData }: Props) {
       <AwardsActionBar remaining={total - completed} canReset={completed > 0} isSaving={isSaving} isLocked={isLocked} onReset={reset} onSave={save} />
 
       {isLocked && <AwardsLockedBanner />}
-
-      {/* The "list isn't final yet" note only matters while picks are editable. */}
-      {!isLocked && (
-        <DismissibleNotice tone="amber" dismissLabel={t("disclaimer.dismiss")}>
-          {t("disclaimer.body")}
-        </DismissibleNotice>
-      )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {AWARD_TYPES.map((awardType) => (
