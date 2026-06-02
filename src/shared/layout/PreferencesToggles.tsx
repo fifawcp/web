@@ -37,13 +37,7 @@ function ThemeToggleButton() {
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <Button
-      type="button"
-      variant="ghost"
-      size="icon-sm"
-      aria-label={t("toggleTheme")}
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-    >
+    <Button type="button" variant="ghost" size="icon-sm" aria-label={t("toggleTheme")} onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
       {/* Icons are CSS-driven via the `dark` class next-themes sets *before*
           paint, so the right icon shows on first render with no hydration gate
           (which previously flashed Moon→Sun on a dark-mode refresh). */}
