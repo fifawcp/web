@@ -7,8 +7,7 @@
     "standings": "Posiciones",
     "bracket": "Eliminatorias",
     "awards": "Premios",
-    "login": "Iniciar sesión",
-    "register": "Crear cuenta",
+    "login": "Ingresar",
     "menuLabel": "Navegación",
     "menuDescription": "Menú de navegación principal",
     "openMenu": "Abrir menú",
@@ -32,6 +31,7 @@
   "preferences": {
     "title": "Preferencias",
     "theme": "Tema",
+    "toggleTheme": "Cambiar tema",
     "themeLight": "Claro",
     "themeDark": "Oscuro"
   },

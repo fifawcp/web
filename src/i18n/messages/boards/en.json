@@ -35,13 +35,30 @@
     "leaveSubtitle": "Step away from this board"
   },
   "invite": {
-    "trigger": "Invite friends",
     "copy": "Copy",
     "copied": "Copied",
     "copiedToast": "Join code copied",
     "title": "Invite to {name}",
-    "description": "Share this code with anyone you want on this board.",
-    "close": "Done"
+    "link": "Invite link",
+    "linkSubtitle": "Anyone with this link can join the board.",
+    "copyLink": "Copy link",
+    "copiedLinkToast": "Invite link copied",
+    "shareInvite": "Share invite",
+    "shareText": "Join my board on World Cup Pick'em: {name}",
+    "you": "You",
+    "alreadyPlaying": "{name} & {count, plural, one {# other} other {# others}} already playing",
+    "beFirst": "Be the first to invite your friends"
+  },
+  "inviteLanding": {
+    "invitedYou": "You've been invited to join",
+    "players": "{count, plural, one {# player is already competing in this board} other {# players are already competing in this board}}",
+    "join": "Join board",
+    "cancel": "Not now",
+    "success": "Welcome to the board",
+    "codeFooter": "Joining with code",
+    "invalidTitle": "Invite not found",
+    "invalidDescription": "This invite link is invalid or has expired. Ask for a fresh one.",
+    "invalidCta": "Go to boards"
   },
   "empty": {
     "title": "You're not on any board yet",

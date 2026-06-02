@@ -13,7 +13,7 @@ import { useApiError } from "@/shared/hooks/useApiError";
 export function useRegisterProfileStep() {
   const router = useRouter();
   const apiError = useApiError();
-  const { identifier, otp, setProfile, reset } = useAuthStore();
+  const { identifier, otp, callbackUrl, setProfile, setCallbackUrl } = useAuthStore();
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -58,8 +58,14 @@ export function useRegisterProfileStep() {
       return;
     }
 
-    reset();
-    router.replace("/");
+    // Re-render Server Components so the Header (server-rendered, in the shared
+    // layout a soft navigation won't re-render) reflects the new session —
+    // otherwise it stays on its logged-out render (no avatar). See issue #61.
+    router.refresh();
+    // Navigate, then clear only the callback. A full reset() would wipe the fields
+    // the profile StepGuard requires, tripping it into a redirect that overrides this one.
+    router.replace(callbackUrl);
+    setCallbackUrl("/");
   });
 
   const handleBack = () => {

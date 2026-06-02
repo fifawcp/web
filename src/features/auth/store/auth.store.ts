@@ -22,9 +22,11 @@ interface AuthStoreState {
   username: string;
   firstName: string;
   lastName: string;
+  callbackUrl: string;
   setIdentifier: ({ identifier, purpose }: { identifier: string; purpose: OtpPurpose }) => void;
   setOtp: (otp: string) => void;
   setProfile: (profile: { username: string; firstName: string; lastName: string }) => void;
+  setCallbackUrl: (callbackUrl: string) => void;
   reset: () => void;
 }
 
@@ -35,6 +37,7 @@ const initialState = {
   username: "",
   firstName: "",
   lastName: "",
+  callbackUrl: "/",
 };
 
 export const useAuthStore = create<AuthStoreState>()(
@@ -44,6 +47,7 @@ export const useAuthStore = create<AuthStoreState>()(
       setIdentifier: ({ identifier, purpose }) => set({ identifier, purpose }),
       setOtp: (otp) => set({ otp }),
       setProfile: ({ username, firstName, lastName }) => set({ username, firstName, lastName }),
+      setCallbackUrl: (callbackUrl) => set({ callbackUrl }),
       reset: () => set(initialState),
     }),
     {
@@ -53,6 +57,8 @@ export const useAuthStore = create<AuthStoreState>()(
       partialize: (state) => ({
         identifier: state.identifier,
         purpose: state.purpose,
+        // Persisted so it survives the step navigation that drops URL query params.
+        callbackUrl: state.callbackUrl,
       }),
     }
   )

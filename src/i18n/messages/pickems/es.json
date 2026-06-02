@@ -27,7 +27,7 @@
     "expandAll": "Expandir todo",
     "collapseAll": "Contraer todo",
     "tipsBody": "Arrastra el <handle></handle> para reordenar los equipos dentro de cada grupo.",
-    "tipsLockBody": "Toca el <lockIcon></lockIcon> en cada grupo cuando estés seguro del orden.",
+    "tipsLockBody": "Toca el <lockIcon></lockIcon> en cada grupo cuando estés seguro del orden. Puedes cambiarlo cuando quieras antes de que empiece el torneo.",
     "tipsDismiss": "Ocultar consejo",
     "groupLabel": "Grupo {code}",
     "lockAction": "Bloquear grupo {code}",

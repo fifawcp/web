@@ -13,7 +13,7 @@ import { useApiError } from "@/shared/hooks/useApiError";
 
 export function useLoginOtpStep() {
   const router = useRouter();
-  const { identifier, reset } = useAuthStore();
+  const { identifier, callbackUrl, setCallbackUrl, reset } = useAuthStore();
   const countdown = useCountdown(30);
   const apiError = useApiError();
 
@@ -48,8 +48,15 @@ export function useLoginOtpStep() {
       return;
     }
 
-    reset();
-    router.replace("/");
+    // Re-render Server Components so the Header (which reads the session
+    // server-side and lives in the shared layout a soft navigation won't
+    // re-render) reflects the just-established session — otherwise it stays on
+    // its logged-out render (no avatar). See issue #61.
+    router.refresh();
+    // Navigate, then clear only the callback. A full reset() would wipe `identifier`
+    // mid-step, tripping the OTP StepGuard into a redirect that overrides this navigation.
+    router.replace(callbackUrl);
+    setCallbackUrl("/");
   });
 
   const handleResend = async () => {

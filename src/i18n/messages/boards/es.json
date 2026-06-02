@@ -35,13 +35,30 @@
     "leaveSubtitle": "Sal de este board"
   },
   "invite": {
-    "trigger": "Invitar amigos",
     "copy": "Copiar",
     "copied": "Copiado",
     "copiedToast": "Código copiado",
     "title": "Invitar a {name}",
-    "description": "Comparte este código con quien quieras invitar.",
-    "close": "Listo"
+    "link": "Enlace de invitación",
+    "linkSubtitle": "Cualquiera con este enlace puede unirse al board.",
+    "copyLink": "Copiar enlace",
+    "copiedLinkToast": "Enlace copiado",
+    "shareInvite": "Compartir invitación",
+    "shareText": "Únete a mi board en World Cup Pick'em: {name}",
+    "you": "Tú",
+    "alreadyPlaying": "{name} y {count, plural, one {# persona más} other {# personas más}} ya están jugando",
+    "beFirst": "Sé el primero en invitar a tus amigos"
+  },
+  "inviteLanding": {
+    "invitedYou": "Te invitaron a unirte",
+    "players": "{count, plural, one {# jugador ya está compitiendo en este board} other {# jugadores ya están compitiendo en este board}}",
+    "join": "Unirme al board",
+    "cancel": "Ahora no",
+    "success": "Te uniste al board",
+    "codeFooter": "Te unes con el código",
+    "invalidTitle": "Invitación no encontrada",
+    "invalidDescription": "Este enlace de invitación no es válido o expiró. Pide uno nuevo.",
+    "invalidCta": "Ir a boards"
   },
   "empty": {
     "title": "Aún no estás en ningún board",

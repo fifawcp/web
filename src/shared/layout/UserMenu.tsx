@@ -11,8 +11,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/
 import { getInitials } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
-import { LanguageSwitch, ThemeSwitch } from "./PreferenceControls";
-
 type UserMenuProps = {
   username: string;
   firstName?: string;
@@ -21,8 +19,6 @@ type UserMenuProps = {
 
 export function UserMenu({ username, firstName, lastName }: UserMenuProps) {
   const t = useTranslations("userMenu");
-  const tPref = useTranslations("preferences");
-  const tLang = useTranslations("language");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -70,19 +66,6 @@ export function UserMenu({ username, firstName, lastName }: UserMenuProps) {
             <span className="flex-1">{t("profile")}</span>
             <ChevronRight className="size-4 shrink-0 text-muted-foreground/60" />
           </Link>
-        </div>
-
-        {/* Theme — `expanded` variant fills the popover width and shows
-            icon + label on each pill. */}
-        <div className="border-t border-border p-2">
-          <span className="px-1 pb-1.5 block text-2xs font-medium uppercase tracking-wider text-muted-foreground">{tPref("theme")}</span>
-          <ThemeSwitch variant="expanded" />
-        </div>
-
-        {/* Language — same `expanded` treatment: code · language name. */}
-        <div className="p-2">
-          <span className="px-1 pb-1 block text-2xs font-medium uppercase tracking-wider text-muted-foreground">{tLang("label")}</span>
-          <LanguageSwitch variant="expanded" />
         </div>
 
         {/* Sign out — destructive text, hover swaps to the theme-aware destructive-hover var */}

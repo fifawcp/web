@@ -1,18 +1,16 @@
-import { getTranslations } from "next-intl/server";
-
-import { Link } from "@/i18n/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import { Button } from "@/shared/components/ui/button";
 
 import { Brand } from "./Brand";
+import { HeaderAuth } from "./HeaderAuth";
 import { MobileMenu } from "./MobileMenu";
 import { NavLinks } from "./NavLinks";
-import { PreferencesMenu } from "./PreferencesMenu";
-import { UserMenu } from "./UserMenu";
+import { PreferencesToggles } from "./PreferencesToggles";
 
 export async function Header() {
-  const t = await getTranslations("nav");
   const user = await getCurrentUser();
+  // Plain, serializable shape for the client `HeaderAuth` (it re-syncs from the
+  // live session, but needs a server-correct value for the first paint).
+  const initialUser = user ? { username: user.username, firstName: user.first_name, lastName: user.last_name } : null;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-sm">
@@ -25,22 +23,11 @@ export async function Header() {
           </div>
 
           <div className="flex items-center gap-2 justify-self-end">
-            {user ? (
-              <UserMenu username={user.username} firstName={user.first_name} lastName={user.last_name} />
-            ) : (
-              <>
-                <div className="flex items-center">
-                  <Button asChild variant="ghost" size="sm">
-                    <Link href="/login">{t("login")}</Link>
-                  </Button>
-                  <Button asChild size="sm">
-                    <Link href="/register">{t("register")}</Link>
-                  </Button>
-                </div>
-                <div role="separator" aria-orientation="vertical" className="h-6 w-px bg-border" />
-                <PreferencesMenu />
-              </>
-            )}
+            {/* Theme + language live inline in the bar on desktop (for both
+                guests and authed users) instead of inside the profile menu. */}
+            <PreferencesToggles />
+            <div role="separator" aria-orientation="vertical" className="h-6 w-px bg-border" />
+            <HeaderAuth initialUser={initialUser} />
           </div>
         </div>
 

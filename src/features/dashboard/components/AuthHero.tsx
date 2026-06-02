@@ -38,7 +38,9 @@ export function AuthHero({ pickedChampion, stats, nextMatch, pickemProgress }: P
 
   const isPickemComplete = pickemProgress ? isAllPickemComplete(pickemProgress) : false;
   const primaryCtaLabel = isPickemComplete || countdown.isExpired ? t("cta.seeMyBrackets") : t("cta.finishBracket");
-  const primaryCtaHref = isPickemComplete || countdown.isExpired ? "/bracket" : "/pickems";
+  // `/bracket` is still under construction — point completed users at the
+  // bracket step of /pickems (step 3) until it ships.
+  const primaryCtaHref = isPickemComplete || countdown.isExpired ? "/pickems?step=bracket" : "/pickems";
 
   const bottomContent =
     stats && (isPickemComplete || countdown.isExpired) ? (
