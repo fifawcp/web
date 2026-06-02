@@ -1,18 +1,16 @@
-import { getTranslations } from "next-intl/server";
-
-import { Link } from "@/i18n/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import { Button } from "@/shared/components/ui/button";
 
 import { Brand } from "./Brand";
+import { HeaderAuth } from "./HeaderAuth";
 import { MobileMenu } from "./MobileMenu";
 import { NavLinks } from "./NavLinks";
 import { PreferencesToggles } from "./PreferencesToggles";
-import { UserMenu } from "./UserMenu";
 
 export async function Header() {
-  const t = await getTranslations("nav");
   const user = await getCurrentUser();
+  // Plain, serializable shape for the client `HeaderAuth` (it re-syncs from the
+  // live session, but needs a server-correct value for the first paint).
+  const initialUser = user ? { username: user.username, firstName: user.first_name, lastName: user.last_name } : null;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-sm">
@@ -29,13 +27,7 @@ export async function Header() {
                 guests and authed users) instead of inside the profile menu. */}
             <PreferencesToggles />
             <div role="separator" aria-orientation="vertical" className="h-6 w-px bg-border" />
-            {user ? (
-              <UserMenu username={user.username} firstName={user.first_name} lastName={user.last_name} />
-            ) : (
-              <Button asChild size="sm" variant="ghost">
-                <Link href="/login">{t("login")}</Link>
-              </Button>
-            )}
+            <HeaderAuth initialUser={initialUser} />
           </div>
         </div>
 

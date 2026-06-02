@@ -58,7 +58,11 @@ export function useRegisterProfileStep() {
       return;
     }
 
-    // Navigate first, then clear only the callback. A full reset() would wipe the fields
+    // Re-render Server Components so the Header (server-rendered, in the shared
+    // layout a soft navigation won't re-render) reflects the new session —
+    // otherwise it stays on its logged-out render (no avatar). See issue #61.
+    router.refresh();
+    // Navigate, then clear only the callback. A full reset() would wipe the fields
     // the profile StepGuard requires, tripping it into a redirect that overrides this one.
     router.replace(callbackUrl);
     setCallbackUrl("/");
