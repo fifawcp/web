@@ -15,10 +15,6 @@
   "locked": "Awards are locked",
   "lockedDescription": "The tournament has started — award picks can no longer be changed.",
   "footnote": "Winners are graded when the tournament ends. Each award is worth a flat +20 points.",
-  "disclaimer": {
-    "body": "The player list isn't final yet — it can take a few days to sync after the official 2026 squad announcements, so some players may be missing or change.",
-    "dismiss": "Dismiss"
-  },
   "types": {
     "golden_boot": {
       "title": "Golden Boot",

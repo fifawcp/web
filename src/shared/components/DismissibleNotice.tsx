@@ -51,9 +51,9 @@ export function DismissibleNotice({ children, dismissLabel, icon, tone = "muted"
   return (
     // grid-rows 1fr → 0fr animates the *actual* content height (no max-height
     // guesswork / clipping), so the collapse stays smooth for any body length.
-    <div className={cn("grid transition-all duration-200 ease-out", leaving ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100")}>
+    <div className={cn("grid transition-all duration-200 ease-out ", leaving ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100")}>
       <div className="min-h-0 overflow-hidden">
-        <div className={cn("flex items-start gap-2.5 rounded-xl border px-3 py-3", TONE[tone], className)}>
+        <div className={cn("flex min-h-full items-start gap-2.5 rounded-xl border px-3 py-3", TONE[tone], className)}>
           {icon === undefined ? <Info className="mt-0.5 size-4.5 shrink-0 text-muted-foreground" aria-hidden /> : icon}
           <span className="min-w-0 flex-1 text-sm leading-snug text-foreground/85">{children}</span>
           <button

@@ -27,7 +27,7 @@
     "expandAll": "Expand all",
     "collapseAll": "Collapse all",
     "tipsBody": "Drag the <handle></handle> to reorder teams within each group.",
-    "tipsLockBody": "Tap the <lockIcon></lockIcon> on each group when you're sure about the order.",
+    "tipsLockBody": "Tap the <lockIcon></lockIcon> on each group when you're sure about the order. You can still change it anytime before the tournament starts.",
     "tipsDismiss": "Dismiss tip",
     "groupLabel": "Group {code}",
     "lockAction": "Lock group {code}",

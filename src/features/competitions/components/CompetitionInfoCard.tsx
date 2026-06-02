@@ -202,7 +202,7 @@ function ScopeSection({
   className?: string;
 }) {
   return (
-    <div className={cn("flex min-w-0 flex-col gap-1.5 px-4 py-2.5", className)}>
+    <div className={cn("flex min-w-0 flex-col gap-1.5 pl-7 pr-4 py-2.5", className)}>
       <div className="flex items-center gap-2">
         <Icon className="size-4 shrink-0 text-page-accent-strong" aria-hidden />
         <span className="text-sm font-medium text-foreground">{label}</span>
