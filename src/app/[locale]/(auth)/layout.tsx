@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import Image from "next/image";
 
 import { AuthPanel } from "@/features/auth/components/AuthPanel";
-import { PreferencesMenu } from "@/shared/layout/PreferencesMenu";
+import { PreferencesToggles } from "@/shared/layout/PreferencesToggles";
 
 // Auth screens read OAuth/step query params at request time (useSearchParams),
 // so they can't be statically prerendered for each locale — render on demand.
@@ -55,9 +55,10 @@ export default function AuthPagesLayout({ children }: { children: ReactNode }) {
       <div className="relative flex min-h-[calc(100dvh-var(--header-height))] flex-col overflow-hidden bg-background lg:min-h-dvh lg:bg-transparent">
         {/* Desktop-only preferences cluster — the global Header is hidden
             on auth routes at lg+, so theme/language need a home of their
-            own. `ghost` keeps the trigger weightless against the form bg. */}
+            own. A theme toggle + language dropdown rather than the bundled
+            popover, since there's room for both here. */}
         <div className="absolute right-8 top-8 z-20 hidden lg:flex">
-          <PreferencesMenu variant="ghost" />
+          <PreferencesToggles />
         </div>
 
         <div className="relative z-10 flex flex-1 items-center justify-center px-4 pt-8 pb-[15vh] lg:p-10">

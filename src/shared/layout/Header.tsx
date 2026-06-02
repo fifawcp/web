@@ -7,7 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Brand } from "./Brand";
 import { MobileMenu } from "./MobileMenu";
 import { NavLinks } from "./NavLinks";
-import { PreferencesMenu } from "./PreferencesMenu";
+import { PreferencesToggles } from "./PreferencesToggles";
 import { UserMenu } from "./UserMenu";
 
 export async function Header() {
@@ -25,21 +25,16 @@ export async function Header() {
           </div>
 
           <div className="flex items-center gap-2 justify-self-end">
+            {/* Theme + language live inline in the bar on desktop (for both
+                guests and authed users) instead of inside the profile menu. */}
+            <PreferencesToggles />
+            <div role="separator" aria-orientation="vertical" className="h-6 w-px bg-border" />
             {user ? (
               <UserMenu username={user.username} firstName={user.first_name} lastName={user.last_name} />
             ) : (
-              <>
-                <div className="flex items-center">
-                  <Button asChild variant="ghost" size="sm">
-                    <Link href="/login">{t("login")}</Link>
-                  </Button>
-                  <Button asChild size="sm">
-                    <Link href="/register">{t("register")}</Link>
-                  </Button>
-                </div>
-                <div role="separator" aria-orientation="vertical" className="h-6 w-px bg-border" />
-                <PreferencesMenu />
-              </>
+              <Button asChild size="sm" variant="ghost">
+                <Link href="/login">{t("login")}</Link>
+              </Button>
             )}
           </div>
         </div>
