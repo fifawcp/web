@@ -40,6 +40,7 @@
     "copiedToast": "Código copiado",
     "title": "Invitar a {name}",
     "link": "Enlace de invitación",
+    "linkSubtitle": "Cualquiera con este enlace puede unirse al board.",
     "copyLink": "Copiar enlace",
     "copiedLinkToast": "Enlace copiado",
     "shareInvite": "Compartir invitación",
