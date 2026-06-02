@@ -13,7 +13,6 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
-import { useHydrated } from "@/shared/hooks/useHydrated";
 import { useLanguage } from "@/shared/hooks/useLanguage";
 import { LANGUAGES } from "@/shared/lib/preferences";
 
@@ -34,17 +33,16 @@ export function PreferencesToggles() {
 
 function ThemeToggleButton() {
   const t = useTranslations("preferences");
-  // `resolvedTheme` collapses "system" → the concrete light/dark the OS reports.
-  // Gate on `useHydrated`: it's `undefined` during SSR, so the first client
-  // render must match the server (neutral) and swap to the real icon on mount —
-  // otherwise React logs a hydration mismatch on the icon.
+  // `resolvedTheme` is only read at click time (post-hydration), so it's safe.
   const { resolvedTheme, setTheme } = useTheme();
-  const hydrated = useHydrated();
-  const isDark = hydrated && resolvedTheme === "dark";
 
   return (
-    <Button type="button" variant="ghost" size="icon-sm" aria-label={t(isDark ? "themeLight" : "themeDark")} onClick={() => setTheme(isDark ? "light" : "dark")}>
-      {isDark ? <Sun className="size-5" /> : <Moon className="size-5" />}
+    <Button type="button" variant="ghost" size="icon-sm" aria-label={t("toggleTheme")} onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
+      {/* Icons are CSS-driven via the `dark` class next-themes sets *before*
+          paint, so the right icon shows on first render with no hydration gate
+          (which previously flashed Moon→Sun on a dark-mode refresh). */}
+      <Sun className="hidden size-5 dark:block" />
+      <Moon className="size-5 dark:hidden" />
     </Button>
   );
 }
