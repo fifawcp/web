@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 
 import { getProfile, refreshToken } from "@/features/auth/api/client";
 import { ErrorAlert } from "@/features/auth/components/ErrorAlert";
+import { safeCallbackUrl } from "@/features/auth/lib/callbackUrl";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
@@ -18,6 +19,7 @@ export default function CallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get("from") ?? "login";
+  const callbackUrl = safeCallbackUrl(searchParams.get("callbackUrl"));
   const apiError = useApiError();
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export default function CallbackPage() {
         });
 
         router.refresh();
-        router.replace("/");
+        router.replace(callbackUrl);
       } catch {
         apiError.set({ code: "AUTHENTICATION_FAILED" });
       }

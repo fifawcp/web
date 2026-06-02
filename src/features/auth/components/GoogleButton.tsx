@@ -3,6 +3,7 @@
 import { Button } from "@/shared/components/ui/button";
 
 import { getGoogleOAuthUrl } from "../api/client";
+import { useAuthStore } from "../store/auth.store";
 
 interface GoogleButtonProps {
   label: string;
@@ -24,9 +25,13 @@ const GoogleIcon = () => (
 );
 
 export function GoogleButton({ label }: GoogleButtonProps) {
+  const callbackUrl = useAuthStore((s) => s.callbackUrl);
+
   const handleClick = () => {
-    const returnTo = new URL("/callback?from=oauth", window.location.origin).toString();
-    const googleOAuthUrl = getGoogleOAuthUrl(returnTo);
+    const returnTo = new URL("/callback", window.location.origin);
+    returnTo.searchParams.set("from", "oauth");
+    if (callbackUrl !== "/") returnTo.searchParams.set("callbackUrl", callbackUrl);
+    const googleOAuthUrl = getGoogleOAuthUrl(returnTo.toString());
     window.location.assign(googleOAuthUrl);
   };
 

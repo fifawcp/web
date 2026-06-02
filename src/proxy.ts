@@ -14,6 +14,8 @@ const GUEST_ONLY_ROUTES = new Set(["/login", "/register", "/callback"]);
 // Routes that require a session. Everything else is public (the SEO-safe default —
 // new public pages like /standings need no change here). Compared against locale-stripped paths.
 function isProtectedPath(path: string): boolean {
+  // The invite landing under /boards/join/* is public.
+  if (path.startsWith("/boards/join/")) return false;
   return path === "/pickems" || path === "/profile" || path === "/boards" || path.startsWith("/boards/");
 }
 

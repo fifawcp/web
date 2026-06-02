@@ -11,6 +11,10 @@ import { refreshBackendAccessToken } from "@/shared/lib/api/refresh";
 // Mirror proxy.ts PUBLIC_ROUTES + GUEST_ONLY_ROUTES.
 const GUEST_PATHS = new Set(["/", "/schedule", "/standings", "/login", "/register", "/callback", "/how-it-works", "/rules", "/privacy", "/terms", "/faq"]);
 
+function isGuestPath(pathname: string): boolean {
+  return GUEST_PATHS.has(pathname) || pathname.startsWith("/boards/join/");
+}
+
 // SessionMonitor covers one specific gap: the user stays on the same page long
 // enough for the access token to expire without any navigation occurring
 //
@@ -36,7 +40,7 @@ export function SessionMonitor() {
   // signOut called). Skip guest pages to avoid a redirect loop.
   useEffect(() => {
     if (status !== "unauthenticated") return;
-    if (GUEST_PATHS.has(pathname)) return;
+    if (isGuestPath(pathname)) return;
 
     router.replace("/login");
   }, [status, pathname, router]);

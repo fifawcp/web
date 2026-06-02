@@ -40,6 +40,15 @@ export type BoardMembersPage = {
   has_more: boolean;
 };
 
+export type BoardMemberPreview = Pick<BoardMember, "user_id" | "username" | "first_name" | "last_name">;
+
+export type BoardPreview = {
+  name: string;
+  privacy: BoardPrivacy;
+  member_count: number;
+  members: BoardMemberPreview[];
+};
+
 export type CreateBoardInput = {
   name: string;
 };
