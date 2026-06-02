@@ -1,8 +1,8 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Share2 } from "lucide-react";
+import { Link2, Share2, Ticket, type LucideIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -28,8 +28,19 @@ type Props = {
 // Read client-only values without an SSR/hydration mismatch (server snapshot is the safe default).
 const emptySubscribe = () => () => {};
 
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{children}</span>;
+function InviteSection({ icon: Icon, title, subtitle, children }: { icon: LucideIcon; title: string; subtitle: string; children: ReactNode }) {
+  return (
+    <div className="min-w-0 space-y-3 rounded-lg border bg-muted/20 p-4">
+      <div className="space-y-1">
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-foreground">{title}</h3>
+        <p className="text-xs text-muted-foreground">{subtitle}</p>
+      </div>
+      <div className="flex items-center gap-2.5 rounded-md border bg-muted/40 py-2 pr-2 pl-3">
+        <Icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+        {children}
+      </div>
+    </div>
+  );
 }
 
 export function InviteDialog({ board, open, onOpenChange }: Props) {
@@ -63,7 +74,7 @@ export function InviteDialog({ board, open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="gap-5 sm:max-w-md">
+      <DialogContent className="gap-4 sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-3">
             <BoardSquare board={board} className="size-10 rounded-lg text-xs shadow-sm ring-1 ring-foreground/10" />
@@ -76,7 +87,7 @@ export function InviteDialog({ board, open, onOpenChange }: Props) {
           </div>
         </DialogHeader>
 
-        <div className="flex items-center gap-3 rounded-lg border bg-muted/40 px-4 py-3">
+        <div className="flex min-w-0 items-center gap-3 rounded-lg border bg-muted/40 px-4 py-3">
           {membersQuery.data ? (
             <AvatarStack members={membersQuery.data.items} total={board.member_count} max={4} size="sm" tone="neutral" />
           ) : (
@@ -86,39 +97,28 @@ export function InviteDialog({ board, open, onOpenChange }: Props) {
               ))}
             </div>
           )}
-          <span className="text-sm text-muted-foreground">{othersCount > 0 ? t("alreadyPlaying", { name: viewerName, count: othersCount }) : t("beFirst")}</span>
+          <span className="min-w-0 wrap-break-word text-sm text-muted-foreground">
+            {othersCount > 0 ? t("alreadyPlaying", { name: viewerName, count: othersCount }) : t("beFirst")}
+          </span>
         </div>
 
         {inviteUrl ? (
-          <div className="space-y-3">
-            <FieldLabel>{t("link")}</FieldLabel>
-            <div className="flex items-center justify-between gap-3 rounded-lg border bg-muted/40 py-2 pl-4 pr-2">
-              <span className="truncate text-sm text-muted-foreground" title={inviteUrl}>
-                {inviteUrl}
-              </span>
-              <CopyButton value={inviteUrl} variant="accent" iconOnly label={t("copy")} copiedLabel={t("copied")} onCopied={() => toast.success(t("copiedLinkToast"))} />
-            </div>
-          </div>
+          <InviteSection icon={Link2} title={t("link")} subtitle={t("linkSubtitle")}>
+            <span className="min-w-0 flex-1 truncate text-sm text-foreground" title={inviteUrl}>
+              {inviteUrl}
+            </span>
+            <CopyButton value={inviteUrl} variant="accent" iconOnly label={t("copy")} copiedLabel={t("copied")} onCopied={() => toast.success(t("copiedLinkToast"))} />
+          </InviteSection>
         ) : null}
 
-        <div className="space-y-3">
-          <FieldLabel>{tBoards("manage.general.joinCode")}</FieldLabel>
-          <div className="flex items-center justify-between gap-3 rounded-lg border bg-muted/40 py-2 pl-4 pr-2">
-            <span aria-label={board.join_code ?? ""} className="truncate font-mono text-lg font-semibold tracking-[0.2em] text-foreground">
-              {board.join_code ?? "—"}
-            </span>
-            {board.join_code ? (
-              <CopyButton
-                value={board.join_code}
-                variant="accent"
-                iconOnly
-                label={t("copy")}
-                copiedLabel={t("copied")}
-                onCopied={() => toast.success(t("copiedToast"))}
-              />
-            ) : null}
-          </div>
-        </div>
+        <InviteSection icon={Ticket} title={tBoards("manage.general.joinCode")} subtitle={tBoards("manage.general.joinCodeSubtitle")}>
+          <span aria-label={board.join_code ?? ""} className="min-w-0 flex-1 truncate font-mono text-lg font-semibold tracking-[0.2em] text-foreground">
+            {board.join_code ?? "—"}
+          </span>
+          {board.join_code ? (
+            <CopyButton value={board.join_code} variant="accent" iconOnly label={t("copy")} copiedLabel={t("copied")} onCopied={() => toast.success(t("copiedToast"))} />
+          ) : null}
+        </InviteSection>
 
         <Button type="button" className="w-full gap-2 bg-page-accent text-white hover:bg-page-accent/90" onClick={handleShare} disabled={!inviteUrl}>
           <Share2 className="size-4" aria-hidden />
