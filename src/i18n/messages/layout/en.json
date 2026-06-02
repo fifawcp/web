@@ -31,6 +31,7 @@
   "preferences": {
     "title": "Preferences",
     "theme": "Theme",
+    "toggleTheme": "Toggle theme",
     "themeLight": "Light",
     "themeDark": "Dark"
   },
