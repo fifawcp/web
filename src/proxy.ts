@@ -29,6 +29,10 @@ const SECURE_COOKIES = process.env.NODE_ENV === "production";
 
 const handleI18nRouting = createMiddleware(routing);
 
+function isPrefetch(req: NextRequest): boolean {
+  return req.headers.has("next-router-prefetch") || req.headers.get("sec-purpose")?.includes("prefetch") === true || req.headers.get("purpose") === "prefetch";
+}
+
 // Splits a (possibly locale-prefixed) pathname into the active locale and the
 // unprefixed path. With `as-needed`, the default locale is served unprefixed.
 function splitLocale(pathname: string): { locale: Locale; path: string } {
@@ -83,21 +87,23 @@ export default async function proxy(req: NextRequest) {
     return NextResponse.redirect(localized("/login"));
   }
 
-  // Proactively refresh a near-expiry token so the RSC always renders with a fresh
-  // one (serverApi trusts the middleware to keep the token fresh).
-  if (accessToken && isTokenStale(accessToken)) {
+  // Skip for prefetches so bursts of prefetched links don't each rotate the token;
+  // the real navigation keeps it fresh.
+  if (accessToken && !isPrefetch(req)) {
     const refreshToken = req.cookies.get(REFRESH_COOKIE)?.value;
 
-    // No refresh token on the Next domain — session is unrecoverable. Clear the
-    // NextAuth cookie so the login page doesn't bounce the user back.
-    if (!refreshToken) return expiredSessionRedirect(localized("/login"));
+    // The session cookie can outlive the refresh-token cookie, leaving a stale
+    // logged-in shell that 401s. On a protected route a missing refresh token is
+    // unrecoverable — redirect to /login (clearing the session cookie).
+    if (!refreshToken) {
+      if (isProtectedPath(path)) return expiredSessionRedirect(localized("/login"));
+    } else if (isTokenStale(accessToken)) {
+      const refreshed = await refreshUpstream(refreshToken);
+      if (refreshed === "hard-failure") return expiredSessionRedirect(localized("/login"));
 
-    const refreshed = await refreshUpstream(refreshToken);
-    if (refreshed === "hard-failure") return expiredSessionRedirect(localized("/login"));
-
-    // On transient failure, let the request through — the RSC will hit a 401 and
-    // redirect to /login from there. Better than an incorrect forced sign-out.
-    if (refreshed) return applyRefreshedToken(req, token!, refreshed, i18nResponse);
+      // Transient failure: let it through; the RSC hits a 401 and redirects itself.
+      if (refreshed) return applyRefreshedToken(req, token!, refreshed, i18nResponse);
+    }
   }
 
   return i18nResponse;
@@ -115,7 +121,10 @@ async function refreshUpstream(refreshToken: string): Promise<RefreshSuccess | "
   try {
     const response = await fetch(`${process.env.BACKEND_API_URL}/api/auth/token/refresh`, {
       method: "POST",
-      headers: { Cookie: `${REFRESH_COOKIE}=${refreshToken}` },
+      headers: {
+        Cookie: `${REFRESH_COOKIE}=${refreshToken}`,
+        "X-Refresh-Source": "middleware",
+      },
     });
 
     if (!response.ok) {
@@ -188,6 +197,10 @@ async function applyRefreshedToken(req: NextRequest, token: JWT, refreshed: Refr
 // Redirects to (locale-aware) /login and clears the NextAuth session cookie so the
 // login page doesn't treat the user as still authenticated and bounce them back.
 function expiredSessionRedirect(target: URL): NextResponse {
+  // Flag it so the login page also clears the client-side NextAuth session: a soft
+  // navigation keeps it in memory, so clearing only the cookie here would leave the
+  // navbar showing the user as logged in.
+  target.searchParams.set("session", "expired");
   const response = NextResponse.redirect(target);
   response.cookies.set(SESSION_COOKIE, "", { maxAge: 0, path: "/" });
   return response;
