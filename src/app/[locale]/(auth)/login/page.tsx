@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { Mail } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { Controller } from "react-hook-form";
 
@@ -27,9 +28,19 @@ type LoginStep = "identifier" | "otp";
 export default function LoginPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
   const stepParam = searchParams.get("step");
   const step: LoginStep = stepParam === "otp" || stepParam === "identifier" ? stepParam : "identifier";
   const stepIndex = step === "otp" ? 1 : 0;
+
+  // Arrived here because the middleware invalidated an unrecoverable session. It
+  // cleared the cookie, but the client SessionProvider still holds the session in
+  // memory after a soft nav — sign out to clear the stale navbar, then drop the flag.
+  useEffect(() => {
+    if (searchParams.get("session") !== "expired") return;
+    void signOut({ redirect: false });
+    router.replace(pathname);
+  }, [searchParams, router, pathname]);
 
   useEffect(() => {
     if (stepParam === null || step === stepParam) return;

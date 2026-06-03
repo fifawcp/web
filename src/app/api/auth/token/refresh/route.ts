@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
       headers: {
         ...(rt && { Cookie: `${REFRESH_COOKIE}=${rt}` }),
         ...forwardedClientHeaders(req),
+        "X-Refresh-Source": "client",
       },
     });
   } catch {

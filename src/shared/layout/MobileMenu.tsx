@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ChevronRight, Globe, LogOut, Palette } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 
 import { logoutAndSignOut } from "@/features/auth/lib/logout";
@@ -24,12 +25,20 @@ type SessionUser = {
 };
 
 type MobileMenuProps = {
-  user?: SessionUser;
+  initialUser?: SessionUser;
 };
 
 const sectionLabel = "text-2xs font-medium uppercase tracking-wider text-muted-foreground";
 
-export function MobileMenu({ user }: MobileMenuProps) {
+export function MobileMenu({ initialUser }: MobileMenuProps) {
+  const { data, status } = useSession();
+  const user: SessionUser | undefined =
+    status === "authenticated" && data?.user
+      ? { username: data.user.username, first_name: data.user.first_name, last_name: data.user.last_name }
+      : status === "unauthenticated"
+        ? undefined
+        : initialUser;
+
   const t = useTranslations("nav");
   const tUser = useTranslations("userMenu");
   const tPref = useTranslations("preferences");

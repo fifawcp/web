@@ -34,7 +34,7 @@ export async function Header() {
         {/* Mobile — logo left, burger right. Identity + preferences live in the drawer. */}
         <div className="flex w-full items-center justify-between lg:hidden">
           <Brand />
-          <MobileMenu user={user} />
+          <MobileMenu initialUser={user ? { username: user.username, first_name: user.first_name, last_name: user.last_name } : undefined} />
         </div>
       </div>
     </header>
