@@ -45,8 +45,7 @@ export function GuestHeroStats() {
     { label: t("teams"), value: TOURNAMENT_STATS.teams },
   ];
 
-  const containerStyles =
-    "flex items-center flex-col gap-2 flex-1 px-2 sm:px-3 pt-2 md:pt-3  pb-2 md:pb-0 min-w-0 border-b sm:border-b-0 border-gray-400 dark:border-border";
+  const containerStyles = "flex items-center flex-col gap-2 flex-1 px-2 sm:px-3 pt-2 md:pt-3  pb-2 md:pb-0 min-w-0 border-b sm:border-b-0 border-border";
   return (
     <>
       {/* Countdown */}
