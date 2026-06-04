@@ -1,6 +1,6 @@
 import type { StageCode } from "@/shared/types/wcp.types";
 
-export type CompetitionType = "pickem" | "match";
+export type CompetitionType = "pickem" | "match" | "pool";
 
 export type CompetitionScope = {
   stages: StageCode[];
@@ -18,6 +18,8 @@ export type Competition = {
   type: CompetitionType;
   name: string;
   scope: CompetitionScope | null;
+  // Only set for `pool` competitions — the single match they cover.
+  pool_match_id: number | null;
   created_at: string;
   viewer: CompetitionViewer;
 };
@@ -37,9 +39,6 @@ export type MatchScore = {
 };
 
 export type CompetitionScore = PickemScore | MatchScore;
-
-export const isPickemScore = (score: CompetitionScore, type: CompetitionType): score is PickemScore => type === "pickem";
-export const isMatchScore = (score: CompetitionScore, type: CompetitionType): score is MatchScore => type === "match";
 
 export type LeaderboardMember = {
   user_id: string;
@@ -62,8 +61,17 @@ export type LeaderboardPage = {
   has_more: boolean;
 };
 
-export type CreateCompetitionInput = {
+export type CreateMatchCompetitionInput = {
   name: string;
   type: "match";
   scope: CompetitionScope;
 };
+
+export type CreatePoolCompetitionInput = {
+  name: string;
+  type: "pool";
+  match_id: number;
+};
+
+// Pick'em is auto-seeded as the board's anchor competition and is never created here.
+export type CreateCompetitionInput = CreateMatchCompetitionInput | CreatePoolCompetitionInput;

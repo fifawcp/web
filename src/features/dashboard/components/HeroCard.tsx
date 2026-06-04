@@ -44,47 +44,32 @@ export function HeroCard({ badge, primaryCta, bottomContent }: HeroCardProps) {
         </div>
       </div>
 
-      <Card ref={cardRef} className="relative overflow-hidden p-4 sm:p-6 md:p-8 bg-linear-to-br from-primary/10 via-background to-background opacity-0 z-10">
+      <Card ref={cardRef} className="relative overflow-hidden p-4 sm:p-6 md:p-8 bg-background opacity-0 z-10">
         {/* Mobile stadium image */}
-        <div className="pointer-events-none absolute inset-0 sm:hidden mask-[radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)] [-webkit-mask-image:radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)]">
+        <div className="pointer-events-none absolute inset-0 sm:hidden">
           <Image
             src="/banner-stadium-mobile.webp"
             alt=""
             fill
-            className="object-cover object-bottom-right opacity-50 dark:opacity-15"
+            className="object-cover object-bottom-right opacity-40"
             sizes="600px"
             fetchPriority="high"
             loading="eager"
           />
+          <div className="absolute inset-0 bg-linear-to-r from-background from-0% via-background/90 via-50% to-transparent to-70%" />
         </div>
         {/* Desktop stadium image */}
-        <div className="pointer-events-none absolute inset-0 hidden sm:block mask-[radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)] [-webkit-mask-image:radial-gradient(circle_at_bottom_right,black_0%,transparent_70%)]">
-          <Image
-            src="/banner-stadium.webp"
-            alt=""
-            fill
-            className="object-cover object-bottom-right opacity-50 dark:opacity-15"
-            sizes="1024px"
-            fetchPriority="high"
-            loading="eager"
-          />
+        <div className="pointer-events-none absolute inset-0 hidden sm:block">
+          <Image src="/banner-stadium.webp" alt="" fill className="object-cover object-bottom-right opacity-40" sizes="1024px" fetchPriority="high" loading="eager" />
+          <div className="absolute inset-0 bg-linear-to-r from-background from-0% via-background/90 via-50% to-transparent to-70%" />
         </div>
-        {/* Color overlay */}
-        <div className="pointer-events-none absolute inset-0 bg-white/65 dark:bg-black/20" />
 
         <div className="flex flex-col gap-4 sm:gap-5 relative z-10">
           {badge}
           <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight max-w-full sm:max-w-3/4">{t("title")}</h1>
           <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-full sm:max-w-1/2">{t("subtitle")}</p>
           <div className="flex flex-col sm:flex-row items-center gap-2">
-            <Button
-              asChild
-              // `-strong` matches the `AuthHero` primary CTA so the call to
-              // action carries the same weight across all dashboard hero
-              // variants. Strong flips to a lighter swatch in dark mode
-              // (violet-300 etc.), so the label switches to dark to stay legible.
-              className="w-full bg-page-accent dark:bg-page-accent-strong text-white hover:bg-page-accent-strong/90 dark:text-zinc-950 sm:w-auto sm:px-6 md:w-54 lg:px-10"
-            >
+            <Button asChild className="w-full bg-page-accent-300 text-zinc-950 hover:bg-page-accent sm:w-auto sm:px-6 md:w-54 lg:px-10">
               <Link href={primaryCta.href}>
                 <Sparkles className="size-4" />
                 {primaryCta.label}
@@ -100,9 +85,7 @@ export function HeroCard({ badge, primaryCta, bottomContent }: HeroCardProps) {
           {bottomContent && (
             // pt matches the parent flex `gap-4 sm:gap-5` so the divider has
             // equal breathing room above and below it.
-            <div className="flex flex-col sm:flex-row items-stretch sm:divide-x divide-border border-t border-foreground/30 dark:border-border pt-4 sm:pt-5">
-              {bottomContent}
-            </div>
+            <div className="flex flex-col sm:flex-row items-stretch sm:divide-x divide-border border-t border-border pt-4 sm:pt-5">{bottomContent}</div>
           )}
         </div>
       </Card>

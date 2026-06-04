@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { Mail } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { Controller } from "react-hook-form";
 
@@ -27,9 +28,19 @@ type LoginStep = "identifier" | "otp";
 export default function LoginPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
   const stepParam = searchParams.get("step");
   const step: LoginStep = stepParam === "otp" || stepParam === "identifier" ? stepParam : "identifier";
   const stepIndex = step === "otp" ? 1 : 0;
+
+  // Arrived here because the middleware invalidated an unrecoverable session. It
+  // cleared the cookie, but the client SessionProvider still holds the session in
+  // memory after a soft nav — sign out to clear the stale navbar, then drop the flag.
+  useEffect(() => {
+    if (searchParams.get("session") !== "expired") return;
+    void signOut({ redirect: false });
+    router.replace(pathname);
+  }, [searchParams, router, pathname]);
 
   useEffect(() => {
     if (stepParam === null || step === stepParam) return;
@@ -49,10 +60,10 @@ function LoginPageShell({ stepIndex, children }: { stepIndex: number; children: 
   const t = useTranslations("auth.login");
 
   return (
-    <div className="mx-auto w-full max-w-md">
+    <div className="flex flex-col items-center justify-center h-full gap-6 max-w-md">
       <StepIndicator steps={["step_identifier", "step_verify"].map((s) => t(s))} currentStep={stepIndex} />
-      <Card className="bg-card">{children}</Card>
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <Card className="bg-card w-full">{children}</Card>
+      <p className="text-center text-sm text-muted-foreground">
         {t("noAccount")}{" "}
         <Link href="/register" className="font-medium text-foreground hover:underline">
           {t("createOne")}

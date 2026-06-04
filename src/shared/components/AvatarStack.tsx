@@ -4,11 +4,17 @@ import { avatarTone, getInitials } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
 type Size = "sm" | "md";
-type Tone = "tinted" | "neutral";
+type Tone = "tinted" | "neutral" | "surface";
 
 const SIZE_CLASS: Record<Size, string> = {
   sm: "size-7 text-2xs",
   md: "size-9 text-xs",
+};
+
+// Overflow circle: same footprint as an avatar, with smaller text so 3–4 digit counts fit inside.
+const OVERFLOW_CLASS: Record<Size, string> = {
+  sm: "size-7 text-[0.5rem]",
+  md: "size-9 text-2xs",
 };
 
 type Props = {
@@ -25,20 +31,34 @@ export function AvatarStack({ members, total, max = 5, size = "md", tone = "tint
   const shown = members.slice(0, max);
   const overflow = total - shown.length;
   const sizeClass = SIZE_CLASS[size];
-  const fallbackTone = (seed: string) => (tone === "neutral" ? "bg-foreground/90 text-background" : avatarTone(seed));
+  const fallbackTone = (seed: string) => {
+    if (tone === "neutral") return "bg-foreground/90 text-background";
+    if (tone === "surface") return "bg-card text-foreground";
+    return avatarTone(seed);
+  };
   const ring = overlap ? "ring-2 ring-background" : "";
+  const surfaceBorder = tone === "surface" ? "border border-border" : "";
 
   return (
     <div className={cn("flex items-center", !overlap && "gap-1.5", className)}>
       {shown.map((m) => (
-        <Avatar key={m.user_id} className={cn(sizeClass, ring, overlap && "-ml-2 first:ml-0")}>
+        <Avatar key={m.user_id} className={cn(sizeClass, ring, surfaceBorder, overlap && "-ml-1.5 first:ml-0")}>
           <AvatarFallback className={cn("font-semibold", fallbackTone(m.user_id))}>
             {getInitials(m.username, m.first_name ?? undefined, m.last_name ?? undefined)}
           </AvatarFallback>
         </Avatar>
       ))}
       {overflow > 0 ? (
-        <span className={cn(sizeClass, ring, overlap && "-ml-2", "grid place-items-center rounded-full bg-muted font-semibold text-muted-foreground")}>+{overflow}</span>
+        <span
+          className={cn(
+            OVERFLOW_CLASS[size],
+            surfaceBorder,
+            overlap && "ml-1.5",
+            "grid place-items-center rounded-full bg-muted font-semibold tabular-nums tracking-tight text-muted-foreground"
+          )}
+        >
+          {overflow > 999 ? "999+" : `+${overflow}`}
+        </span>
       ) : null}
     </div>
   );

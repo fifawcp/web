@@ -53,16 +53,16 @@ export default function AuthPagesLayout({ children }: { children: ReactNode }) {
       <AuthPanel />
 
       <div className="relative flex min-h-[calc(100dvh-var(--header-height))] flex-col overflow-hidden bg-background lg:min-h-dvh lg:bg-transparent">
-        {/* Desktop-only preferences cluster — the global Header is hidden
-            on auth routes at lg+, so theme/language need a home of their
-            own. A theme toggle + language dropdown rather than the bundled
-            popover, since there's room for both here. */}
-        <div className="absolute right-8 top-8 z-20 hidden lg:flex">
-          <PreferencesToggles />
-        </div>
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-between px-4 py-[8vh] lg:p-10 gap-6">
+          {/* Desktop-only preferences cluster — the global Header is hidden
+              on auth routes at lg+, so theme/language need a home of their
+              own. A theme toggle + language dropdown rather than the bundled
+              popover, since there's room for both here. */}
+          <div className="hidden w-full max-w-md justify-end lg:flex">
+            <PreferencesToggles />
+          </div>
 
-        <div className="relative z-10 flex flex-1 items-center justify-center px-4 pt-8 pb-[15vh] lg:p-10">
-          <div className="w-full max-w-md">{children}</div>
+          <div className="w-full max-w-md flex-1">{children}</div>
         </div>
       </div>
     </div>

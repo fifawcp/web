@@ -3,7 +3,8 @@
   "notFound": "We couldn't find that competition",
   "type": {
     "pickem": "Pick'em",
-    "match": "Match"
+    "match": "Custom",
+    "pool": "Pool"
   },
   "defaultNames": {
     "fullTournament": "Full tournament"
@@ -12,35 +13,51 @@
     "createCompetition": "New competition"
   },
   "info": {
-    "change": "Switch competition",
-    "switcher": {
-      "heading": "Competitions",
-      "actions": "Competition actions",
-      "add": "Create competition",
-      "addSubtitle": "Add another one to this board",
-      "delete": "Delete competition",
-      "deleteSubtitle": "Remove it permanently"
-    },
-    "scope": "Included stages",
-    "teamsIncluded": "Included teams",
     "stagesCount": "{count, plural, one {# stage} other {# stages}}",
     "teamsCount": "{count, plural, one {# team} other {# teams}}",
-    "allStages": "All stages",
-    "allTeams": "All teams",
     "rank": "Your position",
-    "points": "Your points",
-    "pts": "pts"
+    "points": "Your points"
   },
   "podium": {
-    "title": "Top 3",
-    "first": "1st",
-    "second": "2nd",
-    "third": "3rd",
-    "points": "{points} pts",
     "empty": "No standings yet"
   },
+  "detail": {
+    "back": "Back to board"
+  },
+  "card": {
+    "scope": "Scope",
+    "stages": "Stages",
+    "teams": "Teams",
+    "allStages": "All stages",
+    "allTeamsShort": "All teams",
+    "pickem": {
+      "progress": "Your picks",
+      "groups": "Groups",
+      "thirds": "Thirds",
+      "bracket": "Bracket"
+    },
+    "hint": {
+      "title": "{count, plural, one {# competition needs your picks} other {# competitions need your picks}}",
+      "description": "Cards with an accent border are waiting on you — get your picks in before they lock.",
+      "dismiss": "Dismiss"
+    },
+    "leaderboard": "Leaderboard",
+    "makePicks": "Make your picks",
+    "picksDone": "Picks in",
+    "viewPicks": "View picks",
+    "closed": "Closed",
+    "closesIn": "Closes in {time}",
+    "vs": "vs",
+    "matchUnavailable": "Match unavailable",
+    "actions": "Competition actions",
+    "delete": "Delete competition",
+    "filter": "Filter competitions…",
+    "clearFilter": "Clear filter",
+    "new": "New competition",
+    "newShort": "New",
+    "newHint": "Custom · Pool"
+  },
   "leaderboard": {
-    "title": "Leaderboard",
     "memberCount": "{count, plural, one {# member} other {# members}}",
     "search": "Search members",
     "columns": {
@@ -53,6 +70,15 @@
       "bracket": "Bracket",
       "exactHits": "Exact hits",
       "outcomes": "Outcomes"
+    },
+    "columnsLong": {
+      "total": "Total points",
+      "groupExact": "Exact group positions",
+      "groupQualifiers": "Group qualifiers",
+      "bestThirds": "Best thirds",
+      "bracket": "Bracket hits",
+      "exactHits": "Exact scores",
+      "outcomes": "Correct outcomes"
     },
     "you": "You",
     "empty": "No entries yet",
@@ -70,22 +96,35 @@
   },
   "emptyCompetitions": {
     "title": "No competitions yet",
-    "descriptionAdmin": "Create the first match competition for this board.",
+    "descriptionAdmin": "Create the first custom competition or pool for this board.",
     "descriptionMember": "Wait for an admin to add a competition.",
     "cta": "New competition"
   },
   "create": {
     "title": "New competition",
-    "description": "Score a slice of the tournament with custom stages and teams.",
+    "description": "Set up a custom competition or a single-match pool.",
     "steps": {
-      "name": "Name",
+      "details": "Details",
       "scope": "Scope",
+      "match": "Match",
       "summary": "Summary"
+    },
+    "type": {
+      "label": "Type",
+      "customDescription": "Score a slice of the tournament with custom stages and teams.",
+      "poolDescription": "A single match — everyone predicts the exact score."
+    },
+    "match": {
+      "search": "Search teams…",
+      "empty": "No upcoming matches to pool.",
+      "vs": "vs"
     },
     "name": {
       "label": "Name",
       "placeholder": "e.g. Knockout run",
-      "helper": "Up to 20 characters"
+      "helper": "Up to 20 characters",
+      "poolPlaceholder": "Set from the match",
+      "poolHelper": "Named automatically from the match you pick."
     },
     "scope": {
       "stages": "Stages",
@@ -102,7 +141,9 @@
       "selectedStages": "{count, plural, one {# stage} other {# stages}}"
     },
     "summary": {
+      "type": "Type",
       "name": "Name",
+      "match": "Match",
       "stages": "Stages",
       "teams": "Teams"
     },

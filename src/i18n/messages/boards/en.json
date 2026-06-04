@@ -3,6 +3,18 @@
   "label": "Board",
   "notFound": "We couldn't find that board",
   "members": "{count, plural, one {# member} other {# members}}",
+  "tabs": {
+    "competitions": "Competitions",
+    "members": "Members"
+  },
+  "header": {
+    "menu": {
+      "label": "Board actions",
+      "settings": "Board settings",
+      "leave": "Leave board",
+      "delete": "Delete board"
+    }
+  },
   "privacy": {
     "public": "Public",
     "private": "Private",
@@ -20,19 +32,13 @@
     "sections": {
       "yourBoards": "Your boards",
       "global": "Global board",
-      "actions": "Board actions",
       "more": "Add a board"
     },
-    "manage": "Manage board",
     "create": "Create board",
     "join": "Join with code",
     "createSubtitle": "Start a new board",
     "joinSubtitle": "Enter a code",
-    "invite": "Invite friends",
-    "inviteSubtitle": "Add members to {name}",
-    "manageSubtitle": "Members & roles",
-    "leave": "Leave board",
-    "leaveSubtitle": "Step away from this board"
+    "invite": "Invite"
   },
   "invite": {
     "copy": "Copy",
