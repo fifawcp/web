@@ -2,21 +2,28 @@ import { notFound } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
 import { BOARDS_LIST_TAG, boardTag } from "@/features/boards/api/boards";
-import { BoardHomeView } from "@/features/boards/components/BoardHomeView";
+import { BoardDetailView } from "@/features/boards/components/BoardDetailView";
 import type { Board, BoardListItem } from "@/features/boards/types/boards.types";
-import { competitionsTag, LEADERBOARD_PAGE_SIZE, leaderboardTag } from "@/features/competitions/api/competitions";
-import type { Competition, LeaderboardEntry, LeaderboardPage } from "@/features/competitions/types/competitions.types";
+import { boardLeaderboardsTag, competitionsTag, leaderboardTag } from "@/features/competitions/api/competitions";
+import type { Competition, LeaderboardEntry } from "@/features/competitions/types/competitions.types";
+import { PICKEMS_CACHE_TAG } from "@/features/pickems/api/pickems";
+import type { UserPickem } from "@/features/pickems/types/pickems.types";
 import { MATCHES_CACHE_TAG } from "@/features/schedule/api/matches";
 import { collectTeams } from "@/features/schedule/lib/collectTeams";
 import type { Match } from "@/features/schedule/types/schedule.types";
 import { redirect } from "@/i18n/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { serverApi } from "@/shared/lib/api/server";
+import { getInitials } from "@/shared/lib/ui";
 
 type Props = {
   params: Promise<{ boardId: string }>;
   searchParams: Promise<{ competition?: string; notice?: string }>;
 };
+
+// Top of the leaderboard previewed on each competition card. Small + concurrent + cache-tagged so
+// the pick→revalidate flow already keeps them fresh.
+const TOP_PREVIEW_LIMIT = 3;
 
 export default async function BoardPage({ params, searchParams }: Props) {
   const [{ boardId }, { competition, notice }] = await Promise.all([params, searchParams]);
@@ -25,6 +32,13 @@ export default async function BoardPage({ params, searchParams }: Props) {
 
   const boardIdNum = Number(boardId);
   if (!Number.isFinite(boardIdNum)) notFound();
+
+  // Backward-compat: old links pointed the leaderboard at ?competition=<id>; that view is now a
+  // dedicated route.
+  const competitionParam = Number(competition);
+  if (Number.isFinite(competitionParam) && competition) {
+    redirect({ href: `/boards/${boardIdNum}/competitions/${competitionParam}`, locale });
+  }
 
   const [boardsRes, boardRes, competitionsRes, matchesRes] = await Promise.all([
     serverApi.get<BoardListItem[]>("/api/boards", {
@@ -63,41 +77,44 @@ export default async function BoardPage({ params, searchParams }: Props) {
   const activeBoard = boardRes.data;
   const competitions = competitionsRes.data ?? [];
   const teams = collectTeams(matchesRes.data ?? []);
-  const competitionParam = Number(competition);
-  const matchedCompetition = Number.isFinite(competitionParam) ? competitions.find((c) => c.id === competitionParam) : undefined;
-  const activeCompetition = matchedCompetition ?? competitions[0] ?? null;
-  // A `?competition=` was given but matches nothing real — the view falls back to the first
-  // competition and self-heals the URL; flag it so the client can explain the switch.
-  const competitionNotFound = Boolean(competition) && !matchedCompetition && competitions.length > 0;
+  const matches = matchesRes.data ?? [];
 
-  let initialLeaderboard: LeaderboardPage | null = null;
-  if (activeCompetition) {
-    const lbRes = await serverApi.get<LeaderboardEntry[]>(
-      `/api/boards/${boardIdNum}/competitions/${activeCompetition.id}/leaderboard?page=1&limit=${LEADERBOARD_PAGE_SIZE}`,
-      {
-        authenticated: true,
-        next: { revalidate: 30, tags: [leaderboardTag(boardIdNum, activeCompetition.id)] },
-      }
-    );
-    if (lbRes.success && lbRes.data) {
-      const items = lbRes.data;
-      const fallback = { page: 1, limit: LEADERBOARD_PAGE_SIZE, total: items.length, has_more: false };
-      const pagination = lbRes.pagination ?? fallback;
-      initialLeaderboard = { items, page: pagination.page, limit: pagination.limit, total: pagination.total, has_more: pagination.has_more };
-    }
-  }
+  // Prefetch the top-N for every competition (concurrently) + the tournament pick'em progress (when
+  // the board has a pick'em — always, since it's the auto-seeded anchor).
+  const hasPickem = competitions.some((c) => c.type === "pickem");
+  const [topPreviews, pickemRes] = await Promise.all([
+    Promise.all(
+      competitions.map((c) =>
+        serverApi.get<LeaderboardEntry[]>(`/api/boards/${boardIdNum}/competitions/${c.id}/leaderboard?page=1&limit=${TOP_PREVIEW_LIMIT}`, {
+          authenticated: true,
+          next: { revalidate: 30, tags: [leaderboardTag(boardIdNum, c.id), boardLeaderboardsTag(boardIdNum)] },
+        })
+      )
+    ),
+    hasPickem ? serverApi.get<UserPickem>("/api/pickems", { authenticated: true, next: { revalidate: 30, tags: [PICKEMS_CACHE_TAG] } }) : Promise.resolve(null),
+  ]);
+
+  const topThreeByCompetition: Record<number, LeaderboardEntry[]> = {};
+  competitions.forEach((c, i) => {
+    const res = topPreviews[i];
+    topThreeByCompetition[c.id] = res?.success && res.data ? res.data : [];
+  });
+
+  const pickem = pickemRes?.success && pickemRes.data ? { progress: pickemRes.data.progress, isLocked: pickemRes.data.is_locked } : null;
 
   return (
-    <BoardHomeView
+    <BoardDetailView
       currentUserId={user.id}
+      currentUserInitials={getInitials(user.username, user.first_name, user.last_name)}
       boards={boards}
       activeBoard={activeBoard}
       competitions={competitions}
-      activeCompetition={activeCompetition}
-      initialLeaderboard={initialLeaderboard}
       teams={teams}
+      matches={matches}
+      topThreeByCompetition={topThreeByCompetition}
+      pickem={pickem}
       boardNotFound={notice === "board-not-found"}
-      competitionNotFound={competitionNotFound}
+      competitionNotFound={notice === "competition-not-found"}
     />
   );
 }

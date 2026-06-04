@@ -7,6 +7,9 @@ export const getInitials = (username: string, firstName?: string, lastName?: str
   return username.slice(0, 2).toUpperCase();
 };
 
+// Full name from first/last, falling back to the username.
+export const displayName = (username: string, firstName?: string | null, lastName?: string | null): string => [firstName, lastName].filter(Boolean).join(" ") || username;
+
 const AVATAR_TONES = [
   "bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-200",
   "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-200",

@@ -1,5 +1,7 @@
 import type { ColumnDef, RowData } from "@tanstack/react-table";
 
+import { displayName } from "@/shared/lib/ui";
+
 import type { CompetitionType, LeaderboardEntry, MatchScore, PickemScore } from "../types/competitions.types";
 
 export type LeaderboardColumnId = "rank" | "member" | "total" | "groupExact" | "groupQualifiers" | "bestThirds" | "bracket" | "exactHits" | "outcomes";
@@ -22,6 +24,13 @@ const matchScore = (row: LeaderboardEntry) => row.score as MatchScore;
 
 type ValueColumn = { id: LeaderboardColumnId; value: (row: LeaderboardEntry) => number };
 
+// match and pool share the same scoring shape.
+const matchColumns: ValueColumn[] = [
+  { id: "total", value: (row) => row.score.total },
+  { id: "exactHits", value: (row) => matchScore(row).exact_hits },
+  { id: "outcomes", value: (row) => matchScore(row).correct_outcomes },
+];
+
 const VALUE_COLUMNS_BY_TYPE: Record<CompetitionType, ValueColumn[]> = {
   pickem: [
     { id: "total", value: (row) => row.score.total },
@@ -30,11 +39,8 @@ const VALUE_COLUMNS_BY_TYPE: Record<CompetitionType, ValueColumn[]> = {
     { id: "bestThirds", value: (row) => pickemScore(row).best_third_hits },
     { id: "bracket", value: (row) => pickemScore(row).bracket_hits },
   ],
-  match: [
-    { id: "total", value: (row) => row.score.total },
-    { id: "exactHits", value: (row) => matchScore(row).exact_hits },
-    { id: "outcomes", value: (row) => matchScore(row).correct_outcomes },
-  ],
+  match: matchColumns,
+  pool: matchColumns,
 };
 
 const rank: Column = {
@@ -47,9 +53,10 @@ const rank: Column = {
 
 const member: Column = {
   id: "member",
-  accessorFn: (row) => [row.member.first_name, row.member.last_name].filter(Boolean).join(" ") || row.member.username,
+  accessorFn: (row) => displayName(row.member.username, row.member.first_name, row.member.last_name),
   header: "member",
-  meta: { align: "left" },
+  // Absorbs the slack so the numeric columns size to their own content (auto table layout).
+  meta: { align: "left", width: "w-full" },
 };
 
 const numericCol = ({ id, value }: ValueColumn, emphasize = false): Column => ({
@@ -57,7 +64,7 @@ const numericCol = ({ id, value }: ValueColumn, emphasize = false): Column => ({
   accessorFn: value,
   header: id,
   cell: ({ getValue }) => (getValue() as number).toLocaleString(),
-  meta: { align: "center", emphasize, width: "w-18" },
+  meta: { align: "center", emphasize, width: "w-20" },
 });
 
 export function buildColumns(type: CompetitionType): Column[] {
