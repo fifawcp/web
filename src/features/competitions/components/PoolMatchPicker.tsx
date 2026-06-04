@@ -65,7 +65,7 @@ export function PoolMatchPicker({ matches, value, onChange }: Props) {
                   onClick={() => onChange(match.id)}
                   aria-pressed={selected}
                   className={cn(
-                    "flex w-full flex-col gap-2 rounded-lg border bg-card px-3 py-2.5 text-left transition-colors hover:bg-muted sm:flex-row sm:items-center sm:gap-3",
+                    "flex w-full flex-col gap-1 rounded-lg border bg-card px-3 py-2.5 text-left transition-colors hover:bg-muted sm:flex-row sm:items-center sm:gap-3",
                     selected ? "border-page-accent" : "border-border"
                   )}
                 >
@@ -89,7 +89,7 @@ export function PoolMatchPicker({ matches, value, onChange }: Props) {
                       <TeamFlag code={away?.fifa_code ?? "?"} team={away ?? undefined} />
                     </span>
                   </span>
-                  <span className="flex items-center justify-between gap-2 pl-7 leading-tight sm:flex-col sm:items-end sm:justify-center sm:pl-0">
+                  <span className="flex items-center justify-between gap-0 pl-7 leading-tight sm:flex-col sm:items-end sm:justify-center sm:pl-0">
                     <span className="text-2xs font-medium uppercase tracking-wide text-muted-foreground">{tStages(match.stage_code)}</span>
                     <span className="text-2xs text-muted-foreground">{formatShortDate(new Date(match.kickoff_at), locale)}</span>
                   </span>

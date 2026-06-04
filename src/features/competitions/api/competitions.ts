@@ -5,6 +5,9 @@ import type { Competition, CreateCompetitionInput, LeaderboardEntry, Leaderboard
 
 export const competitionsTag = (boardId: number) => `competitions:${boardId}` as const;
 export const leaderboardTag = (boardId: number, competitionId: number) => `leaderboard:${boardId}:${competitionId}` as const;
+// Board-wide tag carried by every leaderboard fetch so a membership change can bust all of a board's
+// previews at once without knowing each competition id.
+export const boardLeaderboardsTag = (boardId: number) => `leaderboards:${boardId}` as const;
 
 export const competitionsKey = (boardId: number) => ["competitions", "list", boardId] as const;
 export const leaderboardKey = (boardId: number, competitionId: number, params: { page: number; q: string }) =>

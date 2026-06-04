@@ -3,7 +3,7 @@ import { getLocale } from "next-intl/server";
 
 import { BOARDS_LIST_TAG, boardTag } from "@/features/boards/api/boards";
 import type { Board, BoardListItem } from "@/features/boards/types/boards.types";
-import { competitionsTag, LEADERBOARD_PAGE_SIZE, leaderboardTag } from "@/features/competitions/api/competitions";
+import { boardLeaderboardsTag, competitionsTag, LEADERBOARD_PAGE_SIZE, leaderboardTag } from "@/features/competitions/api/competitions";
 import { CompetitionDetailView } from "@/features/competitions/components/CompetitionDetailView";
 import type { Competition, LeaderboardEntry, LeaderboardPage } from "@/features/competitions/types/competitions.types";
 import { PICKEMS_CACHE_TAG } from "@/features/pickems/api/pickems";
@@ -77,7 +77,7 @@ export default async function CompetitionDetailPage({ params, searchParams }: Pr
   if (query) lbSearch.set("q", query);
   const lbRes = await serverApi.get<LeaderboardEntry[]>(`/api/boards/${boardIdNum}/competitions/${competitionIdNum}/leaderboard?${lbSearch.toString()}`, {
     authenticated: true,
-    next: { revalidate: 30, tags: [leaderboardTag(boardIdNum, competitionIdNum)] },
+    next: { revalidate: 30, tags: [leaderboardTag(boardIdNum, competitionIdNum), boardLeaderboardsTag(boardIdNum)] },
   });
 
   let initialLeaderboard: LeaderboardPage | null = null;

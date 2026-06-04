@@ -75,6 +75,8 @@ export function ManageBoardMembers({ board, currentUserId, enabled, onPermission
     await removeMember.mutateAsync({ userId: removeTarget.user_id }).then(() => {
       toast.success(t("removed"));
       setRemoveTarget(null);
+      // Refresh the RSC so the competition-card leaderboard previews drop the removed member.
+      router.refresh();
     }, reportError);
   }
 

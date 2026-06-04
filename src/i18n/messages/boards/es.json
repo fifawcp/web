@@ -11,8 +11,6 @@
     "menu": {
       "label": "Acciones del board",
       "settings": "Configuración del board",
-      "copyCode": "Copiar código",
-      "copiedCode": "Código copiado",
       "leave": "Salir del board",
       "delete": "Eliminar board"
     }

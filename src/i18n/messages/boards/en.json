@@ -11,8 +11,6 @@
     "menu": {
       "label": "Board actions",
       "settings": "Board settings",
-      "copyCode": "Copy join code",
-      "copiedCode": "Join code copied",
       "leave": "Leave board",
       "delete": "Delete board"
     }

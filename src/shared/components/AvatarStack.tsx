@@ -11,6 +11,12 @@ const SIZE_CLASS: Record<Size, string> = {
   md: "size-9 text-xs",
 };
 
+// Overflow circle: same footprint as an avatar, with smaller text so 3–4 digit counts fit inside.
+const OVERFLOW_CLASS: Record<Size, string> = {
+  sm: "size-7 text-[0.5rem]",
+  md: "size-9 text-2xs",
+};
+
 type Props = {
   members: BoardMemberPreview[];
   total: number;
@@ -43,8 +49,15 @@ export function AvatarStack({ members, total, max = 5, size = "md", tone = "tint
         </Avatar>
       ))}
       {overflow > 0 ? (
-        <span className={cn(sizeClass, ring, overlap && "-ml-1.5", "grid place-items-center rounded-full bg-muted font-semibold text-muted-foreground")}>
-          +{overflow}
+        <span
+          className={cn(
+            OVERFLOW_CLASS[size],
+            surfaceBorder,
+            overlap && "ml-1.5",
+            "grid place-items-center rounded-full bg-muted font-semibold tabular-nums tracking-tight text-muted-foreground"
+          )}
+        >
+          {overflow > 999 ? "999+" : `+${overflow}`}
         </span>
       ) : null}
     </div>

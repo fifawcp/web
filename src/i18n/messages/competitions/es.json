@@ -55,7 +55,7 @@
     "clearFilter": "Limpiar filtro",
     "new": "Nueva competencia",
     "newShort": "Nueva",
-    "newHint": "Personalizada · Pool"
+    "newHint": "Personalizada · Polla"
   },
   "leaderboard": {
     "memberCount": "{count, plural, one {# miembro} other {# miembros}}",

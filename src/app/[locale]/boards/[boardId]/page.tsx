@@ -4,7 +4,7 @@ import { getLocale } from "next-intl/server";
 import { BOARDS_LIST_TAG, boardTag } from "@/features/boards/api/boards";
 import { BoardDetailView } from "@/features/boards/components/BoardDetailView";
 import type { Board, BoardListItem } from "@/features/boards/types/boards.types";
-import { competitionsTag, leaderboardTag } from "@/features/competitions/api/competitions";
+import { boardLeaderboardsTag, competitionsTag, leaderboardTag } from "@/features/competitions/api/competitions";
 import type { Competition, LeaderboardEntry } from "@/features/competitions/types/competitions.types";
 import { PICKEMS_CACHE_TAG } from "@/features/pickems/api/pickems";
 import type { UserPickem } from "@/features/pickems/types/pickems.types";
@@ -87,7 +87,7 @@ export default async function BoardPage({ params, searchParams }: Props) {
       competitions.map((c) =>
         serverApi.get<LeaderboardEntry[]>(`/api/boards/${boardIdNum}/competitions/${c.id}/leaderboard?page=1&limit=${TOP_PREVIEW_LIMIT}`, {
           authenticated: true,
-          next: { revalidate: 30, tags: [leaderboardTag(boardIdNum, c.id)] },
+          next: { revalidate: 30, tags: [leaderboardTag(boardIdNum, c.id), boardLeaderboardsTag(boardIdNum)] },
         })
       )
     ),
