@@ -24,7 +24,7 @@ type StatItemProps = {
 
 function StatItem({ label, icon, iconContent, value }: StatItemProps) {
   return (
-    <div className="flex items-center sm:flex-col xl:flex-row sm:justify-center xl:justify-start gap-3 flex-1 px-2 sm:px-3 py-2 md:py-3 min-w-0 border-b sm:border-b-0 border-foreground/30 dark:border-border">
+    <div className="flex items-center sm:flex-col xl:flex-row sm:justify-center xl:justify-start gap-3 flex-1 px-2 sm:px-3 py-2 md:py-3 min-w-0 border-b sm:border-b-0 border-border">
       <div className={`flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted ${!iconContent ? "xl:hidden" : ""}`}>
         {iconContent || (icon && React.createElement(icon, { className: "size-7 text-muted-foreground" }))}
       </div>

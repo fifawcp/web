@@ -15,7 +15,9 @@ export function HeroSection({ isLoggedIn, pickedChampion, stats, nextMatch, pick
   return (
     <section className="relative overflow-hidden bg-muted/30 dark:bg-zinc-950">
       <div className="container py-6 lg:py-8">
-        {isLoggedIn ? <AuthHero pickedChampion={pickedChampion} stats={stats} nextMatch={nextMatch} pickemProgress={pickemProgress} /> : <GuestHero />}
+        <div className="dark">
+          {isLoggedIn ? <AuthHero pickedChampion={pickedChampion} stats={stats} nextMatch={nextMatch} pickemProgress={pickemProgress} /> : <GuestHero />}
+        </div>
       </div>
     </section>
   );

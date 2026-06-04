@@ -48,13 +48,7 @@ export function AuthHero({ pickedChampion, stats, nextMatch, pickemProgress }: P
     ) : (
       <div className="flex flex-col gap-2">
         <p className="text-sm text-foreground">{t("welcome.subtitle")}</p>
-        <Button
-          onClick={scrollToTutorial}
-          // `-strong` gives the CTA punchier weight against the hero
-          // background. Dark mode flips strong to a lighter swatch
-          // (violet-300 etc.), so the label switches to dark to stay legible.
-          className="w-full bg-page-accent-strong text-white hover:bg-page-accent-strong/90 dark:text-zinc-950 md:w-54"
-        >
+        <Button onClick={scrollToTutorial} className="w-full bg-page-accent-300 text-zinc-950 hover:bg-page-accent md:w-54">
           {t("welcome.cta")}
           <ArrowRight className="size-4" />
         </Button>
