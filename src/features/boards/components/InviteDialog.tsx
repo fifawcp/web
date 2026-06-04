@@ -89,7 +89,7 @@ export function InviteDialog({ board, open, onOpenChange }: Props) {
 
         <div className="flex min-w-0 items-center gap-3 rounded-lg border bg-muted/40 px-4 py-3">
           {membersQuery.data ? (
-            <AvatarStack members={membersQuery.data.items} total={board.member_count} max={4} size="sm" tone="neutral" />
+            <AvatarStack members={membersQuery.data.items} total={board.member_count} max={4} size="sm" tone="surface" />
           ) : (
             <div className="flex">
               {Array.from({ length: 3 }).map((_, i) => (

@@ -3,10 +3,11 @@
 import { Fragment, useMemo, useState } from "react";
 import { Check } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import type { Match } from "@/features/schedule/types/schedule.types";
+import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 import { Field, FieldDescription, FieldLabel } from "@/shared/components/ui/field";
@@ -17,41 +18,67 @@ import { getTeamName } from "@/shared/lib/getTeamName";
 import { cn } from "@/shared/lib/utils";
 import type { GroupCode, StageCode, Team } from "@/shared/types/wcp.types";
 
-import { COMPETITION_PARAM } from "../hooks/useCompetitionUrlState";
 import { useCreateCompetition } from "../hooks/useCreateCompetition";
+import { competitionTypeMeta } from "../lib/competitionTypeMeta";
 import { ALL_STAGES } from "../lib/formatScope";
 
+import { PoolMatchPicker } from "./PoolMatchPicker";
+
 const NAME_MAX = 20;
-const STEP_KEYS = ["name", "scope", "summary"] as const;
-type StepKey = (typeof STEP_KEYS)[number];
+type CompetitionKind = "match" | "pool";
+type StepKey = "details" | "scope" | "match" | "summary";
+
+// Step 1 picks the type and names it; the second step branches by type. Custom is the default path
+// so the full stepper is visible before a type is chosen.
+const STEPS_BY_KIND: Record<CompetitionKind, StepKey[]> = {
+  match: ["details", "scope", "summary"],
+  pool: ["details", "match", "summary"],
+};
+const DEFAULT_STEPS: StepKey[] = ["details", "scope", "summary"];
 
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   boardId: number;
   teams: Team[];
+  matches: Match[];
 };
 
-export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams }: Props) {
+export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams, matches }: Props) {
   const t = useTranslations("competitions.create");
+  const tRoot = useTranslations("competitions");
   const tStages = useTranslations("schedule.filters.stage");
   const tApiErrors = useTranslations("apiErrors");
+  const locale = useLocale();
   const router = useRouter();
   const mutation = useCreateCompetition(boardId);
 
   const allTeamCodes = useMemo(() => teams.map((team) => team.fifa_code), [teams]);
 
-  const [step, setStep] = useState<StepKey>("name");
+  const [kind, setKind] = useState<CompetitionKind | null>(null);
+  const [step, setStep] = useState<StepKey>("details");
   const [name, setName] = useState("");
   const [stages, setStages] = useState<StageCode[]>([]);
   const [teamCodes, setTeamCodes] = useState<string[]>([]);
+  const [poolMatchId, setPoolMatchId] = useState<number | null>(null);
   const focus = useAutoFocusUnlessMobile();
+
+  const steps = kind ? STEPS_BY_KIND[kind] : DEFAULT_STEPS;
 
   const trimmed = name.trim();
   const isNameValid = trimmed.length > 0 && trimmed.length <= NAME_MAX;
   const isScopeValid = stages.length > 0 && teamCodes.length > 0;
+  const isMatchValid = poolMatchId !== null;
+  const isBranchValid = kind === "pool" ? isMatchValid : isScopeValid;
   const isAllTeams = teamCodes.length === allTeamCodes.length;
   const isAllStages = stages.length === ALL_STAGES.length;
+
+  // Pools are named automatically from the picked match (FIFA codes keep it within the 20-char cap),
+  // so the name field is skipped for them and the details step only needs a type.
+  const poolMatch = poolMatchId != null ? matches.find((m) => m.id === poolMatchId) : undefined;
+  const poolName = poolMatch ? `${poolMatch.teams.home?.fifa_code ?? "?"} vs ${poolMatch.teams.away?.fifa_code ?? "?"}` : "";
+  const resolvedName = kind === "pool" ? poolName : trimmed;
+  const isDetailsValid = kind !== null && (kind === "pool" || isNameValid);
 
   const teamsByGroup = useMemo(() => {
     const groups = new Map<GroupCode | "_", Team[]>();
@@ -64,10 +91,12 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams }: 
   }, [teams]);
 
   function reset() {
-    setStep("name");
+    setKind(null);
+    setStep("details");
     setName("");
     setStages([]);
     setTeamCodes([]);
+    setPoolMatchId(null);
   }
 
   function close() {
@@ -94,51 +123,44 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams }: 
   function setGroup(groupTeams: Team[], select: boolean) {
     const codes = groupTeams.map((team) => team.fifa_code);
     setTeamCodes((prev) => {
-      if (select) {
-        const set = new Set([...prev, ...codes]);
-        return Array.from(set);
-      }
+      if (select) return Array.from(new Set([...prev, ...codes]));
       return prev.filter((code) => !codes.includes(code));
     });
   }
 
-  const currentIndex = STEP_KEYS.indexOf(step);
+  const currentIndex = steps.indexOf(step);
 
   function canReach(target: StepKey): boolean {
-    if (target === "name") return true;
-    if (target === "scope") return isNameValid;
-    return isNameValid && isScopeValid;
+    if (target === "details") return true;
+    if (target === "scope" || target === "match") return isDetailsValid;
+    return isDetailsValid && isBranchValid;
   }
 
   function isStepComplete(target: StepKey): boolean {
-    const targetIndex = STEP_KEYS.indexOf(target);
-    if (targetIndex >= currentIndex) return false;
-    if (target === "name") return isNameValid;
+    if (steps.indexOf(target) >= currentIndex) return false;
+    if (target === "details") return isDetailsValid;
     if (target === "scope") return isScopeValid;
+    if (target === "match") return isMatchValid;
     return false;
   }
 
+  const canContinue = (step === "details" && isDetailsValid) || (step === "scope" && isScopeValid) || (step === "match" && isMatchValid) || step === "summary";
+
   async function submit() {
-    const created = await mutation
-      .mutateAsync({
-        name: trimmed,
-        type: "match",
-        scope: {
-          stages,
-          team_fifa_codes: isAllTeams ? [] : teamCodes,
-        },
-      })
-      .catch((error: Error) => {
-        toast.error(translateApiError(error, tApiErrors));
-        return null;
-      });
+    const input =
+      kind === "pool"
+        ? ({ name: resolvedName, type: "pool", match_id: poolMatchId! } as const)
+        : ({ name: resolvedName, type: "match", scope: { stages, team_fifa_codes: isAllTeams ? [] : teamCodes } } as const);
+
+    const created = await mutation.mutateAsync(input).catch((error: Error) => {
+      toast.error(translateApiError(error, tApiErrors));
+      return null;
+    });
     if (!created) return;
 
     toast.success(t("success"));
     close();
-    const params = new URLSearchParams(window.location.search);
-    params.set(COMPETITION_PARAM, String(created.id));
-    router.replace(`?${params.toString()}`, { scroll: false });
+    // Stay on the board; refresh so the RSC picks up the new competition card.
     router.refresh();
   }
 
@@ -150,24 +172,44 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams }: 
           <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
-        <Stepper current={step} canReach={canReach} isComplete={isStepComplete} onChange={setStep} />
+        <Stepper steps={steps} current={step} canReach={canReach} isComplete={isStepComplete} onChange={setStep} />
 
         <div className="-mx-6 flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-6">
-          {step === "name" ? (
-            <Field>
-              <FieldLabel htmlFor="comp-name">{t("name.label")}</FieldLabel>
-              <Input
-                id="comp-name"
-                autoFocus={focus.autoFocus}
-                maxLength={NAME_MAX}
-                placeholder={t("name.placeholder")}
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                className="focus-visible:border-page-accent-strong focus-visible:ring-page-accent-strong/30"
-              />
-              <FieldDescription>{t("name.helper")}</FieldDescription>
-            </Field>
+          {step === "details" ? (
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-2">
+                <span className="text-sm font-medium">{t("type.label")}</span>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <TypeCard
+                    type="match"
+                    active={kind === "match"}
+                    title={tRoot("type.match")}
+                    description={t("type.customDescription")}
+                    onClick={() => setKind("match")}
+                  />
+                  <TypeCard type="pool" active={kind === "pool"} title={tRoot("type.pool")} description={t("type.poolDescription")} onClick={() => setKind("pool")} />
+                </div>
+              </div>
+              <Field>
+                <FieldLabel htmlFor="comp-name">{t("name.label")}</FieldLabel>
+                {kind === "pool" ? (
+                  <Input id="comp-name" value={poolName} disabled placeholder={t("name.poolPlaceholder")} />
+                ) : (
+                  <Input
+                    id="comp-name"
+                    maxLength={NAME_MAX}
+                    placeholder={t("name.placeholder")}
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    className="focus-visible:border-page-accent-strong focus-visible:ring-page-accent-strong/30"
+                  />
+                )}
+                <FieldDescription>{kind === "pool" ? t("name.poolHelper") : t("name.helper")}</FieldDescription>
+              </Field>
+            </div>
           ) : null}
+
+          {step === "match" ? <PoolMatchPicker matches={matches} value={poolMatchId} onChange={setPoolMatchId} /> : null}
 
           {step === "scope" ? (
             <div className="flex flex-col gap-4">
@@ -240,29 +282,38 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams }: 
 
           {step === "summary" ? (
             <div className="flex flex-col gap-3 rounded-lg border bg-muted/30 p-4 text-sm">
-              <SummaryRow label={t("summary.name")} value={trimmed} />
-              <SummaryRow
-                label={t("summary.stages")}
-                value={stages.length === ALL_STAGES.length ? <span className="text-muted-foreground">All</span> : stages.map((s) => tStages(s)).join(" · ")}
-              />
-              <SummaryRow
-                label={t("summary.teams")}
-                value={isAllTeams ? <span className="text-muted-foreground">All</span> : t("scope.selectedTeams", { count: teamCodes.length })}
-              />
+              <SummaryRow label={t("summary.type")} value={kind ? tRoot(`type.${kind}`) : ""} />
+              <SummaryRow label={t("summary.name")} value={resolvedName} />
+              {kind === "pool" ? (
+                <SummaryRow
+                  label={t("summary.match")}
+                  value={poolMatch ? `${teamLabel(poolMatch.teams.home, locale)} ${t("match.vs")} ${teamLabel(poolMatch.teams.away, locale)}` : ""}
+                />
+              ) : (
+                <>
+                  <SummaryRow
+                    label={t("summary.stages")}
+                    value={isAllStages ? <span className="text-muted-foreground">All</span> : stages.map((s) => tStages(s)).join(" · ")}
+                  />
+                  <SummaryRow
+                    label={t("summary.teams")}
+                    value={isAllTeams ? <span className="text-muted-foreground">All</span> : t("scope.selectedTeams", { count: teamCodes.length })}
+                  />
+                </>
+              )}
             </div>
           ) : null}
         </div>
 
         <WizardFooter
           step={step}
-          onBack={() => setStep(STEP_KEYS[Math.max(0, STEP_KEYS.indexOf(step) - 1)])}
+          onBack={() => setStep(steps[Math.max(0, currentIndex - 1)])}
           onCancel={close}
           onNext={() => {
-            const i = STEP_KEYS.indexOf(step);
-            if (i < STEP_KEYS.length - 1) setStep(STEP_KEYS[i + 1]);
+            if (currentIndex < steps.length - 1) setStep(steps[currentIndex + 1]);
           }}
           onSubmit={submit}
-          canContinue={(step === "name" && isNameValid) || (step === "scope" && isScopeValid) || step === "summary"}
+          canContinue={canContinue}
           isPending={mutation.isPending}
         />
       </DialogContent>
@@ -270,27 +321,55 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams }: 
   );
 }
 
+function teamLabel(team: Team | null, loc: string): string {
+  return team ? getTeamName(team, loc) : "—";
+}
+
+function TypeCard({ type, active, title, description, onClick }: { type: CompetitionKind; active: boolean; title: string; description: string; onClick: () => void }) {
+  const meta = competitionTypeMeta(type);
+  const Icon = meta.icon;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={cn(
+        "flex flex-col gap-2 rounded-xl border bg-card p-4 text-left transition-colors hover:bg-muted",
+        active ? "border-page-accent ring-1 ring-page-accent/20" : "border-border"
+      )}
+    >
+      <span className={cn("grid size-10 place-items-center rounded-lg", meta.tileClass)}>
+        <Icon className="size-5" aria-hidden />
+      </span>
+      <span className="font-heading text-base font-semibold">{title}</span>
+      <span className="text-xs text-muted-foreground">{description}</span>
+    </button>
+  );
+}
+
 type StepState = "completed" | "active" | "upcoming";
 
 function Stepper({
+  steps,
   current,
   canReach,
   isComplete,
   onChange,
 }: {
+  steps: StepKey[];
   current: StepKey;
   canReach: (step: StepKey) => boolean;
   isComplete: (step: StepKey) => boolean;
   onChange: (step: StepKey) => void;
 }) {
   const t = useTranslations("competitions.create.steps");
-  const currentIndex = STEP_KEYS.indexOf(current);
+  const currentIndex = steps.indexOf(current);
 
   return (
     <div className="flex w-full items-center rounded-xl border bg-card px-3 py-3 sm:px-4">
-      {STEP_KEYS.map((step, i) => {
+      {steps.map((step, i) => {
         const state: StepState = i === currentIndex ? "active" : isComplete(step) ? "completed" : "upcoming";
-        const isLast = i === STEP_KEYS.length - 1;
+        const isLast = i === steps.length - 1;
         const reachable = canReach(step);
         const isClickable = state !== "active" && reachable;
         const stepIsDone = isComplete(step);
@@ -340,8 +419,6 @@ function StepDot({ index, state }: { index: number; state: StepState }) {
   );
 }
 
-// Select-all / clear-all toggle. Used both at the section level (Fases / Equipos headers) and
-// per-group, so the broader action reads as the same control as "Marcar grupo entero".
 function ScopeToggle({ active, onToggle, activeLabel, inactiveLabel }: { active: boolean; onToggle: () => void; activeLabel: string; inactiveLabel: string }) {
   return (
     <button
@@ -387,7 +464,7 @@ function GroupBlock({
 }
 
 function TeamRow({ team, selected, onToggle }: { team: Team; selected: boolean; onToggle: () => void }) {
-  const locale = useLocale();
+  const loc = useLocale();
   return (
     <li>
       <button
@@ -415,7 +492,7 @@ function TeamRow({ team, selected, onToggle }: { team: Team; selected: boolean; 
         ) : (
           <span className="inline-flex h-5 w-7 shrink-0 items-center justify-center rounded-xs bg-muted text-2xs font-semibold">{team.fifa_code}</span>
         )}
-        <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{getTeamName(team, locale)}</span>
+        <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{getTeamName(team, loc)}</span>
       </button>
     </li>
   );
@@ -448,7 +525,7 @@ function WizardFooter({
   isPending: boolean;
 }) {
   const t = useTranslations("competitions.create");
-  const isFirst = step === "name";
+  const isFirst = step === "details";
   const isLast = step === "summary";
 
   return (

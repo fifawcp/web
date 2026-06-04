@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { displayName } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
 import { LEADERBOARD_PAGE_SIZE } from "../api/competitions";
@@ -86,13 +87,14 @@ export function LeaderboardMobileTable({ rows, cyclableColumns, currentUserId, i
         <ul className="divide-y divide-border">
           {rows.map((entry) => {
             const isMe = entry.member.user_id === currentUserId;
-            const displayName = [entry.member.first_name, entry.member.last_name].filter(Boolean).join(" ") || entry.member.username;
             return (
               <li key={entry.member.user_id} className={cn("grid grid-cols-[auto_1fr_auto] items-center gap-3 px-2 py-2.5", isMe && "bg-page-accent-soft/60")}>
                 <span className="w-9 shrink-0 text-xs font-medium tabular-nums text-muted-foreground">{String(entry.rank).padStart(2, "0")}</span>
                 <div className="flex min-w-0 flex-col leading-tight">
                   <span className="flex min-w-0 items-center gap-1.5">
-                    <span className={cn("truncate text-sm font-medium", isMe && "text-page-accent-strong")}>{displayName}</span>
+                    <span className={cn("truncate text-sm font-medium", isMe && "text-page-accent-strong")}>
+                      {displayName(entry.member.username, entry.member.first_name, entry.member.last_name)}
+                    </span>
                     {isMe ? <span className="rounded-md bg-page-accent p-1 text-2xs font-medium uppercase tracking-wide text-white">{t("you")}</span> : null}
                   </span>
                   <span className="truncate text-xs text-muted-foreground">@{entry.member.username}</span>

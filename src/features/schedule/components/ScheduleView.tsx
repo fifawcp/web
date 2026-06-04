@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
 
 import { useMatches } from "../hooks/useMatches";
@@ -24,11 +24,31 @@ type Props = {
   initialMatches: Match[];
   anchorMatchId: number | null;
   isAuthed: boolean;
+  deepLinkMatchId?: number | null;
 };
 
-export function ScheduleView({ initialMatches, anchorMatchId, isAuthed }: Props) {
+export function ScheduleView({ initialMatches, anchorMatchId, isAuthed, deepLinkMatchId = null }: Props) {
   const t = useTranslations("schedule");
   const { data: matches = [] } = useMatches(initialMatches);
+
+  // Arriving via a competition's "make picks" deep link (?match=<id>) — scroll to that match once.
+  // Poll briefly so the scroll waits until the target card has actually rendered.
+  const scrolledTo = useRef<number | null>(null);
+  useEffect(() => {
+    if (deepLinkMatchId == null || scrolledTo.current === deepLinkMatchId) return;
+    let frame = 0;
+    let attempts = 0;
+    const tryScroll = () => {
+      if (document.querySelector(`[data-match-id="${deepLinkMatchId}"]`)) {
+        scrolledTo.current = deepLinkMatchId;
+        scrollMatchIntoView(deepLinkMatchId);
+        return;
+      }
+      if (attempts++ < 30) frame = requestAnimationFrame(tryScroll);
+    };
+    frame = requestAnimationFrame(tryScroll);
+    return () => cancelAnimationFrame(frame);
+  }, [deepLinkMatchId]);
 
   const allTeams = useMemo(() => collectTeams(matches), [matches]);
   const [filters, setFilters] = useScheduleFilters(allTeams);

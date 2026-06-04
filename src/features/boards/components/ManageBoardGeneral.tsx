@@ -189,8 +189,7 @@ function SettingCard({ children, tone = "default" }: { children: React.ReactNode
   );
 }
 
-// Icon + title + one-line description, atop each card. The accent-soft tile mirrors
-// CompetitionInfoCard so the sheet feels part of the board's themed surfaces.
+// Icon + title + one-line description, atop each card.
 function SectionHeader({ icon: Icon, title, description, tone = "default" }: { icon: LucideIcon; title: string; description: string; tone?: "default" | "danger" }) {
   const isDanger = tone === "danger";
   return (

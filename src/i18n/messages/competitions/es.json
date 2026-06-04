@@ -3,7 +3,8 @@
   "notFound": "No encontramos esa competencia",
   "type": {
     "pickem": "Pick'em",
-    "match": "Partidos"
+    "match": "Personalizada",
+    "pool": "Polla"
   },
   "defaultNames": {
     "fullTournament": "Torneo completo"
@@ -12,35 +13,51 @@
     "createCompetition": "Nueva competencia"
   },
   "info": {
-    "change": "Cambiar competencia",
-    "switcher": {
-      "heading": "Competencias",
-      "actions": "Acciones de competencia",
-      "add": "Crear competencia",
-      "addSubtitle": "Agrega otra a este board",
-      "delete": "Eliminar competencia",
-      "deleteSubtitle": "Quitarla permanentemente"
-    },
-    "scope": "Fases incluidas",
-    "teamsIncluded": "Equipos incluidos",
     "stagesCount": "{count, plural, one {# fase} other {# fases}}",
     "teamsCount": "{count, plural, one {# equipo} other {# equipos}}",
-    "allStages": "Todas las fases",
-    "allTeams": "Todos los equipos",
     "rank": "Tu posición",
-    "points": "Tus puntos",
-    "pts": "pts"
+    "points": "Tus puntos"
   },
   "podium": {
-    "title": "Top 3",
-    "first": "1°",
-    "second": "2°",
-    "third": "3°",
-    "points": "{points} pts",
     "empty": "Aún no hay tabla"
   },
+  "detail": {
+    "back": "Volver al tablero"
+  },
+  "card": {
+    "scope": "Alcance",
+    "stages": "Fases",
+    "teams": "Equipos",
+    "allStages": "Todas las fases",
+    "allTeamsShort": "Todos los equipos",
+    "pickem": {
+      "progress": "Tus pronósticos",
+      "groups": "Grupos",
+      "thirds": "Terceros",
+      "bracket": "Llaves"
+    },
+    "hint": {
+      "title": "{count, plural, one {# competencia espera tus pronósticos} other {# competencias esperan tus pronósticos}}",
+      "description": "Las tarjetas con borde de color te esperan: pronostica antes de que cierren.",
+      "dismiss": "Descartar"
+    },
+    "leaderboard": "Clasificación",
+    "makePicks": "Haz tus pronósticos",
+    "picksDone": "Pronósticos listos",
+    "viewPicks": "Ver pronósticos",
+    "closed": "Cerrado",
+    "closesIn": "Cierra en {time}",
+    "vs": "vs",
+    "matchUnavailable": "Partido no disponible",
+    "actions": "Acciones de la competencia",
+    "delete": "Eliminar competencia",
+    "filter": "Filtrar competencias…",
+    "clearFilter": "Limpiar filtro",
+    "new": "Nueva competencia",
+    "newShort": "Nueva",
+    "newHint": "Personalizada · Pool"
+  },
   "leaderboard": {
-    "title": "Tabla",
     "memberCount": "{count, plural, one {# miembro} other {# miembros}}",
     "search": "Busca miembros",
     "columns": {
@@ -53,6 +70,15 @@
       "bracket": "Bracket",
       "exactHits": "Exactos",
       "outcomes": "Resultados"
+    },
+    "columnsLong": {
+      "total": "Puntos totales",
+      "groupExact": "Posiciones exactas de grupo",
+      "groupQualifiers": "Clasificados de grupo",
+      "bestThirds": "Mejores terceros",
+      "bracket": "Aciertos de llave",
+      "exactHits": "Marcadores exactos",
+      "outcomes": "Resultados correctos"
     },
     "you": "Tú",
     "empty": "Aún no hay entradas",
@@ -70,22 +96,35 @@
   },
   "emptyCompetitions": {
     "title": "Aún no hay competencias",
-    "descriptionAdmin": "Crea la primera competencia de partidos para este board.",
+    "descriptionAdmin": "Crea la primera competencia personalizada o pool de este board.",
     "descriptionMember": "Espera a que un admin cree una competencia.",
     "cta": "Nueva competencia"
   },
   "create": {
     "title": "Nueva competencia",
-    "description": "Puntúa una parte del torneo con fases y equipos a tu medida.",
+    "description": "Crea una competencia personalizada o un pool de un solo partido.",
     "steps": {
-      "name": "Nombre",
+      "details": "Detalles",
       "scope": "Alcance",
+      "match": "Partido",
       "summary": "Resumen"
+    },
+    "type": {
+      "label": "Tipo",
+      "customDescription": "Puntúa una parte del torneo con fases y equipos a tu medida.",
+      "poolDescription": "Un solo partido: todos pronostican el marcador exacto."
+    },
+    "match": {
+      "search": "Busca equipos…",
+      "empty": "No hay próximos partidos para crear un pool.",
+      "vs": "vs"
     },
     "name": {
       "label": "Nombre",
       "placeholder": "p. ej. Eliminatorias",
-      "helper": "Hasta 20 caracteres"
+      "helper": "Hasta 20 caracteres",
+      "poolPlaceholder": "Se define con el partido",
+      "poolHelper": "Se nombra automáticamente según el partido que elijas."
     },
     "scope": {
       "stages": "Fases",
@@ -102,7 +141,9 @@
       "selectedStages": "{count, plural, one {# fase} other {# fases}}"
     },
     "summary": {
+      "type": "Tipo",
       "name": "Nombre",
+      "match": "Partido",
       "stages": "Fases",
       "teams": "Equipos"
     },

@@ -3,6 +3,20 @@
   "label": "Board",
   "notFound": "No encontramos ese board",
   "members": "{count, plural, one {# miembro} other {# miembros}}",
+  "tabs": {
+    "competitions": "Competencias",
+    "members": "Miembros"
+  },
+  "header": {
+    "menu": {
+      "label": "Acciones del board",
+      "settings": "Configuración del board",
+      "copyCode": "Copiar código",
+      "copiedCode": "Código copiado",
+      "leave": "Salir del board",
+      "delete": "Eliminar board"
+    }
+  },
   "privacy": {
     "public": "Público",
     "private": "Privado",
@@ -20,19 +34,13 @@
     "sections": {
       "yourBoards": "Tus boards",
       "global": "Board global",
-      "actions": "Acciones del board",
       "more": "Agregar un board"
     },
-    "manage": "Gestionar board",
     "create": "Crear board",
     "join": "Unirme con código",
     "createSubtitle": "Arma uno nuevo",
     "joinSubtitle": "Introduce un código",
-    "invite": "Invitar amigos",
-    "inviteSubtitle": "Suma miembros a {name}",
-    "manageSubtitle": "Miembros y roles",
-    "leave": "Salir del board",
-    "leaveSubtitle": "Sal de este board"
+    "invite": "Invitar"
   },
   "invite": {
     "copy": "Copiar",
