@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Link } from "@/i18n/navigation";
+import { JsonLd } from "@/shared/components/JsonLd";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/components/ui/accordion";
 import { buildPageMetadata } from "@/shared/seo/metadata";
 
@@ -22,8 +23,24 @@ export default async function FaqPage({ params }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations("pages.faq");
 
+  // Strip the next-intl rich-text markers (<rulesLink>…</rulesLink>) so the
+  // structured-data answer is plain prose, as Google's FAQPage spec requires.
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ_KEYS.map((key) => ({
+      "@type": "Question",
+      name: t(`items.${key}.question`),
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: t(`items.${key}.answer`).replace(/<\/?[a-zA-Z]+>/g, ""),
+      },
+    })),
+  };
+
   return (
     <section className="container py-6 lg:py-8">
+      <JsonLd data={faqJsonLd} />
       <div className="flex flex-col gap-10">
         <header className="flex flex-col gap-4 border-b border-border pb-10">
           <span className={eyebrow}>{t("eyebrow")}</span>

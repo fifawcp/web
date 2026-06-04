@@ -6,9 +6,8 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const OG_LOCALE: Record<string, string> = { en: "en_US", es: "es_ES" };
 
-// Social-share image. Note: WebP previews are not reliably rendered by Facebook,
-// LinkedIn, or WhatsApp (X/Twitter is fine) — revisit if those previews matter.
-const OG_IMAGE = { url: "/banner-stadium.webp", width: 1376, height: 768, alt: SITE_NAME };
+// Social-share card image.
+const OG_IMAGE = { url: "/og-card.webp", width: 1200, height: 630, alt: SITE_NAME };
 
 type PageMetaInput = {
   locale: string;
@@ -61,7 +60,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     metadataBase: new URL(SITE_URL),
     ...home,
     title: { default: home.title as string, template: `%s · ${SITE_NAME}` },
-    icons: { icon: "/favicon.svg" },
+    icons: {
+      icon: { url: "/favicon.svg", type: "image/svg+xml" },
+      apple: "/apple-icon.png",
+    },
+    verification: { google: "utA0BlfIkcKU42uOX5Em1xAJJDXl2AKcQDuPFE_Wzjo" },
     robots: { index: true, follow: true },
   };
 }
