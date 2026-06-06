@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
+import { AWARDS_CACHE_TAG } from "@/features/awards/api/awards";
+import type { UserAwards } from "@/features/awards/types/awards.types";
 import { BOARDS_LIST_TAG, boardTag } from "@/features/boards/api/boards";
 import type { Board, BoardListItem } from "@/features/boards/types/boards.types";
 import { boardLeaderboardsTag, competitionsTag, LEADERBOARD_PAGE_SIZE, leaderboardTag } from "@/features/competitions/api/competitions";
@@ -88,11 +90,19 @@ export default async function CompetitionDetailPage({ params, searchParams }: Pr
     initialLeaderboard = { items, page: pagination.page, limit: pagination.limit, total: pagination.total, has_more: pagination.has_more };
   }
 
-  // Pick'em lock state seeds the header countdown + CTA, mirroring the board grid.
+  // Pick'em / awards lock state seeds the header countdown + CTA, mirroring the board grid.
   let pickem: { progress: UserPickem["progress"]; isLocked: boolean } | null = null;
   if (competition.type === "pickem") {
     const pickemRes = await serverApi.get<UserPickem>("/api/pickems", { authenticated: true, next: { revalidate: 30, tags: [PICKEMS_CACHE_TAG] } });
     if (pickemRes.success && pickemRes.data) pickem = { progress: pickemRes.data.progress, isLocked: pickemRes.data.is_locked };
+  }
+
+  let awards: { pickedTypes: UserAwards["picks"][number]["award_type"][]; isLocked: boolean } | null = null;
+  if (competition.type === "awards") {
+    const awardsRes = await serverApi.get<UserAwards>("/api/awards", { authenticated: true, next: { revalidate: 30, tags: [AWARDS_CACHE_TAG] } });
+    if (awardsRes.success && awardsRes.data) {
+      awards = { pickedTypes: awardsRes.data.picks.filter((p) => p.player != null).map((p) => p.award_type), isLocked: awardsRes.data.is_locked };
+    }
   }
 
   return (
@@ -102,6 +112,7 @@ export default async function CompetitionDetailPage({ params, searchParams }: Pr
       competition={competition}
       matches={matchesRes.data ?? []}
       pickem={pickem}
+      awards={awards}
       initialLeaderboard={initialLeaderboard}
     />
   );

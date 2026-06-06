@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
+import { AWARDS_CACHE_TAG } from "@/features/awards/api/awards";
+import type { UserAwards } from "@/features/awards/types/awards.types";
 import { BOARDS_LIST_TAG, boardTag } from "@/features/boards/api/boards";
 import { BoardDetailView } from "@/features/boards/components/BoardDetailView";
 import type { Board, BoardListItem } from "@/features/boards/types/boards.types";
-import { boardLeaderboardsTag, competitionsTag, leaderboardTag } from "@/features/competitions/api/competitions";
+import { competitionsTag } from "@/features/competitions/api/competitions";
 import type { Competition, LeaderboardEntry } from "@/features/competitions/types/competitions.types";
 import { PICKEMS_CACHE_TAG } from "@/features/pickems/api/pickems";
 import type { UserPickem } from "@/features/pickems/types/pickems.types";
@@ -20,10 +22,6 @@ type Props = {
   params: Promise<{ boardId: string }>;
   searchParams: Promise<{ competition?: string; notice?: string }>;
 };
-
-// Top of the leaderboard previewed on each competition card. Small + concurrent + cache-tagged so
-// the pick→revalidate flow already keeps them fresh.
-const TOP_PREVIEW_LIMIT = 3;
 
 export default async function BoardPage({ params, searchParams }: Props) {
   const [{ boardId }, { competition, notice }] = await Promise.all([params, searchParams]);
@@ -79,28 +77,25 @@ export default async function BoardPage({ params, searchParams }: Props) {
   const teams = collectTeams(matchesRes.data ?? []);
   const matches = matchesRes.data ?? [];
 
-  // Prefetch the top-N for every competition (concurrently) + the tournament pick'em progress (when
-  // the board has a pick'em — always, since it's the auto-seeded anchor).
+  // The competitions list already carries each card's top-3 preview, so we only need the viewer's
+  // own pick'em / awards progress for the card context (and only when the board has those types).
   const hasPickem = competitions.some((c) => c.type === "pickem");
-  const [topPreviews, pickemRes] = await Promise.all([
-    Promise.all(
-      competitions.map((c) =>
-        serverApi.get<LeaderboardEntry[]>(`/api/boards/${boardIdNum}/competitions/${c.id}/leaderboard?page=1&limit=${TOP_PREVIEW_LIMIT}`, {
-          authenticated: true,
-          next: { revalidate: 30, tags: [leaderboardTag(boardIdNum, c.id), boardLeaderboardsTag(boardIdNum)] },
-        })
-      )
-    ),
+  const hasAwards = competitions.some((c) => c.type === "awards");
+  const [pickemRes, awardsRes] = await Promise.all([
     hasPickem ? serverApi.get<UserPickem>("/api/pickems", { authenticated: true, next: { revalidate: 30, tags: [PICKEMS_CACHE_TAG] } }) : Promise.resolve(null),
+    hasAwards ? serverApi.get<UserAwards>("/api/awards", { authenticated: true, next: { revalidate: 30, tags: [AWARDS_CACHE_TAG] } }) : Promise.resolve(null),
   ]);
 
   const topThreeByCompetition: Record<number, LeaderboardEntry[]> = {};
-  competitions.forEach((c, i) => {
-    const res = topPreviews[i];
-    topThreeByCompetition[c.id] = res?.success && res.data ? res.data : [];
+  competitions.forEach((c) => {
+    topThreeByCompetition[c.id] = c.top_preview ?? [];
   });
 
   const pickem = pickemRes?.success && pickemRes.data ? { progress: pickemRes.data.progress, isLocked: pickemRes.data.is_locked } : null;
+  const awards =
+    awardsRes?.success && awardsRes.data
+      ? { pickedTypes: awardsRes.data.picks.filter((p) => p.player != null).map((p) => p.award_type), isLocked: awardsRes.data.is_locked }
+      : null;
 
   return (
     <BoardDetailView
@@ -113,6 +108,7 @@ export default async function BoardPage({ params, searchParams }: Props) {
       matches={matches}
       topThreeByCompetition={topThreeByCompetition}
       pickem={pickem}
+      awards={awards}
       boardNotFound={notice === "board-not-found"}
       competitionNotFound={notice === "competition-not-found"}
     />

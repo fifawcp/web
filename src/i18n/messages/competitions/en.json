@@ -4,10 +4,12 @@
   "type": {
     "pickem": "Pick'em",
     "match": "Custom",
-    "pool": "Pool"
+    "pick": "Pick",
+    "awards": "Awards"
   },
   "defaultNames": {
-    "fullTournament": "Full tournament"
+    "fullTournament": "Full schedule",
+    "awards": "Awards"
   },
   "tabs": {
     "createCompetition": "New competition"
@@ -15,6 +17,7 @@
   "info": {
     "stagesCount": "{count, plural, one {# stage} other {# stages}}",
     "teamsCount": "{count, plural, one {# team} other {# teams}}",
+    "awardsCount": "{count, plural, one {# award} other {# awards}}",
     "rank": "Your position",
     "points": "Your points"
   },
@@ -36,6 +39,9 @@
       "thirds": "Thirds",
       "bracket": "Bracket"
     },
+    "awards": {
+      "label": "Individual honors"
+    },
     "hint": {
       "title": "{count, plural, one {# competition needs your picks} other {# competitions need your picks}}",
       "description": "Cards with an accent border are waiting on you — get your picks in before they lock.",
@@ -55,7 +61,7 @@
     "clearFilter": "Clear filter",
     "new": "New competition",
     "newShort": "New",
-    "newHint": "Custom · Pool"
+    "newHint": "Custom · Pick"
   },
   "leaderboard": {
     "memberCount": "{count, plural, one {# member} other {# members}}",
@@ -69,7 +75,11 @@
       "bestThirds": "B.3rds",
       "bracket": "Bracket",
       "exactHits": "Exact hits",
-      "outcomes": "Outcomes"
+      "outcomes": "Outcomes",
+      "golden_boot": "Boot",
+      "golden_ball": "Ball",
+      "golden_glove": "Glove",
+      "young_player": "U21"
     },
     "columnsLong": {
       "total": "Total points",
@@ -78,7 +88,11 @@
       "bestThirds": "Best thirds",
       "bracket": "Bracket hits",
       "exactHits": "Exact scores",
-      "outcomes": "Correct outcomes"
+      "outcomes": "Correct outcomes",
+      "golden_boot": "Golden Boot",
+      "golden_ball": "Golden Ball",
+      "golden_glove": "Golden Glove",
+      "young_player": "Young Player"
     },
     "you": "You",
     "empty": "No entries yet",
@@ -94,15 +108,23 @@
       "nextColumn": "Show {name}"
     }
   },
+  "summary": {
+    "columns": {
+      "pickem": "Pick'em",
+      "custom": "Custom",
+      "pick": "Picks",
+      "awards": "Awards"
+    }
+  },
   "emptyCompetitions": {
     "title": "No competitions yet",
-    "descriptionAdmin": "Create the first custom competition or pool for this board.",
+    "descriptionAdmin": "Create the first custom competition or pick for this board.",
     "descriptionMember": "Wait for an admin to add a competition.",
     "cta": "New competition"
   },
   "create": {
     "title": "New competition",
-    "description": "Set up a custom competition or a single-match pool.",
+    "description": "Set up a custom competition or a single-match pick.",
     "steps": {
       "details": "Details",
       "scope": "Scope",
@@ -112,19 +134,22 @@
     "type": {
       "label": "Type",
       "customDescription": "Score a slice of the tournament with custom stages and teams.",
-      "poolDescription": "A single match — everyone predicts the exact score."
+      "pickDescription": "A single match — everyone predicts the exact score.",
+      "pickemDescription": "The full tournament bracket — groups, thirds and knockouts.",
+      "awardsDescription": "The individual honors — golden boot, ball, glove and young player."
     },
     "match": {
       "search": "Search teams…",
-      "empty": "No upcoming matches to pool.",
+      "empty": "No upcoming matches to pick.",
       "vs": "vs"
     },
     "name": {
       "label": "Name",
       "placeholder": "e.g. Knockout run",
       "helper": "Up to 20 characters",
-      "poolPlaceholder": "Set from the match",
-      "poolHelper": "Named automatically from the match you pick."
+      "pickPlaceholder": "Set from the match",
+      "pickHelper": "Named automatically from the match you pick.",
+      "fixedHelper": "Named automatically — one per board."
     },
     "scope": {
       "stages": "Stages",
@@ -154,8 +179,9 @@
     "success": "Competition created"
   },
   "delete": {
-    "title": "Delete competition?",
-    "description": "{name} and all its picks will be removed for everyone on the board. This can't be undone.",
+    "title": "Delete {name}?",
+    "description": "{name} leaves this board, along with its leaderboard and summary points. Members' picks are kept — re-add it to bring the standings back.",
+    "typeToConfirm": "Type <b>{name}</b> to confirm",
     "confirm": "Delete competition",
     "cancel": "Cancel",
     "success": "Competition deleted"

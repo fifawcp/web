@@ -23,6 +23,8 @@
   "NOT_BOARD_MEMBER": "No eres miembro de este board.",
   "INVALID_BOARD_ID": "Board inválido.",
   "INVALID_USER_ID": "Usuario inválido.",
+  "COMPETITION_PICKEM_ALREADY_EXISTS": "Ya existe una competencia Pick'em en este board.",
+  "COMPETITION_AWARDS_ALREADY_EXISTS": "Ya existe una competencia de Premios en este board.",
   "COMPETITION_NAME_ALREADY_EXISTS": "Ya existe una competencia con ese nombre en este board.",
   "COMPETITION_FORBIDDEN": "Ya no tienes permiso para gestionar competencias en este board.",
   "UNKNOWN_ERROR": "Ocurrió un error. Por favor intenta de nuevo."

@@ -10,15 +10,21 @@ type Params = {
   competitionId: number;
   page: number;
   q?: string;
+  sort?: string;
+  dir?: string;
   initialData?: LeaderboardPage;
 };
 
-export function useLeaderboard({ boardId, competitionId, page, q, initialData }: Params) {
+export function useLeaderboard({ boardId, competitionId, page, q, sort, dir, initialData }: Params) {
   const normalizedQ = q ?? "";
+  const normalizedSort = sort ?? "total";
+  const normalizedDir = dir ?? "desc";
+  // The RSC seed is the default (total, desc) first page — only reuse it then.
+  const isDefault = page === 1 && normalizedQ === "" && normalizedSort === "total" && normalizedDir === "desc";
   return useQuery({
-    queryKey: leaderboardKey(boardId, competitionId, { page, q: normalizedQ }),
-    queryFn: () => fetchLeaderboard(boardId, competitionId, { page, limit: LEADERBOARD_PAGE_SIZE, q: normalizedQ }),
-    initialData: page === 1 && normalizedQ === "" ? initialData : undefined,
+    queryKey: leaderboardKey(boardId, competitionId, { page, q: normalizedQ, sort: normalizedSort, dir: normalizedDir }),
+    queryFn: () => fetchLeaderboard(boardId, competitionId, { page, limit: LEADERBOARD_PAGE_SIZE, q: normalizedQ, sort: normalizedSort, dir: normalizedDir }),
+    initialData: isDefault ? initialData : undefined,
     placeholderData: keepPreviousData,
     enabled: Number.isFinite(boardId) && Number.isFinite(competitionId),
   });
