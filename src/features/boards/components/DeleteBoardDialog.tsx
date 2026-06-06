@@ -5,9 +5,9 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { useRouter } from "@/i18n/navigation";
-import { ConfirmByTyping } from "@/shared/components/ConfirmByTyping";
 import { Button } from "@/shared/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
+import { Input } from "@/shared/components/ui/input";
 import { useAutoFocusUnlessMobile } from "@/shared/hooks/useAutoFocusUnlessMobile";
 import { translateApiError } from "@/shared/lib/api/errors";
 
@@ -54,25 +54,11 @@ export function DeleteBoardDialog({ board, open, onOpenChange }: Props) {
       <DialogContent onOpenAutoFocus={focus.onOpenAutoFocus} className={BOARD_DIALOG_WIDTH}>
         <DialogHeader>
           <DialogTitle>{t("delete.confirm", { name: board.name })}</DialogTitle>
+          <DialogDescription>{t("delete.confirmDescription")}</DialogDescription>
         </DialogHeader>
-        <ConfirmByTyping
-          inputId="delete-board-confirm"
-          warning={t("delete.description")}
-          label={t.rich("delete.typeToConfirm", { name: board.name, b: (chunks) => <span className="font-medium text-foreground">{chunks}</span> })}
-          placeholder={board.name}
-          value={typed}
-          onChange={setTyped}
-          autoFocus={focus.autoFocus}
-        />
+        <Input value={typed} onChange={(event) => setTyped(event.target.value)} autoFocus={focus.autoFocus} aria-label={board.name} />
         <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => {
-              setTyped("");
-              onOpenChange(false);
-            }}
-            className="sm:min-w-24 sm:px-6"
-          >
+          <Button variant="outline" onClick={() => onOpenChange(false)} className="sm:min-w-24 sm:px-6">
             {t("delete.cancel")}
           </Button>
           <Button variant="destructive" disabled={typed !== board.name || remove.isPending} onClick={handleDelete} className="sm:min-w-24 sm:px-6">

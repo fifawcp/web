@@ -20,9 +20,9 @@ type Props = {
   onChange: (matchId: number) => void;
 };
 
-// Picks the single match a pick competition covers. Only still-open matches are selectable — a pick
+// Picks the single match a pool competition covers. Only still-open matches are selectable — a pool
 // on a locked match has nothing left to predict.
-export function PickMatchPicker({ matches, value, onChange }: Props) {
+export function PoolMatchPicker({ matches, value, onChange }: Props) {
   const t = useTranslations("competitions.create.match");
   const tStages = useTranslations("schedule.filters.stage");
   const locale = useLocale();
@@ -30,7 +30,7 @@ export function PickMatchPicker({ matches, value, onChange }: Props) {
   const [search, setSearch] = useState("");
 
   const selectable = useMemo(() => {
-    // Only matches with a confirmed fixture (both teams known) and still open can be picked.
+    // Only matches with a confirmed fixture (both teams known) and still open can be pooled.
     const open = matches.filter((m) => m.teams.home != null && m.teams.away != null && !computeMatchUiState(m, now).isLocked);
     return open.sort((a, b) => new Date(a.kickoff_at).getTime() - new Date(b.kickoff_at).getTime());
   }, [matches, now]);

@@ -21,27 +21,20 @@ import type { GroupCode, StageCode, Team } from "@/shared/types/wcp.types";
 import { useCreateCompetition } from "../hooks/useCreateCompetition";
 import { competitionTypeMeta } from "../lib/competitionTypeMeta";
 import { ALL_STAGES } from "../lib/formatScope";
-import type { CompetitionType } from "../types/competitions.types";
 
-import { PickMatchPicker } from "./PickMatchPicker";
+import { PoolMatchPicker } from "./PoolMatchPicker";
 
 const NAME_MAX = 20;
-type CompetitionKind = "match" | "pick" | "pickem" | "awards";
+type CompetitionKind = "match" | "pool";
 type StepKey = "details" | "scope" | "match" | "summary";
 
 // Step 1 picks the type and names it; the second step branches by type. Custom is the default path
 // so the full stepper is visible before a type is chosen.
 const STEPS_BY_KIND: Record<CompetitionKind, StepKey[]> = {
   match: ["details", "scope", "summary"],
-  pick: ["details", "match", "summary"],
-  pickem: ["details", "summary"],
-  awards: ["details", "summary"],
+  pool: ["details", "match", "summary"],
 };
 const DEFAULT_STEPS: StepKey[] = ["details", "scope", "summary"];
-
-type SingletonKind = "pickem" | "awards";
-const SINGLETON_NAME: Record<SingletonKind, string> = { pickem: "Pick'em", awards: "Awards" };
-const isSingleton = (kind: CompetitionKind | null): kind is SingletonKind => kind === "pickem" || kind === "awards";
 
 type Props = {
   open: boolean;
@@ -49,10 +42,9 @@ type Props = {
   boardId: number;
   teams: Team[];
   matches: Match[];
-  existingTypes: CompetitionType[];
 };
 
-export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams, matches, existingTypes }: Props) {
+export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams, matches }: Props) {
   const t = useTranslations("competitions.create");
   const tRoot = useTranslations("competitions");
   const tStages = useTranslations("schedule.filters.stage");
@@ -68,7 +60,7 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams, ma
   const [name, setName] = useState("");
   const [stages, setStages] = useState<StageCode[]>([]);
   const [teamCodes, setTeamCodes] = useState<string[]>([]);
-  const [pickMatchId, setPickMatchId] = useState<number | null>(null);
+  const [poolMatchId, setPoolMatchId] = useState<number | null>(null);
   const focus = useAutoFocusUnlessMobile();
 
   const steps = kind ? STEPS_BY_KIND[kind] : DEFAULT_STEPS;
@@ -76,16 +68,17 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams, ma
   const trimmed = name.trim();
   const isNameValid = trimmed.length > 0 && trimmed.length <= NAME_MAX;
   const isScopeValid = stages.length > 0 && teamCodes.length > 0;
-  const isMatchValid = pickMatchId !== null;
-  const isBranchValid = kind === "pick" ? isMatchValid : kind === "match" ? isScopeValid : true;
+  const isMatchValid = poolMatchId !== null;
+  const isBranchValid = kind === "pool" ? isMatchValid : isScopeValid;
   const isAllTeams = teamCodes.length === allTeamCodes.length;
   const isAllStages = stages.length === ALL_STAGES.length;
 
-  const pickMatch = pickMatchId != null ? matches.find((m) => m.id === pickMatchId) : undefined;
-  const pickName = pickMatch ? `${pickMatch.teams.home?.fifa_code ?? "?"} vs ${pickMatch.teams.away?.fifa_code ?? "?"}` : "";
-  const resolvedName = kind === "pick" ? pickName : isSingleton(kind) ? SINGLETON_NAME[kind] : trimmed;
-  const isDetailsValid = kind !== null && (kind === "pick" || isSingleton(kind) || isNameValid);
-  const nameFixed = kind === "pick" || isSingleton(kind);
+  // Pools are named automatically from the picked match (FIFA codes keep it within the 20-char cap),
+  // so the name field is skipped for them and the details step only needs a type.
+  const poolMatch = poolMatchId != null ? matches.find((m) => m.id === poolMatchId) : undefined;
+  const poolName = poolMatch ? `${poolMatch.teams.home?.fifa_code ?? "?"} vs ${poolMatch.teams.away?.fifa_code ?? "?"}` : "";
+  const resolvedName = kind === "pool" ? poolName : trimmed;
+  const isDetailsValid = kind !== null && (kind === "pool" || isNameValid);
 
   const teamsByGroup = useMemo(() => {
     const groups = new Map<GroupCode | "_", Team[]>();
@@ -103,7 +96,7 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams, ma
     setName("");
     setStages([]);
     setTeamCodes([]);
-    setPickMatchId(null);
+    setPoolMatchId(null);
   }
 
   function close() {
@@ -155,13 +148,9 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams, ma
 
   async function submit() {
     const input =
-      kind === "pick"
-        ? ({ name: resolvedName, type: "pick", match_id: pickMatchId! } as const)
-        : kind === "pickem"
-          ? ({ name: resolvedName, type: "pickem" } as const)
-          : kind === "awards"
-            ? ({ name: resolvedName, type: "awards" } as const)
-            : ({ name: resolvedName, type: "match", scope: { stages, team_fifa_codes: isAllTeams ? [] : teamCodes } } as const);
+      kind === "pool"
+        ? ({ name: resolvedName, type: "pool", match_id: poolMatchId! } as const)
+        : ({ name: resolvedName, type: "match", scope: { stages, team_fifa_codes: isAllTeams ? [] : teamCodes } } as const);
 
     const created = await mutation.mutateAsync(input).catch((error: Error) => {
       toast.error(translateApiError(error, tApiErrors));
@@ -198,31 +187,13 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams, ma
                     description={t("type.customDescription")}
                     onClick={() => setKind("match")}
                   />
-                  <TypeCard type="pick" active={kind === "pick"} title={tRoot("type.pick")} description={t("type.pickDescription")} onClick={() => setKind("pick")} />
-                  {!existingTypes.includes("pickem") ? (
-                    <TypeCard
-                      type="pickem"
-                      active={kind === "pickem"}
-                      title={tRoot("type.pickem")}
-                      description={t("type.pickemDescription")}
-                      onClick={() => setKind("pickem")}
-                    />
-                  ) : null}
-                  {!existingTypes.includes("awards") ? (
-                    <TypeCard
-                      type="awards"
-                      active={kind === "awards"}
-                      title={tRoot("type.awards")}
-                      description={t("type.awardsDescription")}
-                      onClick={() => setKind("awards")}
-                    />
-                  ) : null}
+                  <TypeCard type="pool" active={kind === "pool"} title={tRoot("type.pool")} description={t("type.poolDescription")} onClick={() => setKind("pool")} />
                 </div>
               </div>
               <Field>
                 <FieldLabel htmlFor="comp-name">{t("name.label")}</FieldLabel>
-                {nameFixed ? (
-                  <Input id="comp-name" value={resolvedName} disabled placeholder={t("name.pickPlaceholder")} />
+                {kind === "pool" ? (
+                  <Input id="comp-name" value={poolName} disabled placeholder={t("name.poolPlaceholder")} />
                 ) : (
                   <Input
                     id="comp-name"
@@ -233,12 +204,12 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams, ma
                     className="focus-visible:border-page-accent-strong focus-visible:ring-page-accent-strong/30"
                   />
                 )}
-                <FieldDescription>{kind === "pick" ? t("name.pickHelper") : isSingleton(kind) ? t("name.fixedHelper") : t("name.helper")}</FieldDescription>
+                <FieldDescription>{kind === "pool" ? t("name.poolHelper") : t("name.helper")}</FieldDescription>
               </Field>
             </div>
           ) : null}
 
-          {step === "match" ? <PickMatchPicker matches={matches} value={pickMatchId} onChange={setPickMatchId} /> : null}
+          {step === "match" ? <PoolMatchPicker matches={matches} value={poolMatchId} onChange={setPoolMatchId} /> : null}
 
           {step === "scope" ? (
             <div className="flex flex-col gap-4">
@@ -313,12 +284,12 @@ export function CreateCompetitionWizard({ open, onOpenChange, boardId, teams, ma
             <div className="flex flex-col gap-3 rounded-lg border bg-muted/30 p-4 text-sm">
               <SummaryRow label={t("summary.type")} value={kind ? tRoot(`type.${kind}`) : ""} />
               <SummaryRow label={t("summary.name")} value={resolvedName} />
-              {kind === "pick" ? (
+              {kind === "pool" ? (
                 <SummaryRow
                   label={t("summary.match")}
-                  value={pickMatch ? `${teamLabel(pickMatch.teams.home, locale)} ${t("match.vs")} ${teamLabel(pickMatch.teams.away, locale)}` : ""}
+                  value={poolMatch ? `${teamLabel(poolMatch.teams.home, locale)} ${t("match.vs")} ${teamLabel(poolMatch.teams.away, locale)}` : ""}
                 />
-              ) : isSingleton(kind) ? null : (
+              ) : (
                 <>
                   <SummaryRow
                     label={t("summary.stages")}
@@ -363,17 +334,15 @@ function TypeCard({ type, active, title, description, onClick }: { type: Competi
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "flex items-center gap-3 rounded-xl border bg-card p-3 text-left transition-colors hover:bg-muted sm:flex-col sm:items-start sm:gap-2 sm:p-4",
+        "flex flex-col gap-2 rounded-xl border bg-card p-4 text-left transition-colors hover:bg-muted",
         active ? "border-page-accent ring-1 ring-page-accent/20" : "border-border"
       )}
     >
-      <span className={cn("grid size-10 shrink-0 place-items-center rounded-lg", meta.tileClass)}>
+      <span className={cn("grid size-10 place-items-center rounded-lg", meta.tileClass)}>
         <Icon className="size-5" aria-hidden />
       </span>
-      <span className="flex min-w-0 flex-col gap-0.5">
-        <span className="font-heading text-base font-semibold">{title}</span>
-        <span className="text-xs text-muted-foreground">{description}</span>
-      </span>
+      <span className="font-heading text-base font-semibold">{title}</span>
+      <span className="text-xs text-muted-foreground">{description}</span>
     </button>
   );
 }

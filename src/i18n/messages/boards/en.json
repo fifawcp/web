@@ -5,7 +5,6 @@
   "members": "{count, plural, one {# member} other {# members}}",
   "tabs": {
     "competitions": "Competitions",
-    "summary": "Summary",
     "members": "Members"
   },
   "header": {
@@ -116,7 +115,7 @@
         "description": "Deleting the board removes all its members, competitions, and results. This can't be undone.",
         "cta": "Delete board",
         "confirm": "Delete {name}?",
-        "typeToConfirm": "Type <b>{name}</b> to confirm",
+        "confirmDescription": "Type the board name to confirm.",
         "cancel": "Cancel",
         "success": "Board deleted"
       }

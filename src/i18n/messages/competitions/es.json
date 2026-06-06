@@ -4,12 +4,10 @@
   "type": {
     "pickem": "Pick'em",
     "match": "Personalizada",
-    "pick": "Polla",
-    "awards": "Premios"
+    "pool": "Polla"
   },
   "defaultNames": {
-    "fullTournament": "Calendario completo",
-    "awards": "Premios"
+    "fullTournament": "Torneo completo"
   },
   "tabs": {
     "createCompetition": "Nueva competencia"
@@ -17,7 +15,6 @@
   "info": {
     "stagesCount": "{count, plural, one {# fase} other {# fases}}",
     "teamsCount": "{count, plural, one {# equipo} other {# equipos}}",
-    "awardsCount": "{count, plural, one {# premio} other {# premios}}",
     "rank": "Tu posición",
     "points": "Tus puntos"
   },
@@ -38,9 +35,6 @@
       "groups": "Grupos",
       "thirds": "Terceros",
       "bracket": "Llaves"
-    },
-    "awards": {
-      "label": "Premios individuales"
     },
     "hint": {
       "title": "{count, plural, one {# competencia espera tus pronósticos} other {# competencias esperan tus pronósticos}}",
@@ -75,11 +69,7 @@
       "bestThirds": "3eros",
       "bracket": "Bracket",
       "exactHits": "Exactos",
-      "outcomes": "Resultados",
-      "golden_boot": "Bota",
-      "golden_ball": "Balón",
-      "golden_glove": "Guante",
-      "young_player": "Sub-21"
+      "outcomes": "Resultados"
     },
     "columnsLong": {
       "total": "Puntos totales",
@@ -88,11 +78,7 @@
       "bestThirds": "Mejores terceros",
       "bracket": "Aciertos de llave",
       "exactHits": "Marcadores exactos",
-      "outcomes": "Resultados correctos",
-      "golden_boot": "Bota de Oro",
-      "golden_ball": "Balón de Oro",
-      "golden_glove": "Guante de Oro",
-      "young_player": "Jugador Joven"
+      "outcomes": "Resultados correctos"
     },
     "you": "Tú",
     "empty": "Aún no hay entradas",
@@ -108,23 +94,15 @@
       "nextColumn": "Mostrar {name}"
     }
   },
-  "summary": {
-    "columns": {
-      "pickem": "Pick'em",
-      "custom": "Personalizadas",
-      "pick": "Pollas",
-      "awards": "Premios"
-    }
-  },
   "emptyCompetitions": {
     "title": "Aún no hay competencias",
-    "descriptionAdmin": "Crea la primera competencia personalizada o polla de este board.",
+    "descriptionAdmin": "Crea la primera competencia personalizada o pool de este board.",
     "descriptionMember": "Espera a que un admin cree una competencia.",
     "cta": "Nueva competencia"
   },
   "create": {
     "title": "Nueva competencia",
-    "description": "Crea una competencia personalizada o una polla de un solo partido.",
+    "description": "Crea una competencia personalizada o un pool de un solo partido.",
     "steps": {
       "details": "Detalles",
       "scope": "Alcance",
@@ -134,22 +112,19 @@
     "type": {
       "label": "Tipo",
       "customDescription": "Puntúa una parte del torneo con fases y equipos a tu medida.",
-      "pickDescription": "Un solo partido: todos pronostican el marcador exacto.",
-      "pickemDescription": "El bracket completo del torneo: grupos, terceros y eliminatorias.",
-      "awardsDescription": "Los premios individuales: bota, balón, guante de oro y joven."
+      "poolDescription": "Un solo partido: todos pronostican el marcador exacto."
     },
     "match": {
       "search": "Busca equipos…",
-      "empty": "No hay próximos partidos para crear una polla.",
+      "empty": "No hay próximos partidos para crear un pool.",
       "vs": "vs"
     },
     "name": {
       "label": "Nombre",
       "placeholder": "p. ej. Eliminatorias",
       "helper": "Hasta 20 caracteres",
-      "pickPlaceholder": "Se define con el partido",
-      "pickHelper": "Se nombra automáticamente según el partido que elijas.",
-      "fixedHelper": "Se nombra automáticamente: una por board."
+      "poolPlaceholder": "Se define con el partido",
+      "poolHelper": "Se nombra automáticamente según el partido que elijas."
     },
     "scope": {
       "stages": "Fases",
@@ -179,9 +154,8 @@
     "success": "Competencia creada"
   },
   "delete": {
-    "title": "¿Eliminar {name}?",
-    "description": "{name} se quita de este tablero, junto con su clasificación y sus puntos en el resumen. Las picks de los miembros se conservan: vuelve a agregarla para recuperar las posiciones.",
-    "typeToConfirm": "Escribe <b>{name}</b> para confirmar",
+    "title": "¿Eliminar competencia?",
+    "description": "Se borrarán {name} y todas sus picks para todos los miembros del board. No se puede deshacer.",
     "confirm": "Eliminar competencia",
     "cancel": "Cancelar",
     "success": "Competencia eliminada"

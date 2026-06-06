@@ -6,8 +6,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import type { AwardType } from "@/features/awards/types/awards.types";
-import { BoardSummaryTab, type SummaryColumn } from "@/features/competitions/components/BoardSummaryTab";
 import { CompetitionsTab } from "@/features/competitions/components/CompetitionsTab";
 import { CreateCompetitionWizard } from "@/features/competitions/components/CreateCompetitionWizard";
 import type { Competition, LeaderboardEntry } from "@/features/competitions/types/competitions.types";
@@ -35,7 +33,6 @@ type Props = {
   matches: Match[];
   topThreeByCompetition: Record<number, LeaderboardEntry[]>;
   pickem: { progress: PickemProgress | null; isLocked: boolean } | null;
-  awards: { pickedTypes: AwardType[]; isLocked: boolean } | null;
   boardNotFound?: boolean;
   competitionNotFound?: boolean;
 };
@@ -52,7 +49,6 @@ export function BoardDetailView({
   matches,
   topThreeByCompetition,
   pickem,
-  awards,
   boardNotFound = false,
   competitionNotFound = false,
 }: Props) {
@@ -64,8 +60,7 @@ export function BoardDetailView({
   const [wizardOpen, setWizardOpen] = useState(false);
   const [query, setQuery] = useState("");
 
-  const tabParam = searchParams.get(TAB_PARAM);
-  const tab: BoardTabKey = tabParam === "members" ? "members" : tabParam === "summary" ? "summary" : "competitions";
+  const tab: BoardTabKey = searchParams.get(TAB_PARAM) === "members" ? "members" : "competitions";
 
   useEffect(() => {
     rememberLastBoard(activeBoard.id);
@@ -93,17 +88,6 @@ export function BoardDetailView({
   const canManage = canManageBoard(activeBoard.viewer.role);
 
   const pickemContext = useMemo(() => ({ progress: pickem?.progress ?? null, isLocked: pickem?.isLocked ?? false }), [pickem]);
-  const awardsContext = useMemo(() => ({ pickedTypes: awards?.pickedTypes ?? [], isLocked: awards?.isLocked ?? false }), [awards]);
-
-  const summaryColumns = useMemo<SummaryColumn[]>(() => {
-    const present = new Set(competitions.map((c) => c.type));
-    const cols: SummaryColumn[] = [];
-    if (present.has("pickem")) cols.push("pickem");
-    if (present.has("match")) cols.push("custom");
-    if (present.has("pick")) cols.push("pick");
-    if (present.has("awards")) cols.push("awards");
-    return cols;
-  }, [competitions]);
 
   function setTab(next: BoardTabKey) {
     const params = new URLSearchParams(searchParams);
@@ -115,7 +99,6 @@ export function BoardDetailView({
 
   const tabs = [
     { key: "competitions" as const, label: tBoards("tabs.competitions") },
-    { key: "summary" as const, label: tBoards("tabs.summary") },
     { key: "members" as const, label: tBoards("tabs.members") },
   ];
 
@@ -163,29 +146,17 @@ export function BoardDetailView({
             teamsByCode={teamsByCode}
             topThreeByCompetition={topThreeByCompetition}
             pickemContext={pickemContext}
-            awardsContext={awardsContext}
             query={query}
             canManage={canManage}
             canCreate={canCreate}
             onCreate={() => setWizardOpen(true)}
           />
-        ) : tab === "summary" ? (
-          <BoardSummaryTab boardId={activeBoard.id} currentUserId={currentUserId} columns={summaryColumns} enabled={tab === "summary"} />
         ) : (
           <MembersTab board={activeBoard} currentUserId={currentUserId} enabled={tab === "members"} />
         )}
       </section>
 
-      {canCreate ? (
-        <CreateCompetitionWizard
-          open={wizardOpen}
-          onOpenChange={setWizardOpen}
-          boardId={activeBoard.id}
-          teams={teams}
-          matches={matches}
-          existingTypes={competitions.map((c) => c.type)}
-        />
-      ) : null}
+      {canCreate ? <CreateCompetitionWizard open={wizardOpen} onOpenChange={setWizardOpen} boardId={activeBoard.id} teams={teams} matches={matches} /> : null}
     </>
   );
 }

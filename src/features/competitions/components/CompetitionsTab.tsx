@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { Flame, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import type { AwardType } from "@/features/awards/types/awards.types";
 import type { PickemProgress } from "@/features/pickems/types/pickems.types";
 import { useNow } from "@/features/schedule/hooks/useNow";
 import type { Match } from "@/features/schedule/types/schedule.types";
@@ -27,7 +26,6 @@ type Props = {
   teamsByCode: Map<string, Team>;
   topThreeByCompetition: Record<number, LeaderboardEntry[]>;
   pickemContext: { progress: PickemProgress | null; isLocked: boolean };
-  awardsContext: { pickedTypes: AwardType[]; isLocked: boolean };
   query: string;
   canManage: boolean;
   canCreate: boolean;
@@ -43,7 +41,6 @@ export function CompetitionsTab({
   teamsByCode,
   topThreeByCompetition,
   pickemContext,
-  awardsContext,
   query,
   canManage,
   canCreate,
@@ -60,11 +57,8 @@ export function CompetitionsTab({
   }, [competitions, query, competitionName]);
 
   const pendingCount = useMemo(
-    () =>
-      competitions.filter((c) =>
-        competitionNeedsPick(getCompetitionPickState(c, matches, now, c.type === "pickem" ? pickemContext : undefined, c.type === "awards" ? awardsContext : undefined))
-      ).length,
-    [competitions, matches, now, pickemContext, awardsContext]
+    () => competitions.filter((c) => competitionNeedsPick(getCompetitionPickState(c, matches, now, c.type === "pickem" ? pickemContext : undefined))).length,
+    [competitions, matches, now, pickemContext]
   );
 
   if (competitions.length === 0) {
@@ -90,7 +84,6 @@ export function CompetitionsTab({
             teamsByCode={teamsByCode}
             topThree={topThreeByCompetition[competition.id] ?? []}
             pickemContext={competition.type === "pickem" ? pickemContext : undefined}
-            awardsContext={competition.type === "awards" ? awardsContext : undefined}
             canManage={canManage}
           />
         ))}
