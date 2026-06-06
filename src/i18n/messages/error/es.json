@@ -1,4 +1,6 @@
 {
   "title": "Algo salió mal",
-  "description": "Ocurrió un error inesperado"
+  "description": "Ocurrió un error inesperado",
+  "hint": "Intenta refrescar la página o vuelve más tarde.",
+  "retry": "Reintentar"
 }

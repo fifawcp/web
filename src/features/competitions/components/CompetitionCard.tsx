@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ListOrdered, MoreVertical, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import type { AwardType } from "@/features/awards/types/awards.types";
 import type { PickemProgress } from "@/features/pickems/types/pickems.types";
 import { useNow } from "@/features/schedule/hooks/useNow";
 import type { Match } from "@/features/schedule/types/schedule.types";
@@ -25,6 +26,7 @@ import { DeleteCompetitionDialog } from "./DeleteCompetitionDialog";
 import { PicksCta } from "./PicksCta";
 
 type PickemContext = { progress: PickemProgress | null; isLocked: boolean };
+type AwardsContext = { pickedTypes: AwardType[]; isLocked: boolean };
 
 type Props = {
   boardId: number;
@@ -35,10 +37,22 @@ type Props = {
   teamsByCode: Map<string, Team>;
   topThree: LeaderboardEntry[];
   pickemContext?: PickemContext;
+  awardsContext?: AwardsContext;
   canManage: boolean;
 };
 
-export function CompetitionCard({ boardId, competition, currentUserId, currentUserInitials, matches, teamsByCode, topThree, pickemContext, canManage }: Props) {
+export function CompetitionCard({
+  boardId,
+  competition,
+  currentUserId,
+  currentUserInitials,
+  matches,
+  teamsByCode,
+  topThree,
+  pickemContext,
+  awardsContext,
+  canManage,
+}: Props) {
   const t = useTranslations("competitions.card");
   const tRoot = useTranslations("competitions");
   const competitionName = useCompetitionName();
@@ -47,9 +61,9 @@ export function CompetitionCard({ boardId, competition, currentUserId, currentUs
 
   const meta = competitionTypeMeta(competition.type);
   const Icon = meta.icon;
-  const pickState = getCompetitionPickState(competition, matches, now, pickemContext);
+  const pickState = getCompetitionPickState(competition, matches, now, pickemContext, awardsContext);
   const needsPick = competitionNeedsPick(pickState);
-  const deletable = canManage && competition.type !== "pickem";
+  const deletable = canManage;
   const picksHref = competitionDeepLink(competition, pickState);
 
   return (
@@ -92,6 +106,7 @@ export function CompetitionCard({ boardId, competition, currentUserId, currentUs
         teamsByCode={teamsByCode}
         pickState={pickState}
         pickemProgress={pickemContext?.progress ?? null}
+        awardsPickedTypes={awardsContext?.pickedTypes ?? []}
         now={now}
       />
 
