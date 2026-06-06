@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { useRouter } from "@/i18n/navigation";
+import { ConfirmByTyping } from "@/shared/components/ConfirmByTyping";
 import { CopyButton } from "@/shared/components/CopyButton";
 import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
@@ -162,11 +163,25 @@ export function ManageBoardGeneral({ board, onClose, onPermissionLost }: Props) 
         <DialogContent onOpenAutoFocus={deleteFocus.onOpenAutoFocus} className={BOARD_DIALOG_WIDTH}>
           <DialogHeader>
             <DialogTitle>{t("delete.confirm", { name: board.name })}</DialogTitle>
-            <DialogDescription>{t("delete.confirmDescription")}</DialogDescription>
           </DialogHeader>
-          <Input value={deleteTyped} onChange={(event) => setDeleteTyped(event.target.value)} autoFocus={deleteFocus.autoFocus} />
+          <ConfirmByTyping
+            inputId="manage-delete-board-confirm"
+            warning={t("delete.description")}
+            label={t.rich("delete.typeToConfirm", { name: board.name, b: (chunks) => <span className="font-medium text-foreground">{chunks}</span> })}
+            placeholder={board.name}
+            value={deleteTyped}
+            onChange={setDeleteTyped}
+            autoFocus={deleteFocus.autoFocus}
+          />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setConfirmDelete(false)} className="sm:min-w-24 sm:px-6">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setDeleteTyped("");
+                setConfirmDelete(false);
+              }}
+              className="sm:min-w-24 sm:px-6"
+            >
               {t("delete.cancel")}
             </Button>
             <Button variant="destructive" disabled={deleteTyped !== board.name || remove.isPending} onClick={handleDelete} className="sm:min-w-24 sm:px-6">

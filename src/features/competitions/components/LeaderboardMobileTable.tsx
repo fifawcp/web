@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/shared/components/ui/button";
@@ -19,44 +18,53 @@ type Props = {
   currentUserId: string;
   isLoading: boolean;
   emptyLabel: string;
+  sort: string;
+  dir: "asc" | "desc";
+  onSort: (key: string) => void;
 };
 
-export function LeaderboardMobileTable({ rows, cyclableColumns, currentUserId, isLoading, emptyLabel }: Props) {
+// The cycler picks which metric to show AND sorts by it; tapping the active
+// column label flips the direction.
+export function LeaderboardMobileTable({ rows, cyclableColumns, currentUserId, isLoading, emptyLabel, sort, dir, onSort }: Props) {
   const t = useTranslations("competitions.leaderboard");
   const tCols = useTranslations("competitions.leaderboard.columns");
-  const [activeColumn, setActiveColumn] = useState(0);
 
-  const active = cyclableColumns[activeColumn] ?? cyclableColumns[0];
-  const prevIdx = (activeColumn - 1 + cyclableColumns.length) % cyclableColumns.length;
-  const nextIdx = (activeColumn + 1) % cyclableColumns.length;
-  const prevLabel = cyclableColumns[prevIdx]?.labelKey ?? "";
-  const nextLabel = cyclableColumns[nextIdx]?.labelKey ?? "";
+  const activeIdx = Math.max(
+    0,
+    cyclableColumns.findIndex((c) => c.id === sort)
+  );
+  const active = cyclableColumns[activeIdx] ?? cyclableColumns[0];
+  const prev = cyclableColumns[(activeIdx - 1 + cyclableColumns.length) % cyclableColumns.length];
+  const next = cyclableColumns[(activeIdx + 1) % cyclableColumns.length];
 
   return (
     <div className="flex flex-col">
       <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-border px-2 pb-2 text-2xs font-medium uppercase tracking-wider text-muted-foreground">
         <span className="w-9">{t("columns.rank")}</span>
         <span>{t("columns.member")}</span>
-        <div className="flex w-24 items-center justify-between gap-0.5">
+        <div className="flex w-28 items-center justify-between gap-0.5">
           <Button
             type="button"
             variant="ghost"
             size="icon-sm"
-            onClick={() => setActiveColumn(prevIdx)}
+            onClick={() => onSort(prev.id)}
             disabled={cyclableColumns.length <= 1}
-            aria-label={t("mobile.prevColumn", { name: tCols(prevLabel) })}
+            aria-label={t("mobile.prevColumn", { name: tCols(prev.labelKey) })}
             className="size-6 shrink-0"
           >
             <ChevronLeft className="size-3.5" aria-hidden />
           </Button>
-          <span className="flex-1 text-center tabular-nums">{tCols(active.labelKey)}</span>
+          <button type="button" onClick={() => onSort(active.id)} className="flex flex-1 cursor-pointer items-center justify-center gap-0.5 tabular-nums text-foreground">
+            {tCols(active.labelKey)}
+            {dir === "asc" ? <ChevronUp className="size-3" aria-hidden /> : <ChevronDown className="size-3" aria-hidden />}
+          </button>
           <Button
             type="button"
             variant="ghost"
             size="icon-sm"
-            onClick={() => setActiveColumn(nextIdx)}
+            onClick={() => onSort(next.id)}
             disabled={cyclableColumns.length <= 1}
-            aria-label={t("mobile.nextColumn", { name: tCols(nextLabel) })}
+            aria-label={t("mobile.nextColumn", { name: tCols(next.labelKey) })}
             className="size-6 shrink-0"
           >
             <ChevronRight className="size-3.5" aria-hidden />
@@ -75,7 +83,7 @@ export function LeaderboardMobileTable({ rows, cyclableColumns, currentUserId, i
                 <Skeleton className="h-4 w-28" />
                 <Skeleton className="h-2.5 w-16" />
               </div>
-              <span className="flex w-24 justify-center">
+              <span className="flex w-28 justify-center">
                 <Skeleton className="h-4 w-10" />
               </span>
             </li>
@@ -99,7 +107,17 @@ export function LeaderboardMobileTable({ rows, cyclableColumns, currentUserId, i
                   </span>
                   <span className="truncate text-xs text-muted-foreground">@{entry.member.username}</span>
                 </div>
-                <span className="w-24 text-center text-base font-semibold tabular-nums">{active.value(entry).toLocaleString()}</span>
+                <span className="flex w-28 justify-center text-base font-semibold tabular-nums">
+                  {active.display === "check" ? (
+                    active.value(entry) === 1 ? (
+                      <Check className="size-4 text-lime-600 dark:text-lime-400" aria-hidden />
+                    ) : (
+                      <X className="size-4 text-muted-foreground/40" aria-hidden />
+                    )
+                  ) : (
+                    active.value(entry).toLocaleString()
+                  )}
+                </span>
               </li>
             );
           })}
