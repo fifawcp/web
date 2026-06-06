@@ -25,7 +25,7 @@ import {
   SF_VISUAL_ORDER,
   THIRD_PLACE_MATCH_ID,
 } from "../lib/bracketStructure";
-import type { BracketMatchSlot, BracketStageCode } from "../types/pickems.types";
+import type { BracketMatchCompare, BracketMatchSlot, BracketStageCode } from "../types/pickems.types";
 
 import { BracketCenterCard } from "./BracketCenterCard";
 import { BracketMatchCard } from "./BracketMatchCard";
@@ -34,7 +34,10 @@ type Props = {
   bracket: BracketMatchSlot[];
   champion: BracketMatchSlot["picked_team"];
   disabled?: boolean;
-  onPick: (matchId: number, fifaCode: string) => void;
+  /** Omitted on the read-only `/bracket` page. */
+  onPick?: (matchId: number, fifaCode: string) => void;
+  /** Read-only compare overlay keyed by match id. Present in `/bracket` compare mode. */
+  comparisonById?: ReadonlyMap<number, BracketMatchCompare>;
 };
 
 type Side = "left" | "right";
@@ -74,7 +77,7 @@ const COMPACT_COLUMNS: ColumnSpec[] = [
   { stage: "final", matchIds: [FINAL_MATCH_ID], rowSpan: 16 },
 ];
 
-function BracketCompactView({ champion, disabled, onPick, byId }: Props & { byId: ByIdMap }) {
+function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }: Props & { byId: ByIdMap }) {
   const tRounds = useTranslations("pickems.bracket.rounds");
   const t = useTranslations("pickems.bracket");
   const locale = useLocale();
@@ -125,7 +128,14 @@ function BracketCompactView({ champion, disabled, onPick, byId }: Props & { byId
                 hasIncoming={colIdx > 0}
                 outgoing={isTopOfPair ? "pair-top" : "pair-bottom"}
               >
-                <BracketMatchCard slot={slot} density="dense" disabled={disabled} onPick={(code) => onPick(id, code)} className="w-full" />
+                <BracketMatchCard
+                  slot={slot}
+                  density="dense"
+                  disabled={disabled}
+                  onPick={onPick ? (code) => onPick(id, code) : undefined}
+                  comparison={comparisonById?.get(id) ?? null}
+                  className="w-full"
+                />
               </BracketGridCell>
             );
           })
@@ -134,9 +144,15 @@ function BracketCompactView({ champion, disabled, onPick, byId }: Props & { byId
         {/* Col 5 mirrors the xl center column — Final, Champion, Third stacked
             so every card across the bracket shares the same R32 width. */}
         <div className="flex flex-col justify-center gap-3 px-1.5" style={{ gridColumnStart: 5, gridRow: "1 / span 16" }}>
-          <BracketCenterCard slot={finalSlot} label={tRounds("final")} disabled={disabled} onPick={onPick} />
+          <BracketCenterCard slot={finalSlot} label={tRounds("final")} disabled={disabled} onPick={onPick} comparison={comparisonById?.get(FINAL_MATCH_ID) ?? null} />
           <BracketChampionDisplay champion={champion} label={t("champion")} locale={locale} />
-          <BracketCenterCard slot={thirdSlot} label={tRounds("third_place")} disabled={disabled} onPick={onPick} />
+          <BracketCenterCard
+            slot={thirdSlot}
+            label={tRounds("third_place")}
+            disabled={disabled}
+            onPick={onPick}
+            comparison={comparisonById?.get(THIRD_PLACE_MATCH_ID) ?? null}
+          />
         </div>
       </div>
     </div>
@@ -175,7 +191,7 @@ const SPLIT_COLUMNS: SplitColumn[] = [
 // column get the same width (~125px at xl).
 const SPLIT_GRID_COLS = "grid-cols-9";
 
-function BracketSplitView({ champion, disabled, onPick, byId }: Props & { byId: ByIdMap }) {
+function BracketSplitView({ champion, disabled, onPick, comparisonById, byId }: Props & { byId: ByIdMap }) {
   const tRounds = useTranslations("pickems.bracket.rounds");
   const t = useTranslations("pickems.bracket");
   const locale = useLocale();
@@ -225,7 +241,14 @@ function BracketSplitView({ champion, disabled, onPick, byId }: Props & { byId: 
                 outgoing={outgoing}
                 pad="sm"
               >
-                <BracketMatchCard slot={slot} density="dense" disabled={disabled} onPick={(code) => onPick(id, code)} className="w-full" />
+                <BracketMatchCard
+                  slot={slot}
+                  density="dense"
+                  disabled={disabled}
+                  onPick={onPick ? (code) => onPick(id, code) : undefined}
+                  comparison={comparisonById?.get(id) ?? null}
+                  className="w-full"
+                />
               </BracketGridCell>
             );
           })
@@ -235,9 +258,15 @@ function BracketSplitView({ champion, disabled, onPick, byId }: Props & { byId: 
             (the apex below Final), then Third place. `px-1.5` mirrors the
             bracket cells so every card has the same width. */}
         <div className="flex flex-col justify-center gap-3 px-1.5" style={{ gridColumnStart: 5, gridRow: "1 / span 16" }}>
-          <BracketCenterCard slot={finalSlot} label={tRounds("final")} disabled={disabled} onPick={onPick} />
+          <BracketCenterCard slot={finalSlot} label={tRounds("final")} disabled={disabled} onPick={onPick} comparison={comparisonById?.get(FINAL_MATCH_ID) ?? null} />
           <BracketChampionDisplay champion={champion} label={t("champion")} locale={locale} />
-          <BracketCenterCard slot={thirdSlot} label={tRounds("third_place")} disabled={disabled} onPick={onPick} />
+          <BracketCenterCard
+            slot={thirdSlot}
+            label={tRounds("third_place")}
+            disabled={disabled}
+            onPick={onPick}
+            comparison={comparisonById?.get(THIRD_PLACE_MATCH_ID) ?? null}
+          />
         </div>
       </div>
     </div>

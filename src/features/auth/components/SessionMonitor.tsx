@@ -9,7 +9,7 @@ import { refreshBackendAccessToken } from "@/shared/lib/api/refresh";
 
 // Paths where an unauthenticated session is expected -> no redirect should fire.
 // Mirror proxy.ts PUBLIC_ROUTES + GUEST_ONLY_ROUTES.
-const GUEST_PATHS = new Set(["/", "/schedule", "/standings", "/login", "/register", "/callback", "/how-it-works", "/rules", "/privacy", "/terms", "/faq"]);
+const GUEST_PATHS = new Set(["/", "/schedule", "/standings", "/bracket", "/login", "/register", "/callback", "/how-it-works", "/rules", "/privacy", "/terms", "/faq"]);
 
 function isGuestPath(pathname: string): boolean {
   return GUEST_PATHS.has(pathname) || pathname.startsWith("/boards/join/");

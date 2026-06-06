@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/shared/lib/utils";
 
 import { STAGES, STAGE_MATCH_IDS } from "../lib/bracketStructure";
-import type { BracketMatchSlot, BracketStageCode } from "../types/pickems.types";
+import type { BracketMatchCompare, BracketMatchSlot, BracketStageCode } from "../types/pickems.types";
 
 import { BracketChampionCard } from "./BracketChampionCard";
 import { BracketMatchCard } from "./BracketMatchCard";
@@ -16,12 +16,15 @@ type Props = {
   bracket: BracketMatchSlot[];
   champion: BracketMatchSlot["picked_team"];
   disabled?: boolean;
-  onPick: (matchId: number, fifaCode: string) => void;
+  /** Omitted on the read-only `/bracket` page. */
+  onPick?: (matchId: number, fifaCode: string) => void;
+  /** Read-only compare overlay keyed by match id. Present in `/bracket` compare mode. */
+  comparisonById?: ReadonlyMap<number, BracketMatchCompare>;
   activeStage: BracketStageCode;
   onStageChange: (stage: BracketStageCode) => void;
 };
 
-export function BracketMobile({ bracket, champion, disabled, onPick, activeStage, onStageChange }: Props) {
+export function BracketMobile({ bracket, champion, disabled, onPick, comparisonById, activeStage, onStageChange }: Props) {
   const t = useTranslations("pickems.bracket");
   const tRounds = useTranslations("pickems.bracket.rounds");
   const tShort = useTranslations("pickems.bracket.roundsShort");
@@ -82,7 +85,13 @@ export function BracketMobile({ bracket, champion, disabled, onPick, activeStage
             if (!slot) return null;
             return (
               <li key={id}>
-                <BracketMatchCard slot={slot} disabled={disabled} onPick={(code) => onPick(id, code)} showId />
+                <BracketMatchCard
+                  slot={slot}
+                  disabled={disabled}
+                  onPick={onPick ? (code) => onPick(id, code) : undefined}
+                  comparison={comparisonById?.get(id) ?? null}
+                  showId
+                />
               </li>
             );
           })}

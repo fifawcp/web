@@ -1,0 +1,20 @@
+{
+  "title": "Eliminatorias",
+  "stageHeading": "Cuadro de eliminatorias",
+  "stageHeadingLive": "Cuadro de eliminatorias · En vivo",
+  "description": "El cuadro de eliminatorias del Mundial, desde los Dieciseisavos hasta la Final. Se completa a medida que se definen los partidos.",
+  "descriptionCompare": "El cuadro real hasta ahora, con los equipos que pronosticaste correctamente en cada ronda marcados en verde.",
+  "compare": {
+    "label": "Vista del cuadro",
+    "results": "Resultados",
+    "compare": "Comparar"
+  },
+  "legend": {
+    "title": "Comparación",
+    "pointsLabel": "pts",
+    "earnedPossible": "Ganados / posibles",
+    "correct": "Tu acierto",
+    "correctHelp": "equipo que pronosticaste para llegar a esa ronda",
+    "scoringTitle": "Puntos por ronda alcanzada"
+  }
+}

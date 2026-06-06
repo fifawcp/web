@@ -23,7 +23,7 @@ export function PickemsSkeleton({ step = "groups" }: Props = {}) {
       <StepperSkeleton />
       {step === "groups" && <GroupsStepSkeleton />}
       {step === "thirds" && <ThirdsStepSkeleton />}
-      {step === "bracket" && <BracketStepSkeleton />}
+      {step === "bracket" && <BracketTreeSkeleton />}
     </>
   );
 }
@@ -100,7 +100,12 @@ function ThirdsStepSkeleton() {
   );
 }
 
-function BracketStepSkeleton() {
+/**
+ * Responsive knockout-tree skeleton mirroring `BracketDesktop` (compact 5-col +
+ * xl split/folded 9-col) and `BracketMobile`. Exported so the standalone
+ * `/bracket` page's `loading.tsx` reuses the exact same tree shape.
+ */
+export function BracketTreeSkeleton() {
   return (
     <>
       <BracketMobileSkeleton />
