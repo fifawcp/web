@@ -5,6 +5,7 @@
   "members": "{count, plural, one {# miembro} other {# miembros}}",
   "tabs": {
     "competitions": "Competencias",
+    "summary": "Resumen",
     "members": "Miembros"
   },
   "header": {
@@ -115,7 +116,7 @@
         "description": "Al eliminar el board se borrarán sus miembros, competencias y resultados. Esta acción no se puede deshacer.",
         "cta": "Eliminar board",
         "confirm": "¿Eliminar {name}?",
-        "confirmDescription": "Escribe el nombre del board para confirmar.",
+        "typeToConfirm": "Escribe <b>{name}</b> para confirmar",
         "cancel": "Cancelar",
         "success": "Board eliminado"
       }

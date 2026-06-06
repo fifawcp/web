@@ -4,6 +4,7 @@
 // normalize casing so "All Matches"/"All matches"/"all matches" all resolve.
 const DEFAULT_NAME_KEYS: Record<string, string> = {
   "all matches": "fullTournament",
+  awards: "awards",
 };
 
 export function resolveCompetitionNameKey(name: string): string | null {

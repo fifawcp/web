@@ -3,6 +3,7 @@
 import { ChevronLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import type { AwardType } from "@/features/awards/types/awards.types";
 import type { Board } from "@/features/boards/types/boards.types";
 import type { PickemProgress } from "@/features/pickems/types/pickems.types";
 import type { Match } from "@/features/schedule/types/schedule.types";
@@ -20,10 +21,11 @@ type Props = {
   competition: Competition;
   matches: Match[];
   pickem: { progress: PickemProgress | null; isLocked: boolean } | null;
+  awards: { pickedTypes: AwardType[]; isLocked: boolean } | null;
   initialLeaderboard: LeaderboardPage | null;
 };
 
-export function CompetitionDetailView({ currentUserId, board, competition, matches, pickem, initialLeaderboard }: Props) {
+export function CompetitionDetailView({ currentUserId, board, competition, matches, pickem, awards, initialLeaderboard }: Props) {
   const t = useTranslations("competitions");
   const playersCount = initialLeaderboard?.total ?? 0;
 
@@ -37,7 +39,7 @@ export function CompetitionDetailView({ currentUserId, board, competition, match
         {t("detail.back")}
       </Link>
 
-      <CompetitionDetailHeader competition={competition} matches={matches} pickem={pickem} />
+      <CompetitionDetailHeader competition={competition} matches={matches} pickem={pickem} awards={awards} />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <span className="text-sm text-muted-foreground">{t("leaderboard.memberCount", { count: playersCount })}</span>

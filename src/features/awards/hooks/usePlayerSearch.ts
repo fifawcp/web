@@ -11,9 +11,8 @@ import type { PlayerPosition } from "../types/awards.types";
 type Params = {
   q: string;
   positions: PlayerPosition[];
-  /** Selected country FIFA codes (AND with positions / query server-side). */
+  lockedPosition?: PlayerPosition;
   teamFifaCodes: string[];
-  /** Picker open — gates the request so closed pickers don't fetch. */
   enabled: boolean;
 };
 
@@ -23,15 +22,16 @@ type Params = {
  * `keepPreviousData` holds the prior results on screen while the next query
  * resolves so the list never flashes empty between keystrokes.
  */
-export function usePlayerSearch({ q, positions, teamFifaCodes, enabled }: Params) {
+export function usePlayerSearch({ q, positions, lockedPosition, teamFifaCodes, enabled }: Params) {
   const debouncedQ = useDebounce(q, PLAYER_SEARCH_DEBOUNCE_MS);
   const trimmed = debouncedQ.trim();
 
   const hasCriteria = trimmed.length > 0 || positions.length > 0 || teamFifaCodes.length > 0;
+  const requestPositions = lockedPosition ? [lockedPosition] : positions;
 
   const query = useQuery({
-    queryKey: [...PLAYERS_QUERY_KEY, { q: trimmed, positions, teamFifaCodes }],
-    queryFn: ({ signal }) => fetchPlayers({ q: trimmed, positions, team_fifa_codes: teamFifaCodes }, signal),
+    queryKey: [...PLAYERS_QUERY_KEY, { q: trimmed, positions: requestPositions, teamFifaCodes }],
+    queryFn: ({ signal }) => fetchPlayers({ q: trimmed, positions: requestPositions, team_fifa_codes: teamFifaCodes }, signal),
     enabled: enabled && hasCriteria,
     placeholderData: keepPreviousData,
     staleTime: 60_000,

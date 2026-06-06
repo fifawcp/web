@@ -1,6 +1,7 @@
 "use client";
 
 import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { Check, ChevronDown, ChevronsUpDown, ChevronUp, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Skeleton } from "@/shared/components/ui/skeleton";
@@ -16,9 +17,12 @@ type Props = {
   currentUserId: string;
   isLoading: boolean;
   emptyLabel: string;
+  sort: string;
+  dir: "asc" | "desc";
+  onSort: (key: string) => void;
 };
 
-export function LeaderboardTable({ columns, rows, currentUserId, isLoading, emptyLabel }: Props) {
+export function LeaderboardTable({ columns, rows, currentUserId, isLoading, emptyLabel, sort, dir, onSort }: Props) {
   const tCols = useTranslations("competitions.leaderboard.columns");
   const tColsLong = useTranslations("competitions.leaderboard.columnsLong");
 
@@ -41,10 +45,12 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
               const meta = header.column.columnDef.meta;
               const headerKey = header.column.columnDef.header as string;
               const isNumeric = headerKey !== "rank" && headerKey !== "member";
+              const isActive = sort === headerKey;
               return (
                 <th
                   key={header.id}
                   title={isNumeric ? tColsLong(headerKey) : undefined}
+                  aria-sort={isActive ? (dir === "asc" ? "ascending" : "descending") : undefined}
                   className={cn(
                     "px-4 py-2.5 whitespace-nowrap",
                     meta?.align === "left" && "text-left",
@@ -53,7 +59,26 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
                     meta?.width
                   )}
                 >
-                  {tCols(headerKey)}
+                  {isNumeric ? (
+                    <button
+                      type="button"
+                      onClick={() => onSort(headerKey)}
+                      className={cn("inline-flex cursor-pointer items-center gap-1 transition-colors hover:text-foreground", isActive && "text-foreground")}
+                    >
+                      {tCols(headerKey)}
+                      {isActive ? (
+                        dir === "asc" ? (
+                          <ChevronUp className="size-3" aria-hidden />
+                        ) : (
+                          <ChevronDown className="size-3" aria-hidden />
+                        )
+                      ) : (
+                        <ChevronsUpDown className="size-3 text-muted-foreground/50" aria-hidden />
+                      )}
+                    </button>
+                  ) : (
+                    tCols(headerKey)
+                  )}
                 </th>
               );
             })}
@@ -108,7 +133,13 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
                         isMember && "font-medium"
                       )}
                     >
-                      {isMember ? <MemberCell entry={row.original} isMe={isMe} /> : flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {isMember ? (
+                        <MemberCell entry={row.original} isMe={isMe} />
+                      ) : meta?.display === "check" ? (
+                        <CheckCell value={cell.getValue() as number} />
+                      ) : (
+                        flexRender(cell.column.columnDef.cell, cell.getContext())
+                      )}
                     </td>
                   );
                 })}
@@ -118,6 +149,14 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
         )}
       </tbody>
     </table>
+  );
+}
+
+function CheckCell({ value }: { value: number }) {
+  return value === 1 ? (
+    <Check className="mx-auto size-4 text-lime-600 dark:text-lime-400" aria-hidden />
+  ) : (
+    <X className="mx-auto size-4 text-muted-foreground/40" aria-hidden />
   );
 }
 
