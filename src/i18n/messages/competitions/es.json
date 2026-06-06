@@ -75,20 +75,20 @@
       "bestThirds": "3eros",
       "bracket": "Bracket",
       "exactHits": "Exactos",
-      "outcomes": "Resultados",
+      "outcomes": "Ganador",
       "golden_boot": "Bota",
       "golden_ball": "Balón",
       "golden_glove": "Guante",
       "young_player": "Sub-21"
     },
     "columnsLong": {
-      "total": "Puntos totales",
-      "groupExact": "Posiciones exactas de grupo",
-      "groupQualifiers": "Clasificados de grupo",
+      "total": "Total",
+      "groupExact": "Grupos exactos",
+      "groupQualifiers": "Clasificados",
       "bestThirds": "Mejores terceros",
-      "bracket": "Aciertos de llave",
+      "bracket": "Bracket",
       "exactHits": "Marcadores exactos",
-      "outcomes": "Resultados correctos",
+      "outcomes": "Ganador",
       "golden_boot": "Bota de Oro",
       "golden_ball": "Balón de Oro",
       "golden_glove": "Guante de Oro",
@@ -105,7 +105,9 @@
     },
     "mobile": {
       "prevColumn": "Mostrar {name}",
-      "nextColumn": "Mostrar {name}"
+      "nextColumn": "Mostrar {name}",
+      "toggleSort": "Cambiar el orden",
+      "hint": "Desliza o usa las flechas para cambiar la columna visible"
     }
   },
   "summary": {

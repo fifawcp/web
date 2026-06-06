@@ -36,8 +36,14 @@ export function LeaderboardSection({ boardId, competition, currentUserId, initia
   const sort = searchParams.get(SORT_PARAM) ?? "total";
   const dir = searchParams.get(DIR_PARAM) === "asc" ? "asc" : "desc";
 
+  const tCols = useTranslations("competitions.leaderboard.columns");
+
   const columns = useMemo(() => buildColumns(competition.type), [competition.type]);
-  const cyclableColumns = useMemo(() => buildMobileCyclableColumns(competition.type), [competition.type]);
+  // Short labels: the cycler shows one metric in a fixed-width column, so they must stay compact.
+  const mobileColumns = useMemo(
+    () => buildMobileCyclableColumns(competition.type).map((col) => ({ id: col.id, label: tCols(col.labelKey), value: col.value, display: col.display })),
+    [competition.type, tCols]
+  );
 
   const query = useLeaderboard({
     boardId,
@@ -95,7 +101,9 @@ export function LeaderboardSection({ boardId, competition, currentUserId, initia
       <div className="p-4 md:hidden">
         <LeaderboardMobileTable
           rows={items}
-          cyclableColumns={cyclableColumns}
+          columns={mobileColumns}
+          getMember={(row) => row.member}
+          getRank={(row) => row.rank}
           currentUserId={currentUserId}
           isLoading={isLoading}
           emptyLabel={emptyLabel}

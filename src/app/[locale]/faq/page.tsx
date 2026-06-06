@@ -23,8 +23,7 @@ export default async function FaqPage({ params }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations("pages.faq");
 
-  // Strip the next-intl rich-text markers (<rulesLink>…</rulesLink>) so the
-  // structured-data answer is plain prose, as Google's FAQPage spec requires.
+  const stripTags = { rulesLink: (c: string) => c, boardsLink: (c: string) => c, howItWorksLink: (c: string) => c };
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -33,7 +32,7 @@ export default async function FaqPage({ params }: Props) {
       name: t(`items.${key}.question`),
       acceptedAnswer: {
         "@type": "Answer",
-        text: t(`items.${key}.answer`).replace(/<\/?[a-zA-Z]+>/g, ""),
+        text: t.markup(`items.${key}.answer`, stripTags),
       },
     })),
   };
