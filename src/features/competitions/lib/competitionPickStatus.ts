@@ -18,7 +18,6 @@ export const competitionNeedsPick = (state: CompetitionPickState): boolean => st
 
 type AwardsContext = { pickedTypes: AwardType[]; isLocked: boolean };
 
-// Reduce a set of in-scope matches to a pick state. Shared by the match and pick variants.
 function fromMatches(matches: Match[], now: Date): CompetitionPickState {
   if (matches.length === 0) return { kind: "none" };
 
@@ -28,7 +27,8 @@ function fromMatches(matches: Match[], now: Date): CompetitionPickState {
     const { isLocked, hasPick } = computeMatchUiState(match, now);
     if (isLocked) continue;
     anyOpen = true;
-    if (!hasPick && (!earliest || new Date(match.kickoff_at) < new Date(earliest.kickoff_at))) {
+    const isPickable = match.teams.home != null && match.teams.away != null;
+    if (isPickable && !hasPick && (!earliest || new Date(match.kickoff_at) < new Date(earliest.kickoff_at))) {
       earliest = match;
     }
   }
