@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import { SquarePen } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { BracketDesktop } from "@/features/pickems/components/BracketDesktop";
@@ -9,6 +10,8 @@ import { findChampion, projectBracket } from "@/features/pickems/lib/projectBrac
 import type { BracketStageCode, UserPickem } from "@/features/pickems/types/pickems.types";
 import { useMatches } from "@/features/schedule/hooks/useMatches";
 import type { Match } from "@/features/schedule/types/schedule.types";
+import { Link } from "@/i18n/navigation";
+import { Button } from "@/shared/components/ui/button";
 
 import { useBracketCompareView } from "../hooks/useBracketCompareView";
 import { buildComparisonMap, summarizeBracket } from "../lib/bracketCompare";
@@ -77,7 +80,17 @@ export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) 
           </span>
           {canCompare && <CompareToggle view={view} onChange={setView} />}
         </div>
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t("title")}</h1>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t("title")}</h1>
+          {isAuthed && (
+            <Button asChild variant="outline" size="sm" className="shrink-0 self-start sm:self-auto">
+              <Link href="/pickems?step=bracket">
+                <SquarePen className="size-4" />
+                {t("seeMyPicks")}
+              </Link>
+            </Button>
+          )}
+        </div>
         <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{comparing ? t("descriptionCompare") : t("description")}</p>
       </header>
 
