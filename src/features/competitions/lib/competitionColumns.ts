@@ -91,9 +91,8 @@ const numericCol = (col: ValueColumn, emphasize = false): Column => ({
 });
 
 export function buildColumns(type: CompetitionType): Column[] {
-  // Total sits at the far right (after the breakdown columns) — the conventional
-  // place for a computed sum, matching the summary tab.
-  const valueCols = VALUE_COLUMNS_BY_TYPE[type];
+  // Total goes last (far right); fallback shape guards an unknown/legacy type.
+  const valueCols = VALUE_COLUMNS_BY_TYPE[type] ?? matchColumns;
   const ordered = [...valueCols.filter((col) => col.id !== "total"), ...valueCols.filter((col) => col.id === "total")];
   return [rank, member, ...ordered.map((col) => numericCol(col, col.id === "total"))];
 }
@@ -106,7 +105,7 @@ export type MobileCyclableColumn = {
 };
 
 export function buildMobileCyclableColumns(type: CompetitionType): MobileCyclableColumn[] {
-  return VALUE_COLUMNS_BY_TYPE[type].map((col) => ({
+  return (VALUE_COLUMNS_BY_TYPE[type] ?? matchColumns).map((col) => ({
     id: col.id,
     labelKey: col.id,
     value: col.value,

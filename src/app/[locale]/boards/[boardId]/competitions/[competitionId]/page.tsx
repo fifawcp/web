@@ -7,6 +7,7 @@ import { BOARDS_LIST_TAG, boardTag } from "@/features/boards/api/boards";
 import type { Board, BoardListItem } from "@/features/boards/types/boards.types";
 import { boardLeaderboardsTag, competitionsTag, LEADERBOARD_PAGE_SIZE, leaderboardTag } from "@/features/competitions/api/competitions";
 import { CompetitionDetailView } from "@/features/competitions/components/CompetitionDetailView";
+import { normalizeCompetition } from "@/features/competitions/lib/normalizeCompetition";
 import type { Competition, LeaderboardEntry, LeaderboardPage } from "@/features/competitions/types/competitions.types";
 import { PICKEMS_CACHE_TAG } from "@/features/pickems/api/pickems";
 import type { UserPickem } from "@/features/pickems/types/pickems.types";
@@ -64,7 +65,7 @@ export default async function CompetitionDetailPage({ params, searchParams }: Pr
   if (!matchesRes.success) throw new Error(matchesRes.error?.message ?? "Failed to load matches");
 
   const activeBoard = boardRes.data;
-  const competitions = competitionsRes.data ?? [];
+  const competitions = (competitionsRes.data ?? []).map(normalizeCompetition);
   const competition = competitions.find((c) => c.id === competitionIdNum);
   // Unknown/deleted competition — fall back to the board grid with a one-shot notice.
   if (!competition) {

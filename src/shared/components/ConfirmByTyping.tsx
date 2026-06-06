@@ -15,8 +15,7 @@ type Props = {
   inputId: string;
 };
 
-// A destructive-action confirmation block: a warning callout plus a "type the name to confirm"
-// field. The caller owns the match check (enable/disable its confirm button).
+// Warning callout + "type the name to confirm" field; the caller owns the match check.
 export function ConfirmByTyping({ warning, label, value, onChange, placeholder, autoFocus, inputId }: Props) {
   return (
     <div className="flex flex-col gap-4">

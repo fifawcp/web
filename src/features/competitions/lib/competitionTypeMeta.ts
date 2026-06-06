@@ -17,5 +17,6 @@ const META: Record<CompetitionType, CompetitionTypeMeta> = {
 };
 
 export function competitionTypeMeta(type: CompetitionType): CompetitionTypeMeta {
-  return META[type];
+  // Fallback so an unknown/legacy type can't crash the card on `meta.icon`.
+  return META[type] ?? META.match;
 }

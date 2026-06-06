@@ -1,6 +1,7 @@
 import { api } from "@/shared/lib/api/client";
 import { ApiClientError } from "@/shared/lib/api/errors";
 
+import { normalizeCompetition } from "../lib/normalizeCompetition";
 import type { BoardSummaryEntry, BoardSummaryPage, Competition, CreateCompetitionInput, LeaderboardEntry, LeaderboardPage } from "../types/competitions.types";
 
 export const competitionsTag = (boardId: number) => `competitions:${boardId}` as const;
@@ -19,7 +20,7 @@ export const LEADERBOARD_PAGE_SIZE = 10;
 export async function fetchCompetitions(boardId: number): Promise<Competition[]> {
   const res = await api.get<Competition[]>(`/api/boards/${boardId}/competitions`, { authenticated: true });
   if (!res.success || !res.data) throw new Error(res.error?.message ?? "Failed to load competitions");
-  return res.data;
+  return res.data.map(normalizeCompetition);
 }
 
 export async function fetchLeaderboard(

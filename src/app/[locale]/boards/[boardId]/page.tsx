@@ -7,6 +7,7 @@ import { BOARDS_LIST_TAG, boardTag } from "@/features/boards/api/boards";
 import { BoardDetailView } from "@/features/boards/components/BoardDetailView";
 import type { Board, BoardListItem } from "@/features/boards/types/boards.types";
 import { competitionsTag } from "@/features/competitions/api/competitions";
+import { normalizeCompetition } from "@/features/competitions/lib/normalizeCompetition";
 import type { Competition, LeaderboardEntry } from "@/features/competitions/types/competitions.types";
 import { PICKEMS_CACHE_TAG } from "@/features/pickems/api/pickems";
 import type { UserPickem } from "@/features/pickems/types/pickems.types";
@@ -73,7 +74,7 @@ export default async function BoardPage({ params, searchParams }: Props) {
   if (!matchesRes.success) throw new Error(matchesRes.error?.message ?? "Failed to load matches");
 
   const activeBoard = boardRes.data;
-  const competitions = competitionsRes.data ?? [];
+  const competitions = (competitionsRes.data ?? []).map(normalizeCompetition);
   const teams = collectTeams(matchesRes.data ?? []);
   const matches = matchesRes.data ?? [];
 

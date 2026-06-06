@@ -11,7 +11,7 @@ type Props = {
   reset: () => void;
 };
 
-export default function GlobalError({ error, reset }: Props) {
+export default function GlobalError({ error }: Props) {
   const t = useTranslations("error");
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function GlobalError({ error, reset }: Props) {
           <p className="text-sm text-muted-foreground">{t("description")}</p>
           <p className="text-sm text-muted-foreground">{t("hint")}</p>
         </div>
-        <Button onClick={reset} className="gap-1.5 bg-foreground text-background hover:bg-foreground/90">
+        <Button onClick={() => window.location.reload()} className="gap-1.5 bg-foreground text-background hover:bg-foreground/90">
           <RotateCw className="size-4" aria-hidden />
           {t("retry")}
         </Button>
