@@ -1,6 +1,6 @@
 import type { StageCode } from "@/shared/types/wcp.types";
 
-export type CompetitionType = "pickem" | "match" | "pick" | "awards";
+export type CompetitionType = "pickem" | "match" | "pool";
 
 export type CompetitionScope = {
   stages: StageCode[];
@@ -18,12 +18,10 @@ export type Competition = {
   type: CompetitionType;
   name: string;
   scope: CompetitionScope | null;
-  // Only set for `pick` competitions — the single match they cover.
-  pick_match_id: number | null;
+  // Only set for `pool` competitions — the single match they cover.
+  pool_match_id: number | null;
   created_at: string;
   viewer: CompetitionViewer;
-  // Top members previewed on the card — supplied with the list so no extra call is needed.
-  top_preview: LeaderboardEntry[];
 };
 
 export type PickemScore = {
@@ -40,15 +38,7 @@ export type MatchScore = {
   correct_outcomes: number;
 };
 
-export type AwardsScore = {
-  total: number;
-  golden_boot: number;
-  golden_ball: number;
-  golden_glove: number;
-  young_player: number;
-};
-
-export type CompetitionScore = PickemScore | MatchScore | AwardsScore;
+export type CompetitionScore = PickemScore | MatchScore;
 
 export type LeaderboardMember = {
   user_id: string;
@@ -71,45 +61,17 @@ export type LeaderboardPage = {
   has_more: boolean;
 };
 
-// Board-wide standing: per-type subtotals + raw-sum total. `custom` = match competitions.
-export type BoardSummaryEntry = {
-  member: LeaderboardMember;
-  rank: number;
-  total: number;
-  pickem: number;
-  custom: number;
-  pick: number;
-  awards: number;
-};
-
-export type BoardSummaryPage = {
-  items: BoardSummaryEntry[];
-  page: number;
-  limit: number;
-  total: number;
-  has_more: boolean;
-};
-
 export type CreateMatchCompetitionInput = {
   name: string;
   type: "match";
   scope: CompetitionScope;
 };
 
-export type CreatePickCompetitionInput = {
+export type CreatePoolCompetitionInput = {
   name: string;
-  type: "pick";
+  type: "pool";
   match_id: number;
 };
 
-export type CreatePickemCompetitionInput = {
-  name: string;
-  type: "pickem";
-};
-
-export type CreateAwardsCompetitionInput = {
-  name: string;
-  type: "awards";
-};
-
-export type CreateCompetitionInput = CreateMatchCompetitionInput | CreatePickCompetitionInput | CreatePickemCompetitionInput | CreateAwardsCompetitionInput;
+// Pick'em is auto-seeded as the board's anchor competition and is never created here.
+export type CreateCompetitionInput = CreateMatchCompetitionInput | CreatePoolCompetitionInput;

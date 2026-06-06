@@ -8,10 +8,8 @@ export function competitionDeepLink(competition: Competition, pickState: Competi
   switch (competition.type) {
     case "pickem":
       return "/pickems";
-    case "awards":
-      return "/pickems/awards";
-    case "pick":
-      return competition.pick_match_id != null ? `/schedule?match=${competition.pick_match_id}` : "/schedule";
+    case "pool":
+      return competition.pool_match_id != null ? `/schedule?match=${competition.pool_match_id}` : "/schedule";
     default: {
       const matchId = pickState.kind === "needs-pick" ? pickState.matchId : undefined;
       return matchId != null ? `/schedule?match=${matchId}` : "/schedule";

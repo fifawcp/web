@@ -1,6 +1,4 @@
 {
   "title": "Something went wrong",
-  "description": "An unexpected error occurred",
-  "hint": "Try refreshing the page, or come back later.",
-  "retry": "Try again"
+  "description": "An unexpected error occurred"
 }

@@ -4,8 +4,6 @@ import { CalendarDays, Crosshair, Flag, LayoutGrid, Medal, Network } from "lucid
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 
-import { AWARD_CONFIG, AWARD_TYPES } from "@/features/awards/lib/awards";
-import type { AwardType } from "@/features/awards/types/awards.types";
 import type { PickemProgress, StepProgress } from "@/features/pickems/types/pickems.types";
 import type { Match } from "@/features/schedule/types/schedule.types";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/components/ui/tooltip";
@@ -16,7 +14,7 @@ import type { StageCode, Team } from "@/shared/types/wcp.types";
 
 import type { CompetitionPickState } from "../lib/competitionPickStatus";
 import { ALL_STAGES, resolveScope } from "../lib/formatScope";
-import { resolvePickMatch } from "../lib/resolvePickMatch";
+import { resolvePoolMatch } from "../lib/resolvePoolMatch";
 import type { Competition } from "../types/competitions.types";
 
 import { CompetitionCountdown } from "./CompetitionCountdown";
@@ -53,46 +51,17 @@ type Props = {
   teamsByCode: Map<string, Team>;
   pickState: CompetitionPickState;
   pickemProgress: PickemProgress | null;
-  awardsPickedTypes: AwardType[];
   now: Date;
 };
 
-export function CompetitionCardContext({ competition, matches, teamsByCode, pickState, pickemProgress, awardsPickedTypes, now }: Props) {
-  if (competition.type === "pick") {
-    return <PickContext competition={competition} matches={matches} pickState={pickState} now={now} />;
+export function CompetitionCardContext({ competition, matches, teamsByCode, pickState, pickemProgress, now }: Props) {
+  if (competition.type === "pool") {
+    return <PoolContext competition={competition} matches={matches} pickState={pickState} now={now} />;
   }
   if (competition.type === "pickem" && pickemProgress) {
     return <PickemContext progress={pickemProgress} pickState={pickState} now={now} />;
   }
-  if (competition.type === "awards") {
-    return <AwardsContext pickedTypes={awardsPickedTypes} pickState={pickState} now={now} />;
-  }
   return <ScopeContext competition={competition} teamsByCode={teamsByCode} pickState={pickState} now={now} />;
-}
-
-// awards: the four individual honors — each tile reads accent once that honor is picked, muted otherwise.
-function AwardsContext({ pickedTypes, pickState, now }: { pickedTypes: AwardType[]; pickState: CompetitionPickState; now: Date }) {
-  const t = useTranslations("competitions.card");
-  const tTypes = useTranslations("awards.types");
-  const picked = new Set(pickedTypes);
-
-  return (
-    <div className={CONTEXT_BOX}>
-      <ContextHeader label={t("awards.label")} pickState={pickState} now={now} />
-      <div className="grid flex-1 grid-cols-2 gap-1.5">
-        {AWARD_TYPES.map((type) => {
-          const Icon = AWARD_CONFIG[type].icon;
-          const isPicked = picked.has(type);
-          return (
-            <div key={type} className={cn("flex items-center gap-1.5 rounded-md bg-card px-2.5 py-2 ring-1 ring-foreground/5", isPicked && "ring-page-accent/30")}>
-              <Icon className={cn("size-3.5 shrink-0", isPicked ? "text-page-accent-strong" : "text-muted-foreground")} aria-hidden />
-              <span className={cn("truncate text-2xs font-medium", isPicked ? "text-foreground" : "text-muted-foreground")}>{tTypes(`${type}.title`)}</span>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
 }
 
 // pick'em: the viewer's progress through the three predicting steps — useful, actionable info.
@@ -227,12 +196,12 @@ function StageChipStack({ stages, max = 4 }: { stages: StageCode[]; max?: number
   );
 }
 
-// pick: a compact schedule-style card for the single covered match.
-function PickContext({ competition, matches, pickState, now }: { competition: Competition; matches: Match[]; pickState: CompetitionPickState; now: Date }) {
+// pool: a compact schedule-style card for the single covered match.
+function PoolContext({ competition, matches, pickState, now }: { competition: Competition; matches: Match[]; pickState: CompetitionPickState; now: Date }) {
   const locale = useLocale();
   const tStages = useTranslations("schedule.filters.stage");
   const t = useTranslations("competitions.card");
-  const match = resolvePickMatch(competition, matches);
+  const match = resolvePoolMatch(competition, matches);
 
   if (!match) {
     return <div className={cn(CONTEXT_BOX, "items-center text-center text-xs text-muted-foreground")}>{t("matchUnavailable")}</div>;
@@ -247,9 +216,9 @@ function PickContext({ competition, matches, pickState, now }: { competition: Co
       <ContextHeader label={tStages(match.stage_code)} pickState={pickState} now={now} />
 
       <div className="flex items-center gap-2">
-        <PickTeam team={home} locale={locale} side="home" />
+        <PoolTeam team={home} locale={locale} side="home" />
         <span className="shrink-0 text-sm font-semibold text-muted-foreground">{result ? `${result.home_score}–${result.away_score}` : t("vs")}</span>
-        <PickTeam team={away} locale={locale} side="away" />
+        <PoolTeam team={away} locale={locale} side="away" />
       </div>
 
       <div className="flex items-center justify-between gap-2 border-t border-border/60 pt-2 text-2xs text-muted-foreground">
@@ -263,8 +232,8 @@ function PickContext({ competition, matches, pickState, now }: { competition: Co
   );
 }
 
-// One side of a pick match, schedule-style: flag on the outer edge, name + FIFA code on the inner.
-function PickTeam({ team, locale, side }: { team: Team | null; locale: string; side: "home" | "away" }) {
+// One side of a pool match, schedule-style: flag on the outer edge, name + FIFA code on the inner.
+function PoolTeam({ team, locale, side }: { team: Team | null; locale: string; side: "home" | "away" }) {
   const flag = (
     <span className="shrink-0 overflow-hidden rounded-xs ring-1 ring-foreground/10">
       {team?.flag_url ? (

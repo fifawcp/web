@@ -64,7 +64,11 @@ function PlayerPickerBody({ awardType, selectedPlayerId, onSelect }: { awardType
   const [countries, setCountries] = useState<string[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const search = usePlayerSearch({ q: query, positions, lockedPosition, teamFifaCodes: countries, enabled: true });
+  // A position-locked award (Golden Glove) always constrains to its position,
+  // regardless of the toggle row (which is hidden in that case).
+  const activePositions = lockedPosition ? [lockedPosition] : positions;
+
+  const search = usePlayerSearch({ q: query, positions: activePositions, teamFifaCodes: countries, enabled: true });
   const popular = usePopularPicks(!search.hasCriteria);
   const { teams, isLoading: teamsLoading } = useFilterTeams(filtersOpen || countries.length > 0);
 

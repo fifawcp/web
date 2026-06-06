@@ -1,10 +1,8 @@
 "use client";
 
-import { Award, CalendarDays, Clock, Crosshair, Flag, Hash, Star } from "lucide-react";
+import { CalendarDays, Clock, Crosshair, Flag, Hash, Star } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-import { AWARD_TYPES } from "@/features/awards/lib/awards";
-import type { AwardType } from "@/features/awards/types/awards.types";
 import type { PickemProgress } from "@/features/pickems/types/pickems.types";
 import { useNow } from "@/features/schedule/hooks/useNow";
 import type { Match } from "@/features/schedule/types/schedule.types";
@@ -17,7 +15,7 @@ import { competitionDeepLink } from "../lib/competitionDeepLink";
 import { getCompetitionPickState } from "../lib/competitionPickStatus";
 import { competitionTypeMeta } from "../lib/competitionTypeMeta";
 import { resolveScope } from "../lib/formatScope";
-import { resolvePickMatch } from "../lib/resolvePickMatch";
+import { resolvePoolMatch } from "../lib/resolvePoolMatch";
 import type { Competition } from "../types/competitions.types";
 
 import { CompetitionCountdown } from "./CompetitionCountdown";
@@ -27,10 +25,9 @@ type Props = {
   competition: Competition;
   matches: Match[];
   pickem: { progress: PickemProgress | null; isLocked: boolean } | null;
-  awards: { pickedTypes: AwardType[]; isLocked: boolean } | null;
 };
 
-export function CompetitionDetailHeader({ competition, matches, pickem, awards }: Props) {
+export function CompetitionDetailHeader({ competition, matches, pickem }: Props) {
   const t = useTranslations("competitions");
   const tInfo = useTranslations("competitions.info");
   const competitionName = useCompetitionName();
@@ -38,9 +35,9 @@ export function CompetitionDetailHeader({ competition, matches, pickem, awards }
 
   const meta = competitionTypeMeta(competition.type);
   const Icon = meta.icon;
-  const pickState = getCompetitionPickState(competition, matches, now, pickem ?? undefined, awards ?? undefined);
+  const pickState = getCompetitionPickState(competition, matches, now, pickem ?? undefined);
   const picksHref = competitionDeepLink(competition, pickState);
-  const pickMatch = competition.type === "pick" ? resolvePickMatch(competition, matches) : null;
+  const poolMatch = competition.type === "pool" ? resolvePoolMatch(competition, matches) : null;
 
   return (
     <div className="flex flex-col gap-4 border-b border-border pb-5 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
@@ -57,7 +54,7 @@ export function CompetitionDetailHeader({ competition, matches, pickem, awards }
             </div>
           </div>
         </div>
-        {pickMatch ? <PickMeta match={pickMatch} /> : null}
+        {poolMatch ? <PoolMeta match={poolMatch} /> : null}
       </div>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
@@ -92,8 +89,8 @@ function ScopeLine({ competition, matches }: { competition: Competition; matches
   const tInfo = useTranslations("competitions.info");
   const locale = useLocale();
 
-  if (competition.type === "pick") {
-    const match = resolvePickMatch(competition, matches);
+  if (competition.type === "pool") {
+    const match = resolvePoolMatch(competition, matches);
     if (!match) return null;
     const { home, away } = match.teams;
     return (
@@ -101,17 +98,6 @@ function ScopeLine({ competition, matches }: { competition: Competition; matches
         {home ? getTeamName(home, locale) : "—"}
         <span className="text-muted-foreground"> vs </span>
         {away ? getTeamName(away, locale) : "—"}
-      </span>
-    );
-  }
-
-  if (competition.type === "awards") {
-    return (
-      <span className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
-        <span className="inline-flex items-center gap-1">
-          <Award className="size-3.5" aria-hidden />
-          {tInfo("awardsCount", { count: AWARD_TYPES.length })}
-        </span>
       </span>
     );
   }
@@ -133,9 +119,9 @@ function ScopeLine({ competition, matches }: { competition: Competition; matches
   );
 }
 
-// Pick match date · time · stage as muted chips. Full width and spaced apart on mobile (it sits
+// Pool match date · time · stage as muted chips. Full width and spaced apart on mobile (it sits
 // outside the icon-indented column); natural width on larger screens.
-function PickMeta({ match }: { match: Match }) {
+function PoolMeta({ match }: { match: Match }) {
   const locale = useLocale();
   const tStages = useTranslations("schedule.filters.stage");
   const kickoff = new Date(match.kickoff_at);
