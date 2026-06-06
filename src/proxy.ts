@@ -29,6 +29,42 @@ const SECURE_COOKIES = process.env.NODE_ENV === "production";
 
 const handleI18nRouting = createMiddleware(routing);
 
+// Web-layer maintenance gate. Every browser->API call is a same-origin `/api/*`
+// (shared/lib/api/client.ts uses relative URLs), so gating here also catches
+// stale-tab fetches — no API-side gate needed. Toggled by MAINTENANCE_MODE.
+const MAINT_BYPASS_COOKIE = "maint-bypass";
+
+function maintenanceResponse(req: NextRequest): NextResponse | null {
+  if (process.env.MAINTENANCE_MODE !== "true") return null;
+
+  const { pathname } = req.nextUrl;
+  const secret = process.env.MAINTENANCE_BYPASS_SECRET;
+
+  // `?preview=<secret>` drops a bypass cookie so an operator can smoke-test behind
+  // the wall; thereafter the cookie alone grants full passthrough (pages + API).
+  if (secret && req.nextUrl.searchParams.get("preview") === secret) {
+    const res = NextResponse.next();
+    res.cookies.set(MAINT_BYPASS_COOKIE, secret, { httpOnly: true, sameSite: "lax", secure: SECURE_COOKIES, path: "/" });
+    return res;
+  }
+  if (secret && req.cookies.get(MAINT_BYPASS_COOKIE)?.value === secret) return null;
+  if (pathname === "/maintenance") return null;
+
+  // API (incl. in-flight client fetches from already-open tabs) gets a clean 503.
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.json(
+      { success: false, error: { code: "MAINTENANCE", message: "Service temporarily unavailable for maintenance." } },
+      { status: 503, headers: { "Retry-After": "120" } }
+    );
+  }
+
+  const url = req.nextUrl.clone();
+  url.pathname = "/maintenance";
+  const res = NextResponse.rewrite(url);
+  res.headers.set("Retry-After", "120");
+  return res;
+}
+
 function isPrefetch(req: NextRequest): boolean {
   return req.headers.has("next-router-prefetch") || req.headers.get("sec-purpose")?.includes("prefetch") === true || req.headers.get("purpose") === "prefetch";
 }
@@ -65,6 +101,14 @@ function withI18n(response: NextResponse, i18n: NextResponse): NextResponse {
 }
 
 export default async function proxy(req: NextRequest) {
+  // 0. Maintenance gate (env-toggled) short-circuits everything else.
+  const maintenance = maintenanceResponse(req);
+  if (maintenance) return maintenance;
+
+  // API routes only need the maintenance gate above; the locale/auth pipeline below
+  // is page-oriented and would mangle them, so let them fall through to the rewrites.
+  if (req.nextUrl.pathname.startsWith("/api/")) return NextResponse.next();
+
   // 1. Locale routing first: handles prefixing, the locale cookie, hreflang headers,
   //    and any locale redirect (e.g. a non-default cookie on the unprefixed path).
   const i18nResponse = handleI18nRouting(req);
@@ -110,9 +154,11 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  // Run on every pathname except API routes, Next internals, and files with an
-  // extension (covers sitemap.xml, robots.txt, manifest.webmanifest, og.png, etc.).
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+  // Run on every pathname except Next internals and files with an extension (covers
+  // sitemap.xml, robots.txt, manifest.webmanifest, og.png, etc.). `/api/*` is now
+  // included so the maintenance gate can 503 it; outside maintenance those requests
+  // return early (NextResponse.next()) and fall through to the rewrites untouched.
+  matcher: ["/((?!_next|_vercel|.*\\..*).*)"],
 };
 
 type RefreshSuccess = { accessToken: string; expiresAt: string; refreshToken: string; expires?: Date };
