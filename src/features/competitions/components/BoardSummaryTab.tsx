@@ -1,20 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronsUpDown, ChevronUp, Crown, Search, User, X } from "lucide-react";
+import { ChevronDown, ChevronsUpDown, ChevronUp, Crown, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Input } from "@/shared/components/ui/input";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useDebounce } from "@/shared/hooks/useDebounce";
-import { displayName, getInitials } from "@/shared/lib/ui";
+import { displayName } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
 
 import { LEADERBOARD_PAGE_SIZE } from "../api/competitions";
 import { useBoardSummary } from "../hooks/useBoardSummary";
 import type { BoardSummaryEntry } from "../types/competitions.types";
 
+import { LeaderboardMobileTable, type MobileLeaderboardColumn } from "./LeaderboardMobileTable";
 import { LeaderboardPagination } from "./LeaderboardPagination";
 
 // Which per-type subtotal columns the board has (custom = match competitions).
@@ -46,9 +46,11 @@ export function BoardSummaryTab({ boardId, currentUserId, columns, enabled }: Pr
   const isLoading = query.isFetching && items.length === 0;
   const emptyLabel = debouncedQ.length > 0 ? t("noResults") : t("empty");
 
-  // Sortable keys in display order: the per-type subtotals, then the overall total.
-  const sortKeys: SortKey[] = [...columns, "total"];
-  const sortLabel = (key: SortKey) => (key === "total" ? t("columns.total") : tCol(key));
+  // Mobile cycler columns: the per-type subtotals, then the overall total.
+  const mobileColumns: MobileLeaderboardColumn<BoardSummaryEntry>[] = [
+    ...columns.map((col) => ({ id: col, label: tCol(col), value: (e: BoardSummaryEntry) => e[col] })),
+    { id: "total", label: t("columns.total"), value: (e: BoardSummaryEntry) => e.total },
+  ];
 
   function onSearch(value: string) {
     setQ(value);
@@ -56,11 +58,12 @@ export function BoardSummaryTab({ boardId, currentUserId, columns, enabled }: Pr
   }
 
   // Click a new column → sort it descending; click the active column → flip direction.
-  function onSort(key: SortKey) {
+  // `key` is always a valid SortKey (column id); typed as string to match the shared cycler.
+  function onSort(key: string) {
     if (key === sort) {
       setDir((d) => (d === "desc" ? "asc" : "desc"));
     } else {
-      setSort(key);
+      setSort(key as SortKey);
       setDir("desc");
     }
     setPage(1);
@@ -87,7 +90,7 @@ export function BoardSummaryTab({ boardId, currentUserId, columns, enabled }: Pr
         {/* Desktop */}
         <table className="hidden w-full border-collapse text-sm md:table">
           <thead>
-            <tr className="border-b border-border bg-muted/40 text-2xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <tr className="border-b border-border bg-muted/40 text-xs font-semibold text-muted-foreground">
               <th className="w-12 px-4 py-2.5 text-center">{t("columns.rank")}</th>
               <th className="w-full px-4 py-2.5 text-left">{t("columns.member")}</th>
               {columns.map((col) => (
@@ -150,60 +153,19 @@ export function BoardSummaryTab({ boardId, currentUserId, columns, enabled }: Pr
         </table>
 
         {/* Mobile */}
-        <div className="md:hidden">
-          <div className="flex flex-wrap gap-1.5 border-b border-border px-3 py-2.5">
-            {sortKeys.map((key) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => onSort(key)}
-                aria-pressed={sort === key}
-                className={cn(
-                  "inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-2xs font-medium transition-colors",
-                  sort === key ? "border-page-accent-strong/30 bg-page-accent-soft text-page-accent-strong" : "border-border text-muted-foreground hover:bg-muted"
-                )}
-              >
-                {sortLabel(key)}
-                {sort === key ? <DirChevron dir={dir} /> : null}
-              </button>
-            ))}
-          </div>
-          {isLoading ? (
-            <ul className="divide-y divide-border">
-              {Array.from({ length: LEADERBOARD_PAGE_SIZE }).map((_, i) => (
-                <li key={i} className="flex items-center gap-3 px-3 py-2.5">
-                  <Skeleton className="h-3.5 w-6" />
-                  <Skeleton className="h-9 flex-1" />
-                </li>
-              ))}
-            </ul>
-          ) : items.length === 0 ? (
-            <p className="py-10 text-center text-sm text-muted-foreground">{emptyLabel}</p>
-          ) : (
-            <ul className="divide-y divide-border">
-              {items.map((entry) => {
-                const isMe = entry.member.user_id === currentUserId;
-                return (
-                  <li key={entry.member.user_id} className={cn("flex items-center gap-3 px-3 py-2.5", isMe && "bg-page-accent-soft/60")}>
-                    <span className="w-6 shrink-0 text-center">
-                      <RankBadge rank={entry.rank} />
-                    </span>
-                    <div className="flex min-w-0 flex-1 flex-col gap-1">
-                      <MemberCell entry={entry} isMe={isMe} youLabel={t("you")} />
-                      <span className="flex flex-wrap gap-x-2 text-2xs text-muted-foreground tabular-nums">
-                        {columns.map((col) => (
-                          <span key={col}>
-                            {tCol(col)} {entry[col].toLocaleString()}
-                          </span>
-                        ))}
-                      </span>
-                    </div>
-                    <span className="shrink-0 font-mono text-base font-semibold tabular-nums">{entry.total.toLocaleString()}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+        <div className="p-4 md:hidden">
+          <LeaderboardMobileTable
+            rows={items}
+            columns={mobileColumns}
+            getMember={(row) => row.member}
+            getRank={(row) => row.rank}
+            currentUserId={currentUserId}
+            isLoading={isLoading}
+            emptyLabel={emptyLabel}
+            sort={sort}
+            dir={dir}
+            onSort={onSort}
+          />
         </div>
 
         {totalPages > 1 ? (
@@ -250,14 +212,7 @@ function RankBadge({ rank }: { rank: number }) {
 
 function MemberCell({ entry, isMe, youLabel }: { entry: BoardSummaryEntry; isMe: boolean; youLabel: string }) {
   return (
-    <span className="flex min-w-0 items-center gap-2">
-      <Avatar className="size-6 border border-border">
-        <AvatarFallback className="bg-card text-2xs font-semibold text-foreground">
-          {getInitials(entry.member.username, entry.member.first_name ?? undefined, entry.member.last_name ?? undefined) || (
-            <User className="size-3 text-muted-foreground" aria-hidden />
-          )}
-        </AvatarFallback>
-      </Avatar>
+    <span className="flex min-w-0 items-center gap-1.5">
       <span className="min-w-0 truncate font-medium">{displayName(entry.member.username, entry.member.first_name, entry.member.last_name)}</span>
       {isMe ? <span className="shrink-0 rounded-md bg-page-accent p-1 text-2xs font-medium uppercase tracking-wide text-white">{youLabel}</span> : null}
     </span>

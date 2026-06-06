@@ -75,20 +75,20 @@
       "bestThirds": "B.3rds",
       "bracket": "Bracket",
       "exactHits": "Exact hits",
-      "outcomes": "Outcomes",
+      "outcomes": "Winner",
       "golden_boot": "Boot",
       "golden_ball": "Ball",
       "golden_glove": "Glove",
       "young_player": "U21"
     },
     "columnsLong": {
-      "total": "Total points",
-      "groupExact": "Exact group positions",
-      "groupQualifiers": "Group qualifiers",
+      "total": "Total",
+      "groupExact": "Exact groups",
+      "groupQualifiers": "Qualifiers",
       "bestThirds": "Best thirds",
-      "bracket": "Bracket hits",
+      "bracket": "Bracket",
       "exactHits": "Exact scores",
-      "outcomes": "Correct outcomes",
+      "outcomes": "Winner",
       "golden_boot": "Golden Boot",
       "golden_ball": "Golden Ball",
       "golden_glove": "Golden Glove",
@@ -105,7 +105,9 @@
     },
     "mobile": {
       "prevColumn": "Show {name}",
-      "nextColumn": "Show {name}"
+      "nextColumn": "Show {name}",
+      "toggleSort": "Change sort direction",
+      "hint": "Swipe or use the arrows to change the visible column"
     }
   },
   "summary": {

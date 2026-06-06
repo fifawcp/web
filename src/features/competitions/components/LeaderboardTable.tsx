@@ -40,16 +40,17 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
     <table className="w-full border-collapse text-sm">
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id} className="border-b border-border bg-muted/40 text-2xs font-semibold uppercase tracking-wide text-muted-foreground">
+          <tr key={headerGroup.id} className="border-b border-border bg-muted/40 text-xs font-semibold text-muted-foreground">
             {headerGroup.headers.map((header) => {
               const meta = header.column.columnDef.meta;
               const headerKey = header.column.columnDef.header as string;
               const isNumeric = headerKey !== "rank" && headerKey !== "member";
               const isActive = sort === headerKey;
+              // Desktop has room for the full column name; the short `columns` set is for the mobile cycler.
+              const label = isNumeric ? tColsLong(headerKey) : tCols(headerKey);
               return (
                 <th
                   key={header.id}
-                  title={isNumeric ? tColsLong(headerKey) : undefined}
                   aria-sort={isActive ? (dir === "asc" ? "ascending" : "descending") : undefined}
                   className={cn(
                     "px-4 py-2.5 whitespace-nowrap",
@@ -65,7 +66,7 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
                       onClick={() => onSort(headerKey)}
                       className={cn("inline-flex cursor-pointer items-center gap-1 transition-colors hover:text-foreground", isActive && "text-foreground")}
                     >
-                      {tCols(headerKey)}
+                      {label}
                       {isActive ? (
                         dir === "asc" ? (
                           <ChevronUp className="size-3" aria-hidden />
@@ -77,7 +78,7 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
                       )}
                     </button>
                   ) : (
-                    tCols(headerKey)
+                    label
                   )}
                 </th>
               );
