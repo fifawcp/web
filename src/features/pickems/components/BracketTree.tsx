@@ -90,8 +90,10 @@ const COMPACT_COLUMNS: ColumnSpec[] = [
 // the cell fade-in (`.bracket-cell-in`). Each depth is sized so the smallest
 // still-visible round fits at rest: depth 0 → R32 (span 1, ~1 card tall);
 // deeper in only larger spans remain so rows tighten. The Final column (span
-// 16, champion card) sets the lower bound (16 × 1rem ≥ its stacked height).
-const COMPACT_ROW_HEIGHTS = ["3.5rem", "1.9rem", "1rem", "1rem", "1rem"] as const;
+// 16: Final + Champion + Third ≈ 278px) sets the real lower bound — fixed
+// tracks can't grow to fit it, so the compressed floor is 1.15rem (16 × 18.4px
+// ≈ 294px ≥ 278) to keep those cards from being flex-shrunk and clipped.
+const COMPACT_ROW_HEIGHTS = ["3.5rem", "1.9rem", "1.15rem", "1.15rem", "1.15rem"] as const;
 
 /**
  * Hook to detect which pair of columns are currently visible in the scroll container.
@@ -101,6 +103,7 @@ const COMPACT_ROW_HEIGHTS = ["3.5rem", "1.9rem", "1rem", "1rem", "1rem"] as cons
  */
 function useVisibleColumnPair(scrollRef: React.RefObject<HTMLDivElement | null>) {
   const [visiblePair, setVisiblePair] = useState<[number, number]>([0, 1]);
+  const prevScrollLeft = useRef(0);
 
   const updateVisiblePair = useCallback(() => {
     const container = scrollRef.current;
@@ -108,9 +111,23 @@ function useVisibleColumnPair(scrollRef: React.RefObject<HTMLDivElement | null>)
 
     const scrollLeft = container.scrollLeft;
     const columnWidth = container.clientWidth * 0.5; // Each column is 50vw
+    const raw = scrollLeft / columnWidth;
 
-    // Calculate which column is at the left edge of the viewport
-    const leftColumnIndex = Math.floor(scrollLeft / columnWidth);
+    // Direction-aware so the compaction fires at the START of the gesture in
+    // BOTH directions. Plain floor() drops the index the instant you scroll left
+    // off a snap point (animation starts immediately) but only climbs once a
+    // rightward snap *lands* (animation starts at the end). Mirroring it with
+    // ceil() while scrolling right makes the index climb as soon as you head
+    // toward the next round. The 1e-3 epsilon absorbs sub-pixel jitter so a
+    // settled snap point resolves to its exact integer index, not the next one.
+    const movingRight = scrollLeft > prevScrollLeft.current;
+    prevScrollLeft.current = scrollLeft;
+    const rawIndex = movingRight ? Math.ceil(raw - 1e-3) : Math.floor(raw + 1e-3);
+    // Clamp to length-2: two columns are visible at once, so the leftmost can
+    // never exceed the second-to-last (SF). Without this, the trailing scroll
+    // padding pushes raw just past the last index and ceil() rounds it up to the
+    // Final column, which would wrongly collapse the Semifinals at the end.
+    const leftColumnIndex = Math.max(0, Math.min(rawIndex, COMPACT_COLUMNS.length - 2));
     // The right column is the next one (clamped to max index)
     const rightColumnIndex = Math.min(leftColumnIndex + 1, COMPACT_COLUMNS.length - 1);
 
