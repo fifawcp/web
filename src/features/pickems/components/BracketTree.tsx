@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Trophy } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
@@ -135,7 +135,7 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
       {/* Mobile: scrolls horizontally, ~2 rounds visible; on lg the columns fill.
           Tight row height keeps the later-round gaps (rowSpan × row height) small. */}
       <div ref={scrollRef} className="-mx-4 snap-x snap-mandatory scroll-pl-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:scroll-pl-0 sm:px-0">
-        <div className="mb-3 grid grid-cols-[repeat(5,minmax(50vw,1fr))_16px] sm:grid-cols-[repeat(5,minmax(8rem,1fr))]">
+        <div className="mb-3 grid grid-cols-[repeat(5,minmax(50vw,1fr))] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))]">
           {COMPACT_COLUMNS.map((col, colIdx) => {
             const completed = col.matchIds.reduce((n, id) => (byId.get(id)?.picked_team ? n + 1 : n), 0);
             const hasIncoming = colIdx > 0;
@@ -159,42 +159,29 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
           })}
         </div>
 
-        <div className="grid grid-cols-[repeat(5,minmax(50vw,1fr))_16px] grid-rows-[repeat(16,minmax(2rem,1fr))] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))] sm:grid-rows-[repeat(16,minmax(2.75rem,1fr))]">
-          {/* Vertical line with stage label for R32 column when compressed */}
-          {visiblePair[0] >= 1 && (
-            <>
-              {/* Label in R32 column, positioned at right edge */}
-              <div
-                className="pointer-events-none z-10 flex items-center justify-end pr-1"
-                style={{
-                  gridColumnStart: 1,
-                  gridRowStart: 1,
-                  gridRowEnd: "span 8",
-                }}
-              >
-                <span
-                  className="font-mono text-2xs uppercase tracking-wider text-muted-foreground"
-                  style={{
-                    writingMode: "vertical-rl",
-                    textOrientation: "mixed",
-                    transform: "rotate(180deg)",
-                  }}
+        <div className="grid grid-cols-[repeat(5,minmax(50vw,1fr))] grid-rows-[repeat(16,minmax(2rem,1fr))] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))] sm:grid-rows-[repeat(16,minmax(2.75rem,1fr))]">
+          {/* Every round scrolled off the left collapses to a rotated label in
+              its own column plus a divider line at the next round's left edge
+              (UEFA-style telescoping). Rendered for all passed columns. */}
+          {COMPACT_COLUMNS.map((col, colIdx) =>
+            colIdx < visiblePair[0] ? (
+              <Fragment key={`collapsed-${col.stage}`}>
+                <div
+                  className="pointer-events-none z-10 flex items-center justify-end pr-1"
+                  style={{ gridColumnStart: colIdx + 1, gridRowStart: 1, gridRowEnd: "span 8" }}
                 >
-                  {tRounds("round_of_32")}
-                </span>
-              </div>
-              {/* Vertical line at R16 left edge */}
-              <div
-                className="pointer-events-none z-10 flex items-center justify-start"
-                style={{
-                  gridColumnStart: 2,
-                  gridRowStart: 1,
-                  gridRowEnd: "span 8",
-                }}
-              >
-                <div className="h-full border-l border-border" />
-              </div>
-            </>
+                  <span
+                    className="font-mono text-2xs uppercase tracking-wider text-muted-foreground"
+                    style={{ writingMode: "vertical-rl", textOrientation: "mixed", transform: "rotate(180deg)" }}
+                  >
+                    {tRounds(col.stage)}
+                  </span>
+                </div>
+                <div className="pointer-events-none z-10 flex items-center justify-start" style={{ gridColumnStart: colIdx + 2, gridRowStart: 1, gridRowEnd: "span 8" }}>
+                  <div className="h-full border-l border-border" />
+                </div>
+              </Fragment>
+            ) : null
           )}
 
           {/* Cols 1-4 (R32 → SF) render as normal grid cells with connectors. */}
@@ -203,14 +190,11 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
               const slot = byId.get(id);
               if (!slot) return null;
               const isTopOfPair = matchIdx % 2 === 0;
-              // Compression logic: ALL columns compress together when we scroll past view [0,1]
+              // Visible rounds compress vertically once anything has scrolled off
+              // the left, tightening the later-round gaps; passed rounds drop out
+              // (their collapsed label + divider is rendered above).
               const shouldCompress = visiblePair[0] >= 1;
-
-              // Hide R32 completely when compressed (view [1,2] or beyond)
-              const hideR32 = colIdx === 0 && shouldCompress;
-
-              // Skip rendering R32 cells when compressed
-              if (hideR32) return null;
+              if (colIdx < visiblePair[0]) return null;
 
               return (
                 <BracketGridCell
@@ -237,9 +221,11 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
             })
           )}
 
-          {/* Col 5 — Final, Champion, Third place stacked. */}
+          {/* Col 5 — Final, Champion, Third place stacked. As the last column it
+              snaps by its END edge, so the snap target equals the true max scroll
+              (a `snap-start` here clamps short and leaves a right gutter). */}
           <div
-            className="flex snap-start flex-col justify-center gap-3 pl-1.5 pr-4 transition-all duration-300"
+            className="flex snap-end flex-col justify-center gap-3 px-5 transition-all duration-300"
             style={{
               gridColumnStart: 5,
               gridRow: visiblePair[0] >= 1 ? "1 / span 8" : "1 / span 16",
@@ -489,7 +475,6 @@ type CellProps = {
  */
 function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgoing, pad = "md", snap, isCompressed, hideOutgoing, children }: CellProps) {
   const sm = pad === "sm";
-  const hasOutgoing = outgoing !== "none" && !hideOutgoing;
 
   // When compressed, reduce the rowSpan to minimize vertical whitespace
   const effectiveRowSpan = isCompressed ? Math.max(1, Math.ceil(rowSpan / 2)) : rowSpan;
@@ -516,7 +501,10 @@ function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgo
       className={cn(
         "relative flex items-center py-2 transition-all duration-300",
         snap && "snap-start",
-        sm ? padX : cn(hasIncoming && (side === "left" ? padL : padR), hasOutgoing && (side === "left" ? padR : padL))
+        // Symmetric padding on every cell so all cards are the same width across
+        // rounds (connectors live inside this padding); `sm` (split view) keeps
+        // its own tighter uniform padding.
+        sm ? padX : cn(padL, padR)
       )}
       style={{
         gridColumnStart: colStart,
