@@ -6,7 +6,7 @@ import createMiddleware from "next-intl/middleware";
 import { routing, type Locale } from "@/i18n/routing";
 import { env } from "@/lib/env";
 import { HARD_AUTH_FAILURE_CODES } from "@/shared/lib/api/errors";
-import { forwardedClientHeaders } from "@/shared/lib/api/forwarded-headers";
+import { forwardedClientHeaders, trustedClientIpHeaders } from "@/shared/lib/api/forwarded-headers";
 import { isTokenStale } from "@/shared/lib/api/jwt";
 
 // Authenticated users are redirected away from these routes (locale-stripped paths).
@@ -66,6 +66,18 @@ function maintenanceResponse(req: NextRequest): NextResponse | null {
   return res;
 }
 
+function apiPassthrough(req: NextRequest): NextResponse {
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.delete("x-client-ip");
+  requestHeaders.delete("x-ip-forward-secret");
+
+  for (const [key, value] of Object.entries(trustedClientIpHeaders(req))) {
+    requestHeaders.set(key, value);
+  }
+
+  return NextResponse.next({ request: { headers: requestHeaders } });
+}
+
 function isPrefetch(req: NextRequest): boolean {
   return req.headers.has("next-router-prefetch") || req.headers.get("sec-purpose")?.includes("prefetch") === true || req.headers.get("purpose") === "prefetch";
 }
@@ -107,8 +119,9 @@ export default async function proxy(req: NextRequest) {
   if (maintenance) return maintenance;
 
   // API routes only need the maintenance gate above; the locale/auth pipeline below
-  // is page-oriented and would mangle them, so let them fall through to the rewrites.
-  if (req.nextUrl.pathname.startsWith("/api/")) return NextResponse.next();
+  // is page-oriented and would mangle them, so let them fall through to the rewrites —
+  // after stamping the trusted client-IP headers the rewrite proxy carries to the API.
+  if (req.nextUrl.pathname.startsWith("/api/")) return apiPassthrough(req);
 
   // 1. Locale routing first: handles prefixing, the locale cookie, hreflang headers,
   //    and any locale redirect (e.g. a non-default cookie on the unprefixed path).
