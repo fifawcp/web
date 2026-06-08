@@ -101,7 +101,7 @@ function ThirdsStepSkeleton() {
 }
 
 /**
- * Knockout-tree skeleton mirroring `BracketDesktop`: the braced compact tree
+ * Knockout-tree skeleton mirroring `BracketTree`: the braced compact tree
  * (mobile horizontal-scroll → lg) and the xl split/folded tree. Exported so the
  * standalone `/bracket` page's `loading.tsx` reuses the shapes.
  */
@@ -243,7 +243,7 @@ function TipCardSkeleton() {
       <Skeleton className="mt-0.5 size-5 shrink-0 rounded-sm" />
       <div className="min-w-0 flex-1 space-y-1.5 pt-1">
         <Skeleton className="h-3.5 w-full max-w-xs" />
-        <Skeleton className="h-3.5 w-3/4 max-w-[12rem]" />
+        <Skeleton className="h-3.5 w-3/4 max-w-48" />
       </div>
       <Skeleton className="size-6 shrink-0 rounded-md" />
     </div>

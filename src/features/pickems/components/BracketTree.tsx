@@ -45,7 +45,7 @@ type OutgoingKind = "pair-top" | "pair-bottom" | "straight" | "none";
 type ConnectorPad = "md" | "sm";
 type ByIdMap = Map<number, BracketMatchSlot>;
 
-export function BracketDesktop(props: Props) {
+export function BracketTree(props: Props) {
   const byId = useMemo(() => new Map(props.bracket.map((slot) => [slot.match_id, slot] as const)), [props.bracket]);
 
   return (
@@ -514,7 +514,7 @@ function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgo
   return (
     <div
       className={cn(
-        "relative flex items-center py-1 transition-all duration-300",
+        "relative flex items-center py-2 transition-all duration-300",
         snap && "snap-start",
         sm ? padX : cn(hasIncoming && (side === "left" ? padL : padR), hasOutgoing && (side === "left" ? padR : padL))
       )}

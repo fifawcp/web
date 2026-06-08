@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { SquarePen } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { BracketDesktop } from "@/features/pickems/components/BracketDesktop";
+import { BracketTree } from "@/features/pickems/components/BracketTree";
 import { findChampion, projectBracket } from "@/features/pickems/lib/projectBracket";
 import type { UserPickem } from "@/features/pickems/types/pickems.types";
 import { useMatches } from "@/features/schedule/hooks/useMatches";
@@ -89,7 +89,7 @@ export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) 
 
       {comparing && summary && summary.possible > 0 && <BracketCompareLegend summary={summary} />}
 
-      <BracketDesktop bracket={actualSlots} champion={champion} disabled comparisonById={comparisonById} />
+      <BracketTree bracket={actualSlots} champion={champion} disabled comparisonById={comparisonById} />
     </div>
   );
 }

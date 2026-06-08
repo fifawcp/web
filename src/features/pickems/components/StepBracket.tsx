@@ -10,7 +10,7 @@ import { prevStep } from "../lib/pickemStep";
 import { findChampion, projectBracket } from "../lib/projectBracket";
 import type { BracketDraft, PickemProgress, PickemStep, UserPickem } from "../types/pickems.types";
 
-import { BracketDesktop } from "./BracketDesktop";
+import { BracketTree } from "./BracketTree";
 import { PickemsCTABar, type CTAAction } from "./PickemsCTABar";
 import { PickemsHeader } from "./PickemsHeader";
 import { PickemsHeaderActions } from "./PickemsHeaderActions";
@@ -81,7 +81,7 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
 
       <PickemsStepper current={step} progress={progress} onChange={onStep} canNavigateTo={canNavigateTo} />
 
-      <BracketDesktop bracket={projected} champion={champion} disabled={data.is_locked} onPick={pick} />
+      <BracketTree bracket={projected} champion={champion} disabled={data.is_locked} onPick={pick} />
 
       <PickemsCTABar action={action} onBack={back} progress={{ completed: pickedCount, total: TOTAL_BRACKET_PICKS }} />
     </section>
