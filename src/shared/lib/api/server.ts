@@ -1,5 +1,6 @@
 import "server-only";
 
+import { headers as getRequestHeaders } from "next/headers";
 import { getServerSession } from "next-auth";
 import { getLocale } from "next-intl/server";
 
@@ -9,7 +10,16 @@ import { env } from "@/lib/env";
 
 import { logger } from "../logger";
 
+import { trustedClientIpHeaders } from "./forwarded-headers";
 import { ApiError, ApiResponse } from "./types";
+
+async function clientIpHeaders(): Promise<Record<string, string>> {
+  try {
+    return trustedClientIpHeaders(await getRequestHeaders());
+  } catch {
+    return {};
+  }
+}
 
 type RequestOptions = Omit<RequestInit, "method" | "body"> & {
   authenticated?: boolean;
@@ -27,6 +37,8 @@ async function request<T>(endpoint: string, options: RequestOptions = { method: 
   const url = `${env.BACKEND_API_URL}${endpoint}`;
   const headers = new Headers(options.headers as HeadersInit | undefined);
   if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+
+  for (const [key, value] of Object.entries(await clientIpHeaders())) headers.set(key, value);
 
   if (authenticated) {
     const session = await getServerSession(authOptions);

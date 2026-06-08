@@ -4,6 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { ApiClientError } from "@/shared/lib/api/errors";
+
 import { PICKEMS_QUERY_KEY } from "../api/pickems";
 import { countClearedPicks } from "../lib/diffInvalidation";
 import type { UserPickem } from "../types/pickems.types";
@@ -42,8 +44,13 @@ export function usePickemMutation<TInput>({
       if (previous) qc.setQueryData<UserPickem>(PICKEMS_QUERY_KEY, applyOptimistic(previous, input));
       return { previous };
     },
-    onError: (_err, _input, ctx) => {
+    onError: (err, _input, ctx) => {
       if (ctx?.previous) qc.setQueryData(PICKEMS_QUERY_KEY, ctx.previous);
+      // Surface the backend's rejection detail (code + per-field validation) so a
+      // future failure is diagnosable from the console instead of just a toast.
+      // Intentionally logs in production — this exists to diagnose live rejections.
+      // eslint-disable-next-line no-console -- intentional diagnostic sink
+      if (err instanceof ApiClientError) console.warn("Pickem save rejected:", err.code, err.fields);
       toast.error(t(errorMessageKey));
     },
     onSuccess: (response, _input, ctx) => {

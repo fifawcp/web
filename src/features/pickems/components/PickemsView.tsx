@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -42,6 +42,19 @@ export function PickemsView({ initialData, userId }: Props) {
   const groupsSave = useSaveGroups(userId);
   const bestThirdsSave = useSaveBestThirds(userId);
   const [navigating, setNavigating] = useState(false);
+
+  // Each step is its own screen — land at the top when moving between them
+  // (e.g. Continue from groups → best thirds → bracket) so the new step's header
+  // is in view rather than wherever the previous step was scrolled. Skips the
+  // first render so a deep-linked step isn't yanked to the top on load.
+  const isInitialStep = useRef(true);
+  useEffect(() => {
+    if (isInitialStep.current) {
+      isInitialStep.current = false;
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
 
   // When the pickem is locked the server is read-only; localStorage drafts can
   // never sync, so ignore them and project against the server-saved state only

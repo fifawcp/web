@@ -1,3 +1,5 @@
+import type { ApiErrorField } from "./types";
+
 export const API_ERROR_CODES = {
   NETWORK_ERROR: "NETWORK_ERROR",
   UNAUTHENTICATED: "UNAUTHENTICATED",
@@ -21,10 +23,12 @@ export const HARD_AUTH_FAILURE_CODES: ReadonlySet<string> = new Set([
 
 export class ApiClientError extends Error {
   readonly code: string;
-  constructor(code: string, message: string) {
+  readonly fields?: Record<string, ApiErrorField>;
+  constructor(code: string, message: string, fields?: Record<string, ApiErrorField>) {
     super(message);
     this.name = "ApiClientError";
     this.code = code;
+    this.fields = fields;
   }
 }
 

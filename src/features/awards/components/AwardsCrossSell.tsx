@@ -19,9 +19,9 @@ export function AwardsCrossSell({ isLocked = false }: Props) {
   const t = useTranslations("awards.crossSell");
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+    <div className="flex flex-col gap-3 rounded-xl border border-amber-300/70 bg-amber-100/80 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 dark:border-amber-500/30 dark:bg-amber-500/15">
       <div className="flex items-start gap-3">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-300">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-300">
           <Trophy className="size-5" />
         </span>
         <div className="flex flex-col gap-0.5">
