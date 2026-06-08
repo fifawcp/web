@@ -79,6 +79,20 @@ const COMPACT_COLUMNS: ColumnSpec[] = [
   { stage: "final", matchIds: [FINAL_MATCH_ID], rowSpan: 16 },
 ];
 
+// Row-track height per scroll depth (indexed by the left visible column).
+// Compaction is the row height shrinking — cards keep their intrinsic size, so
+// the later-round gaps (rowSpan × rowH) close up. These are FIXED track sizes
+// (no `minmax(…, 1fr)`): a flexible max lets a remounting round's content
+// instantly inflate the rows, which bypasses the transition and makes the
+// expand (scroll-left) jump. Fixed tracks are driven purely by this value, so
+// the transition animates symmetrically in both directions; cards overflow
+// rather than resize the track, and the brief reflow on remount is masked by
+// the cell fade-in (`.bracket-cell-in`). Each depth is sized so the smallest
+// still-visible round fits at rest: depth 0 → R32 (span 1, ~1 card tall);
+// deeper in only larger spans remain so rows tighten. The Final column (span
+// 16, champion card) sets the lower bound (16 × 1rem ≥ its stacked height).
+const COMPACT_ROW_HEIGHTS = ["3.5rem", "1.9rem", "1rem", "1rem", "1rem"] as const;
+
 /**
  * Hook to detect which pair of columns are currently visible in the scroll container.
  * Each column is 50vw wide, so 2 columns are visible at a time.
@@ -100,7 +114,11 @@ function useVisibleColumnPair(scrollRef: React.RefObject<HTMLDivElement | null>)
     // The right column is the next one (clamped to max index)
     const rightColumnIndex = Math.min(leftColumnIndex + 1, COMPACT_COLUMNS.length - 1);
 
-    setVisiblePair([leftColumnIndex, rightColumnIndex]);
+    // Only re-render when the pair actually changes. The scroll handler fires
+    // dozens of times per scroll; without this guard each tick set a fresh array
+    // and re-rendered the whole bracket mid-animation, which stutters the
+    // compaction transition.
+    setVisiblePair((prev) => (prev[0] === leftColumnIndex && prev[1] === rightColumnIndex ? prev : [leftColumnIndex, rightColumnIndex]));
   }, [scrollRef]);
 
   useEffect(() => {
@@ -126,6 +144,10 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
 
   // visiblePair: [leftColumnIndex, rightColumnIndex] (0-indexed)
   // Stages: 0=R32, 1=R16, 2=QF, 3=SF, 4=Final
+
+  // Row-track height for the current scroll depth. Changing this (vs re-spanning
+  // cells across grid lines) is what makes the compaction animate — see globals.
+  const rowHeight = COMPACT_ROW_HEIGHTS[Math.min(visiblePair[0], COMPACT_ROW_HEIGHTS.length - 1)];
 
   const finalSlot = byId.get(FINAL_MATCH_ID) ?? null;
   const thirdSlot = byId.get(THIRD_PLACE_MATCH_ID) ?? null;
@@ -159,16 +181,19 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
           })}
         </div>
 
-        <div className="grid grid-cols-[repeat(5,minmax(50vw,1fr))] grid-rows-[repeat(16,minmax(2rem,1fr))] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))] sm:grid-rows-[repeat(16,minmax(2.75rem,1fr))]">
+        <div
+          className="bracket-rows-animated grid grid-cols-[repeat(5,minmax(50vw,1fr))] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))]"
+          style={{ gridTemplateRows: `repeat(16, ${rowHeight})` }}
+        >
           {/* Every round scrolled off the left collapses to a rotated label in
-              its own column plus a divider line at the next round's left edge
-              (UEFA-style telescoping). Rendered for all passed columns. */}
+              its own column plus a full-height divider line at the next round's
+              left edge (UEFA-style telescoping). Rendered for all passed columns. */}
           {COMPACT_COLUMNS.map((col, colIdx) =>
             colIdx < visiblePair[0] ? (
               <Fragment key={`collapsed-${col.stage}`}>
                 <div
                   className="pointer-events-none z-10 flex items-center justify-end pr-1"
-                  style={{ gridColumnStart: colIdx + 1, gridRowStart: 1, gridRowEnd: "span 8" }}
+                  style={{ gridColumnStart: colIdx + 1, gridRowStart: 1, gridRowEnd: "span 16" }}
                 >
                   <span
                     className="font-mono text-2xs uppercase tracking-wider text-muted-foreground"
@@ -177,23 +202,22 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
                     {tRounds(col.stage)}
                   </span>
                 </div>
-                <div className="pointer-events-none z-10 flex items-center justify-start" style={{ gridColumnStart: colIdx + 2, gridRowStart: 1, gridRowEnd: "span 8" }}>
+                <div className="pointer-events-none z-10 flex items-center justify-start" style={{ gridColumnStart: colIdx + 2, gridRowStart: 1, gridRowEnd: "span 16" }}>
                   <div className="h-full border-l border-border" />
                 </div>
               </Fragment>
             ) : null
           )}
 
-          {/* Cols 1-4 (R32 → SF) render as normal grid cells with connectors. */}
+          {/* Cols 1-4 (R32 → SF) render as normal grid cells with connectors.
+              Compaction is driven by the row-track height (above), so each cell
+              keeps its full rowSpan and stays centered — passed rounds just drop
+              out (their collapsed label + divider is rendered above). */}
           {COMPACT_COLUMNS.slice(0, 4).map((col, colIdx) =>
             col.matchIds.map((id, matchIdx) => {
               const slot = byId.get(id);
               if (!slot) return null;
               const isTopOfPair = matchIdx % 2 === 0;
-              // Visible rounds compress vertically once anything has scrolled off
-              // the left, tightening the later-round gaps; passed rounds drop out
-              // (their collapsed label + divider is rendered above).
-              const shouldCompress = visiblePair[0] >= 1;
               if (colIdx < visiblePair[0]) return null;
 
               return (
@@ -202,7 +226,6 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
                   colStart={colIdx + 1}
                   rowStart={matchIdx * col.rowSpan + 1}
                   rowSpan={col.rowSpan}
-                  isCompressed={shouldCompress}
                   side="left"
                   hasIncoming={colIdx > 0}
                   outgoing={isTopOfPair ? "pair-top" : "pair-bottom"}
@@ -214,7 +237,7 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
                     disabled={disabled}
                     onPick={onPick ? (code) => onPick(id, code) : undefined}
                     comparison={comparisonById?.get(id) ?? null}
-                    className="w-full"
+                    className="bracket-cell-in w-full"
                   />
                 </BracketGridCell>
               );
@@ -225,10 +248,10 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
               snaps by its END edge, so the snap target equals the true max scroll
               (a `snap-start` here clamps short and leaves a right gutter). */}
           <div
-            className="flex snap-end flex-col justify-center gap-3 px-5 transition-all duration-300"
+            className="flex snap-end flex-col justify-center gap-3 px-5"
             style={{
               gridColumnStart: 5,
-              gridRow: visiblePair[0] >= 1 ? "1 / span 8" : "1 / span 16",
+              gridRow: "1 / span 16",
             }}
           >
             <BracketCenterCard slot={finalSlot} label={tRounds("final")} disabled={disabled} onPick={onPick} comparison={comparisonById?.get(FINAL_MATCH_ID) ?? null} />
@@ -451,8 +474,6 @@ type CellProps = {
   pad?: ConnectorPad;
   /** Marks this cell as a horizontal scroll-snap point (mobile snaps one round per swipe). */
   snap?: boolean;
-  /** When true, compress the rowSpan to reduce vertical whitespace. */
-  isCompressed?: boolean;
   /** When true, hide the outgoing connectors. */
   hideOutgoing?: boolean;
   children: React.ReactNode;
@@ -473,14 +494,8 @@ type CellProps = {
  * `outgoing: "straight"` is used for singleton columns (SF in the split view)
  * where there's no paired match to bracket toward.
  */
-function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgoing, pad = "md", snap, isCompressed, hideOutgoing, children }: CellProps) {
+function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgoing, pad = "md", snap, hideOutgoing, children }: CellProps) {
   const sm = pad === "sm";
-
-  // When compressed, reduce the rowSpan to minimize vertical whitespace
-  const effectiveRowSpan = isCompressed ? Math.max(1, Math.ceil(rowSpan / 2)) : rowSpan;
-  // R32 (rowSpan=1) needs -0.5 offset when compressed to align connectors with R16
-  const rowOffset = isCompressed && rowSpan === 1 ? -1 : 0;
-  const effectiveRowStart = isCompressed ? Math.floor((rowStart - 1) / 2) + 1 + rowOffset : rowStart;
 
   // Padding is applied to BOTH sides uniformly in sm mode so every card
   // (R32 outer or inner) ends up the same width. Source-side L-shape lives
@@ -508,8 +523,8 @@ function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgo
       )}
       style={{
         gridColumnStart: colStart,
-        gridRowStart: effectiveRowStart,
-        gridRowEnd: `span ${effectiveRowSpan}`,
+        gridRowStart: rowStart,
+        gridRowEnd: `span ${rowSpan}`,
       }}
     >
       {children}

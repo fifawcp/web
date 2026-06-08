@@ -364,6 +364,43 @@
   }
 }
 
+/* Mobile bracket compaction. The braced tree shrinks its row tracks as later
+   rounds scroll into view (UEFA-style telescoping). Re-expressing compaction as
+   a row-track-height change — rather than re-spanning each cell across grid
+   lines — lets it animate: `grid-row`/`grid-column` placement is discrete, but
+   `grid-template-rows` interpolates between two track lists of equal length
+   (Chrome 107+, Firefox 66+, Safari 16+). `BracketTree` sets the inline
+   `grid-template-rows` per scroll depth and this transitions between them. */
+.bracket-rows-animated {
+  transition: grid-template-rows 300ms ease-out;
+}
+/* Fade a round in as it remounts when scrolling left (expanding). Fixed row
+   tracks animate the spacing symmetrically, but a revealed short-span round
+   (R32/R16) briefly overflows its still-growing cell — the fade masks that
+   reflow so the expand reads as smooth as the collapse. Opacity only (no
+   transform): the cell is being relaid-out by the grid track transition every
+   frame, and animating a geometry transform on top of that re-rasterizes the
+   layer each frame and stutters — opacity composites cleanly alongside layout. */
+@keyframes bracket-cell-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.bracket-cell-in {
+  animation: bracket-cell-in 240ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bracket-rows-animated {
+    transition: none;
+  }
+  .bracket-cell-in {
+    animation: none;
+  }
+}
+
 /* Caps the height of a cmdk group's item list so the scroll lives inside the group
    instead of the surrounding popover. Apply via the `cmdk-scroll-group` class on a CommandGroup. */
 .cmdk-scroll-group [cmdk-group-items] {
