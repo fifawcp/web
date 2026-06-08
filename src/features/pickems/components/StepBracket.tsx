@@ -1,17 +1,14 @@
 "use client";
 
-import { useMemo } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
 
 import { useBracketDraft } from "../hooks/useBracketDraft";
 import { useSubmitBracket } from "../hooks/useSubmitBracket";
 import { TOTAL_BRACKET_PICKS } from "../lib/bracketStructure";
 import { prevStep } from "../lib/pickemStep";
-import { findChampion, projectBracket } from "../lib/projectBracket";
-import type { BracketDraft, PickemProgress, PickemStep, UserPickem } from "../types/pickems.types";
 import { bracketSignature, findChampion, projectBracket } from "../lib/projectBracket";
-import type { BracketDraft, BracketStageCode, PickemProgress, PickemStep, UserPickem } from "../types/pickems.types";
+import type { BracketDraft, PickemProgress, PickemStep, UserPickem } from "../types/pickems.types";
 
 import { BracketTree } from "./BracketTree";
 import { PickemsCTABar, type CTAAction } from "./PickemsCTABar";
@@ -74,17 +71,6 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
     return () => window.clearTimeout(id);
   }, [data.is_locked, isReady, isSubmitting, projectedSignature, savedSignature, projected, submit]);
 
-  const projectedById = useMemo(() => new Map(projected.map((slot) => [slot.match_id, slot] as const)), [projected]);
-  const stageStats = useMemo(() => {
-    const ids = STAGE_MATCH_IDS[activeStage];
-    const completed = ids.reduce((n, id) => (projectedById.get(id)?.picked_team ? n + 1 : n), 0);
-    return { total: ids.length, completed, remaining: ids.length - completed, isComplete: completed === ids.length };
-  }, [activeStage, projectedById]);
-
-  const stageIdx = STAGES.indexOf(activeStage);
-  const nextStage = stageIdx >= 0 && stageIdx < STAGES.length - 1 ? STAGES[stageIdx + 1] : null;
-  const prevStage = stageIdx > 0 ? STAGES[stageIdx - 1] : null;
-
   const prev = prevStep("bracket");
   const helperText = isReady ? tCommon("readyToSubmit") : t("picksLeft", { n: TOTAL_BRACKET_PICKS - pickedCount });
   const back = !data.is_locked && prev ? () => onStep(prev) : undefined;
@@ -102,37 +88,6 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
         helperTone: isReady ? "ready" : undefined,
         onClick: () => submit(projected),
       };
-
-  // Per-stage mobile CTA: a "Next: <round>" button gated on the current stage
-  // being complete. Final stage flips to "Submit picks", which still requires
-  // all 32 picks across the bracket (a user could land on Final via tab without
-  // having completed earlier rounds).
-  const mobileAction: CTAAction = data.is_locked
-    ? { kind: "hidden" }
-    : nextStage
-      ? {
-          kind: "continue",
-          label: tRounds(nextStage),
-          disabled: !stageStats.isComplete,
-          helperText: stageStats.isComplete ? tCommon("readyForRound", { round: tRounds(nextStage) }) : t("roundLeft", { n: stageStats.remaining }),
-          helperTone: stageStats.isComplete ? "ready" : undefined,
-          onClick: () => {
-            if (!stageStats.isComplete) {
-              toast(tToasts("finishRoundFirst"));
-              return;
-            }
-            goToStage(nextStage);
-          },
-        }
-      : {
-          kind: "submit",
-          label: t("submit"),
-          disabled: !isReady,
-          loading: isSubmitting,
-          helperText,
-          helperTone: isReady ? "ready" : undefined,
-          onClick: () => submit(projected),
-        };
 
   const rightSlot = (
     <div className="hidden flex-col items-stretch gap-2.5 lg:flex">
