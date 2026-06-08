@@ -16,7 +16,7 @@ export default function BracketLoading() {
       <header className="flex flex-col gap-3">
         <Skeleton className="h-3 w-40" />
         <Skeleton className="h-9 w-44 sm:h-10" />
-        <Skeleton className="h-4 w-full max-w-2xl" />
+        <Skeleton className="h-20 w-full max-w-2xl" />
       </header>
 
       <BracketTreeSkeleton />

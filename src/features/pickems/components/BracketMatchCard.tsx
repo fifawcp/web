@@ -111,7 +111,7 @@ function TeamRow({ team, picked, density, locale, canPick, interactive, placehol
     // label (e.g. "1E" / "3A/B/C/D/F") when known, else "to be decided".
     const label = interactive ? t("pickWinner") : (placeholder ?? t("toBeDecided"));
     return (
-      <div className={cn("flex items-center gap-2 px-2.5 text-muted-foreground", density === "dense" ? "py-1.5 text-xs" : "py-2.5 text-sm")}>
+      <div className={cn("flex items-center gap-2 px-2.5 text-muted-foreground", density === "dense" ? "py-0.5 text-xs" : "py-2.5 text-sm")}>
         <span className="size-3 shrink-0 rounded-full border border-dashed border-muted-foreground/60" aria-hidden />
         <span className={cn(placeholder && !interactive ? "font-mono text-2xs tracking-wide" : "italic")}>{label}</span>
       </div>
@@ -131,7 +131,7 @@ function TeamRow({ team, picked, density, locale, canPick, interactive, placehol
       disabled={!canPick}
       className={cn(
         "group flex w-full items-center gap-1 px-2.5 text-left transition-colors",
-        density === "dense" ? "py-1.5" : "py-2.5",
+        density === "dense" ? "py-0.5" : "py-2.5",
         canPick ? "cursor-pointer" : "cursor-default",
         inCompare ? correct && "bg-lime-500/15" : picked && "bg-page-accent-soft",
         canPick && !highlighted && "hover:bg-muted"

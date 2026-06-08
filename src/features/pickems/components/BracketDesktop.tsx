@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Trophy } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
@@ -57,9 +57,11 @@ export function BracketDesktop(props: Props) {
 }
 
 // =============================================================================
-// Compact view — 1024px ≤ width < 1280px. All five rounds laid out left to
-// right; the right rail carries the read-only Champion display + the
-// Third-Place match card.
+// Compact view — every width below 1280px (mobile → lg). The full braced tree
+// (R32 → Final) with connectors. On mobile it scrolls horizontally and snaps one
+// round per swipe (~2 rounds visible); on lg the columns grow to fill. The last
+// column carries the Final, the read-only Champion display, and the Third-Place
+// match.
 // =============================================================================
 
 type ColumnSpec = {
@@ -77,82 +79,182 @@ const COMPACT_COLUMNS: ColumnSpec[] = [
   { stage: "final", matchIds: [FINAL_MATCH_ID], rowSpan: 16 },
 ];
 
+/**
+ * Hook to detect which pair of columns are currently visible in the scroll container.
+ * Each column is 50vw wide, so 2 columns are visible at a time.
+ * Returns [leftColumnIndex, rightColumnIndex] (0-indexed).
+ * Example: [0, 1] = R32 + R16, [2, 3] = QF + SF, [3, 4] = SF + Final
+ */
+function useVisibleColumnPair(scrollRef: React.RefObject<HTMLDivElement | null>) {
+  const [visiblePair, setVisiblePair] = useState<[number, number]>([0, 1]);
+
+  const updateVisiblePair = useCallback(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const scrollLeft = container.scrollLeft;
+    const columnWidth = container.clientWidth * 0.5; // Each column is 50vw
+
+    // Calculate which column is at the left edge of the viewport
+    const leftColumnIndex = Math.floor(scrollLeft / columnWidth);
+    // The right column is the next one (clamped to max index)
+    const rightColumnIndex = Math.min(leftColumnIndex + 1, COMPACT_COLUMNS.length - 1);
+
+    setVisiblePair([leftColumnIndex, rightColumnIndex]);
+  }, [scrollRef]);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    container.addEventListener("scroll", updateVisiblePair, { passive: true });
+    updateVisiblePair(); // Initial check
+
+    return () => container.removeEventListener("scroll", updateVisiblePair);
+  }, [scrollRef, updateVisiblePair]);
+
+  return visiblePair;
+}
+
 function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }: Props & { byId: ByIdMap }) {
   const tRounds = useTranslations("pickems.bracket.rounds");
   const t = useTranslations("pickems.bracket");
   const locale = useLocale();
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const visiblePair = useVisibleColumnPair(scrollRef);
+
+  // visiblePair: [leftColumnIndex, rightColumnIndex] (0-indexed)
+  // Stages: 0=R32, 1=R16, 2=QF, 3=SF, 4=Final
+
   const finalSlot = byId.get(FINAL_MATCH_ID) ?? null;
   const thirdSlot = byId.get(THIRD_PLACE_MATCH_ID) ?? null;
 
   return (
-    <div className="hidden lg:block xl:hidden">
-      <div className="mb-3 grid grid-cols-5">
-        {COMPACT_COLUMNS.map((col, colIdx) => {
-          const completed = col.matchIds.reduce((n, id) => (byId.get(id)?.picked_team ? n + 1 : n), 0);
-          const hasIncoming = colIdx > 0;
-          const hasOutgoing = colIdx < COMPACT_COLUMNS.length - 1;
-          return (
-            <header
-              key={col.stage}
-              className={cn(
-                "flex flex-col items-center gap-0.5 font-mono text-2xs uppercase tracking-wider text-muted-foreground",
-                hasIncoming && "pl-5",
-                hasOutgoing && "pr-5"
-              )}
-            >
-              <span className="truncate">{tRounds(col.stage)}</span>
-              <span className="tabular-nums opacity-60">
-                {completed}/{col.matchIds.length}
-              </span>
-              <span aria-hidden className="mt-1 h-px w-full bg-border" />
-            </header>
-          );
-        })}
-      </div>
-
-      <div className="grid grid-cols-5 grid-rows-[repeat(16,minmax(2.75rem,1fr))]">
-        {/* Cols 1-4 (R32 → SF) render as normal grid cells with connectors. */}
-        {COMPACT_COLUMNS.slice(0, 4).map((col, colIdx) =>
-          col.matchIds.map((id, matchIdx) => {
-            const slot = byId.get(id);
-            if (!slot) return null;
-            const isTopOfPair = matchIdx % 2 === 0;
+    <div className="block xl:hidden">
+      {/* Mobile: scrolls horizontally, ~2 rounds visible; on lg the columns fill.
+          Tight row height keeps the later-round gaps (rowSpan × row height) small. */}
+      <div ref={scrollRef} className="-mx-4 snap-x snap-mandatory scroll-pl-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:scroll-pl-0 sm:px-0">
+        <div className="mb-3 grid grid-cols-[repeat(5,minmax(50vw,1fr))_16px] sm:grid-cols-[repeat(5,minmax(8rem,1fr))]">
+          {COMPACT_COLUMNS.map((col, colIdx) => {
+            const completed = col.matchIds.reduce((n, id) => (byId.get(id)?.picked_team ? n + 1 : n), 0);
+            const hasIncoming = colIdx > 0;
+            const hasOutgoing = colIdx < COMPACT_COLUMNS.length;
             return (
-              <BracketGridCell
-                key={id}
-                colStart={colIdx + 1}
-                rowStart={matchIdx * col.rowSpan + 1}
-                rowSpan={col.rowSpan}
-                side="left"
-                hasIncoming={colIdx > 0}
-                outgoing={isTopOfPair ? "pair-top" : "pair-bottom"}
+              <header
+                key={col.stage}
+                className={cn(
+                  "flex flex-col items-center gap-0.5 font-mono text-2xs uppercase tracking-wider text-muted-foreground",
+                  hasIncoming && "pl-5 sm:pl-0 md:pl-5",
+                  hasOutgoing && "pr-5 sm:pr-0 md:pr-5"
+                )}
               >
-                <BracketMatchCard
-                  slot={slot}
-                  density="dense"
-                  disabled={disabled}
-                  onPick={onPick ? (code) => onPick(id, code) : undefined}
-                  comparison={comparisonById?.get(id) ?? null}
-                  className="w-full"
-                />
-              </BracketGridCell>
+                <span className="truncate">{tRounds(col.stage)}</span>
+                <span className="tabular-nums opacity-60">
+                  {completed}/{col.matchIds.length}
+                </span>
+                <span aria-hidden className="mt-1 h-px w-full bg-border" />
+              </header>
             );
-          })
-        )}
+          })}
+        </div>
 
-        {/* Col 5 mirrors the xl center column — Final, Champion, Third stacked
-            so every card across the bracket shares the same R32 width. */}
-        <div className="flex flex-col justify-center gap-3 px-1.5" style={{ gridColumnStart: 5, gridRow: "1 / span 16" }}>
-          <BracketCenterCard slot={finalSlot} label={tRounds("final")} disabled={disabled} onPick={onPick} comparison={comparisonById?.get(FINAL_MATCH_ID) ?? null} />
-          <BracketChampionDisplay champion={champion} label={t("champion")} locale={locale} />
-          <BracketCenterCard
-            slot={thirdSlot}
-            label={tRounds("third_place")}
-            disabled={disabled}
-            onPick={onPick}
-            comparison={comparisonById?.get(THIRD_PLACE_MATCH_ID) ?? null}
-          />
+        <div className="grid grid-cols-[repeat(5,minmax(50vw,1fr))_16px] grid-rows-[repeat(16,minmax(2rem,1fr))] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))] sm:grid-rows-[repeat(16,minmax(2.75rem,1fr))]">
+          {/* Vertical line with stage label for R32 column when compressed */}
+          {visiblePair[0] >= 1 && (
+            <>
+              {/* Label in R32 column, positioned at right edge */}
+              <div
+                className="pointer-events-none z-10 flex items-center justify-end pr-1"
+                style={{
+                  gridColumnStart: 1,
+                  gridRowStart: 1,
+                  gridRowEnd: "span 8",
+                }}
+              >
+                <span
+                  className="font-mono text-2xs uppercase tracking-wider text-muted-foreground"
+                  style={{
+                    writingMode: "vertical-rl",
+                    textOrientation: "mixed",
+                    transform: "rotate(180deg)",
+                  }}
+                >
+                  {tRounds("round_of_32")}
+                </span>
+              </div>
+              {/* Vertical line at R16 left edge */}
+              <div
+                className="pointer-events-none z-10 flex items-center justify-start"
+                style={{
+                  gridColumnStart: 2,
+                  gridRowStart: 1,
+                  gridRowEnd: "span 8",
+                }}
+              >
+                <div className="h-full border-l border-border" />
+              </div>
+            </>
+          )}
+
+          {/* Cols 1-4 (R32 → SF) render as normal grid cells with connectors. */}
+          {COMPACT_COLUMNS.slice(0, 4).map((col, colIdx) =>
+            col.matchIds.map((id, matchIdx) => {
+              const slot = byId.get(id);
+              if (!slot) return null;
+              const isTopOfPair = matchIdx % 2 === 0;
+              // Compression logic: ALL columns compress together when we scroll past view [0,1]
+              const shouldCompress = visiblePair[0] >= 1;
+
+              // Hide R32 completely when compressed (view [1,2] or beyond)
+              const hideR32 = colIdx === 0 && shouldCompress;
+
+              // Skip rendering R32 cells when compressed
+              if (hideR32) return null;
+
+              return (
+                <BracketGridCell
+                  key={id}
+                  colStart={colIdx + 1}
+                  rowStart={matchIdx * col.rowSpan + 1}
+                  rowSpan={col.rowSpan}
+                  isCompressed={shouldCompress}
+                  side="left"
+                  hasIncoming={colIdx > 0}
+                  outgoing={isTopOfPair ? "pair-top" : "pair-bottom"}
+                  snap={matchIdx === 0}
+                >
+                  <BracketMatchCard
+                    slot={slot}
+                    density="dense"
+                    disabled={disabled}
+                    onPick={onPick ? (code) => onPick(id, code) : undefined}
+                    comparison={comparisonById?.get(id) ?? null}
+                    className="w-full"
+                  />
+                </BracketGridCell>
+              );
+            })
+          )}
+
+          {/* Col 5 — Final, Champion, Third place stacked. */}
+          <div
+            className="flex snap-start flex-col justify-center gap-3 pl-1.5 pr-4 transition-all duration-300"
+            style={{
+              gridColumnStart: 5,
+              gridRow: visiblePair[0] >= 1 ? "1 / span 8" : "1 / span 16",
+            }}
+          >
+            <BracketCenterCard slot={finalSlot} label={tRounds("final")} disabled={disabled} onPick={onPick} comparison={comparisonById?.get(FINAL_MATCH_ID) ?? null} />
+            <BracketChampionDisplay champion={champion} label={t("champion")} locale={locale} />
+            <BracketCenterCard
+              slot={thirdSlot}
+              label={tRounds("third_place")}
+              disabled={disabled}
+              onPick={onPick}
+              comparison={comparisonById?.get(THIRD_PLACE_MATCH_ID) ?? null}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -361,6 +463,12 @@ type CellProps = {
   outgoing: OutgoingKind;
   /** "md" = pl-5/w-5 connectors (compact 5-col view). "sm" = pl-3/w-3 (tighter split view). */
   pad?: ConnectorPad;
+  /** Marks this cell as a horizontal scroll-snap point (mobile snaps one round per swipe). */
+  snap?: boolean;
+  /** When true, compress the rowSpan to reduce vertical whitespace. */
+  isCompressed?: boolean;
+  /** When true, hide the outgoing connectors. */
+  hideOutgoing?: boolean;
   children: React.ReactNode;
 };
 
@@ -379,9 +487,15 @@ type CellProps = {
  * `outgoing: "straight"` is used for singleton columns (SF in the split view)
  * where there's no paired match to bracket toward.
  */
-function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgoing, pad = "md", children }: CellProps) {
+function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgoing, pad = "md", snap, isCompressed, hideOutgoing, children }: CellProps) {
   const sm = pad === "sm";
-  const hasOutgoing = outgoing !== "none";
+  const hasOutgoing = outgoing !== "none" && !hideOutgoing;
+
+  // When compressed, reduce the rowSpan to minimize vertical whitespace
+  const effectiveRowSpan = isCompressed ? Math.max(1, Math.ceil(rowSpan / 2)) : rowSpan;
+  // R32 (rowSpan=1) needs -0.5 offset when compressed to align connectors with R16
+  const rowOffset = isCompressed && rowSpan === 1 ? -1 : 0;
+  const effectiveRowStart = isCompressed ? Math.floor((rowStart - 1) / 2) + 1 + rowOffset : rowStart;
 
   // Padding is applied to BOTH sides uniformly in sm mode so every card
   // (R32 outer or inner) ends up the same width. Source-side L-shape lives
@@ -399,32 +513,50 @@ function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgo
 
   return (
     <div
-      className={cn("relative flex items-center py-1.5", sm ? padX : cn(hasIncoming && (side === "left" ? padL : padR), hasOutgoing && (side === "left" ? padR : padL)))}
+      className={cn(
+        "relative flex items-center py-1 transition-all duration-300",
+        snap && "snap-start",
+        sm ? padX : cn(hasIncoming && (side === "left" ? padL : padR), hasOutgoing && (side === "left" ? padR : padL))
+      )}
       style={{
         gridColumnStart: colStart,
-        gridRowStart: rowStart,
-        gridRowEnd: `span ${rowSpan}`,
+        gridRowStart: effectiveRowStart,
+        gridRowEnd: `span ${effectiveRowSpan}`,
       }}
     >
       {children}
 
-      {hasIncoming && <span aria-hidden className={cn("absolute top-1/2 h-px -translate-y-1/2 bg-border", tailW, side === "left" ? "left-0" : "right-0")} />}
+      {hasIncoming && (
+        <span aria-hidden className={cn("absolute top-1/2 h-px -translate-y-1/2 bg-border transition-all duration-300", tailW, side === "left" ? "left-0" : "right-0")} />
+      )}
 
       {outgoing === "pair-top" && (
         <span
           aria-hidden
-          className={cn("absolute top-1/2 h-1/2 border-t border-border", tailW, side === "left" ? cn("right-0 border-r", cornerTR) : cn("left-0 border-l", cornerTL))}
+          className={cn(
+            "absolute top-1/2 h-1/2 border-t border-border transition-all duration-300",
+            tailW,
+            side === "left" ? cn("right-0 border-r", cornerTR) : cn("left-0 border-l", cornerTL),
+            hideOutgoing && "hidden"
+          )}
         />
       )}
 
       {outgoing === "pair-bottom" && (
         <span
           aria-hidden
-          className={cn("absolute top-0 h-1/2 border-b border-border", tailW, side === "left" ? cn("right-0 border-r", cornerBR) : cn("left-0 border-l", cornerBL))}
+          className={cn(
+            "absolute top-0 h-1/2 border-b border-border transition-all duration-300",
+            tailW,
+            side === "left" ? cn("right-0 border-r", cornerBR) : cn("left-0 border-l", cornerBL),
+            hideOutgoing && "hidden"
+          )}
         />
       )}
 
-      {outgoing === "straight" && <span aria-hidden className={cn("absolute top-1/2 h-px -translate-y-1/2 bg-border", tailW, side === "left" ? "right-0" : "left-0")} />}
+      {outgoing === "straight" && (
+        <span aria-hidden className={cn("absolute top-1/2 h-px -translate-y-1/2 bg-border transition-all duration-300", tailW, side === "left" ? "right-0" : "left-0")} />
+      )}
     </div>
   );
 }

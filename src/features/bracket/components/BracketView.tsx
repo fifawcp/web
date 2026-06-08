@@ -1,13 +1,12 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { SquarePen } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { BracketDesktop } from "@/features/pickems/components/BracketDesktop";
-import { BracketMobile } from "@/features/pickems/components/BracketMobile";
 import { findChampion, projectBracket } from "@/features/pickems/lib/projectBracket";
-import type { BracketStageCode, UserPickem } from "@/features/pickems/types/pickems.types";
+import type { UserPickem } from "@/features/pickems/types/pickems.types";
 import { useMatches } from "@/features/schedule/hooks/useMatches";
 import type { Match } from "@/features/schedule/types/schedule.types";
 import { Link } from "@/i18n/navigation";
@@ -52,12 +51,6 @@ export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) 
   const [view, setView] = useBracketCompareView(canCompare);
   const comparing = view === "compare" && predictedSlots !== null;
 
-  const [activeStage, setActiveStage] = useState<BracketStageCode>("round_of_32");
-  const goToStage = useCallback((stage: BracketStageCode) => {
-    setActiveStage(stage);
-    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
   // Both views render the real bracket; compare just overlays green checks on
   // the teams the user predicted correctly + the earned/possible tally.
   const champion = useMemo(() => findChampion(actualSlots), [actualSlots]);
@@ -97,7 +90,6 @@ export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) 
       {comparing && summary && summary.possible > 0 && <BracketCompareLegend summary={summary} />}
 
       <BracketDesktop bracket={actualSlots} champion={champion} disabled comparisonById={comparisonById} />
-      <BracketMobile bracket={actualSlots} champion={champion} disabled comparisonById={comparisonById} activeStage={activeStage} onStageChange={goToStage} />
     </div>
   );
 }
