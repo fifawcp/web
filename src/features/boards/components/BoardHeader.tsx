@@ -73,7 +73,7 @@ export function BoardHeader({ boards, activeBoard }: Props) {
           <BoardHeaderAvatars board={activeBoard} />
           <div className="flex items-center gap-2">
             {showInvite ? (
-              <Button variant="outline" size="sm" className="gap-1.5 px-3.5" onClick={() => setInviteOpen(true)}>
+              <Button variant="outline" size="sm" className="gap-1.5 px-3.5 sm:px-6" onClick={() => setInviteOpen(true)}>
                 <UserPlus className="size-4" aria-hidden />
                 {t("switcher.invite")}
               </Button>

@@ -22,6 +22,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     profileMessages,
     awardsMessages,
     bracketMessages,
+    maintenanceMessages,
   ] = await Promise.all([
     import(`./messages/auth/${locale}.json`),
     import(`./messages/layout/${locale}.json`),
@@ -37,6 +38,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     import(`./messages/profile/${locale}.json`),
     import(`./messages/awards/${locale}.json`),
     import(`./messages/bracket/${locale}.json`),
+    import(`./messages/maintenance/${locale}.json`),
   ]);
 
   return {
@@ -56,6 +58,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       profile: profileMessages.default,
       awards: awardsMessages.default,
       bracket: bracketMessages.default,
+      maintenance: maintenanceMessages.default,
     },
     timeZone: "UTC",
   };

@@ -35,7 +35,7 @@ export default function CallbackPage() {
 
         const { access_token, expires_at } = res.data!;
 
-        const profileRes = await getProfile();
+        const profileRes = await getProfile(access_token);
         if (!profileRes.success) {
           apiError.set(profileRes.error);
           return;

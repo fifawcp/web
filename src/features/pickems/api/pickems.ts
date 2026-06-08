@@ -1,4 +1,5 @@
 import { api } from "@/shared/lib/api/client";
+import { ApiClientError } from "@/shared/lib/api/errors";
 
 import type { SaveBestThirdsPayload, SaveBracketPicksPayload, SaveGroupPicksPayload, UserPickem } from "../types/pickems.types";
 
@@ -17,7 +18,9 @@ export async function fetchPickems(): Promise<UserPickem> {
 async function putPickem<T>(endpoint: string, body: T): Promise<UserPickem> {
   const res = await api.put<UserPickem>(endpoint, body, { authenticated: true });
   if (!res.success || !res.data) {
-    throw new Error(res.error?.message ?? "Failed to save");
+    // Preserve the backend's code + per-field detail so callers can log exactly
+    // what was rejected (e.g. bracket VALIDATION_FAILED → fields.bracket_picks).
+    throw new ApiClientError(res.error?.code ?? "UNKNOWN_ERROR", res.error?.message ?? "Failed to save", res.error?.fields);
   }
 
   return res.data;

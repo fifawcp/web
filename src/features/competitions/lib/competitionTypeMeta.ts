@@ -1,4 +1,4 @@
-import { ListChecks, Swords, Trophy, type LucideIcon } from "lucide-react";
+import { Award, ListChecks, Swords, Trophy, type LucideIcon } from "lucide-react";
 
 import type { CompetitionType } from "../types/competitions.types";
 
@@ -12,9 +12,11 @@ type CompetitionTypeMeta = {
 const META: Record<CompetitionType, CompetitionTypeMeta> = {
   pickem: { icon: ListChecks, labelKey: "pickem", tileClass: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" },
   match: { icon: Trophy, labelKey: "match", tileClass: "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300" },
-  pool: { icon: Swords, labelKey: "pool", tileClass: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300" },
+  pick: { icon: Swords, labelKey: "pick", tileClass: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300" },
+  awards: { icon: Award, labelKey: "awards", tileClass: "bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300" },
 };
 
 export function competitionTypeMeta(type: CompetitionType): CompetitionTypeMeta {
-  return META[type];
+  // Fallback so an unknown/legacy type can't crash the card on `meta.icon`.
+  return META[type] ?? META.match;
 }

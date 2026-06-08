@@ -1,6 +1,8 @@
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
+import { forwardedClientHeaders } from "@/shared/lib/api/forwarded-headers";
+
 const UPSTREAM = process.env.BACKEND_API_URL;
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -13,8 +15,8 @@ type ProxyOptions = {
 };
 
 export async function proxyToBackend(req: NextRequest, options: ProxyOptions): Promise<NextResponse> {
+  const headers: Record<string, string> = forwardedClientHeaders(req);
   const auth = req.headers.get("authorization");
-  const headers: HeadersInit = {};
   if (auth) headers.Authorization = auth;
 
   const init: RequestInit = { method: options.method, headers };
@@ -24,7 +26,7 @@ export async function proxyToBackend(req: NextRequest, options: ProxyOptions): P
     const raw = await req.text();
     if (raw.length > 0) {
       init.body = raw;
-      (headers as Record<string, string>)["Content-Type"] = req.headers.get("content-type") ?? "application/json";
+      headers["Content-Type"] = req.headers.get("content-type") ?? "application/json";
     }
   }
 
