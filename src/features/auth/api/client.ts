@@ -39,7 +39,14 @@ export const logout = async (): Promise<ApiResponse> => {
   return api.post("/api/auth/logout", undefined, { authenticated: false });
 };
 
-export const getProfile = async (): Promise<ApiResponse<User>> => {
+export const getProfile = async (accessToken?: string): Promise<ApiResponse<User>> => {
+  if (accessToken) {
+    return api.get<User>("/api/users/profile", {
+      authenticated: false,
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+  }
+
   return api.get<User>("/api/users/profile", { authenticated: true });
 };
 
