@@ -65,7 +65,12 @@ export function projectBracket(serverBracket: BracketMatchSlot[], draft: Bracket
     if (draftCode) {
       if (home?.fifa_code === draftCode) picked = home;
       else if (away?.fifa_code === draftCode) picked = away;
-    } else if (slot.picked_team) {
+    } else if (slot.picked_team && (home?.fifa_code === slot.picked_team.fifa_code || away?.fifa_code === slot.picked_team.fifa_code)) {
+      // Only keep the server's committed pick when it's still one of the
+      // locally-computed sides. Changing an upstream pick shifts this slot's
+      // home/away, which can leave the server pick referencing a team that no
+      // longer plays here — counting it would read as "picked" while the card
+      // shows nothing, and submitting it would be rejected (INVALID_BRACKET_PICK).
       picked = slot.picked_team;
     }
 
@@ -79,6 +84,17 @@ export function projectBracket(serverBracket: BracketMatchSlot[], draft: Bracket
 
 export function findChampion(bracket: BracketMatchSlot[]): Team | null {
   return bracket.find((slot) => slot.stage_code === "final")?.picked_team ?? null;
+}
+
+/**
+ * Stable string identity of a bracket's picks (one `matchId:fifaCode` per slot,
+ * empty when unpicked). Used to tell whether the locally-projected board differs
+ * from what's already committed on the server — i.e. whether there's anything to
+ * auto-save. Both inputs come from the same server array order, so a plain map is
+ * order-stable; no sort needed.
+ */
+export function bracketSignature(bracket: BracketMatchSlot[]): string {
+  return bracket.map((slot) => `${slot.match_id}:${slot.picked_team?.fifa_code ?? ""}`).join(",");
 }
 
 /**

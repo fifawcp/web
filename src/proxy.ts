@@ -6,6 +6,7 @@ import createMiddleware from "next-intl/middleware";
 import { routing, type Locale } from "@/i18n/routing";
 import { env } from "@/lib/env";
 import { HARD_AUTH_FAILURE_CODES } from "@/shared/lib/api/errors";
+import { forwardedClientHeaders } from "@/shared/lib/api/forwarded-headers";
 import { isTokenStale } from "@/shared/lib/api/jwt";
 
 // Authenticated users are redirected away from these routes (locale-stripped paths).
@@ -142,7 +143,7 @@ export default async function proxy(req: NextRequest) {
     if (!refreshToken) {
       if (isProtectedPath(path)) return expiredSessionRedirect(localized("/login"));
     } else if (isTokenStale(accessToken)) {
-      const refreshed = await refreshUpstream(refreshToken);
+      const refreshed = await refreshUpstream(refreshToken, req);
       if (refreshed === "hard-failure") return expiredSessionRedirect(localized("/login"));
 
       // Transient failure: let it through; the RSC hits a 401 and redirects itself.
@@ -163,11 +164,12 @@ export const config = {
 
 type RefreshSuccess = { accessToken: string; expiresAt: string; refreshToken: string; expires?: Date };
 
-async function refreshUpstream(refreshToken: string): Promise<RefreshSuccess | "hard-failure" | null> {
+async function refreshUpstream(refreshToken: string, req: NextRequest): Promise<RefreshSuccess | "hard-failure" | null> {
   try {
     const response = await fetch(`${process.env.BACKEND_API_URL}/api/auth/token/refresh`, {
       method: "POST",
       headers: {
+        ...forwardedClientHeaders(req),
         Cookie: `${REFRESH_COOKIE}=${refreshToken}`,
         "X-Refresh-Source": "middleware",
       },

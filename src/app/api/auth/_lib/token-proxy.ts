@@ -1,18 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+
+export { forwardedClientHeaders } from "@/shared/lib/api/forwarded-headers";
 
 export const REFRESH_COOKIE = "refresh_token";
 export const UPSTREAM = process.env.BACKEND_API_URL!;
-
-export function forwardedClientHeaders(req: NextRequest): Record<string, string> {
-  const headers: Record<string, string> = {};
-  const ua = req.headers.get("user-agent");
-  if (ua) headers["User-Agent"] = ua;
-  // Prefer an already-set X-Forwarded-For from a load balancer; otherwise use the
-  // direct client IP from the Next.js connection.
-  const xff = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip");
-  if (xff) headers["X-Forwarded-For"] = xff;
-  return headers;
-}
 
 // Re-sets the refresh-token cookie at path="/" so it is visible on every route.
 // Also clears the backend's natural Path=/api/auth copy — the Google OAuth callback

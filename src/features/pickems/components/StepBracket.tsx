@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -8,7 +8,7 @@ import { useBracketDraft } from "../hooks/useBracketDraft";
 import { useSubmitBracket } from "../hooks/useSubmitBracket";
 import { STAGE_MATCH_IDS, STAGES, TOTAL_BRACKET_PICKS } from "../lib/bracketStructure";
 import { prevStep } from "../lib/pickemStep";
-import { findChampion, projectBracket } from "../lib/projectBracket";
+import { bracketSignature, findChampion, projectBracket } from "../lib/projectBracket";
 import type { BracketDraft, BracketStageCode, PickemProgress, PickemStep, UserPickem } from "../types/pickems.types";
 
 import { BracketDesktop } from "./BracketDesktop";
@@ -21,6 +21,10 @@ import { PickemsStepper } from "./PickemsStepper";
 
 // Stable reference for "no local draft" — keeps useMemo cached when locked.
 const EMPTY_DRAFT: BracketDraft = {};
+
+// Debounce before auto-saving a complete board, so rapid edits (e.g. flipping
+// the champion a few times) collapse into a single PUT instead of one each.
+const AUTO_SAVE_DELAY_MS = 1000;
 
 type Props = {
   data: UserPickem;
@@ -58,6 +62,29 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
   const pickedCount = projected.reduce((n, slot) => (slot.picked_team ? n + 1 : n), 0);
   const isReady = pickedCount === TOTAL_BRACKET_PICKS;
 
+  // Auto-save: desktop users scroll past the header Save and forget to commit, so
+  // once the board is complete we push it for them. We save only when the
+  // projected board differs from what's already on the server, debounced to batch
+  // rapid edits. `lastAutoSaved` holds the last signature we attempted: after the
+  // optimistic update it equals the server's, so success goes quiet; after an
+  // error the rollback makes it differ again, but the guard stops us re-firing the
+  // same failed payload (the Save button remains for a manual retry). Any *new*
+  // edit changes the signature and re-enables auto-save.
+  const savedSignature = useMemo(() => bracketSignature(data.bracket), [data.bracket]);
+  const projectedSignature = useMemo(() => bracketSignature(projected), [projected]);
+  const lastAutoSaved = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (data.is_locked || !isReady || isSubmitting) return;
+    if (projectedSignature === savedSignature) return; // already committed
+    if (projectedSignature === lastAutoSaved.current) return; // don't re-fire a failed payload
+    const id = window.setTimeout(() => {
+      lastAutoSaved.current = projectedSignature;
+      submit(projected);
+    }, AUTO_SAVE_DELAY_MS);
+    return () => window.clearTimeout(id);
+  }, [data.is_locked, isReady, isSubmitting, projectedSignature, savedSignature, projected, submit]);
+
   const projectedById = useMemo(() => new Map(projected.map((slot) => [slot.match_id, slot] as const)), [projected]);
   const stageStats = useMemo(() => {
     const ids = STAGE_MATCH_IDS[activeStage];
@@ -87,7 +114,7 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
         loading: isSubmitting,
         helperText,
         helperTone: isReady ? "ready" : undefined,
-        onClick: () => submit(draft),
+        onClick: () => submit(projected),
       };
 
   // Per-stage mobile CTA: a "Next: <round>" button gated on the current stage
@@ -118,7 +145,7 @@ export function StepBracket({ data, step, onStep, progress, canNavigateTo, userI
           loading: isSubmitting,
           helperText,
           helperTone: isReady ? "ready" : undefined,
-          onClick: () => submit(draft),
+          onClick: () => submit(projected),
         };
 
   const rightSlot = (
