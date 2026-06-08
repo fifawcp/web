@@ -18,7 +18,6 @@ const nextConfig: NextConfig = {
       // /api/auth/token, /api/auth/token/refresh, and /api/auth/logout are omitted —
       // they have dedicated route handlers that manage the refresh-token cookie
       beforeFiles: [
-        { source: "/api/auth/otp/:path*", destination: `${upstream}/api/auth/otp/:path*` },
         { source: "/api/auth/logout/all", destination: `${upstream}/api/auth/logout/all` },
         { source: "/api/auth/sessions", destination: `${upstream}/api/auth/sessions` },
         { source: "/api/auth/sessions/:id", destination: `${upstream}/api/auth/sessions/:id` },
@@ -28,16 +27,10 @@ const nextConfig: NextConfig = {
         { source: "/api/oauth/:path((?!google/callback).*)", destination: `${upstream}/api/oauth/:path*` },
       ],
 
-      // afterFiles: proxy non-auth API routes to the backend
-      // Excludes paths owned by custom route handlers (e.g. matches/:id/pick, pickems/{groups,best-thirds,bracket}, boards/*, competitions/*, awards) —
-      // afterFiles rewrites run before dynamic routes, so a match here would swallow them.
-      // `awards` is excluded (GET+PUT route handler revalidates its cache tag); `players` is NOT — it has no handler and proxies straight through.
-      afterFiles: [
-        {
-          source: "/api/:path((?!auth/|matches/[^/]+/pick|pickems/(?:groups|best-thirds|bracket)|boards(?:/.*)?|competitions(?:/.*)?|awards(?:/.*)?).*)",
-          destination: `${upstream}/api/:path*`,
-        },
-      ],
+      // Non-auth API routes are proxied by the catch-all route handler at
+      // src/app/api/[...path]/route.ts (Node runtime), so it can attach the trusted
+      // X-Client-IP header — a rewrite would drop proxy-set request headers.
+      afterFiles: [],
 
       fallback: [],
     };
