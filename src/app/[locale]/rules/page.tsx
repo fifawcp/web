@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { SITE_URL } from "@/lib/site";
+import { JsonLd } from "@/shared/components/JsonLd";
 import { Card } from "@/shared/components/ui/card";
+import { buildBreadcrumbJsonLd } from "@/shared/seo/breadcrumbs";
 import { buildPageMetadata } from "@/shared/seo/metadata";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -53,8 +56,23 @@ export default async function RulesPage({ params }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations("pages.rules");
 
+  const prefix = locale === "en" ? "" : `/${locale}`;
+  const rulesLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      buildBreadcrumbJsonLd(
+        [
+          { name: "Pick'ems", url: `${SITE_URL}${prefix}` },
+          { name: "Rules", url: `${SITE_URL}${prefix}/rules` },
+        ],
+        locale
+      ),
+    ],
+  };
+
   return (
     <section className="container py-6 lg:py-8">
+      <JsonLd data={rulesLd} />
       <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:items-start lg:gap-12 xl:gap-20">
         <div className="flex flex-col gap-6 lg:sticky lg:top-24 lg:max-w-sm lg:self-start">
           <Hero eyebrow={t("eyebrow")} title={t("title")} intro={t("intro")} />
