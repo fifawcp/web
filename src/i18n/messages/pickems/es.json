@@ -87,6 +87,7 @@
     "lockAllGroupsFirst": "Confirma los 12 grupos antes de continuar",
     "selectAllThirdsFirst": "Elige los 8 mejores terceros antes de continuar",
     "finishRoundFirst": "Termina esta ronda antes de continuar",
-    "pickAllBracketFirst": "Elige los 32 ganadores antes de guardar tus picks"
+    "pickAllBracketFirst": "Elige los 32 ganadores antes de guardar tus picks",
+    "crossDeviceStepReset": "Tus picks fueron actualizados desde otro dispositivo"
   }
 }
