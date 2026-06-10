@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Link } from "@/i18n/navigation";
+import { SITE_URL } from "@/lib/site";
 import { JsonLd } from "@/shared/components/JsonLd";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/shared/components/ui/accordion";
+import { buildBreadcrumbJsonLd } from "@/shared/seo/breadcrumbs";
 import { buildPageMetadata } from "@/shared/seo/metadata";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -24,22 +26,31 @@ export default async function FaqPage({ params }: Props) {
   const t = await getTranslations("pages.faq");
 
   const stripTags = { rulesLink: (c: string) => c, boardsLink: (c: string) => c, howItWorksLink: (c: string) => c };
-  const faqJsonLd = {
+  const faqItems = FAQ_KEYS.map((key) => ({
+    "@type": "Question",
+    name: t(`items.${key}.question`),
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: t.markup(`items.${key}.answer`, stripTags),
+    },
+  }));
+
+  const prefix = locale === "en" ? "" : `/${locale}`;
+  const breadcrumb = buildBreadcrumbJsonLd(
+    [
+      { name: "Pick'ems", url: `${SITE_URL}${prefix}` },
+      { name: "FAQ", url: `${SITE_URL}${prefix}/faq` },
+    ],
+    locale
+  );
+  const combinedLd = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQ_KEYS.map((key) => ({
-      "@type": "Question",
-      name: t(`items.${key}.question`),
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: t.markup(`items.${key}.answer`, stripTags),
-      },
-    })),
+    "@graph": [{ "@type": "FAQPage", mainEntity: faqItems }, breadcrumb],
   };
 
   return (
     <section className="container py-6 lg:py-8">
-      <JsonLd data={faqJsonLd} />
+      <JsonLd data={combinedLd} />
       <div className="flex flex-col gap-10">
         <header className="flex flex-col gap-4 border-b border-border pb-10">
           <span className={eyebrow}>{t("eyebrow")}</span>

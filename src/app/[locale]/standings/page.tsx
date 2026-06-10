@@ -7,7 +7,10 @@ import { STANDINGS_CACHE_TAG } from "@/features/standings/api/standings";
 import { StandingsView } from "@/features/standings/components/StandingsView";
 import type { StandingRow } from "@/features/standings/types/standings.types";
 import { getCurrentUser } from "@/lib/auth";
+import { SITE_URL } from "@/lib/site";
+import { JsonLd } from "@/shared/components/JsonLd";
 import { serverApi } from "@/shared/lib/api/server";
+import { buildBreadcrumbJsonLd } from "@/shared/seo/breadcrumbs";
 import { buildPageMetadata } from "@/shared/seo/metadata";
 
 import StandingsLoading from "./loading";
@@ -17,8 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return buildPageMetadata({ locale, namespace: "seo.standings", path: "/standings" });
 }
 
-export default async function StandingsPage() {
-  const user = await getCurrentUser();
+export default async function StandingsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const [{ locale }, user] = await Promise.all([params, getCurrentUser()]);
 
   // Public endpoint — guests welcome. A failure here is fatal: without the
   // table there is no page, so let the error boundary take over.
@@ -44,13 +47,26 @@ export default async function StandingsPage() {
     else pickemFailed = true;
   }
 
+  const prefix = locale === "en" ? "" : `/${locale}`;
+  const breadcrumbLd = buildBreadcrumbJsonLd(
+    [
+      { name: "Pick'ems", url: `${SITE_URL}${prefix}` },
+      { name: "Standings", url: `${SITE_URL}${prefix}/standings` },
+    ],
+    locale
+  );
+  const standingsLd = { "@context": "https://schema.org", "@graph": [breadcrumbLd] };
+
   // StandingsView reads the compare toggle from the URL via useSearchParams,
   // which Next.js requires under a Suspense boundary. The route-level
   // `loading.tsx` covers the *initial* paint; this fallback covers any later
   // client transition that suspends — without it the page would blank out.
   return (
-    <Suspense fallback={<StandingsLoading />}>
-      <StandingsView initialStandings={standingsRes.data} initialPickem={pickem} pickemFailed={pickemFailed} isAuthed={Boolean(user)} />
-    </Suspense>
+    <>
+      <JsonLd data={standingsLd} />
+      <Suspense fallback={<StandingsLoading />}>
+        <StandingsView initialStandings={standingsRes.data} initialPickem={pickem} pickemFailed={pickemFailed} isAuthed={Boolean(user)} />
+      </Suspense>
+    </>
   );
 }
