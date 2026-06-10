@@ -65,7 +65,7 @@
     "howItWorks": {
       "title": "Cómo funciona",
       "eyebrow": "Cómo empezar",
-      "intro": "Pick'ems es el juego definitivo de pronósticos del Mundial 2026. Compite con tus amigos prediciendo resultados, posiciones de grupos y el cuadro de eliminatorias.",
+      "intro": "La quiniela del Mundial 2026 que te faltaba. Pronostica cada partido, arma la polla con tus amigos y compite en tiempo real.",
       "steps": {
         "createAccount": {
           "title": "Crea tu cuenta",
@@ -210,7 +210,7 @@
       "items": {
         "whatIs": {
           "question": "¿Qué es Pick'ems?",
-          "answer": "Pick'ems es un juego gratuito de pronósticos para el Mundial FIFA 2026. Predices marcadores, posiciones de grupos y el cuadro de eliminatorias, y compites con amigos en clasificaciones. Más información en <howItWorksLink>Cómo funciona</howItWorksLink>."
+          "answer": "Pick'ems es un juego gratuito de pronósticos del Mundial FIFA 2026 (en México quiniela, en Argentina prode, en Colombia, Chile, Perú y Venezuela polla, en España porra). Predices marcadores, posiciones de grupos y el cuadro de eliminatorias, y compites con amigos en clasificaciones. Más información en <howItWorksLink>Cómo funciona</howItWorksLink>."
         },
         "howToPlay": {
           "question": "¿Cómo juego?",

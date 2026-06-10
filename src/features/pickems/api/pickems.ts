@@ -1,6 +1,7 @@
 import { api } from "@/shared/lib/api/client";
 import { ApiClientError } from "@/shared/lib/api/errors";
 
+import { syncDraftBaseline } from "../lib/draftBaseline";
 import type { SaveBestThirdsPayload, SaveBracketPicksPayload, SaveGroupPicksPayload, UserPickem } from "../types/pickems.types";
 
 export const PICKEMS_QUERY_KEY = ["pickems"] as const;
@@ -12,6 +13,8 @@ export async function fetchPickems(): Promise<UserPickem> {
     throw new Error(res.error?.message ?? "Failed to load pickems");
   }
 
+  // Every fetch result is server truth — keep the draft-staleness baseline current.
+  syncDraftBaseline(res.data);
   return res.data;
 }
 
