@@ -89,12 +89,15 @@ export function findChampion(bracket: BracketMatchSlot[]): Team | null {
 /**
  * Stable string identity of a bracket's picks (one `matchId:fifaCode` per slot,
  * empty when unpicked). Used to tell whether the locally-projected board differs
- * from what's already committed on the server — i.e. whether there's anything to
- * auto-save. Both inputs come from the same server array order, so a plain map is
- * order-stable; no sort needed.
+ * from what's already committed on the server (auto-save gate) and as the draft
+ * staleness baseline (see `draftBaseline`). The latter compares signatures across
+ * separate server responses, so sort by match_id rather than trusting array order.
  */
 export function bracketSignature(bracket: BracketMatchSlot[]): string {
-  return bracket.map((slot) => `${slot.match_id}:${slot.picked_team?.fifa_code ?? ""}`).join(",");
+  return [...bracket]
+    .sort((a, b) => a.match_id - b.match_id)
+    .map((slot) => `${slot.match_id}:${slot.picked_team?.fifa_code ?? ""}`)
+    .join(",");
 }
 
 /**
