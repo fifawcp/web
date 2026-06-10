@@ -8,6 +8,7 @@ import { AwardsCrossSell } from "@/features/awards/components/AwardsCrossSell";
 import { useHydrated } from "@/shared/hooks/useHydrated";
 
 import { useBracketDraft } from "../hooks/useBracketDraft";
+import { useDraftBaseline } from "../hooks/useDraftBaseline";
 import { usePickems } from "../hooks/usePickems";
 import { useSaveBestThirds } from "../hooks/useSaveBestThirds";
 import { useSaveGroups } from "../hooks/useSaveGroups";
@@ -36,6 +37,9 @@ const EMPTY_BRACKET_DRAFT: BracketDraft = {};
 export function PickemsView({ initialData, userId }: Props) {
   const hydrated = useHydrated();
   const tToasts = useTranslations("pickems.toasts");
+  // Must come before the draft hooks below — their localStorage reads validate
+  // drafts against this baseline, and layout effects run in declaration order.
+  useDraftBaseline(initialData);
   const { data = initialData } = usePickems(initialData);
   const [step, rawSetStep] = useStep();
   const { draft: bracketDraft, replaceDraft: replaceBracketDraft, isHydrated: bracketDraftHydrated } = useBracketDraft(userId);

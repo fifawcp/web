@@ -8,6 +8,7 @@ import { ApiClientError } from "@/shared/lib/api/errors";
 
 import { PICKEMS_QUERY_KEY } from "../api/pickems";
 import { countClearedPicks } from "../lib/diffInvalidation";
+import { syncDraftBaseline } from "../lib/draftBaseline";
 import type { UserPickem } from "../types/pickems.types";
 
 type Options<TInput> = {
@@ -54,6 +55,10 @@ export function usePickemMutation<TInput>({
       toast.error(t(errorMessageKey));
     },
     onSuccess: (response, _input, ctx) => {
+      // The response is the new server truth — drafts written from here on are
+      // stamped against it, and older stamps become stale (see draftBaseline).
+      syncDraftBaseline(response);
+
       const current = qc.getQueryData<UserPickem>(PICKEMS_QUERY_KEY);
       if (current) {
         const merged = mergeServerResponse ? mergeServerResponse(current, response) : response;
