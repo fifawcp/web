@@ -174,18 +174,20 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
       {/* Mobile: scrolls horizontally, ~2 rounds visible; on lg the columns fill.
           Tight row height keeps the later-round gaps (rowSpan × row height) small. */}
       <div ref={scrollRef} className="-mx-4 snap-x snap-mandatory scroll-pl-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:scroll-pl-0 sm:px-0">
-        <div className="mb-3 grid grid-cols-[repeat(5,minmax(50vw,1fr))] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))]">
+        <div className="mb-3 grid grid-cols-[repeat(4,minmax(50vw,1fr))_calc(50vw-18px)] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))]">
           {COMPACT_COLUMNS.map((col, colIdx) => {
             const completed = col.matchIds.reduce((n, id) => (byId.get(id)?.picked_team ? n + 1 : n), 0);
             const hasIncoming = colIdx > 0;
             const hasOutgoing = colIdx < COMPACT_COLUMNS.length;
+            const isFirstColumn = colIdx === 0;
             return (
               <header
                 key={col.stage}
                 className={cn(
                   "flex flex-col items-center gap-0.5 font-mono text-2xs uppercase tracking-wider text-muted-foreground",
-                  hasIncoming && "pl-5 sm:pl-0 md:pl-5",
-                  hasOutgoing && "pr-5 sm:pr-0 md:pr-5"
+                  hasIncoming && isFirstColumn && "pl-5 sm:pl-0 md:pl-5",
+                  hasOutgoing && "pr-5 sm:pr-0 md:pr-5",
+                  isFirstColumn && "pl-0 md:pl-5"
                 )}
               >
                 <span className="truncate">{tRounds(col.stage)}</span>
@@ -199,7 +201,7 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
         </div>
 
         <div
-          className="bracket-rows-animated grid grid-cols-[repeat(5,minmax(50vw,1fr))] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))]"
+          className="bracket-rows-animated grid grid-cols-[repeat(4,minmax(50vw,1fr))_calc(50vw-18px)] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))]"
           style={{ gridTemplateRows: `repeat(16, ${rowHeight})` }}
         >
           {/* Every round scrolled off the left collapses to a rotated label in
@@ -265,7 +267,7 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
               snaps by its END edge, so the snap target equals the true max scroll
               (a `snap-start` here clamps short and leaves a right gutter). */}
           <div
-            className="flex snap-end flex-col justify-center gap-3 px-5"
+            className="flex snap-end snap-always flex-col justify-center gap-3 px-5"
             style={{
               gridColumnStart: 5,
               gridRow: "1 / span 16",
@@ -511,7 +513,18 @@ type CellProps = {
  * `outgoing: "straight"` is used for singleton columns (SF in the split view)
  * where there's no paired match to bracket toward.
  */
-function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgoing, pad = "md", snap, hideOutgoing, children }: CellProps) {
+function BracketGridCell({
+  colStart,
+  rowStart,
+  rowSpan,
+  side,
+  hasIncoming,
+  outgoing,
+  pad = "md",
+  snap,
+  hideOutgoing,
+  children,
+}: CellProps & { isFirstColumn?: boolean }) {
   const sm = pad === "sm";
 
   // Padding is applied to BOTH sides uniformly in sm mode so every card
@@ -520,7 +533,7 @@ function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgo
   // next cell's incoming-side padding — together they form a continuous
   // bracket connector across the 12px gap between two cards.
   const padX = sm ? "px-1.5" : "";
-  const padL = sm ? "pl-1.5" : "pl-5";
+  const padL = sm ? "pl-1.5" : colStart !== 1 ? "pl-5" : "sm:pl-5";
   const padR = sm ? "pr-1.5" : "pr-5";
   const tailW = sm ? "w-1.5" : "w-5";
   const cornerTR = sm ? "rounded-tr-sm" : "rounded-tr-md";
@@ -532,7 +545,10 @@ function BracketGridCell({ colStart, rowStart, rowSpan, side, hasIncoming, outgo
     <div
       className={cn(
         "relative flex items-center py-2 transition-all duration-300",
-        snap && "snap-start",
+        // `snap-always` (scroll-snap-stop: always) forces the scroll to halt at
+        // the very next round — under mandatory snapping a firm fling would
+        // otherwise skip an intermediate snap point (e.g. R32 → QF, past R16).
+        snap && "snap-start snap-always",
         // Symmetric padding on every cell so all cards are the same width across
         // rounds (connectors live inside this padding); `sm` (split view) keeps
         // its own tighter uniform padding.
