@@ -1,107 +1,163 @@
 {
-  "hero": {
-    "badge": "FIFA WCP · USA · México · Canadá",
-    "countdown": "● {days} días  · {hours} horas  · {minutes} minutos para el inicio",
-    "title": "Predice el Mundial. Vence a tus amigos.",
-    "subtitle": "Dos juegos, un trofeo. Completa tu bracket antes del inicio, ¡luego haz picks exactos para cada partido y escala en todos tus rankings de tus tableros!",
-    "cta": {
-      "makeYourPicks": "Haz tus picks",
-      "finishBracket": "Terminar mi bracket",
-      "seeMyBrackets": "Ver mis brackets",
-      "viewSchedule": "Ver calendario"
-    },
-    "welcome": {
-      "subtitle": "Completa estos pasos para empezar a competir con jugadores de todo el mundo.",
-      "cta": "Iniciar tutorial"
-    },
-    "tournamentStats": {
-      "tournamentBegins": "Inicia el Mundial",
-      "tournamentEnds": "Termina el Mundial",
-      "tournamentByNumbers": "El mundial en números",
-      "days": "Días",
-      "hours": "Horas",
-      "minutes": "Minutos",
-      "seconds": "Segundos",
-      "totalMatches": "Partidos totales",
-      "knockouts": "Eliminatorias",
-      "groupMatches": "Fase de grupos",
-      "teams": "Equipos"
-    }
-  },
-  "tutorial": {
-    "title": "Cómo participar",
-    "subtitle": "Empieza en 6 simples pasos",
-    "steps": {
-      "createAccount": {
-        "step": "1",
-        "title": "Crea una Cuenta",
-        "description": "Regístrate y crea tu perfil para empezar a competir con jugadores de todo el mundo."
-      },
-      "joinOrCreateBoard": {
-        "step": "2",
-        "title": "Únete o Crea un Tablero",
-        "description": "Crea tu propio tablero privado e invita amigos con un código, o únete a uno existente al instante. Si no te unes a ningún tablero, participarás automáticamente en el Tablero Global con todos los usuarios."
-      },
-      "tournaments": {
-        "step": "3",
-        "title": "Juega en Torneos",
-        "description": "Los dueños de los tableros pueden crear torneos para sus miembros. Si te unes a un tablero, participarás automáticamente en todos sus torneos."
-      },
-      "customRules": {
-        "step": "4",
-        "title": "Personaliza la Competencia",
-        "description": "Cada torneo puede configurarse de manera diferente según cómo tu tablero quiera jugar y puntuar."
-      },
-      "pickems": {
-        "step": "5",
-        "title": "Predice Resultados del Torneo",
-        "description": "Usa Pickems para predecir posiciones de fase de grupos y resultados completos del bracket. Gana puntos por cada posición correcta y puntos adicionales por predecir correctamente el avance de cada equipo."
-      },
-      "schedule": {
-        "step": "6",
-        "title": "Predice Marcadores",
-        "description": "Usa el modo Calendario para predecir el marcador de cada partido. Gana puntos por predecir correctamente al ganador y puntos bonus por el marcador exacto."
+  "landing": {
+    "hero": {
+      "badge": "Mundial 2026 · En vivo",
+      "title": "El Mundial ya empezó. Vence a tus amigos.",
+      "subtitle": "Pronostica cada partido, arma competencias con amigos y escala los rankings — todo gratis.",
+      "cta": {
+        "signUp": "Regístrate gratis",
+        "howItWorks": "Cómo funciona"
       }
     },
-    "cta": "Crea tu cuenta",
-    "scrollHint": "Desliza"
+    "demo": {
+      "kicker": "Pruébalo",
+      "title": "Mira cómo se puntúa",
+      "subtitle": "Pronostica un marcador y mira cómo suman los puntos — sin crear cuenta. El marcador exacto vale más, y acertar el resultado también puntúa.",
+      "rulesLink": "Ver reglas de puntuación",
+      "yourPick": "Tu pronóstico",
+      "final": "Resultado final",
+      "exact": "¡Marcador exacto!",
+      "correct": "Resultado correcto",
+      "miss": "Esta vez no",
+      "rule": "Exacto 5 pts · Resultado 2 pts",
+      "points": "{points} pts",
+      "cta": "Ver calendario completo"
+    },
+    "waysToPlay": {
+      "title": "Tres formas de jugar",
+      "subtitle": "Suma puntos en todo el torneo — pronostica partidos ahora; tu bracket y premios se definían antes del inicio.",
+      "match": {
+        "title": "Picks de Partidos",
+        "desc": "Pronostica el marcador exacto de cada partido.",
+        "scoring": "Exacto 5 pts · Resultado 2 pts",
+        "note": "En vivo",
+        "visual": "Pruébalo arriba"
+      },
+      "bracket": {
+        "title": "Bracket Pick'em",
+        "desc": "Predice quién lidera cada grupo y avanza hasta la final.",
+        "scoring": "Hasta 320 pts",
+        "note": "Antes del inicio"
+      },
+      "awards": {
+        "title": "Premios",
+        "desc": "Elige Bota de Oro, Balón de Oro, Guante de Oro y Jugador Joven.",
+        "scoring": "20 pts cada uno",
+        "note": "Antes del inicio"
+      }
+    },
+    "stats": {
+      "title": "El Mundial más grande de la historia",
+      "subtitle": "48 selecciones en Norteamérica — hay un pronóstico para cada partido.",
+      "teams": "Selecciones",
+      "matches": "Partidos",
+      "cities": "Ciudades sede",
+      "countries": "Países sede"
+    },
+    "social": {
+      "title": "Jugadores de todo el mundo ya están dentro",
+      "subtitle": "Mira a quién elige el mundo para levantar el trofeo."
+    },
+    "finalCta": {
+      "title": "¿Listo para jugar?",
+      "subtitle": "Te registras en un minuto y compites el resto del torneo.",
+      "cta": "Crea tu cuenta gratis"
+    }
   },
   "stats": {
     "predictedChampion": "Campeón predicho",
     "pickemRank": "Ranking pick'em",
-    "matchRank": "Ranking picks de partidos",
-    "nextMatch": "Próximo partido",
-    "vs": "vs"
+    "matchRank": "Ranking picks de partidos"
   },
-  "pickStatus": {
-    "title": "Estado de picks",
-    "subtitle": "Sigue tu progreso y completa todas las categorías.",
-    "notLoggedIn": "Formas de jugar",
-    "notLoggedInSubtitle": "Predice partidos y suma puntos en tres categorías.",
+  "featured": {
+    "kicker": "Próximo partido",
+    "kickoffIn": "Inicia en <val>{time}</val>",
+    "vs": "VS",
+    "stage": {
+      "group": "Grupo {group}"
+    },
+    "notPicked": "Sin pronóstico",
+    "notPickedHint": "Cierra al inicio del partido",
+    "picked": "Pronóstico enviado",
+    "pickedHint": "Puedes editarlo hasta el inicio",
+    "guestHint": "Únete para pronosticar este partido y sumar puntos",
+    "locked": "Cerrado",
+    "cta": {
+      "make": "Pronostica",
+      "edit": "Edita tu pick",
+      "signUp": "Regístrate y pronostica"
+    }
+  },
+  "banner": {
+    "group": "La fase de grupos está en marcha — se abren nuevos partidos para pronosticar antes de cada inicio.",
+    "groupCta": "Ver calendario",
+    "knockout": "Llegaron las eliminatorias — cada partido es a todo o nada.",
+    "knockoutCta": "Ver bracket",
+    "guest": "El Mundial está en vivo — crea tu cuenta y empieza a pronosticar.",
+    "guestCta": "Regístrate"
+  },
+  "progress": {
+    "title": "Tus picks",
+    "subtitle": "Sigue tu progreso en los tres juegos.",
+    "guestTitle": "Formas de jugar",
+    "guestSubtitle": "Predice partidos y suma puntos en tres categorías.",
     "bracket": {
       "title": "Bracket Pick'em",
-      "description": "Grupos, mejores terceros y eliminatorias.",
-      "progress": "{current} de 3 pasos",
-      "continue": "Continuar",
-      "start": "Empezar",
-      "see": "Ver"
+      "blurb": "Grupos, mejores terceros y el bracket completo.",
+      "count": "{completed} de {total} pasos"
     },
     "matchPicks": {
       "title": "Picks de Partidos",
-      "description": "Marcadores exactos por partido.",
-      "progress": "{current} de {total} partidos",
-      "continue": "Continuar",
-      "start": "Empezar",
-      "see": "Ver"
+      "blurb": "Marcadores exactos de cada partido.",
+      "count": "{completed} de {total} partidos"
     },
     "awards": {
-      "title": "Premios del Mundial",
-      "description": "Predice los ganadores de premios individuales.",
-      "progress": "{current} de {total} premios",
-      "continue": "Continuar",
-      "start": "Empezar",
-      "see": "Ver"
+      "title": "Premios",
+      "blurb": "Bota de Oro, Mejor Jugador y más.",
+      "count": "{completed} de {total} premios"
+    },
+    "status": {
+      "todo": "Sin empezar",
+      "inProgress": "En curso",
+      "done": "Completo",
+      "locked": "Cerrado"
+    },
+    "recap": {
+      "correct": "{correct} de {scored} acertados",
+      "noneScored": "Aún sin resultados"
+    },
+    "cta": {
+      "start": "Empieza",
+      "continue": "Continúa",
+      "review": "Revisa",
+      "results": "Ver resultados"
     }
+  },
+  "quickActions": {
+    "title": "Acciones rápidas",
+    "newCompetition": "Nueva polla de partido",
+    "newCompetitionSub": "Pronostica un partido puntual",
+    "joinBoard": "Únete a un tablero",
+    "joinBoardSub": "Ingresa el código de un amigo",
+    "lastVisitedSub": "Tu tablero más reciente",
+    "dialog": {
+      "title": "¿Dónde quieres crearla?",
+      "description": "Elige un tablero que administres para alojar la nueva polla.",
+      "emptyTitle": "Aún no tienes tableros para alojarla",
+      "emptyDescription": "Necesitas ser dueño o administrador de un tablero para crear una polla.",
+      "createBoard": "Crea un tablero"
+    }
+  },
+  "standings": {
+    "heading": "Posiciones de grupos",
+    "subtitle": "Mira cómo va cada grupo.",
+    "viewAll": "Ver posiciones",
+    "prevGroup": "Grupo anterior",
+    "nextGroup": "Grupo siguiente"
+  },
+  "favorites": {
+    "title": "Más elegidos campeón",
+    "subtitle": "Entre todos los jugadores"
   },
   "leaderboard": {
     "title": "Ranking del board",
@@ -110,7 +166,7 @@
       "pickem": "Pick'em",
       "match": "Picks de Partidos"
     },
-    "rank": "Top 5",
+    "rank": "Top 10",
     "player": "Jugador",
     "points": "Puntos",
     "you": "Tú",
