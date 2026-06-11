@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Target, Trophy, Users } from "lucide-react";
+import { ArrowRight, Crown, Target, Trophy, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Link } from "@/i18n/navigation";
+import { Button } from "@/shared/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
 import { cn } from "@/shared/lib/utils";
 
@@ -15,6 +16,8 @@ import { CardReveal } from "./CardReveal";
 type Props = {
   leaderboard: DashboardLeaderboard | null;
   currentUserId: string | null;
+  delay?: number;
+  from?: "up" | "left" | "right";
 };
 
 const accentTab =
@@ -22,7 +25,7 @@ const accentTab =
 
 type LeaderboardTab = "pickem" | "match";
 
-export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
+export function LeaderboardCard({ leaderboard, currentUserId, delay, from }: Props) {
   const t = useTranslations("dashboard.leaderboard");
   // Controlled so the "Full ranking" link can follow the active tab to that
   // competition on the global board.
@@ -32,7 +35,7 @@ export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
   const fullRankingHref = activeCompetition ? `/boards/${activeCompetition.board_id}?competition=${activeCompetition.competition_id}` : "/boards?board=global";
 
   return (
-    <CardReveal className="flex h-full flex-col bg-card p-4 opacity-0 sm:p-5">
+    <CardReveal delay={delay} from={from} className="opacity-0 flex h-full flex-1 flex-col bg-card p-4 sm:p-5">
       <div className="flex flex-col gap-1">
         <span className="text-base font-semibold">{t("title")}</span>
         <span className="text-xs text-muted-foreground">{t("subtitle")}</span>
@@ -49,23 +52,20 @@ export function LeaderboardSection({ leaderboard, currentUserId }: Props) {
             {t("tabs.match")}
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="pickem">
+        <TabsContent value="pickem" className="flex-1">
           <LeaderboardEntries data={leaderboard?.pickem ?? null} currentUserId={currentUserId} />
         </TabsContent>
-        <TabsContent value="match">
+        <TabsContent value="match" className="flex-1">
           <LeaderboardEntries data={leaderboard?.match ?? null} currentUserId={currentUserId} />
         </TabsContent>
       </Tabs>
 
-      <div className="mt-auto flex items-center justify-end pt-3">
-        <Link
-          href={fullRankingHref}
-          className="flex items-center gap-1 text-xs font-medium text-page-accent-strong transition-colors hover:text-page-accent hover:underline"
-        >
+      <Button asChild variant="outline" className="group/full w-full text-page-accent-strong">
+        <Link href={fullRankingHref}>
           {t("fullRanking")}
-          <ArrowRight className="size-3" />
+          <ArrowRight className="size-4 transition-transform group-hover/full:translate-x-0.5" aria-hidden />
         </Link>
-      </div>
+      </Button>
     </CardReveal>
   );
 }
@@ -86,27 +86,27 @@ function LeaderboardEntries({ data, currentUserId }: { data: CompetitionLeaderbo
     );
   }
 
-  // Cap to top 5 — keeps the section short on the dashboard.
-  const entries = data.entries.slice(0, 5);
+  // Backend returns the top 10; show them all so the rail fills and its bottom aligns with the main column.
+  const entries = data.entries.slice(0, 10);
 
   return (
-    <div className="flex flex-col">
-      {/* Three-column header: rank / player / points. Same grid template as
-          the rows below so columns line up cleanly. Rank column is fixed at
-          `w-9` in both header and rows so column-2 edges align. The PLAYER
-          label gets a `pl-9.5` inset (avatar size-7 + gap-2.5 = 38px) so it
-          sits over the username, not the avatar. */}
+    <div className="flex flex-1 flex-col">
+      {/* Three-column rows: rank / player / points. Rank column is fixed at `w-9`
+          in both header and rows so column-2 edges align. The list grows and rows
+          stretch so the card fills the rail. */}
       <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-border px-2 pb-2 text-2xs font-medium uppercase tracking-wider text-muted-foreground">
-        <span className="w-9">{t("rank")}</span>
+        <span className="w-12 whitespace-nowrap">{t("rank")}</span>
         <span>{t("player")}</span>
         <span>{t("points")}</span>
       </div>
-      <ul className="divide-y divide-border">
+      <ul className="flex flex-1 flex-col divide-y divide-border">
         {entries.map((entry) => {
           const isMe = entry.member.user_id === currentUserId;
           return (
-            <li key={entry.member.user_id} className={cn("grid grid-cols-[auto_1fr_auto] items-center gap-3 px-2 py-2.5", isMe && "bg-page-accent-soft/60")}>
-              <span className="w-9 shrink-0 text-xs font-medium tabular-nums text-muted-foreground">{entry.rank}</span>
+            <li key={entry.member.user_id} className={cn("grid flex-1 grid-cols-[auto_1fr_auto] items-center gap-3 px-2 py-2.5", isMe && "bg-page-accent-soft/60")}>
+              <span className="flex w-12 shrink-0 items-center text-xs font-medium tabular-nums text-muted-foreground">
+                {entry.rank === 1 ? <Crown className="size-3.5 text-page-accent-strong" aria-label="1" /> : entry.rank}
+              </span>
               <span className={cn("min-w-0 truncate text-sm", isMe && "font-semibold text-page-accent-strong")}>{isMe ? t("you") : entry.member.username}</span>
               <span className="shrink-0 text-xs font-medium tabular-nums">
                 {entry.points} <span className="font-normal text-muted-foreground">{t("pts")}</span>

@@ -37,7 +37,7 @@ export function HeaderAuth({ initialUser }: { initialUser: HeaderUser | null }) 
   return user ? (
     <UserMenu username={user.username} firstName={user.firstName} lastName={user.lastName} />
   ) : (
-    <Button asChild size="sm" variant="ghost">
+    <Button asChild size="sm" variant="outline">
       <Link href="/login">{t("login")}</Link>
     </Button>
   );

@@ -10,6 +10,9 @@ export type BoardListItem = {
   id: number;
   name: string;
   privacy: BoardPrivacy;
+  // The viewer's role in this board (used to filter boards where they can create competitions).
+  // Optional so the client degrades gracefully against an API that predates this field.
+  role?: BoardRole;
 };
 
 export type Board = {

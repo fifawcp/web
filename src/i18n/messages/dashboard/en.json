@@ -1,109 +1,165 @@
 {
-  "hero": {
-    "badge": "FIFA WCP · USA · Mexico · Canada",
-    "countdown": "● {days} days  ·  {hours} hours · {minutes} minutes until kickoff",
-    "title": "Predict the World Cup. Beat your friends.",
-    "subtitle": "Two games, one trophy. Lock in your full bracket before kickoff, then place exact-score picks for every match and climb all your boards leaderboards!",
-    "cta": {
-      "makeYourPicks": "Make your picks",
-      "finishBracket": "Finish my bracket",
-      "seeMyBrackets": "See my brackets",
-      "viewSchedule": "View schedule"
-    },
-    "welcome": {
-      "subtitle": "Complete these steps to start competing with players around the world.",
-      "cta": "Start tutorial"
-    },
-    "tournamentStats": {
-      "tournamentBegins": "World Cup begins",
-      "tournamentEnds": "World Cup ends",
-      "tournamentByNumbers": "World Cup by the numbers",
-      "days": "Days",
-      "hours": "Hours",
-      "minutes": "Minutes",
-      "seconds": "Seconds",
-      "totalMatches": "Total matches",
-      "knockouts": "Knockouts",
-      "groupMatches": "Group matches",
-      "teams": "Teams"
-    }
-  },
-  "tutorial": {
-    "title": "How to participate",
-    "subtitle": "Get started in 6 simple steps",
-    "steps": {
-      "createAccount": {
-        "step": "1",
-        "title": "Create an Account",
-        "description": "Sign up and create your profile to start competing with other players around the world."
-      },
-      "joinOrCreateBoard": {
-        "step": "2",
-        "title": "Join or Create a Board",
-        "description": "Create your own private board and invite friends with a join code, or join an existing one instantly. If you don't join any board, you'll still participate automatically in the Global Board with all app users."
-      },
-      "tournaments": {
-        "step": "3",
-        "title": "Play in Tournaments",
-        "description": "Board owners can create tournaments for their members. If you join a board, you'll automatically participate in all its tournaments."
-      },
-      "customRules": {
-        "step": "4",
-        "title": "Customize the Competition",
-        "description": "Each tournament can be configured differently depending on how your board wants to play and score points."
-      },
-      "pickems": {
-        "step": "5",
-        "title": "Predict Tournament Results",
-        "description": "Use Pickems to predict group stage standings and full bracket results. Earn points for every correct position and additional points for correctly predicting how far each team advances."
-      },
-      "schedule": {
-        "step": "6",
-        "title": "Predict Match Scores",
-        "description": "Use the Schedule mode to predict the score of every match. Earn points for correctly predicting the winner and bonus points for the exact final score."
+  "landing": {
+    "hero": {
+      "badge": "World Cup 2026 · Live",
+      "title": "The World Cup is live. Beat your friends.",
+      "subtitle": "Predict every match, spin up competitions with friends, and climb the leaderboards — all for free.",
+      "cta": {
+        "signUp": "Sign up free",
+        "howItWorks": "How it works"
       }
     },
-    "cta": "Create your account",
-    "scrollHint": "Scroll down"
+    "demo": {
+      "kicker": "Try it",
+      "title": "See how scoring works",
+      "subtitle": "Predict a score and watch the points add up — no account needed. Exact scores are worth most, the right result still scores.",
+      "rulesLink": "See full scoring rules",
+      "yourPick": "Your prediction",
+      "final": "Final result",
+      "exact": "Exact score!",
+      "correct": "Right result",
+      "miss": "Not this time",
+      "rule": "Exact 5 pts · Result 2 pts",
+      "points": "{points} pts",
+      "cta": "See full schedule"
+    },
+    "waysToPlay": {
+      "title": "Three ways to play",
+      "subtitle": "Score across the whole tournament — pick matches now, with your bracket and award predictions set before kickoff.",
+      "match": {
+        "title": "Match Picks",
+        "desc": "Predict the exact scoreline of every match.",
+        "scoring": "Exact 5 pts · Result 2 pts",
+        "note": "Live now",
+        "visual": "Try it above"
+      },
+      "bracket": {
+        "title": "Bracket Pick'em",
+        "desc": "Call who tops each group and advances all the way to the final.",
+        "scoring": "Up to 320 pts",
+        "note": "Set before kickoff"
+      },
+      "awards": {
+        "title": "Awards",
+        "desc": "Pick the Golden Boot, Golden Ball, Golden Glove and Young Player.",
+        "scoring": "20 pts each",
+        "note": "Set before kickoff"
+      }
+    },
+    "stats": {
+      "title": "The biggest World Cup ever",
+      "subtitle": "48 teams across North America — there's a pick for every match.",
+      "teams": "Teams",
+      "matches": "Matches",
+      "cities": "Host cities",
+      "countries": "Host countries"
+    },
+    "social": {
+      "title": "Players around the world are in",
+      "subtitle": "See who the world is backing to lift the trophy."
+    },
+    "finalCta": {
+      "title": "Ready to play?",
+      "subtitle": "It takes a minute to sign up and you're in for the rest of the tournament.",
+      "cta": "Create your free account"
+    }
   },
-  "pickStatus": {
-    "title": "Pick status",
-    "subtitle": "Track your progress and complete every category.",
-    "notLoggedIn": "Ways to play",
-    "notLoggedInSubtitle": "Predict matches and earn points across three categories.",
+  "featured": {
+    "kicker": "Up next",
+    "kickoffIn": "Kickoff in <val>{time}</val>",
+    "vs": "VS",
+    "stage": {
+      "group": "Group {group}"
+    },
+    "notPicked": "Not predicted yet",
+    "notPickedHint": "Locks at kickoff",
+    "picked": "Prediction submitted",
+    "pickedHint": "You can edit until kickoff",
+    "guestHint": "Join to predict this match and earn points",
+    "locked": "Locked",
+    "cta": {
+      "make": "Make your pick",
+      "edit": "Edit your pick",
+      "signUp": "Sign up to predict"
+    }
+  },
+  "banner": {
+    "group": "The group stage is rolling — new fixtures open for picks as each kickoff approaches.",
+    "groupCta": "View schedule",
+    "knockout": "Knockouts are here — every match is win or go home.",
+    "knockoutCta": "View bracket",
+    "guest": "The World Cup is live — create your account and start predicting.",
+    "guestCta": "Sign up"
+  },
+  "progress": {
+    "title": "Your picks",
+    "subtitle": "Track your progress across all three games.",
+    "guestTitle": "Ways to play",
+    "guestSubtitle": "Predict matches and earn points across three categories.",
     "bracket": {
-      "title": "Pick'em Bracket",
-      "description": "Groups, best thirds, and knockouts.",
-      "progress": "{current} of 3 steps",
-      "continue": "Continue",
-      "start": "Start",
-      "see": "View"
+      "title": "Bracket Pick'em",
+      "blurb": "Groups, best thirds, and the full knockout bracket.",
+      "count": "{completed} of {total} steps"
     },
     "matchPicks": {
       "title": "Match Picks",
-      "description": "Exact scores per match.",
-      "progress": "{current} of {total} matches",
-      "continue": "Continue",
-      "start": "Start",
-      "see": "View"
+      "blurb": "Exact scores for every match.",
+      "count": "{completed} of {total} matches"
     },
     "awards": {
-      "title": "World Cup Awards",
-      "description": "Predict individual award winners.",
-      "progress": "{current} of {total} awards",
-      "continue": "Continue",
+      "title": "Awards",
+      "blurb": "Golden Boot, Best Player, and more.",
+      "count": "{completed} of {total} awards"
+    },
+    "status": {
+      "todo": "Not started",
+      "inProgress": "In progress",
+      "done": "Complete",
+      "locked": "Locked"
+    },
+    "recap": {
+      "correct": "{correct} of {scored} correct",
+      "noneScored": "No results scored yet"
+    },
+    "cta": {
       "start": "Start",
-      "see": "View"
+      "continue": "Continue",
+      "review": "Review",
+      "results": "View results"
     }
+  },
+  "quickActions": {
+    "title": "Quick actions",
+    "newCompetition": "New match competition",
+    "newCompetitionSub": "Predict a single upcoming match",
+    "joinBoard": "Join a board",
+    "joinBoardSub": "Enter a join code from a friend",
+    "lastVisitedSub": "Your latest board",
+    "dialog": {
+      "title": "Where do you want to create it?",
+      "description": "Pick a board you manage to host the new match competition.",
+      "emptyTitle": "No boards to host it yet",
+      "emptyDescription": "You need to own or manage a board to create a competition.",
+      "createBoard": "Create a board"
+    }
+  },
+  "standings": {
+    "heading": "Group standings",
+    "subtitle": "See how each group is shaping up.",
+    "viewAll": "Full standings",
+    "prevGroup": "Previous group",
+    "nextGroup": "Next group"
   },
   "stats": {
     "predictedChampion": "Predicted champion",
     "pickemRank": "Pick'em ranking",
-    "matchRank": "Match Picks ranking",
-    "nextMatch": "Next match",
-    "vs": "vs"
+    "matchRank": "Match Picks ranking"
   },
 
+  "favorites": {
+    "title": "Most picked to win",
+    "subtitle": "Across all players"
+  },
   "leaderboard": {
     "title": "Board ranking",
     "subtitle": "How the top participants are doing.",
@@ -111,7 +167,7 @@
       "pickem": "Pick'em",
       "match": "Match Picks"
     },
-    "rank": "Top 5",
+    "rank": "Top 10",
     "player": "Player",
     "points": "Points",
     "you": "You",
