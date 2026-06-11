@@ -8,13 +8,14 @@ import { AwardsCrossSell } from "@/features/awards/components/AwardsCrossSell";
 import { useHydrated } from "@/shared/hooks/useHydrated";
 
 import { useBracketDraft } from "../hooks/useBracketDraft";
+import { useDraftBaseline } from "../hooks/useDraftBaseline";
 import { usePickems } from "../hooks/usePickems";
 import { useSaveBestThirds } from "../hooks/useSaveBestThirds";
 import { useSaveGroups } from "../hooks/useSaveGroups";
 import { useStep } from "../hooks/useStep";
 import { readBestThirdsDraft } from "../lib/bestThirdsDraftStorage";
 import { readGroupsDraft } from "../lib/groupsDraftStorage";
-import { stepIndex } from "../lib/pickemStep";
+import { highestValidStep, stepIndex } from "../lib/pickemStep";
 import { projectBracket, pruneBracketDraft } from "../lib/projectBracket";
 import type { BracketDraft, PickemProgress, PickemStep, UserPickem } from "../types/pickems.types";
 
@@ -36,12 +37,45 @@ const EMPTY_BRACKET_DRAFT: BracketDraft = {};
 export function PickemsView({ initialData, userId }: Props) {
   const hydrated = useHydrated();
   const tToasts = useTranslations("pickems.toasts");
+  // Must come before the draft hooks below — their localStorage reads validate
+  // drafts against this baseline, and layout effects run in declaration order.
+  useDraftBaseline(initialData);
   const { data = initialData } = usePickems(initialData);
   const [step, rawSetStep] = useStep();
   const { draft: bracketDraft, replaceDraft: replaceBracketDraft, isHydrated: bracketDraftHydrated } = useBracketDraft(userId);
   const groupsSave = useSaveGroups(userId);
   const bestThirdsSave = useSaveBestThirds(userId);
   const [navigating, setNavigating] = useState(false);
+
+  // Cross-device step guard: if the URL carries a step ahead of what the server
+  // committed (e.g. `?step=bracket` left over from a previous session while
+  // another device reset groups/thirds), we must show the correct step without
+  // a flash. `effectiveStep` starts as the clamped value from `useState` so the
+  // render is immediately correct; the URL is fixed asynchronously once the
+  // mount effect runs.
+  const maxStepOnLoad: PickemStep = !initialData.is_locked ? highestValidStep(initialData) : "bracket";
+  const [effectiveStep, setEffectiveStep] = useState<PickemStep>(() => (stepIndex(step) > stepIndex(maxStepOnLoad) ? maxStepOnLoad : step));
+  // Used ONLY inside effects — never during render (would violate React Compiler rules).
+  const mountCorrectionDone = useRef(false);
+
+  // MUST be declared before the mount-correction effect so it fires first on mount.
+  // Effects run in declaration order: on mount `mountCorrectionDone.current` is still
+  // false here, so we skip; subsequent URL changes (from the correction or user nav)
+  // arrive after the flag is set and drive effectiveStep going forward.
+  useEffect(() => {
+    if (!mountCorrectionDone.current) return;
+    setEffectiveStep(step);
+  }, [step]);
+
+  // Mount-only: open the step sync, then correct the URL + toast if needed.
+  useEffect(() => {
+    mountCorrectionDone.current = true;
+    if (stepIndex(step) > stepIndex(maxStepOnLoad)) {
+      rawSetStep(maxStepOnLoad);
+      toast.info(tToasts("crossDeviceStepReset"));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Each step is its own screen — land at the top when moving between them
   // (e.g. Continue from groups → best thirds → bracket) so the new step's header
@@ -54,7 +88,7 @@ export function PickemsView({ initialData, userId }: Props) {
       return;
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [step]);
+  }, [effectiveStep]);
 
   // When the pickem is locked the server is read-only; localStorage drafts can
   // never sync, so ignore them and project against the server-saved state only
@@ -163,10 +197,10 @@ export function PickemsView({ initialData, userId }: Props) {
           step header + stepper so it stays prominent regardless of step. */}
       <AwardsCrossSell isLocked={data.is_locked} />
 
-      {step === "groups" && (
+      {effectiveStep === "groups" && (
         <StepGroups
           data={data}
-          step={step}
+          step={effectiveStep}
           onStep={setStep}
           progress={progress}
           canNavigateTo={canNavigateTo}
@@ -186,10 +220,10 @@ export function PickemsView({ initialData, userId }: Props) {
           isSaving={groupsSave.isSaving || navigating}
         />
       )}
-      {step === "thirds" && (
+      {effectiveStep === "thirds" && (
         <StepBestThirds
           data={data}
-          step={step}
+          step={effectiveStep}
           onStep={setStep}
           progress={progress}
           canNavigateTo={canNavigateTo}
@@ -207,7 +241,7 @@ export function PickemsView({ initialData, userId }: Props) {
           isSaving={bestThirdsSave.isSaving || navigating}
         />
       )}
-      {step === "bracket" && <StepBracket data={data} step={step} onStep={setStep} progress={progress} canNavigateTo={canNavigateTo} userId={userId} />}
+      {effectiveStep === "bracket" && <StepBracket data={data} step={effectiveStep} onStep={setStep} progress={progress} canNavigateTo={canNavigateTo} userId={userId} />}
     </div>
   );
 }

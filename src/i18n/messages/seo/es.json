@@ -1,11 +1,11 @@
 {
   "home": {
     "title": "Pick'ems — Quiniela y Pronósticos del Mundial 2026 Gratis",
-    "description": "Juega la quiniela del Mundial 2026: pronostica los marcadores, arma tu llave y compite con amigos en tablas en vivo. Gratis."
+    "description": "La quiniela del Mundial 2026 más completa (prode en Argentina, porra en España, polla en Latam): pronostica marcadores, compite con amigos en tableros en vivo. Gratis."
   },
   "schedule": {
     "title": "Calendario del Mundial 2026 — Fechas, Horarios y Grupos",
-    "description": "Calendario completo del Mundial FIFA 2026: fechas, horarios, sedes y grupos. Pronostica cada marcador antes del inicio y sube en la tabla."
+    "description": "Consulta el calendario completo del Mundial FIFA 2026 y pronostica cada marcador antes del pitazo. No te quedes atrás en tu quiniela."
   },
   "standings": {
     "title": "Posiciones del Mundial 2026 — Tablas de Grupos en Vivo",
@@ -16,8 +16,8 @@
     "description": "Proyecta el cuadro completo de eliminatorias del Mundial 2026, desde los Dieciseisavos hasta la Final, y compara tus pronósticos con los resultados reales."
   },
   "howItWorks": {
-    "title": "Cómo Jugar — Pronósticos del Mundial 2026",
-    "description": "Aprende cómo funciona Pick'ems: pronostica los grupos, arma tu llave del Mundial 2026, acierta los marcadores y suma puntos en tablas compartidas."
+    "title": "Cómo Jugar la Quiniela del Mundial 2026",
+    "description": "Domina tu quiniela del Mundial 2026: pronostica grupos, llena el bracket, acierta marcadores y deja a tus amigos sin excusas."
   },
   "rules": {
     "title": "Reglas y Puntuación — Mundial 2026",
@@ -37,6 +37,10 @@
   },
   "faq": {
     "title": "FAQ — Pick'ems del Mundial 2026",
-    "description": "Preguntas frecuentes sobre Pick'ems: cómo jugar, reglas de puntuación, tableros y todo lo que necesitas saber sobre el juego de pronósticos del Mundial 2026."
+    "description": "Todo lo que necesitas para tu polla mundialista del Mundial 2026: cómo jugar, puntuación, tableros y cómo dejar a tus amigos sin argumentos."
+  },
+  "bracket": {
+    "title": "Eliminatorias — Fase Final del Mundial 2026",
+    "description": "Sigue las eliminatorias del Mundial FIFA 2026: ronda de 32, octavos, cuartos, semifinales y la gran final. Compara el resultado real con tus pronósticos del Pick'ems."
   }
 }

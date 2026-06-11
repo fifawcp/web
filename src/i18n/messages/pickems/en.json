@@ -87,6 +87,8 @@
     "submitFailed": "Could not submit your bracket. Try again.",
     "lockAllGroupsFirst": "Lock all 12 groups before continuing",
     "selectAllThirdsFirst": "Pick all 8 best thirds before continuing",
-    "pickAllBracketFirst": "Pick all 32 winners before submitting"
+    "finishRoundFirst": "Finish this round before continuing",
+    "pickAllBracketFirst": "Pick all 32 winners before submitting",
+    "crossDeviceStepReset": "Your picks were updated from another device"
   }
 }

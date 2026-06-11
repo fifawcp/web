@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { BracketView } from "@/features/bracket/components/BracketView";
 import { PICKEMS_CACHE_TAG } from "@/features/pickems/api/pickems";
@@ -8,17 +8,24 @@ import type { UserPickem } from "@/features/pickems/types/pickems.types";
 import { MATCHES_CACHE_TAG } from "@/features/schedule/api/matches";
 import type { Match } from "@/features/schedule/types/schedule.types";
 import { getCurrentUser } from "@/lib/auth";
+import { SITE_URL } from "@/lib/site";
+import { JsonLd } from "@/shared/components/JsonLd";
 import { serverApi } from "@/shared/lib/api/server";
+import { buildBreadcrumbJsonLd } from "@/shared/seo/breadcrumbs";
 import { buildPageMetadata } from "@/shared/seo/metadata";
 
 import BracketLoading from "./loading";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   return buildPageMetadata({ locale, namespace: "seo.bracket", path: "/bracket" });
 }
 
-export default async function BracketPage() {
+export default async function BracketPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations("bracket");
 
   // Public page — guests welcome. Auth only unlocks the compare view.
@@ -44,10 +51,25 @@ export default async function BracketPage() {
     if (pickemRes.success && pickemRes.data) pickem = pickemRes.data;
   }
 
+  const prefix = locale === "en" ? "" : `/${locale}`;
+  const bracketLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      buildBreadcrumbJsonLd(
+        [
+          { name: "Pick'ems", url: `${SITE_URL}${prefix}` },
+          { name: "Bracket", url: `${SITE_URL}${prefix}/bracket` },
+        ],
+        locale
+      ),
+    ],
+  };
+
   // BracketView reads the compare toggle from the URL via useSearchParams, which
   // Next.js requires under a Suspense boundary.
   return (
     <>
+      <JsonLd data={bracketLd} />
       <h1 className="sr-only">{t("title")}</h1>
       <Suspense fallback={<BracketLoading />}>
         <BracketView initialMatches={matchesRes.data} initialPickem={pickem} isAuthed={Boolean(user)} />

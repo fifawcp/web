@@ -38,5 +38,9 @@
   "faq": {
     "title": "FAQ — World Cup 2026 Pick'ems",
     "description": "Frequently asked questions about Pick'ems: how to play, scoring rules, boards, and everything you need to know about the World Cup 2026 prediction game."
+  },
+  "bracket": {
+    "title": "Bracket — World Cup 2026 Knockout Stage",
+    "description": "View the FIFA World Cup 2026 knockout bracket: round of 32, round of 16, quarterfinals, semifinals and the final. Follow your Pick'ems predictions match by match."
   }
 }
