@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { BracketView } from "@/features/bracket/components/BracketView";
 import { PICKEMS_CACHE_TAG } from "@/features/pickems/api/pickems";
@@ -18,6 +19,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function BracketPage() {
+  const t = await getTranslations("bracket");
+
   // Public page — guests welcome. Auth only unlocks the compare view.
   const user = await getCurrentUser();
 
@@ -44,8 +47,11 @@ export default async function BracketPage() {
   // BracketView reads the compare toggle from the URL via useSearchParams, which
   // Next.js requires under a Suspense boundary.
   return (
-    <Suspense fallback={<BracketLoading />}>
-      <BracketView initialMatches={matchesRes.data} initialPickem={pickem} isAuthed={Boolean(user)} />
-    </Suspense>
+    <>
+      <h1 className="sr-only">{t("title")}</h1>
+      <Suspense fallback={<BracketLoading />}>
+        <BracketView initialMatches={matchesRes.data} initialPickem={pickem} isAuthed={Boolean(user)} />
+      </Suspense>
+    </>
   );
 }

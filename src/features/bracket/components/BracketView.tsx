@@ -74,7 +74,7 @@ export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) 
           {canCompare && <CompareToggle view={view} onChange={setView} />}
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{t("title")}</h1>
+          <p className="text-3xl font-bold tracking-tight sm:text-4xl">{t("title")}</p>
           {isAuthed && (
             <Button asChild variant="outline" size="sm" className="shrink-0 self-start sm:self-auto">
               <Link href="/pickems?step=bracket">
