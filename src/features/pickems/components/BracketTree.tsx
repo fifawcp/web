@@ -82,7 +82,7 @@ const COMPACT_COLUMNS: ColumnSpec[] = [
 // Row-track height per scroll depth (indexed by the left visible column).
 // Compaction is the row height shrinking — cards keep their intrinsic size, so
 // the later-round gaps (rowSpan × rowH) close up. These are FIXED track sizes
-// (no `minmax(…, 1fr)`): a flexible max lets a remounting round's content
+// (no `minmax(…, 1fr)`): a flexible max lets a remounting round's contentca
 // instantly inflate the rows, which bypasses the transition and makes the
 // expand (scroll-left) jump. Fixed tracks are driven purely by this value, so
 // the transition animates symmetrically in both directions; cards overflow
@@ -103,7 +103,6 @@ const COMPACT_ROW_HEIGHTS = ["3.5rem", "1.9rem", "1.15rem", "1.15rem", "1.15rem"
  */
 function useVisibleColumnPair(scrollRef: React.RefObject<HTMLDivElement | null>) {
   const [visiblePair, setVisiblePair] = useState<[number, number]>([0, 1]);
-  const prevScrollLeft = useRef(0);
 
   const updateVisiblePair = useCallback(() => {
     const container = scrollRef.current;
@@ -113,20 +112,17 @@ function useVisibleColumnPair(scrollRef: React.RefObject<HTMLDivElement | null>)
     const columnWidth = container.clientWidth * 0.5; // Each column is 50vw
     const raw = scrollLeft / columnWidth;
 
-    // Direction-aware so the compaction fires at the START of the gesture in
-    // BOTH directions. Plain floor() drops the index the instant you scroll left
-    // off a snap point (animation starts immediately) but only climbs once a
-    // rightward snap *lands* (animation starts at the end). Mirroring it with
-    // ceil() while scrolling right makes the index climb as soon as you head
-    // toward the next round. The 1e-3 epsilon absorbs sub-pixel jitter so a
-    // settled snap point resolves to its exact integer index, not the next one.
-    const movingRight = scrollLeft > prevScrollLeft.current;
-    prevScrollLeft.current = scrollLeft;
-    const rawIndex = movingRight ? Math.ceil(raw - 1e-3) : Math.floor(raw + 1e-3);
+    // Round to the nearest column so the depth flips at the MIDPOINT of a swipe —
+    // identical position in both directions. (A direction-aware ceil/floor
+    // flipped at the gesture start instead, which made a round collapse/expand
+    // the instant you nudged off a snap point: scrolling back from SF re-expanded
+    // QF before you had actually scrolled to it. Round is also earlier than the
+    // old floor for the forward case, so it stays responsive.)
+    const rawIndex = Math.round(raw);
     // Clamp to length-2: two columns are visible at once, so the leftmost can
     // never exceed the second-to-last (SF). Without this, the trailing scroll
-    // padding pushes raw just past the last index and ceil() rounds it up to the
-    // Final column, which would wrongly collapse the Semifinals at the end.
+    // padding pushes raw past the last index and would wrongly collapse the
+    // Semifinals at the end.
     const leftColumnIndex = Math.max(0, Math.min(rawIndex, COMPACT_COLUMNS.length - 2));
     // The right column is the next one (clamped to max index)
     const rightColumnIndex = Math.min(leftColumnIndex + 1, COMPACT_COLUMNS.length - 1);
@@ -174,7 +170,7 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
       {/* Mobile: scrolls horizontally, ~2 rounds visible; on lg the columns fill.
           Tight row height keeps the later-round gaps (rowSpan × row height) small. */}
       <div ref={scrollRef} className="-mx-4 snap-x snap-mandatory scroll-pl-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:scroll-pl-0 sm:px-0">
-        <div className="mb-3 grid grid-cols-[repeat(4,minmax(50vw,1fr))_calc(50vw-18px)] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))]">
+        <div className="mb-3 grid grid-cols-[calc(50vw-20px)_repeat(3,minmax(50vw,1fr))_calc(50vw-18px)] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))]">
           {COMPACT_COLUMNS.map((col, colIdx) => {
             const completed = col.matchIds.reduce((n, id) => (byId.get(id)?.picked_team ? n + 1 : n), 0);
             const hasIncoming = colIdx > 0;
@@ -186,7 +182,7 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
                 className={cn(
                   "flex flex-col items-center gap-0.5 font-mono text-2xs uppercase tracking-wider text-muted-foreground",
                   hasIncoming && isFirstColumn && "pl-5 sm:pl-0 md:pl-5",
-                  hasOutgoing && "pr-5 sm:pr-0 md:pr-5",
+                  hasOutgoing && "px-5 sm:px-0 md:px-5",
                   isFirstColumn && "pl-0 md:pl-5"
                 )}
               >
@@ -201,7 +197,7 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
         </div>
 
         <div
-          className="bracket-rows-animated grid grid-cols-[repeat(4,minmax(50vw,1fr))_calc(50vw-18px)] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))]"
+          className="bracket-rows-animated grid grid-cols-[calc(50vw-20px)_repeat(3,minmax(50vw,1fr))_calc(50vw-18px)] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))]"
           style={{ gridTemplateRows: `repeat(16, ${rowHeight})` }}
         >
           {/* Every round scrolled off the left collapses to a rotated label in
@@ -210,8 +206,12 @@ function BracketCompactView({ champion, disabled, onPick, comparisonById, byId }
           {COMPACT_COLUMNS.map((col, colIdx) =>
             colIdx < visiblePair[0] ? (
               <Fragment key={`collapsed-${col.stage}`}>
+                {/* The collapsed label carries the round's snap point so the snap
+                    grid stays stable across collapse/expand. Without it the point
+                    would appear mid-scroll when a round un-collapses, and
+                    snap-mandatory would yank the scroll back (the left bounce). */}
                 <div
-                  className="pointer-events-none z-10 flex items-center justify-end pr-1"
+                  className="pointer-events-none z-10 flex snap-start snap-always items-center justify-end pr-1"
                   style={{ gridColumnStart: colIdx + 1, gridRowStart: 1, gridRowEnd: "span 16" }}
                 >
                   <span
