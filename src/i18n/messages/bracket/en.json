@@ -1,0 +1,21 @@
+{
+  "title": "Bracket",
+  "stageHeading": "Knockout bracket",
+  "stageHeadingLive": "Knockout bracket · Live",
+  "description": "The World Cup knockout bracket, from the Round of 32 to the Final. It fills in as each match is decided.",
+  "descriptionCompare": "The real bracket so far, with the teams you correctly predicted to reach each round checked in green.",
+  "seeMyPicks": "See my bracket",
+  "compare": {
+    "label": "Bracket view",
+    "results": "Results",
+    "compare": "Compare"
+  },
+  "legend": {
+    "title": "Compare",
+    "pointsLabel": "pts",
+    "earnedPossible": "Earned / possible",
+    "correct": "Your correct pick",
+    "correctHelp": "a team you predicted to reach that round",
+    "scoringTitle": "Points per round reached"
+  }
+}

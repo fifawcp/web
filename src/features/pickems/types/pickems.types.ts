@@ -21,6 +21,22 @@ export type BracketMatchSlot = {
   picked_team: Team | null;
 };
 
+/**
+ * Optional read-only compare overlay for a bracket match card. Set by the
+ * `/bracket` page when comparing the user's predictions against real results;
+ * `undefined` in the normal pick flow. Defined here (not in the `bracket`
+ * feature) so the dependency only ever points bracket → pickems, never back.
+ *
+ * `homeCorrect` / `awayCorrect` flag each team row to be highlighted green —
+ * meaning the user correctly predicted that team to reach this match's stage
+ * (or, for the final/third-place match, to win it). Scoring rules live in the
+ * `bracket` feature; the card only needs the two booleans to render.
+ */
+export type BracketMatchCompare = {
+  homeCorrect: boolean;
+  awayCorrect: boolean;
+};
+
 export type StepProgress = {
   completed: number;
   total: number;

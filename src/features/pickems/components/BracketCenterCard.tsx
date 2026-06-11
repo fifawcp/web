@@ -1,6 +1,6 @@
 "use client";
 
-import type { BracketMatchSlot } from "../types/pickems.types";
+import type { BracketMatchCompare, BracketMatchSlot } from "../types/pickems.types";
 
 import { BracketMatchCard } from "./BracketMatchCard";
 
@@ -9,7 +9,9 @@ type Props = {
   /** Uppercase label shown in the ornament header (e.g. "Final", "Third place"). */
   label: string;
   disabled?: boolean;
-  onPick: (matchId: number, fifaCode: string) => void;
+  /** Omitted on the read-only `/bracket` page. */
+  onPick?: (matchId: number, fifaCode: string) => void;
+  comparison?: BracketMatchCompare | null;
 };
 
 /**
@@ -17,7 +19,7 @@ type Props = {
  * every other bracket cell; the topBar is a minimalist label with a thin
  * separator — no decorative iconography on either Final or Third Place.
  */
-export function BracketCenterCard({ slot, label, disabled, onPick }: Props) {
+export function BracketCenterCard({ slot, label, disabled, onPick, comparison }: Props) {
   if (!slot) return null;
 
   return (
@@ -25,7 +27,8 @@ export function BracketCenterCard({ slot, label, disabled, onPick }: Props) {
       slot={slot}
       density="dense"
       disabled={disabled}
-      onPick={(code) => onPick(slot.match_id, code)}
+      onPick={onPick ? (code) => onPick(slot.match_id, code) : undefined}
+      comparison={comparison}
       topBar={
         <div className="flex items-center justify-center border-b border-border/60 px-2 py-1.5 text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
           <span>{label}</span>
