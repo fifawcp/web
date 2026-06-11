@@ -62,7 +62,7 @@ export async function fetchBoardSummary(
 
 export async function createCompetition(boardId: number, input: CreateCompetitionInput): Promise<Competition> {
   const res = await api.post<Competition>(`/api/boards/${boardId}/competitions`, input, { authenticated: true });
-  if (!res.success || !res.data) throw new Error(res.error?.message ?? "Failed to create competition");
+  if (!res.success || !res.data) throw new ApiClientError(res.error?.code ?? "UNKNOWN_ERROR", res.error?.message ?? "Failed to create competition");
   return res.data;
 }
 

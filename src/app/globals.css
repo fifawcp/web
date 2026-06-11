@@ -22,9 +22,6 @@
     header (65px) + sticky filter+tabs bar (~108px when authed, 52px otherwise) + section gap (11px) */
   --schedule-scroll-offset: calc(var(--header-height) + 108px + 11px);
 
-  /* Offset used when scrolling the tutorial section into view (header + breathing room). */
-  --tutorial-scroll-offset: var(--header-height);
-
   --text-2xs: 0.625rem;
   --text-2xs--line-height: 0.875rem;
 

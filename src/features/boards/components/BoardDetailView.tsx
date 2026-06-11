@@ -61,7 +61,9 @@ export function BoardDetailView({
   const searchParams = useSearchParams();
   const tBoards = useTranslations("boards");
   const tComp = useTranslations("competitions");
-  const [wizardOpen, setWizardOpen] = useState(false);
+  // One-shot ?dialog=new-competition (dashboard quick action) seeds the wizard open.
+  const dialogParam = searchParams.get("dialog");
+  const [wizardOpen, setWizardOpen] = useState(() => dialogParam === "new-competition" && canCreateCompetitions(activeBoard));
   const [query, setQuery] = useState("");
 
   const tabParam = searchParams.get(TAB_PARAM);
@@ -80,6 +82,16 @@ export function BoardDetailView({
     const qs = next.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   }, [pathname, router, searchParams]);
+
+  // Strip the consumed ?dialog=new-competition so refresh/back doesn't reopen the wizard.
+  // Other dialog values (create/join) belong to BoardHeader's useBoardDialogParam.
+  useEffect(() => {
+    if (dialogParam !== "new-competition") return;
+    const next = new URLSearchParams(searchParams);
+    next.delete("dialog");
+    const qs = next.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [dialogParam, pathname, router, searchParams]);
 
   const noticeShown = useRef(false);
   useEffect(() => {

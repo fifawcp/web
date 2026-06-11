@@ -1,6 +1,6 @@
-import type { LocalizedName, Match, Team } from "@/features/schedule/types/schedule.types";
+import type { LocalizedName, Match, Team, UserScorePick } from "@/features/schedule/types/schedule.types";
 
-export type { LocalizedName, Match, Team };
+export type { LocalizedName, Match, Team, UserScorePick };
 
 // ─── GET /dashboard — single consolidated payload ───────────────────────────
 // Shape mirrors the backend response under `data` (see lib/ExampleRequest.json).
@@ -64,11 +64,33 @@ export type DashboardLeaderboard = {
   match: CompetitionLeaderboard;
 };
 
+// title_favorites — share of users who picked each team as champion
+export type TitleFavorite = {
+  team: Team;
+  pick_count: number;
+  pick_percent: number;
+};
+
+// recap.pickem / recap.awards — points earned in a locked category
+export type CategoryRecap = {
+  points: number;
+  correct_picks: number;
+  scored_picks: number;
+};
+
+export type DashboardRecap = {
+  pickem: CategoryRecap;
+  awards: CategoryRecap;
+};
+
 // Full consolidated response
+// `title_favorites` and `recap` are optional until the API ships them (see docs/api-requirements-dashboard.md).
 export type DashboardData = {
   picked_champion: Team | null;
   stats: DashboardStats;
   next_match: Match | null;
   progress: DashboardProgress;
   leaderboard: DashboardLeaderboard;
+  title_favorites?: TitleFavorite[];
+  recap?: DashboardRecap;
 };

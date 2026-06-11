@@ -12,3 +12,8 @@ export const fadeLeft = {
   opacity: 0,
   x: -40,
 };
+
+export const fadeRight = {
+  opacity: 0,
+  x: 40,
+};
