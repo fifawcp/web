@@ -16,6 +16,7 @@ import type { BoardSummaryEntry } from "../types/competitions.types";
 
 import { LeaderboardMobileTable, type MobileLeaderboardColumn } from "./LeaderboardMobileTable";
 import { LeaderboardPagination } from "./LeaderboardPagination";
+import { MemberNameLink } from "./MemberNameLink";
 
 // Which per-type subtotal columns the board has (custom = match competitions).
 export type SummaryColumn = "pickem" | "custom" | "pick" | "awards";
@@ -137,7 +138,7 @@ export function BoardSummaryTab({ boardId, currentUserId, columns, enabled }: Pr
                       <RankBadge rank={entry.rank} />
                     </td>
                     <td className="px-4 py-2.5">
-                      <MemberCell entry={entry} isMe={isMe} youLabel={t("you")} />
+                      <MemberCell entry={entry} isMe={isMe} youLabel={t("you")} boardId={boardId} currentUserId={currentUserId} />
                     </td>
                     {columns.map((col) => (
                       <td key={col} className="px-4 py-2.5 text-center text-muted-foreground">
@@ -155,6 +156,7 @@ export function BoardSummaryTab({ boardId, currentUserId, columns, enabled }: Pr
         {/* Mobile */}
         <div className="p-4 md:hidden">
           <LeaderboardMobileTable
+            boardId={boardId}
             rows={items}
             columns={mobileColumns}
             getMember={(row) => row.member}
@@ -210,10 +212,29 @@ function RankBadge({ rank }: { rank: number }) {
   return <span className="font-mono text-xs font-semibold text-muted-foreground">{rank}</span>;
 }
 
-function MemberCell({ entry, isMe, youLabel }: { entry: BoardSummaryEntry; isMe: boolean; youLabel: string }) {
+function MemberCell({
+  entry,
+  isMe,
+  youLabel,
+  boardId,
+  currentUserId,
+}: {
+  entry: BoardSummaryEntry;
+  isMe: boolean;
+  youLabel: string;
+  boardId: number;
+  currentUserId: string;
+}) {
   return (
     <span className="flex min-w-0 items-center gap-1.5">
-      <span className="min-w-0 truncate font-medium">{displayName(entry.member.username, entry.member.first_name, entry.member.last_name)}</span>
+      <MemberNameLink
+        boardId={boardId}
+        userId={entry.member.user_id}
+        currentUserId={currentUserId}
+        name={displayName(entry.member.username, entry.member.first_name, entry.member.last_name)}
+        username={entry.member.username}
+        className="font-medium"
+      />
       {isMe ? <span className="shrink-0 rounded-md bg-page-accent p-1 text-2xs font-medium uppercase tracking-wide text-white">{youLabel}</span> : null}
     </span>
   );

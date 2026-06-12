@@ -124,6 +124,8 @@
     "members": {
       "search": "Busca miembros",
       "actions": "Acciones del miembro",
+      "viewPicks": "Ver picks",
+      "viewPicksSubtitle": "Pronósticos y premios",
       "you": "Tú",
       "promote": "Hacer admin",
       "promoteSubtitle": "Podrá gestionar miembros y competencias",
@@ -167,6 +169,17 @@
         "success": "Saliste del board"
       }
     }
+  },
+  "member": {
+    "back": "Volver a {board}",
+    "subtitle": "Viendo los pronósticos de {name}",
+    "fallbackName": "Miembro",
+    "tabs": { "pickem": "Pick'em", "awards": "Premios", "matches": "Partidos" },
+    "sections": { "groups": "Posiciones de grupo", "bracket": "Bracket" },
+    "picksUnavailable": "Estos picks aún no están disponibles.",
+    "awardsUnavailable": "Los premios aún no están disponibles.",
+    "matchesSoonTitle": "Pronósticos de partidos próximamente",
+    "matchesSoonHint": "Aquí podrás ver su pronóstico de cada partido jugado."
   },
   "errors": {
     "generic": "Algo salió mal"

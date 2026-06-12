@@ -11,7 +11,10 @@ import { cn } from "@/shared/lib/utils";
 import { LEADERBOARD_PAGE_SIZE } from "../api/competitions";
 import type { LeaderboardEntry } from "../types/competitions.types";
 
+import { MemberNameLink } from "./MemberNameLink";
+
 type Props = {
+  boardId: number;
   columns: ColumnDef<LeaderboardEntry>[];
   rows: LeaderboardEntry[];
   currentUserId: string;
@@ -22,7 +25,7 @@ type Props = {
   onSort: (key: string) => void;
 };
 
-export function LeaderboardTable({ columns, rows, currentUserId, isLoading, emptyLabel, sort, dir, onSort }: Props) {
+export function LeaderboardTable({ boardId, columns, rows, currentUserId, isLoading, emptyLabel, sort, dir, onSort }: Props) {
   const tCols = useTranslations("competitions.leaderboard.columns");
   const tColsLong = useTranslations("competitions.leaderboard.columnsLong");
 
@@ -135,7 +138,7 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
                       )}
                     >
                       {isMember ? (
-                        <MemberCell entry={row.original} isMe={isMe} />
+                        <MemberCell entry={row.original} isMe={isMe} boardId={boardId} currentUserId={currentUserId} />
                       ) : meta?.display === "check" ? (
                         <CheckCell value={cell.getValue() as number} />
                       ) : (
@@ -161,12 +164,18 @@ function CheckCell({ value }: { value: number }) {
   );
 }
 
-function MemberCell({ entry, isMe }: { entry: LeaderboardEntry; isMe: boolean }) {
+function MemberCell({ entry, isMe, boardId, currentUserId }: { entry: LeaderboardEntry; isMe: boolean; boardId: number; currentUserId: string }) {
   const t = useTranslations("competitions.leaderboard");
   return (
     <span className="flex min-w-0 flex-col leading-tight">
       <span className="flex min-w-0 items-center gap-1.5">
-        <span className="truncate">{displayName(entry.member.username, entry.member.first_name, entry.member.last_name)}</span>
+        <MemberNameLink
+          boardId={boardId}
+          userId={entry.member.user_id}
+          currentUserId={currentUserId}
+          name={displayName(entry.member.username, entry.member.first_name, entry.member.last_name)}
+          username={entry.member.username}
+        />
         {isMe ? <span className="rounded-md bg-page-accent p-1 text-2xs font-medium uppercase tracking-wide text-white">{t("you")}</span> : null}
       </span>
       <span className="truncate text-xs text-muted-foreground">@{entry.member.username}</span>

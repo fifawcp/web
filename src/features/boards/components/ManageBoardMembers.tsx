@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, Crown, Search, ShieldOff, ShieldUser, UserX } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Crown, Eye, Search, ShieldOff, ShieldUser, UserX } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
+import { hasTournamentStarted } from "@/features/dashboard/lib/tournamentConfig";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 import { Input } from "@/shared/components/ui/input";
@@ -61,6 +63,8 @@ export function ManageBoardMembers({ board, currentUserId, enabled, onPermission
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const viewerRole = board.viewer.role;
   const canManage = canManageBoard(viewerRole);
+  // Other members' picks only become viewable once the tournament has started.
+  const tournamentStarted = hasTournamentStarted();
 
   function handlePromote(member: BoardMember) {
     updateRole.mutateAsync({ userId: member.user_id, role: "admin" }).then(() => toast.success(t("promoted")), reportError);
@@ -118,10 +122,15 @@ export function ManageBoardMembers({ board, currentUserId, enabled, onPermission
             const canActOnTarget = viewerRole === "owner" || member.role === "member";
             const showActions = canManage && !isSelf && member.role !== "owner" && canActOnTarget;
             const isOpen = expandedId === member.user_id;
+            // "View picks" is available to everyone (after kickoff) for any other
+            // member; the manage actions stay gated by `showActions`. The chevron
+            // appears whenever the panel has at least one option.
+            const canViewPicks = tournamentStarted && !isSelf;
+            const hasPanel = canViewPicks || showActions;
 
             return (
               <li key={member.user_id} className={cn("overflow-hidden rounded-lg border bg-card transition-colors", isOpen && "border-page-accent/40")}>
-                {showActions ? (
+                {hasPanel ? (
                   <button
                     type="button"
                     onClick={() => setExpandedId(isOpen ? null : member.user_id)}
@@ -142,50 +151,62 @@ export function ManageBoardMembers({ board, currentUserId, enabled, onPermission
                   </div>
                 )}
 
-                {showActions && isOpen ? (
+                {hasPanel && isOpen ? (
                   <div className="flex flex-col gap-0.5 border-t border-border/60 bg-muted/40 p-1.5">
-                    {member.role === "member" ? (
+                    {canViewPicks ? (
                       <MemberActionRow
-                        icon={ShieldUser}
-                        title={t("promote")}
-                        subtitle={t("promoteSubtitle")}
-                        onClick={() => {
-                          setExpandedId(null);
-                          handlePromote(member);
-                        }}
-                      />
-                    ) : (
-                      <MemberActionRow
-                        icon={ShieldOff}
-                        title={t("demote")}
-                        subtitle={t("demoteSubtitle")}
-                        onClick={() => {
-                          setExpandedId(null);
-                          handleDemote(member);
-                        }}
-                      />
-                    )}
-                    {viewerRole === "owner" ? (
-                      <MemberActionRow
-                        icon={Crown}
-                        title={t("transfer")}
-                        subtitle={t("transferSubtitle")}
-                        onClick={() => {
-                          setExpandedId(null);
-                          setTransferTarget(member);
-                        }}
+                        icon={Eye}
+                        title={t("viewPicks")}
+                        subtitle={t("viewPicksSubtitle")}
+                        href={`/boards/${board.id}/members/${member.user_id}?n=${encodeURIComponent(displayName)}&u=${encodeURIComponent(member.username)}`}
                       />
                     ) : null}
-                    <MemberActionRow
-                      icon={UserX}
-                      title={t("remove")}
-                      subtitle={t("removeSubtitle")}
-                      tone="destructive"
-                      onClick={() => {
-                        setExpandedId(null);
-                        setRemoveTarget(member);
-                      }}
-                    />
+                    {showActions ? (
+                      <>
+                        {member.role === "member" ? (
+                          <MemberActionRow
+                            icon={ShieldUser}
+                            title={t("promote")}
+                            subtitle={t("promoteSubtitle")}
+                            onClick={() => {
+                              setExpandedId(null);
+                              handlePromote(member);
+                            }}
+                          />
+                        ) : (
+                          <MemberActionRow
+                            icon={ShieldOff}
+                            title={t("demote")}
+                            subtitle={t("demoteSubtitle")}
+                            onClick={() => {
+                              setExpandedId(null);
+                              handleDemote(member);
+                            }}
+                          />
+                        )}
+                        {viewerRole === "owner" ? (
+                          <MemberActionRow
+                            icon={Crown}
+                            title={t("transfer")}
+                            subtitle={t("transferSubtitle")}
+                            onClick={() => {
+                              setExpandedId(null);
+                              setTransferTarget(member);
+                            }}
+                          />
+                        ) : null}
+                        <MemberActionRow
+                          icon={UserX}
+                          title={t("remove")}
+                          subtitle={t("removeSubtitle")}
+                          tone="destructive"
+                          onClick={() => {
+                            setExpandedId(null);
+                            setRemoveTarget(member);
+                          }}
+                        />
+                      </>
+                    ) : null}
                   </div>
                 ) : null}
               </li>
@@ -259,23 +280,23 @@ function MemberActionRow({
   subtitle,
   onClick,
   tone = "default",
+  href,
 }: {
   icon: ActionIcon;
   title: string;
   subtitle: string;
-  onClick: () => void;
+  onClick?: () => void;
   tone?: "default" | "destructive";
+  /** When set, the row navigates (used by "View picks") instead of firing onClick. */
+  href?: string;
 }) {
   const destructive = tone === "destructive";
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "flex w-full min-w-0 items-center gap-2.5 rounded-md px-2 py-2 text-left transition-colors hover:bg-card focus-visible:bg-card focus-visible:outline-none",
-        destructive && "hover:bg-destructive/5 focus-visible:bg-destructive/5"
-      )}
-    >
+  const className = cn(
+    "flex w-full min-w-0 items-center gap-2.5 rounded-md px-2 py-2 text-left transition-colors hover:bg-card focus-visible:bg-card focus-visible:outline-none",
+    destructive && "hover:bg-destructive/5 focus-visible:bg-destructive/5"
+  );
+  const inner = (
+    <>
       <span className={cn("grid size-8 shrink-0 place-items-center rounded-md", destructive ? "bg-destructive/10" : "bg-page-accent-soft")}>
         <Icon className={cn("size-4", destructive ? "text-destructive" : "text-page-accent-strong")} aria-hidden />
       </span>
@@ -283,6 +304,20 @@ function MemberActionRow({
         <span className={cn("truncate text-sm font-medium", destructive && "text-destructive")}>{title}</span>
         <span className="truncate text-2xs text-muted-foreground">{subtitle}</span>
       </span>
+      {href ? <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden /> : null}
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {inner}
+      </Link>
+    );
+  }
+  return (
+    <button type="button" onClick={onClick} className={className}>
+      {inner}
     </button>
   );
 }

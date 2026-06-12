@@ -10,7 +10,7 @@ import type { UserPickem } from "@/features/pickems/types/pickems.types";
 import { standingsRevealAnimation } from "../animations/standings.animations";
 import { useCompareView } from "../hooks/useCompareView";
 import { useStandings } from "../hooks/useStandings";
-import { buildBestThirdsSet, buildPickIndex } from "../lib/comparison";
+import { buildBestThirdsSet, buildPickIndex, summarizeGroupStage } from "../lib/comparison";
 import { groupAndEnrichStandings } from "../lib/groupStandings";
 import { buildThirdPlaceStandings } from "../lib/thirdPlace";
 import type { StandingRow } from "../types/standings.types";
@@ -44,6 +44,8 @@ export function StandingsView({ initialStandings, initialPickem, pickemFailed, i
   // structures so every row renders with the "not picked" pill.
   const pickIndex = useMemo(() => (comparing ? buildPickIndex(initialPickem) : null), [comparing, initialPickem]);
   const bestThirds = useMemo(() => (comparing ? buildBestThirdsSet(initialPickem) : null), [comparing, initialPickem]);
+  // Aggregate group-stage points for the legend's "earned / possible" figure.
+  const groupSummary = useMemo(() => (comparing ? summarizeGroupStage(groups, pickIndex) : null), [comparing, groups, pickIndex]);
 
   // Pickems is optional — surface a fetch failure once, then fall back to the
   // guest standings. The ref guards against React StrictMode's double-mount.
@@ -87,7 +89,7 @@ export function StandingsView({ initialStandings, initialPickem, pickemFailed, i
 
       {comparing && (
         <div data-reveal>
-          <ComparisonLegend />
+          <ComparisonLegend summary={groupSummary ?? undefined} />
         </div>
       )}
 

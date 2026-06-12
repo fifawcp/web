@@ -29,34 +29,16 @@ export function ThirdPlaceCard({ standings, bestThirds }: Props) {
   const tAria = useTranslations("standings.columnLabels");
   const showComparison = bestThirds !== null;
   const accuracy = showComparison ? computeThirdPlaceAccuracy(standings.rows, bestThirds) : null;
+  const summary = accuracy && accuracy.total > 0 ? { earned: accuracy.points, possible: accuracy.maxPoints } : undefined;
 
   return (
     <section className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-end justify-between gap-2">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-xl font-bold tracking-tight sm:text-2xl">{t("title")}</h2>
-          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{t("description")}</p>
-        </div>
-        {accuracy && accuracy.total > 0 && (
-          <span
-            className={cn(
-              "shrink-0 rounded-full border px-2.5 py-1 text-2xs font-semibold tabular-nums",
-              accuracy.isPerfect ? "border-lime-500/30 bg-lime-500/15 text-lime-700 dark:text-lime-400" : "border-border bg-muted text-muted-foreground"
-            )}
-            aria-label={t("accuracySummary", {
-              correct: accuracy.correct,
-              total: accuracy.total,
-              points: accuracy.points,
-              max: accuracy.maxPoints,
-            })}
-          >
-            {accuracy.isPerfect ? "★ " : ""}
-            {t("accuracyLabel", { correct: accuracy.correct, total: accuracy.total, points: accuracy.points })}
-          </span>
-        )}
+      <div className="flex flex-col gap-1">
+        <h2 className="text-xl font-bold tracking-tight sm:text-2xl">{t("title")}</h2>
+        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{t("description")}</p>
       </div>
 
-      {showComparison && <ThirdsLegend />}
+      {showComparison && <ThirdsLegend summary={summary} />}
 
       <article className="overflow-hidden rounded-xl border border-border bg-card" aria-label={t("title")}>
         {/* Same `table-fixed` + width strategy as GroupTable so columns

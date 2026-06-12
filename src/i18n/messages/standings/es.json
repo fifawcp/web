@@ -21,6 +21,7 @@
     "wrong0pts": "Incorrecto (0 pts)",
     "notPicked": "Sin pronosticar"
   },
+  "score": { "pointsLabel": "pts", "earnedPossible": "Obtenidos / posibles" },
   "thirdsLegend": {
     "title": "Cómo leerlo · Mejores terceros",
     "youColumn": "Columna Tú",
@@ -63,8 +64,6 @@
     "rank": "#",
     "yourPick": "Tú",
     "yourPickLabel": "Entre tus pronósticos de terceros",
-    "accuracyLabel": "{correct}/{total} · {points} pts",
-    "accuracySummary": "{correct} de {total} mejores terceros acertados, {points} de {max} puntos",
     "advancesLegend": "Los {count} mejores avanzan a Dieciseisavos"
   }
 }

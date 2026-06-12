@@ -124,6 +124,8 @@
     "members": {
       "search": "Search members",
       "actions": "Member actions",
+      "viewPicks": "View picks",
+      "viewPicksSubtitle": "Predictions & awards",
       "you": "You",
       "promote": "Make admin",
       "promoteSubtitle": "Let them manage members and competitions",
@@ -167,6 +169,17 @@
         "success": "You left the board"
       }
     }
+  },
+  "member": {
+    "back": "Back to {board}",
+    "subtitle": "Viewing predictions by {name}",
+    "fallbackName": "Member",
+    "tabs": { "pickem": "Pick'em", "awards": "Awards", "matches": "Matches" },
+    "sections": { "groups": "Group standings", "bracket": "Bracket" },
+    "picksUnavailable": "These picks aren't available yet.",
+    "awardsUnavailable": "Awards aren't available yet.",
+    "matchesSoonTitle": "Match predictions coming soon",
+    "matchesSoonHint": "You'll be able to see their pick for every match that's been played, right here."
   },
   "errors": {
     "generic": "Something went wrong"

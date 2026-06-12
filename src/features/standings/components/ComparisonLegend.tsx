@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
+import { ScoreTally } from "@/shared/components/ScoreTally";
 import { cn } from "@/shared/lib/utils";
 
 import { getAccuracyPillClass } from "../lib/comparison";
@@ -22,12 +23,21 @@ function AccuracyPill({ accuracy, content }: { accuracy: PickAccuracy; content: 
  * top-2 swap. Keeping the two ideas apart was the whole reason we split
  * the legend in two.
  */
-export function ComparisonLegend() {
+type Props = {
+  /** Group-stage earned / possible points. Omitted → the figure is hidden. */
+  summary?: { earned: number; possible: number };
+};
+
+export function ComparisonLegend({ summary }: Props) {
   const t = useTranslations("standings.comparisonLegend");
+  const tScore = useTranslations("standings.score");
 
   return (
     <section aria-label={t("title")} className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4">
-      <p className="text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("title")}</p>
+      <div className="flex items-start justify-between gap-4">
+        <p className="text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("title")}</p>
+        {summary ? <ScoreTally earned={summary.earned} possible={summary.possible} pointsLabel={tScore("pointsLabel")} caption={tScore("earnedPossible")} /> : null}
+      </div>
 
       <div className="flex flex-col gap-2">
         <p className="text-xs font-semibold text-foreground">

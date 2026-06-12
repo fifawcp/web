@@ -88,6 +88,7 @@ export function LeaderboardSection({ boardId, competition, currentUserId, initia
     <div className="overflow-hidden rounded-xl border border-foreground/10 bg-card shadow-xs">
       <div className="hidden md:block">
         <LeaderboardTable
+          boardId={boardId}
           columns={columns}
           rows={items}
           currentUserId={currentUserId}
@@ -100,6 +101,7 @@ export function LeaderboardSection({ boardId, competition, currentUserId, initia
       </div>
       <div className="p-4 md:hidden">
         <LeaderboardMobileTable
+          boardId={boardId}
           rows={items}
           columns={mobileColumns}
           getMember={(row) => row.member}

@@ -2,6 +2,7 @@ import type { UserPickem } from "@/features/pickems/types/pickems.types";
 
 import type {
   GroupComparison,
+  GroupStandings,
   PickAccuracy,
   PickIndex,
   RowComparison,
@@ -73,6 +74,23 @@ export function computeGroupComparison(rows: TeamStandingRow[], groupPicks: Map<
     points += pointsForRow(row, predicted);
   }
   return { correct, total, isPerfect: correct === total, points, maxPoints };
+}
+
+/**
+ * Aggregate points across the whole group stage: earned (sum of each group's
+ * scored points) over possible (sum of every group's max). Unpicked/unlocked
+ * groups contribute 0 earned but their full max to possible, so the figure
+ * always reads against the total achievable — matching the bracket's tally.
+ */
+export function summarizeGroupStage(groups: GroupStandings[], pickIndex: PickIndex | null): { earned: number; possible: number } {
+  let earned = 0;
+  let possible = 0;
+  for (const group of groups) {
+    const comparison = computeGroupComparison(group.rows, pickIndex?.get(group.group_code));
+    earned += comparison.points;
+    possible += comparison.maxPoints;
+  }
+  return { earned, possible };
 }
 
 /** Tailwind classes for the small pill rendering the user's predicted position. */
