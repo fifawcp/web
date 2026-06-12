@@ -7,7 +7,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 const OG_LOCALE: Record<string, string> = { en: "en_US", es: "es_ES" };
 
 // Social-share card image.
-const OG_IMAGE = { url: "/og-card.webp", width: 1200, height: 630, alt: SITE_NAME };
+const OG_IMAGE = { url: "/og-cover.webp", width: 1200, height: 630, alt: SITE_NAME };
 
 type PageMetaInput = {
   locale: string;
