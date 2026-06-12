@@ -20,10 +20,11 @@ type Props = {
   match: Match;
   isLoggedIn: boolean;
   delay?: number;
+  className?: string;
 };
 
 // Primary "what to do next" card: the next upcoming match with the user's pick state.
-export function FeaturedMatchCard({ match, isLoggedIn, delay }: Props) {
+export function FeaturedMatchCard({ match, isLoggedIn, delay, className }: Props) {
   const t = useTranslations("dashboard.featured");
   const stageT = useTranslations("schedule.filters.stage");
   const locale = useLocale();
@@ -36,7 +37,10 @@ export function FeaturedMatchCard({ match, isLoggedIn, delay }: Props) {
   const stageLabel = match.stage_code === "group_stage" && match.group_code ? t("stage.group", { group: match.group_code }) : stageT(match.stage_code);
 
   return (
-    <CardReveal delay={delay} className="opacity-0 relative gap-5 border border-page-accent/30 bg-card p-4 shadow-[0_6px_22px_-18px_var(--page-accent)] sm:p-6">
+    <CardReveal
+      delay={delay}
+      className={cn("opacity-0 relative gap-5 border border-page-accent/30 bg-card p-4 shadow-[0_6px_22px_-18px_var(--page-accent)] sm:p-6", className)}
+    >
       {/* Top accent line (clipped by the card's rounded corners) */}
       <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r from-page-accent to-page-accent/40" />
 
@@ -55,13 +59,16 @@ export function FeaturedMatchCard({ match, isLoggedIn, delay }: Props) {
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
         <TeamColumn team={match.teams.home} locale={locale} align="start" />
 
-        <div data-depth="12" className="flex shrink-0 items-center justify-center px-1">
+        <div data-depth="12" className="flex shrink-0 flex-col items-center justify-center gap-1 px-1">
           {pick ? (
-            <span className="font-heading text-2xl font-bold tabular-nums leading-none text-foreground sm:text-3xl">
-              {pick.home_score}
-              <span className="mx-1 text-muted-foreground/60 sm:mx-1.5">–</span>
-              {pick.away_score}
-            </span>
+            <>
+              <span className="font-heading text-2xl font-bold tabular-nums leading-none text-foreground sm:text-3xl">
+                {pick.home_score}
+                <span className="mx-1 text-muted-foreground/60 sm:mx-1.5">–</span>
+                {pick.away_score}
+              </span>
+              <span className="text-2xs font-medium uppercase tracking-wide text-muted-foreground">{t("yourPick")}</span>
+            </>
           ) : (
             <span className="font-heading text-lg font-bold leading-none text-muted-foreground/60 sm:text-xl">{t("vs")}</span>
           )}

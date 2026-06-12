@@ -9,7 +9,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/components/ui/dialog";
 
-const ROW_CLASS = "-mx-2 flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left transition-colors hover:bg-muted dark:hover:bg-muted";
+const ROW_CLASS = "-mx-2 flex items-center gap-3 rounded-lg px-2 py-2.5 text-left transition-colors hover:bg-muted dark:hover:bg-muted";
 
 type Props = {
   // Boards the viewer can create a competition in (admin/owner, non-global).
@@ -39,7 +39,7 @@ export function NewCompetitionDialog({ boards }: Props) {
             <span className="truncate text-sm font-semibold">{t("newCompetition")}</span>
             <span className="truncate text-xs text-muted-foreground">{t("newCompetitionSub")}</span>
           </span>
-          <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+          <ChevronRight className="-mr-1.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
         </button>
       </DialogTrigger>
 
@@ -60,7 +60,7 @@ export function NewCompetitionDialog({ boards }: Props) {
                   <span className="truncate text-sm font-semibold">{board.name}</span>
                   <span className="truncate text-xs capitalize text-muted-foreground">{board.privacy}</span>
                 </span>
-                <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                <ChevronRight className="-mr-1.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
               </button>
             ))}
           </div>
