@@ -51,7 +51,7 @@ export function JoinBoardDialog({ open, onOpenChange }: Props) {
     });
     if (!res) return;
 
-    toast.success(t("success"));
+    toast.success(res.alreadyMember ? t("alreadyMember") : t("success"));
     rememberLastBoard(res.board_id);
     reset();
     onOpenChange(false);

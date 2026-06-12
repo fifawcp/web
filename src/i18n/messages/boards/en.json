@@ -62,6 +62,7 @@
     "join": "Join board",
     "cancel": "Not now",
     "success": "Welcome to the board",
+    "alreadyMember": "You're already in this board",
     "codeFooter": "Joining with code",
     "invalidTitle": "Invite not found",
     "invalidDescription": "This invite link is invalid or has expired. Ask for a fresh one.",
@@ -89,6 +90,7 @@
     "cancel": "Cancel",
     "submit": "Join",
     "success": "Welcome to the board",
+    "alreadyMember": "You're already in this board",
     "invalid": "That code didn't work"
   },
   "manage": {

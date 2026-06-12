@@ -98,7 +98,7 @@ async function request<T>(endpoint: string, options: RequestOptions = { method: 
       return { success: false, error: { code, message, requestId, fields } };
     }
 
-    return { success: true, data: body.data, pagination: body.pagination };
+    return { success: true, data: body.data, pagination: body.pagination, status: response.status };
   } catch (error) {
     // A request aborted via its signal (e.g. React Query cancelling a superseded
     // or unmounted query) is not a failure — rethrow so the caller treats it as

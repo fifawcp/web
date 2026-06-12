@@ -3,6 +3,7 @@ export type ApiResponse<T = void> = {
   data?: T;
   pagination?: Pagination;
   error?: ApiError;
+  status?: number;
 };
 
 export type Pagination = {
