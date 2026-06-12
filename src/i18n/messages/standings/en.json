@@ -21,6 +21,7 @@
     "wrong0pts": "Wrong (0 pts)",
     "notPicked": "Not picked"
   },
+  "score": { "pointsLabel": "pts", "earnedPossible": "Earned / possible" },
   "thirdsLegend": {
     "title": "How to read · Best thirds",
     "youColumn": "You column",
@@ -63,8 +64,6 @@
     "rank": "#",
     "yourPick": "You",
     "yourPickLabel": "Among your best-thirds picks",
-    "accuracyLabel": "{correct}/{total} · {points} pts",
-    "accuracySummary": "{correct} of {total} best thirds correct, {points} of {max} points earned",
     "advancesLegend": "Top {count} advance to R32"
   }
 }

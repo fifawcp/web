@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
+import { ScoreTally } from "@/shared/components/ScoreTally";
 import { cn } from "@/shared/lib/utils";
 
 import { getThirdPlacePillClass } from "../lib/comparison";
@@ -18,12 +19,21 @@ function ThirdsPill({ accuracy, content }: { accuracy: ThirdPlaceAccuracy; conte
  * meaning of the You column is right next to the table that uses it. Mirrors
  * the structure of `ComparisonLegend` for the group tables.
  */
-export function ThirdsLegend() {
+type Props = {
+  /** Best-thirds earned / possible points. Omitted → the figure is hidden. */
+  summary?: { earned: number; possible: number };
+};
+
+export function ThirdsLegend({ summary }: Props) {
   const t = useTranslations("standings.thirdsLegend");
+  const tScore = useTranslations("standings.score");
 
   return (
     <section aria-label={t("title")} className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4">
-      <p className="text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("title")}</p>
+      <div className="flex items-start justify-between gap-4">
+        <p className="text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("title")}</p>
+        {summary ? <ScoreTally earned={summary.earned} possible={summary.possible} pointsLabel={tScore("pointsLabel")} caption={tScore("earnedPossible")} /> : null}
+      </div>
       <div className="flex flex-col gap-2">
         <p className="text-xs font-semibold text-foreground">
           {t("youColumn")} <span className="font-normal text-muted-foreground">— {t("youColumnHelp")}</span>

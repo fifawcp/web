@@ -11,6 +11,8 @@ import { cn } from "@/shared/lib/utils";
 
 import { LEADERBOARD_PAGE_SIZE } from "../api/competitions";
 
+import { MemberNameLink } from "./MemberNameLink";
+
 export type MobileLeaderboardMember = {
   user_id: string;
   username: string;
@@ -27,6 +29,7 @@ export type MobileLeaderboardColumn<T> = {
 };
 
 type Props<T> = {
+  boardId: number;
   rows: T[];
   columns: MobileLeaderboardColumn<T>[];
   getMember: (row: T) => MobileLeaderboardMember;
@@ -46,7 +49,7 @@ const GRID = "grid grid-cols-[2.25rem_1fr_7.5rem] items-center gap-3";
 // One metric is visible at a time: the arrows (or a swipe) cycle which column,
 // and the "Order" line flips the sort direction. Shared by the competition
 // leaderboard and the board summary so both read the same on mobile.
-export function LeaderboardMobileTable<T>({ rows, columns, getMember, getRank, currentUserId, isLoading, emptyLabel, sort, dir, onSort }: Props<T>) {
+export function LeaderboardMobileTable<T>({ boardId, rows, columns, getMember, getRank, currentUserId, isLoading, emptyLabel, sort, dir, onSort }: Props<T>) {
   const t = useTranslations("competitions.leaderboard");
 
   const activeIdx = Math.max(
@@ -140,9 +143,14 @@ export function LeaderboardMobileTable<T>({ rows, columns, getMember, getRank, c
                 <span className="text-center text-xs font-medium text-muted-foreground tabular-nums">{String(rank).padStart(2, "0")}</span>
                 <div className="flex min-w-0 flex-col leading-tight">
                   <span className="flex min-w-0 items-center gap-1.5">
-                    <span className={cn("truncate text-sm font-medium", isMe && "text-page-accent-strong")}>
-                      {displayName(member.username, member.first_name, member.last_name)}
-                    </span>
+                    <MemberNameLink
+                      boardId={boardId}
+                      userId={member.user_id}
+                      currentUserId={currentUserId}
+                      name={displayName(member.username, member.first_name, member.last_name)}
+                      username={member.username}
+                      className={cn("text-sm font-medium", isMe && "text-page-accent-strong")}
+                    />
                     {isMe ? <span className="rounded-md bg-page-accent p-1 text-2xs font-medium tracking-wide text-white uppercase">{t("you")}</span> : null}
                   </span>
                   <span className="truncate text-xs text-muted-foreground">@{member.username}</span>
