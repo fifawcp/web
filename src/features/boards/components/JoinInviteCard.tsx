@@ -72,7 +72,7 @@ function ValidInvite({ preview, code, isAuthenticated }: { preview: BoardPreview
     if (!res) return;
 
     setJoined(true);
-    toast.success(t("success"));
+    toast.success(res.alreadyMember ? t("alreadyMember") : t("success"));
     rememberLastBoard(res.board_id);
     router.push(`/boards/${res.board_id}`);
     router.refresh();

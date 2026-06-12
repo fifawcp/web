@@ -54,8 +54,10 @@ export async function createBoard(input: CreateBoardInput): Promise<Board> {
   return unwrap(await api.post<Board>("/api/boards", input, { authenticated: true }), "Failed to create board");
 }
 
-export async function joinBoard(input: JoinBoardInput): Promise<{ board_id: number }> {
-  return unwrap(await api.post<{ board_id: number }>("/api/boards/join", input, { authenticated: true }), "Failed to join board");
+export async function joinBoard(input: JoinBoardInput): Promise<{ board_id: number; alreadyMember: boolean }> {
+  const res = await api.post<{ board_id: number }>("/api/boards/join", input, { authenticated: true });
+  const data = unwrap(res, "Failed to join board");
+  return { ...data, alreadyMember: res.status === 200 };
 }
 
 export async function updateBoard(id: number, input: UpdateBoardInput): Promise<void> {
