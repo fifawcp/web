@@ -66,6 +66,7 @@
   },
   "stats": {
     "predictedChampion": "Campeón predicho",
+    "noChampion": "Sin elegir",
     "pickemRank": "Ranking pick'em",
     "matchRank": "Ranking picks de partidos"
   },
@@ -73,6 +74,7 @@
     "kicker": "Próximo partido",
     "kickoffIn": "Inicia en <val>{time}</val>",
     "vs": "VS",
+    "yourPick": "Tu pronóstico",
     "stage": {
       "group": "Grupo {group}"
     },
@@ -130,7 +132,7 @@
       "start": "Empieza",
       "continue": "Continúa",
       "review": "Revisa",
-      "results": "Ver resultados"
+      "picks": "Ver picks"
     }
   },
   "quickActions": {

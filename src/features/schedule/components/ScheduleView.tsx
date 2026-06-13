@@ -25,11 +25,15 @@ type Props = {
   anchorMatchId: number | null;
   isAuthed: boolean;
   deepLinkMatchId?: number | null;
+  // Deep link asked to open the picker (`&edit=1`) — opened on the target card if pickable.
+  deepLinkEdit?: boolean;
 };
 
-export function ScheduleView({ initialMatches, anchorMatchId, isAuthed, deepLinkMatchId = null }: Props) {
+export function ScheduleView({ initialMatches, anchorMatchId, isAuthed, deepLinkMatchId = null, deepLinkEdit = false }: Props) {
   const t = useTranslations("schedule");
   const { data: matches = [] } = useMatches(initialMatches);
+
+  const autoEditMatchId = deepLinkEdit ? deepLinkMatchId : null;
 
   // Arriving via a competition's "make picks" deep link (?match=<id>) — scroll to that match once.
   // Poll briefly so the scroll waits until the target card has actually rendered.
@@ -91,7 +95,7 @@ export function ScheduleView({ initialMatches, anchorMatchId, isAuthed, deepLink
         {groups.length === 0 ? (
           <EmptyState title={t("empty.title")} description={t("empty.description")} />
         ) : (
-          groups.map((g) => <MatchDateGroup key={g.key} group={g} isAuthed={isAuthed} />)
+          groups.map((g) => <MatchDateGroup key={g.key} group={g} isAuthed={isAuthed} autoEditMatchId={autoEditMatchId} />)
         )}
       </div>
     </div>

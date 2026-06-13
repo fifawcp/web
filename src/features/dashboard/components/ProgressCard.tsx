@@ -30,11 +30,11 @@ const STATUS_RING: Record<ProgressCardStatus, string> = {
   locked: "text-lime-600 dark:text-lime-400",
 };
 
-const STATUS_CTA: Record<ProgressCardStatus, "start" | "continue" | "review" | "results"> = {
+const STATUS_CTA: Record<ProgressCardStatus, "start" | "continue" | "review" | "picks"> = {
   todo: "start",
   inProgress: "continue",
   done: "review",
-  locked: "results",
+  locked: "picks",
 };
 
 type Props = {
@@ -62,44 +62,73 @@ export async function ProgressCard({ state, isLoggedIn, delay }: Props) {
     );
   }
 
+  const ring = (
+    <ProgressRing
+      value={recap ? recap.correct_picks : state.completed}
+      total={recap ? Math.max(recap.scored_picks, 1) : state.total}
+      className={cn("shrink-0", STATUS_RING[state.status])}
+    >
+      <RingCenter state={state} />
+    </ProgressRing>
+  );
+
+  const badge = (
+    <span className={cn("inline-flex shrink-0 items-center gap-1 rounded-lg px-2 py-0.5 text-2xs font-medium", STATUS_BADGE[state.status])}>
+      {isLocked && <Lock className="size-2.5" aria-hidden />}
+      {t(`status.${state.status}`)}
+    </span>
+  );
+
+  const heading = (
+    <>
+      <CategoryName icon={Icon} title={t(`${state.id}.title`)} />
+      <p className="text-xs leading-snug text-muted-foreground">{t(`${state.id}.blurb`)}</p>
+    </>
+  );
+
+  const footer = (
+    <div className="flex items-center justify-between gap-2 border-t border-border pt-3">
+      <span className="text-xs font-medium tabular-nums text-muted-foreground">
+        {recap
+          ? recap.scored_picks > 0
+            ? t("recap.correct", { correct: recap.correct_picks, scored: recap.scored_picks })
+            : t("recap.noneScored")
+          : t(`${state.id}.count`, { completed: state.completed, total: state.total })}
+      </span>
+      {state.status === "inProgress" || state.status === "todo" ? (
+        <Button asChild size="sm" className="bg-page-accent text-white hover:bg-page-accent/90">
+          <Link href={state.href}>{t(`cta.${STATUS_CTA[state.status]}`)}</Link>
+        </Button>
+      ) : (
+        <Button asChild variant="outline" size="sm">
+          <Link href={state.href}>{t(`cta.${STATUS_CTA[state.status]}`)}</Link>
+        </Button>
+      )}
+    </div>
+  );
+
   return (
     <CardReveal delay={delay} className="opacity-0 gap-3 bg-card p-4">
-      <div className="flex items-start justify-between">
-        <ProgressRing
-          value={recap ? recap.correct_picks : state.completed}
-          total={recap ? Math.max(recap.scored_picks, 1) : state.total}
-          className={STATUS_RING[state.status]}
-        >
-          <RingCenter state={state} />
-        </ProgressRing>
-        <span className={cn("inline-flex items-center gap-1 rounded-lg px-2 py-0.5 text-2xs font-medium", STATUS_BADGE[state.status])}>
-          {isLocked && <Lock className="size-2.5" aria-hidden />}
-          {t(`status.${state.status}`)}
-        </span>
+      {/* Mobile: ring + heading on a row, then a full-width footer (divider spans the card) */}
+      <div className="flex flex-col gap-3 sm:hidden">
+        <div className="flex items-center gap-3">
+          {ring}
+          <div className="flex min-w-0 flex-1 items-start justify-between gap-2">
+            <div className="flex min-w-0 flex-1 flex-col gap-1">{heading}</div>
+            {badge}
+          </div>
+        </div>
+        {footer}
       </div>
 
-      <div className="flex flex-1 flex-col gap-1">
-        <CategoryName icon={Icon} title={t(`${state.id}.title`)} />
-        <p className="text-xs leading-snug text-muted-foreground">{t(`${state.id}.blurb`)}</p>
-      </div>
-
-      <div className="flex items-center justify-between gap-2 border-t border-border pt-3">
-        <span className="text-xs font-medium tabular-nums text-muted-foreground">
-          {recap
-            ? recap.scored_picks > 0
-              ? t("recap.correct", { correct: recap.correct_picks, scored: recap.scored_picks })
-              : t("recap.noneScored")
-            : t(`${state.id}.count`, { completed: state.completed, total: state.total })}
-        </span>
-        {state.status === "inProgress" || state.status === "todo" ? (
-          <Button asChild size="sm" className="bg-page-accent text-white hover:bg-page-accent/90">
-            <Link href={state.href}>{t(`cta.${STATUS_CTA[state.status]}`)}</Link>
-          </Button>
-        ) : (
-          <Button asChild variant="outline" size="sm">
-            <Link href={state.href}>{t(`cta.${STATUS_CTA[state.status]}`)}</Link>
-          </Button>
-        )}
+      {/* Desktop: vertical stack */}
+      <div className="hidden flex-1 flex-col gap-3 sm:flex">
+        <div className="flex items-start justify-between">
+          {ring}
+          {badge}
+        </div>
+        <div className="flex flex-1 flex-col gap-1">{heading}</div>
+        {footer}
       </div>
     </CardReveal>
   );

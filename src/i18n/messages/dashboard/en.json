@@ -68,6 +68,7 @@
     "kicker": "Up next",
     "kickoffIn": "Kickoff in <val>{time}</val>",
     "vs": "VS",
+    "yourPick": "Your pick",
     "stage": {
       "group": "Group {group}"
     },
@@ -125,7 +126,7 @@
       "start": "Start",
       "continue": "Continue",
       "review": "Review",
-      "results": "View results"
+      "picks": "View picks"
     }
   },
   "quickActions": {
@@ -152,6 +153,7 @@
   },
   "stats": {
     "predictedChampion": "Predicted champion",
+    "noChampion": "Not picked",
     "pickemRank": "Pick'em ranking",
     "matchRank": "Match Picks ranking"
   },

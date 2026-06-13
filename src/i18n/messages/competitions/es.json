@@ -51,6 +51,10 @@
     "makePicks": "Haz tus pronósticos",
     "picksDone": "Pronósticos listos",
     "viewPicks": "Ver pronósticos",
+    "makePick": "Haz tu pronóstico",
+    "picked": "Pronóstico listo",
+    "viewPick": "Ver pronóstico",
+    "seeResults": "Ver resultados",
     "closed": "Cerrado",
     "closesIn": "Cierra en {time}",
     "vs": "vs",
@@ -95,6 +99,7 @@
       "young_player": "Jugador Joven"
     },
     "you": "Tú",
+    "viewMember": "Ver pronósticos de {name}",
     "empty": "Aún no hay entradas",
     "noResults": "Sin coincidencias",
     "pagination": {
@@ -116,6 +121,77 @@
       "custom": "Personalizadas",
       "pick": "Pollas",
       "awards": "Premios"
+    }
+  },
+  "breakdown": {
+    "back": "Volver a la competencia",
+    "eyebrow": "Pronósticos del tablero",
+    "vs": "vs",
+    "penalties": "Penales {home}–{away}",
+    "noPick": "Sin pronóstico",
+    "noPredictions": "Sin pronósticos aún",
+    "predictionCount": "{count, plural, one {# pronóstico} other {# pronósticos}}",
+    "recap": {
+      "correctWinner": "acertaron el ganador",
+      "exactScore": "marcador exacto",
+      "missed": "fallaron"
+    },
+    "distribution": {
+      "title": "Distribución de resultados"
+    },
+    "outcome": {
+      "teamWins": "Gana {team}",
+      "draw": "Empate",
+      "home": "Local",
+      "away": "Visita"
+    },
+    "members": {
+      "title": "Pronóstico de cada miembro",
+      "filterLabel": "Filtrar pronósticos",
+      "filter": {
+        "all": "Todos",
+        "hits": "Aciertos",
+        "misses": "Fallos",
+        "exact": "Exactos"
+      },
+      "scoring": "Cómo puntúan — por color",
+      "searchPlaceholder": "Busca un miembro…",
+      "empty": "Ningún miembro coincide",
+      "col": {
+        "member": "Miembro",
+        "prediction": "Pronóstico",
+        "points": "Puntos"
+      }
+    },
+    "category": {
+      "exact": "Exacto",
+      "winner": "Ganador",
+      "miss": "Fallo",
+      "none": "Sin pronóstico"
+    },
+    "boardPredictions": {
+      "title": "Cómo predijo el tablero",
+      "subtitle": "Toca un partido para ver el pronóstico de cada miembro.",
+      "searchPlaceholder": "Busca un partido…",
+      "noResults": "No se encontraron partidos",
+      "viewFull": "Ver desglose completo",
+      "previewError": "No se pudo cargar la vista previa."
+    },
+    "locked": {
+      "title": "Los pronósticos aún no se revelan",
+      "description": "Se revelan en cuanto el partido comienza."
+    }
+  },
+  "memberPicks": {
+    "title": "Pronósticos del miembro",
+    "revealed": "Pronósticos revelados",
+    "empty": "Aún no hay pronósticos revelados",
+    "noResults": "No se encontraron partidos",
+    "searchPlaceholder": "Busca un partido…",
+    "hint": "Solo partidos ya iniciados. Toca uno para compararlo con todo el tablero.",
+    "stats": {
+      "rank": "posición",
+      "points": "puntos"
     }
   },
   "emptyCompetitions": {

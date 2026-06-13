@@ -9,6 +9,31 @@ export const THIRD_PLACE_MATCH_ID = 103 as const;
 export const FINAL_MATCH_ID = 104 as const;
 
 /**
+ * Group-position placeholders for each Round-of-32 slot, per the official 2026
+ * bracket (e.g. M74 = winner of Group E vs a third-placed team from A/B/C/D/F).
+ * Used as read-only labels before the qualifiers are known. `home`/`away` follow
+ * the bracket's top/bottom order (the same order as `R32_VISUAL_ORDER`).
+ */
+export const R32_SLOT_LABELS: Record<number, { home: string; away: string }> = {
+  73: { home: "2A", away: "2B" },
+  74: { home: "1E", away: "3A/B/C/D/F" },
+  75: { home: "1F", away: "2C" },
+  76: { home: "1C", away: "2F" },
+  77: { home: "1I", away: "3C/D/F/G/H" },
+  78: { home: "2E", away: "2I" },
+  79: { home: "1A", away: "3C/E/F/H/I" },
+  80: { home: "1L", away: "3E/H/I/J/K" },
+  81: { home: "1D", away: "3B/E/F/I/J" },
+  82: { home: "1G", away: "3A/E/H/I/J" },
+  83: { home: "2K", away: "2L" },
+  84: { home: "1H", away: "2J" },
+  85: { home: "1B", away: "3E/F/G/I/J" },
+  86: { home: "1J", away: "2H" },
+  87: { home: "1K", away: "3D/E/I/J/L" },
+  88: { home: "2D", away: "2G" },
+};
+
+/**
  * Bracket-adjacency order — matches printed top-to-bottom in the
  * official 2026 WC bracket image. Each `_VISUAL_ORDER` chunked by 2 yields
  * the bracket pairs (74 plays 77 in the same R16 cell, etc.).

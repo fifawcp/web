@@ -62,6 +62,7 @@
     "join": "Unirme al board",
     "cancel": "Ahora no",
     "success": "Te uniste al board",
+    "alreadyMember": "Ya eres miembro de este board",
     "codeFooter": "Te unes con el código",
     "invalidTitle": "Invitación no encontrada",
     "invalidDescription": "Este enlace de invitación no es válido o expiró. Pide uno nuevo.",
@@ -89,6 +90,7 @@
     "cancel": "Cancelar",
     "submit": "Unirme",
     "success": "Te uniste al board",
+    "alreadyMember": "Ya eres miembro de este board",
     "invalid": "Ese código no funcionó"
   },
   "manage": {

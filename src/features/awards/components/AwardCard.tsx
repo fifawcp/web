@@ -45,7 +45,9 @@ export function AwardCard({ awardType, pick, isLocked, onSelect, onClear }: Prop
           </span>
           <div className="flex flex-col gap-0.5">
             <span className="text-sm font-semibold leading-tight">{tTypes(`${awardType}.title`)}</span>
-            <span className="text-xs leading-snug text-muted-foreground">{tTypes(`${awardType}.description`)}</span>
+            {/* Reserve two lines so cards with a longer description (e.g. Young
+                Player) keep the same header height and their bodies stay aligned. */}
+            <span className="line-clamp-2 min-h-8 text-xs text-muted-foreground">{tTypes(`${awardType}.description`)}</span>
           </div>
         </div>
         {player && !isLocked && (

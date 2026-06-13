@@ -32,7 +32,7 @@ export function useCreateBoard() {
 }
 
 export function useJoinBoard() {
-  return useMutation<{ board_id: number }, Error, JoinBoardInput>({ mutationFn: joinBoard });
+  return useMutation<{ board_id: number; alreadyMember: boolean }, Error, JoinBoardInput>({ mutationFn: joinBoard });
 }
 
 export function useRenameBoard(id: number) {

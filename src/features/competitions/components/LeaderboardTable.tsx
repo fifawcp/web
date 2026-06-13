@@ -1,9 +1,10 @@
 "use client";
 
 import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { Check, ChevronDown, ChevronsUpDown, ChevronUp, X } from "lucide-react";
+import { Check, ChevronDown, ChevronsUpDown, ChevronUp, Eye, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { displayName } from "@/shared/lib/ui";
 import { cn } from "@/shared/lib/utils";
@@ -20,11 +21,14 @@ type Props = {
   sort: string;
   dir: "asc" | "desc";
   onSort: (key: string) => void;
+  // When set, each row exposes an eye action to reveal that member's predictions.
+  onViewMember?: (entry: LeaderboardEntry) => void;
 };
 
-export function LeaderboardTable({ columns, rows, currentUserId, isLoading, emptyLabel, sort, dir, onSort }: Props) {
+export function LeaderboardTable({ columns, rows, currentUserId, isLoading, emptyLabel, sort, dir, onSort, onViewMember }: Props) {
   const tCols = useTranslations("competitions.leaderboard.columns");
   const tColsLong = useTranslations("competitions.leaderboard.columnsLong");
+  const tLb = useTranslations("competitions.leaderboard");
 
   const table = useReactTable({
     data: rows,
@@ -34,7 +38,7 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
     manualFiltering: true,
   });
 
-  const colCount = table.getVisibleLeafColumns().length;
+  const colCount = table.getVisibleLeafColumns().length + (onViewMember ? 1 : 0);
 
   return (
     <table className="w-full border-collapse text-sm">
@@ -83,6 +87,7 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
                 </th>
               );
             })}
+            {onViewMember ? <th className="w-12" aria-hidden /> : null}
           </tr>
         ))}
       </thead>
@@ -107,6 +112,7 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
                   </td>
                 );
               })}
+              {onViewMember ? <td className="px-2" /> : null}
             </tr>
           ))
         ) : rows.length === 0 ? (
@@ -144,6 +150,19 @@ export function LeaderboardTable({ columns, rows, currentUserId, isLoading, empt
                     </td>
                   );
                 })}
+                {onViewMember ? (
+                  <td className="px-2 text-right">
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      className="text-page-accent-strong hover:bg-muted hover:text-page-accent"
+                      aria-label={tLb("viewMember", { name: displayName(row.original.member.username, row.original.member.first_name, row.original.member.last_name) })}
+                      onClick={() => onViewMember(row.original)}
+                    >
+                      <Eye className="size-4" aria-hidden />
+                    </Button>
+                  </td>
+                ) : null}
               </tr>
             );
           })

@@ -23,7 +23,7 @@ export function PickemsSkeleton({ step = "groups" }: Props = {}) {
       <StepperSkeleton />
       {step === "groups" && <GroupsStepSkeleton />}
       {step === "thirds" && <ThirdsStepSkeleton />}
-      {step === "bracket" && <BracketStepSkeleton />}
+      {step === "bracket" && <BracketTreeSkeleton />}
     </>
   );
 }
@@ -100,39 +100,17 @@ function ThirdsStepSkeleton() {
   );
 }
 
-function BracketStepSkeleton() {
+/**
+ * Knockout-tree skeleton mirroring `BracketTree`: the braced compact tree
+ * (mobile horizontal-scroll → lg) and the xl split/folded tree. Exported so the
+ * standalone `/bracket` page's `loading.tsx` reuses the shapes.
+ */
+export function BracketTreeSkeleton() {
   return (
     <>
-      <BracketMobileSkeleton />
       <BracketCompactSkeleton />
       <BracketSplitSkeleton />
     </>
-  );
-}
-
-function BracketMobileSkeleton() {
-  return (
-    <div className="space-y-4 lg:hidden">
-      <div className="grid grid-cols-6 gap-1 rounded-xl border bg-card p-1">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="flex flex-col items-center gap-0.5 rounded-md px-2 py-2">
-            <Skeleton className="h-3 w-8" />
-            <Skeleton className="h-2 w-6" />
-          </div>
-        ))}
-      </div>
-      <div className="flex items-baseline justify-between px-1">
-        <Skeleton className="h-5 w-32" />
-        <Skeleton className="h-3 w-24" />
-      </div>
-      <ul className="space-y-3">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <li key={i}>
-            <BracketMatchCardSkeleton showHeader />
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
 
@@ -145,25 +123,27 @@ const COMPACT_COLUMNS = [
 
 function BracketCompactSkeleton() {
   return (
-    <div className="hidden lg:block xl:hidden">
-      <div className="mb-3 grid grid-cols-5">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <BracketColumnHeaderSkeleton key={i} paddedLeft={i > 0} paddedRight={i < 4} />
-        ))}
-      </div>
-      <div className="grid grid-cols-5 grid-rows-[repeat(16,minmax(2.75rem,1fr))]">
-        {COMPACT_COLUMNS.map((col, colIdx) =>
-          Array.from({ length: col.count }).map((_, matchIdx) => (
-            <div
-              key={`${colIdx}-${matchIdx}`}
-              className="flex items-center px-1.5 py-1.5"
-              style={{ gridColumnStart: colIdx + 1, gridRowStart: matchIdx * col.rowSpan + 1, gridRowEnd: `span ${col.rowSpan}` }}
-            >
-              <BracketMatchCardSkeleton dense />
-            </div>
-          ))
-        )}
-        <BracketCenterColumnSkeleton colStart={5} />
+    <div className="block xl:hidden">
+      <div className="-mx-4 snap-x snap-mandatory scroll-pl-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:scroll-pl-0 sm:px-0">
+        <div className="mb-3 grid grid-cols-[repeat(5,minmax(50vw,1fr))_16px] sm:grid-cols-[repeat(5,minmax(8rem,1fr))]">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <BracketColumnHeaderSkeleton key={i} paddedLeft={i > 0} paddedRight={i < 4} />
+          ))}
+        </div>
+        <div className="grid grid-cols-[repeat(5,minmax(50vw,1fr))_16px] grid-rows-[repeat(16,minmax(2rem,1fr))] sm:grid-cols-[repeat(5,minmax(8.5rem,1fr))] sm:grid-rows-[repeat(16,minmax(2.75rem,1fr))]">
+          {COMPACT_COLUMNS.map((col, colIdx) =>
+            Array.from({ length: col.count }).map((_, matchIdx) => (
+              <div
+                key={`${colIdx}-${matchIdx}`}
+                className="flex items-center px-1.5 py-1"
+                style={{ gridColumnStart: colIdx + 1, gridRowStart: matchIdx * col.rowSpan + 1, gridRowEnd: `span ${col.rowSpan}` }}
+              >
+                <BracketMatchCardSkeleton dense />
+              </div>
+            ))
+          )}
+          <BracketCenterColumnSkeleton colStart={5} />
+        </div>
       </div>
     </div>
   );
@@ -263,7 +243,7 @@ function TipCardSkeleton() {
       <Skeleton className="mt-0.5 size-5 shrink-0 rounded-sm" />
       <div className="min-w-0 flex-1 space-y-1.5 pt-1">
         <Skeleton className="h-3.5 w-full max-w-xs" />
-        <Skeleton className="h-3.5 w-3/4 max-w-[12rem]" />
+        <Skeleton className="h-3.5 w-3/4 max-w-48" />
       </div>
       <Skeleton className="size-6 shrink-0 rounded-md" />
     </div>

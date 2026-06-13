@@ -7,7 +7,7 @@ import type { Match } from "@/features/schedule/types/schedule.types";
 
 import type { Competition } from "../types/competitions.types";
 
-import { resolveScope } from "./formatScope";
+import { matchesInScope } from "./matchesInScope";
 import { resolvePickMatch } from "./resolvePickMatch";
 
 // Derived state of the viewer's picks for one competition, computed from already-fetched data — no
@@ -41,15 +41,7 @@ function fromMatches(matches: Match[], now: Date): CompetitionPickState {
 // A match-type ("custom") competition: every match whose stage is in scope and (all teams, or one
 // side is in the team set). Mirrors the server's scoring scope so the badge can't lie.
 function getMatchCompetitionPickState(competition: Competition, matches: Match[], now: Date): CompetitionPickState {
-  const scope = resolveScope(competition);
-  const stages = new Set(scope.stages);
-  const teams = new Set(scope.teamCodes);
-  const inScope = matches.filter((match) => {
-    if (!stages.has(match.stage_code)) return false;
-    if (scope.isAllTeams) return true;
-    return [match.teams.home?.fifa_code, match.teams.away?.fifa_code].some((code) => code != null && teams.has(code));
-  });
-  return fromMatches(inScope, now);
+  return fromMatches(matchesInScope(competition, matches), now);
 }
 
 // A pick competition covers exactly one match.

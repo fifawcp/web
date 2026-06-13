@@ -15,13 +15,14 @@ type Props = {
   adminBoards: BoardListItem[];
   delay?: number;
   from?: "up" | "left" | "right";
+  className?: string;
 };
 
-export async function QuickActionsCard({ board, adminBoards, delay, from }: Props) {
+export async function QuickActionsCard({ board, adminBoards, delay, from, className }: Props) {
   const t = await getTranslations("dashboard.quickActions");
 
   return (
-    <CardReveal delay={delay} from={from} className="opacity-0 gap-3 bg-card p-4 sm:p-5">
+    <CardReveal delay={delay} from={from} className={cn("opacity-0 gap-3 bg-card p-4 sm:p-5", className)}>
       <h2 className="text-base font-semibold">{t("title")}</h2>
       <div className="flex flex-col">
         <NewCompetitionDialog boards={adminBoards} />
@@ -78,7 +79,7 @@ function ActionRow({ href, label, sub, icon: Icon, iconClass, leading }: ActionR
         <span className="truncate text-sm font-semibold">{label}</span>
         <span className="truncate text-xs text-muted-foreground">{sub}</span>
       </span>
-      <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+      <ChevronRight className="-mr-1.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
     </Link>
   );
 }
