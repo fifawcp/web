@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MapPin, MoveRight } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
@@ -22,13 +22,15 @@ import { MatchStatusBadge } from "./MatchStatusBadge";
 type Props = {
   match: Match;
   isAuthed: boolean;
+  // Arriving from a "make/edit pick" deep link — open the picker once on mount if editable.
+  autoEdit?: boolean;
 };
 
 // Reserve enough vertical space in the score area for the vertical-stacked
 // picker so the card height is identical in view and edit modes
 const SCORE_AREA_MIN_H = "min-h-[5rem]";
 
-export function MatchCard({ match, isAuthed }: Props) {
+export function MatchCard({ match, isAuthed, autoEdit = false }: Props) {
   const t = useTranslations("schedule.card");
   const stageT = useTranslations("schedule.filters.stage");
   const locale = useLocale();
@@ -41,6 +43,15 @@ export function MatchCard({ match, isAuthed }: Props) {
   const [draft, setDraft] = useState<UserScorePick>(() => match.user_score_pick ?? { home_score: 0, away_score: 0 });
   const updatePick = useUpdatePick();
 
+  // Open the picker once when deep-linked to this match and it's still pickable.
+  const autoOpened = useRef(false);
+  useEffect(() => {
+    if (autoEdit && canEdit && !autoOpened.current) {
+      autoOpened.current = true;
+      setEditing(true);
+    }
+  }, [autoEdit, canEdit]);
+
   const startEdit = () => {
     setDraft(match.user_score_pick ?? { home_score: 0, away_score: 0 });
     setEditing(true);
@@ -50,7 +61,7 @@ export function MatchCard({ match, isAuthed }: Props) {
   const save = () => updatePick.mutate({ matchId: match.id, pick: draft }, { onSuccess: () => setEditing(false) });
 
   return (
-    <Card data-match-id={match.id} className={cn("relative gap-3 px-4 py-4", editing && "ring-2 ring-page-accent")} size="sm">
+    <Card data-match-id={match.id} className={cn("relative scroll-mt-(--schedule-scroll-offset) gap-3 px-4 py-4", editing && "ring-2 ring-page-accent")} size="sm">
       <header className="flex items-center justify-between text-xs text-muted-foreground">
         <span className="font-medium uppercase tracking-wide">{stageHeaderLabel(match, t, stageT)}</span>
         <KickoffTime kickoffAt={match.kickoff_at} />

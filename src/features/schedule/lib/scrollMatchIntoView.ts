@@ -1,8 +1,7 @@
 export function scrollMatchIntoView(matchId: number, behavior: ScrollBehavior = "smooth"): void {
-  // Get the match card by it's id
+  // Scroll the specific match card (not its date section) so a match deep inside a
+  // group still lands in view. The card carries scroll-mt-(--schedule-scroll-offset),
+  // so scrollIntoView clears the sticky header + filter bar.
   const card = document.querySelector(`[data-match-id="${matchId}"]`);
-  // Get the section that contains the match card
-  const section = card?.closest("section");
-  // Scroll the section into view
-  section?.scrollIntoView({ behavior, block: "start" });
+  card?.scrollIntoView({ behavior, block: "start" });
 }

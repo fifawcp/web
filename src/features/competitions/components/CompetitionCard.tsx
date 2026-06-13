@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ListOrdered, MoreVertical, Trash2 } from "lucide-react";
+import { ListOrdered, Lock, MoreVertical, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { AwardType } from "@/features/awards/types/awards.types";
 import type { PickemProgress } from "@/features/pickems/types/pickems.types";
 import { useNow } from "@/features/schedule/hooks/useNow";
+import { computeMatchUiState } from "@/features/schedule/lib/computeMatchUiState";
 import type { Match } from "@/features/schedule/types/schedule.types";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/shared/components/ui/button";
@@ -18,6 +19,7 @@ import { useCompetitionName } from "../hooks/useCompetitionName";
 import { competitionDeepLink } from "../lib/competitionDeepLink";
 import { competitionNeedsPick, getCompetitionPickState } from "../lib/competitionPickStatus";
 import { competitionTypeMeta } from "../lib/competitionTypeMeta";
+import { resolvePickMatch } from "../lib/resolvePickMatch";
 import type { Competition, LeaderboardEntry } from "../types/competitions.types";
 
 import { CompetitionCardContext } from "./CompetitionCardContext";
@@ -66,6 +68,14 @@ export function CompetitionCard({
   const deletable = canManage;
   const picksHref = competitionDeepLink(competition, pickState);
 
+  // A single-match pick whose match hasn't kicked off — its leaderboard is hidden
+  // (all zeros), so the preview + the leaderboard link are gated until it locks.
+  const pickMatch = competition.type === "pick" ? resolvePickMatch(competition, matches) : null;
+  const pickPending = competition.type === "pick" && !(pickMatch && computeMatchUiState(pickMatch, now).isLocked);
+  // Pick competition whose match has locked: the breakdown is the whole story, so the
+  // footer collapses to a single "See results" link instead of leaderboard + view picks.
+  const pickResultsOut = competition.type === "pick" && !pickPending;
+
   return (
     <div
       className={cn(
@@ -110,17 +120,43 @@ export function CompetitionCard({
         now={now}
       />
 
-      <CompetitionMiniLeaderboard entries={topThree} currentUserId={currentUserId} currentUserInitials={currentUserInitials} viewer={competition.viewer} />
+      {pickPending ? (
+        <div className="flex min-h-36 flex-col items-center justify-center gap-2 rounded-lg bg-muted px-4 py-3 text-center">
+          <span className="grid size-9 place-items-center rounded-full bg-background text-muted-foreground">
+            <Lock className="size-4" aria-hidden />
+          </span>
+          <p className="text-sm font-semibold text-foreground">{tRoot("breakdown.locked.title")}</p>
+          <p className="text-xs leading-snug text-muted-foreground">{tRoot("breakdown.locked.description")}</p>
+        </div>
+      ) : (
+        <CompetitionMiniLeaderboard entries={topThree} currentUserId={currentUserId} currentUserInitials={currentUserInitials} viewer={competition.viewer} />
+      )}
 
-      <div className="mt-auto flex items-center justify-between gap-2 pt-1">
-        <Button asChild variant="ghost" size="sm" className="gap-1.5">
+      {pickResultsOut ? (
+        <Button asChild variant="outline" size="sm" className="mt-auto w-full gap-1.5">
           <Link href={`/boards/${boardId}/competitions/${competition.id}`}>
             <ListOrdered className="size-4" aria-hidden />
-            {t("leaderboard")}
+            {t("seeResults")}
           </Link>
         </Button>
-        <PicksCta href={picksHref} state={pickState.kind} />
-      </div>
+      ) : (
+        <div className="mt-auto flex items-center justify-between gap-2 pt-1">
+          {pickPending ? (
+            <Button variant="ghost" size="sm" className="gap-1.5" disabled>
+              <ListOrdered className="size-4" aria-hidden />
+              {t("leaderboard")}
+            </Button>
+          ) : (
+            <Button asChild variant="ghost" size="sm" className="gap-1.5">
+              <Link href={`/boards/${boardId}/competitions/${competition.id}`}>
+                <ListOrdered className="size-4" aria-hidden />
+                {t("leaderboard")}
+              </Link>
+            </Button>
+          )}
+          <PicksCta href={picksHref} state={pickState.kind} />
+        </div>
+      )}
 
       {deletable ? <DeleteCompetitionDialog boardId={boardId} competition={competition} open={deleteOpen} onOpenChange={setDeleteOpen} /> : null}
     </div>

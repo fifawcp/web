@@ -11,9 +11,10 @@ import { MatchCard } from "./MatchCard";
 type Props = {
   group: DateGroup;
   isAuthed: boolean;
+  autoEditMatchId?: number | null;
 };
 
-export function MatchDateGroup({ group, isAuthed }: Props) {
+export function MatchDateGroup({ group, isAuthed, autoEditMatchId = null }: Props) {
   const locale = useLocale();
   const t = useTranslations("schedule");
   const dateLabel = formatDateHeader(group.date, locale);
@@ -28,7 +29,7 @@ export function MatchDateGroup({ group, isAuthed }: Props) {
       </header>
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {group.matches.map((m) => (
-          <MatchCard key={m.id} match={m} isAuthed={isAuthed} />
+          <MatchCard key={m.id} match={m} isAuthed={isAuthed} autoEdit={m.id === autoEditMatchId} />
         ))}
       </div>
     </section>

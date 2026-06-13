@@ -14,7 +14,7 @@ import { serverApi } from "@/shared/lib/api/server";
 import { buildBreadcrumbJsonLd } from "@/shared/seo/breadcrumbs";
 import { buildPageMetadata } from "@/shared/seo/metadata";
 
-type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ match?: string }> };
+type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ match?: string; edit?: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -23,8 +23,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SchedulePage({ params, searchParams }: Props) {
   const t = await getTranslations("schedule");
-  const [{ locale }, user, { match }] = await Promise.all([params, getCurrentUser(), searchParams]);
+  const [{ locale }, user, { match, edit }] = await Promise.all([params, getCurrentUser(), searchParams]);
   const deepLinkMatchId = match && Number.isFinite(Number(match)) ? Number(match) : null;
+  const deepLinkEdit = edit === "1";
 
   const res = await serverApi.get<Match[]>("/api/matches", {
     authenticated: Boolean(user),
@@ -56,7 +57,13 @@ export default async function SchedulePage({ params, searchParams }: Props) {
       {/* ScheduleView reads filters from the URL via useSearchParams,
           which Next.js requires under a Suspense boundary. */}
       <Suspense>
-        <ScheduleView initialMatches={res.data} anchorMatchId={findAnchorMatchId(res.data)} isAuthed={Boolean(user)} deepLinkMatchId={deepLinkMatchId} />
+        <ScheduleView
+          initialMatches={res.data}
+          anchorMatchId={findAnchorMatchId(res.data)}
+          isAuthed={Boolean(user)}
+          deepLinkMatchId={deepLinkMatchId}
+          deepLinkEdit={deepLinkEdit}
+        />
       </Suspense>
     </>
   );

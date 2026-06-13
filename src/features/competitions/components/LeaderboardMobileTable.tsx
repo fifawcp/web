@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type TouchEvent } from "react";
-import { ArrowDownWideNarrow, ArrowUpNarrowWide, Check, ChevronLeft, ChevronRight, MoveHorizontal, X } from "lucide-react";
+import { ArrowDownWideNarrow, ArrowUpNarrowWide, Check, ChevronLeft, ChevronRight, Eye, MoveHorizontal, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/shared/components/ui/button";
@@ -37,6 +37,8 @@ type Props<T> = {
   sort: string;
   dir: "asc" | "desc";
   onSort: (key: string) => void;
+  // When set, each row exposes an eye action to reveal that member's predictions.
+  onViewMember?: (row: T) => void;
 };
 
 // Fixed rank + metric columns so the value (and the header sort control) center in
@@ -46,7 +48,7 @@ const GRID = "grid grid-cols-[2.25rem_1fr_7.5rem] items-center gap-3";
 // One metric is visible at a time: the arrows (or a swipe) cycle which column,
 // and the "Order" line flips the sort direction. Shared by the competition
 // leaderboard and the board summary so both read the same on mobile.
-export function LeaderboardMobileTable<T>({ rows, columns, getMember, getRank, currentUserId, isLoading, emptyLabel, sort, dir, onSort }: Props<T>) {
+export function LeaderboardMobileTable<T>({ rows, columns, getMember, getRank, currentUserId, isLoading, emptyLabel, sort, dir, onSort, onViewMember }: Props<T>) {
   const t = useTranslations("competitions.leaderboard");
 
   const activeIdx = Math.max(
@@ -136,7 +138,7 @@ export function LeaderboardMobileTable<T>({ rows, columns, getMember, getRank, c
             const rank = getRank(row);
             const isMe = member.user_id === currentUserId;
             return (
-              <li key={member.user_id} className={cn(GRID, "py-2.5", isMe && "bg-page-accent-soft/60")}>
+              <li key={member.user_id} className={cn(GRID, "relative py-2.5", isMe && "bg-page-accent-soft/60")}>
                 <span className="text-center text-xs font-medium text-muted-foreground tabular-nums">{String(rank).padStart(2, "0")}</span>
                 <div className="flex min-w-0 flex-col leading-tight">
                   <span className="flex min-w-0 items-center gap-1.5">
@@ -147,7 +149,7 @@ export function LeaderboardMobileTable<T>({ rows, columns, getMember, getRank, c
                   </span>
                   <span className="truncate text-xs text-muted-foreground">@{member.username}</span>
                 </div>
-                <span className="flex justify-center text-sm font-semibold tabular-nums">
+                <span className="flex items-center justify-center text-sm font-semibold tabular-nums">
                   {active.display === "check" ? (
                     active.value(row) === 1 ? (
                       <Check className="size-4 text-lime-600 dark:text-lime-400" aria-hidden />
@@ -158,6 +160,18 @@ export function LeaderboardMobileTable<T>({ rows, columns, getMember, getRank, c
                     active.value(row).toLocaleString()
                   )}
                 </span>
+                {onViewMember ? (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    className="absolute top-1/2 right-0 size-7 -translate-y-1/2 text-page-accent-strong hover:bg-muted hover:text-page-accent"
+                    aria-label={t("viewMember", { name: displayName(member.username, member.first_name, member.last_name) })}
+                    onClick={() => onViewMember(row)}
+                  >
+                    <Eye className="size-3.5" aria-hidden />
+                  </Button>
+                ) : null}
               </li>
             );
           })}

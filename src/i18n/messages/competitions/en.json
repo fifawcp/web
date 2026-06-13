@@ -51,6 +51,10 @@
     "makePicks": "Make your picks",
     "picksDone": "Picks in",
     "viewPicks": "View picks",
+    "makePick": "Make your pick",
+    "picked": "Picked",
+    "viewPick": "View pick",
+    "seeResults": "See results",
     "closed": "Closed",
     "closesIn": "Closes in {time}",
     "vs": "vs",
@@ -95,6 +99,7 @@
       "young_player": "Young Player"
     },
     "you": "You",
+    "viewMember": "View {name}'s predictions",
     "empty": "No entries yet",
     "noResults": "No members match your search",
     "pagination": {
@@ -116,6 +121,77 @@
       "custom": "Custom",
       "pick": "Picks",
       "awards": "Awards"
+    }
+  },
+  "breakdown": {
+    "back": "Back to competition",
+    "eyebrow": "Board predictions",
+    "vs": "vs",
+    "penalties": "Penalties {home}–{away}",
+    "noPick": "No prediction",
+    "noPredictions": "No predictions yet",
+    "predictionCount": "{count, plural, one {# prediction} other {# predictions}}",
+    "recap": {
+      "correctWinner": "called the winner",
+      "exactScore": "exact score",
+      "missed": "missed"
+    },
+    "distribution": {
+      "title": "Outcome distribution"
+    },
+    "outcome": {
+      "teamWins": "{team} win",
+      "draw": "Draw",
+      "home": "Home",
+      "away": "Away"
+    },
+    "members": {
+      "title": "Each member's prediction",
+      "filterLabel": "Filter predictions",
+      "filter": {
+        "all": "All",
+        "hits": "Hits",
+        "misses": "Misses",
+        "exact": "Exact"
+      },
+      "scoring": "How picks score — by color",
+      "searchPlaceholder": "Search a member…",
+      "empty": "No members match",
+      "col": {
+        "member": "Member",
+        "prediction": "Prediction",
+        "points": "Points"
+      }
+    },
+    "category": {
+      "exact": "Exact",
+      "winner": "Winner",
+      "miss": "Miss",
+      "none": "No pick"
+    },
+    "boardPredictions": {
+      "title": "How the board predicted",
+      "subtitle": "Tap a match to see every member's prediction.",
+      "searchPlaceholder": "Search a match…",
+      "noResults": "No matches found",
+      "viewFull": "See full breakdown",
+      "previewError": "Couldn't load this preview."
+    },
+    "locked": {
+      "title": "Predictions aren't revealed yet",
+      "description": "They unlock the moment the match kicks off."
+    }
+  },
+  "memberPicks": {
+    "title": "Member predictions",
+    "revealed": "Revealed predictions",
+    "empty": "No revealed predictions yet",
+    "noResults": "No matches found",
+    "searchPlaceholder": "Search a match…",
+    "hint": "Only matches that have started. Tap one to compare it with the whole board.",
+    "stats": {
+      "rank": "position",
+      "points": "points"
     }
   },
   "emptyCompetitions": {

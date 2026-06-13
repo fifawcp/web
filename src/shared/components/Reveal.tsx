@@ -26,12 +26,16 @@ type Props = {
   delay?: number;
   // When set, animate the wrapper's direct children with this stagger (for grids/lists).
   stagger?: number;
+  // "scroll" (default) reveals as the element enters the viewport — best for long pages.
+  // "mount" reveals immediately on mount with the delay, giving a coordinated entrance for
+  // primary above-the-fold content that should reveal regardless of scroll position.
+  trigger?: "scroll" | "mount";
   className?: string;
 };
 
-// Subtle scroll-triggered reveal. Single mode fades/slides the wrapper in; stagger
-// mode cascades its children. Honours prefers-reduced-motion (shows, no motion).
-export function Reveal({ children, from = "up", delay = 0, stagger, className }: Props) {
+// Subtle reveal. Single mode fades/slides the wrapper in; stagger mode cascades its
+// children. Scroll- or mount-triggered. Honours prefers-reduced-motion (shows, no motion).
+export function Reveal({ children, from = "up", delay = 0, stagger, trigger = "scroll", className }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const isStagger = stagger != null;
 
@@ -41,7 +45,7 @@ export function Reveal({ children, from = "up", delay = 0, stagger, className }:
     const mm = gsap.matchMedia();
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const trigger = { trigger: el, start: "top 85%", once: true };
+      const scrollTrigger = trigger === "scroll" ? { trigger: el, start: "top 85%", once: true } : undefined;
 
       if (isStagger) {
         const tween = gsap.from(el.children, {
@@ -50,7 +54,7 @@ export function Reveal({ children, from = "up", delay = 0, stagger, className }:
           ease: DEFAULT_EASE,
           delay,
           stagger,
-          scrollTrigger: trigger,
+          scrollTrigger,
         });
         return () => {
           tween.scrollTrigger?.kill();
@@ -58,7 +62,7 @@ export function Reveal({ children, from = "up", delay = 0, stagger, className }:
         };
       }
 
-      const tween = gsap.fromTo(el, FROM[from], { opacity: 1, x: 0, y: 0, scale: 1, duration: DEFAULT_DURATION, ease: DEFAULT_EASE, delay, scrollTrigger: trigger });
+      const tween = gsap.fromTo(el, FROM[from], { opacity: 1, x: 0, y: 0, scale: 1, duration: DEFAULT_DURATION, ease: DEFAULT_EASE, delay, scrollTrigger });
       return () => {
         tween.scrollTrigger?.kill();
         tween.kill();

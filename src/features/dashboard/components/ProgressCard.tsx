@@ -30,11 +30,11 @@ const STATUS_RING: Record<ProgressCardStatus, string> = {
   locked: "text-lime-600 dark:text-lime-400",
 };
 
-const STATUS_CTA: Record<ProgressCardStatus, "start" | "continue" | "review" | "results"> = {
+const STATUS_CTA: Record<ProgressCardStatus, "start" | "continue" | "review" | "picks"> = {
   todo: "start",
   inProgress: "continue",
   done: "review",
-  locked: "results",
+  locked: "picks",
 };
 
 type Props = {
