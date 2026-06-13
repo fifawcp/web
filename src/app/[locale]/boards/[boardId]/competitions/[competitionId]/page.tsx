@@ -1,21 +1,22 @@
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
-import { AWARDS_CACHE_TAG } from "@/features/awards/api/awards";
-import type { UserAwards } from "@/features/awards/types/awards.types";
 import { BOARDS_LIST_TAG, boardTag } from "@/features/boards/api/boards";
 import type { Board, BoardListItem } from "@/features/boards/types/boards.types";
-import { boardLeaderboardsTag, competitionsTag, LEADERBOARD_PAGE_SIZE, leaderboardTag } from "@/features/competitions/api/competitions";
-import { CompetitionDetailView } from "@/features/competitions/components/CompetitionDetailView";
+import { competitionsTag } from "@/features/competitions/api/competitions";
+import { CompetitionDetailSkeleton } from "@/features/competitions/components/CompetitionDetailSkeleton";
 import { normalizeCompetition } from "@/features/competitions/lib/normalizeCompetition";
-import type { Competition, LeaderboardEntry, LeaderboardPage } from "@/features/competitions/types/competitions.types";
-import { PICKEMS_CACHE_TAG } from "@/features/pickems/api/pickems";
-import type { UserPickem } from "@/features/pickems/types/pickems.types";
+import { resolvePickMatch } from "@/features/competitions/lib/resolvePickMatch";
+import type { Competition } from "@/features/competitions/types/competitions.types";
 import { MATCHES_CACHE_TAG } from "@/features/schedule/api/matches";
+import { computeMatchUiState } from "@/features/schedule/lib/computeMatchUiState";
 import type { Match } from "@/features/schedule/types/schedule.types";
 import { redirect } from "@/i18n/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { serverApi } from "@/shared/lib/api/server";
+
+import { CompetitionDetailContent } from "./CompetitionDetailContent";
 
 type Props = {
   params: Promise<{ boardId: string; competitionId: string }>;
@@ -31,6 +32,8 @@ export default async function CompetitionDetailPage({ params, searchParams }: Pr
   const competitionIdNum = Number(competitionId);
   if (!Number.isFinite(boardIdNum) || !Number.isFinite(competitionIdNum)) notFound();
 
+  // Guard reads (cached, fast): enough to resolve the board + competition type, so the
+  // Suspense fallback below can pick the matching skeleton before the heavy reads run.
   const [boardsRes, boardRes, competitionsRes, matchesRes] = await Promise.all([
     serverApi.get<BoardListItem[]>("/api/boards", {
       authenticated: true,
@@ -65,6 +68,7 @@ export default async function CompetitionDetailPage({ params, searchParams }: Pr
   if (!matchesRes.success) throw new Error(matchesRes.error?.message ?? "Failed to load matches");
 
   const activeBoard = boardRes.data;
+  const matches = matchesRes.data ?? [];
   const competitions = (competitionsRes.data ?? []).map(normalizeCompetition);
   const competition = competitions.find((c) => c.id === competitionIdNum);
   // Unknown/deleted competition — fall back to the board grid with a one-shot notice.
@@ -73,48 +77,32 @@ export default async function CompetitionDetailPage({ params, searchParams }: Pr
     notFound();
   }
 
-  const pageNum = Math.max(1, Number(page ?? "1") || 1);
-  const query = (q ?? "").trim();
-
-  const lbSearch = new URLSearchParams({ page: String(pageNum), limit: String(LEADERBOARD_PAGE_SIZE) });
-  if (query) lbSearch.set("q", query);
-  const lbRes = await serverApi.get<LeaderboardEntry[]>(`/api/boards/${boardIdNum}/competitions/${competitionIdNum}/leaderboard?${lbSearch.toString()}`, {
-    authenticated: true,
-    next: { revalidate: 30, tags: [leaderboardTag(boardIdNum, competitionIdNum), boardLeaderboardsTag(boardIdNum)] },
-  });
-
-  let initialLeaderboard: LeaderboardPage | null = null;
-  if (lbRes.success && lbRes.data) {
-    const items = lbRes.data;
-    const fallback = { page: pageNum, limit: LEADERBOARD_PAGE_SIZE, total: items.length, has_more: false };
-    const pagination = lbRes.pagination ?? fallback;
-    initialLeaderboard = { items, page: pagination.page, limit: pagination.limit, total: pagination.total, has_more: pagination.has_more };
-  }
-
-  // Pick'em / awards lock state seeds the header countdown + CTA, mirroring the board grid.
-  let pickem: { progress: UserPickem["progress"]; isLocked: boolean } | null = null;
-  if (competition.type === "pickem") {
-    const pickemRes = await serverApi.get<UserPickem>("/api/pickems", { authenticated: true, next: { revalidate: 30, tags: [PICKEMS_CACHE_TAG] } });
-    if (pickemRes.success && pickemRes.data) pickem = { progress: pickemRes.data.progress, isLocked: pickemRes.data.is_locked };
-  }
-
-  let awards: { pickedTypes: UserAwards["picks"][number]["award_type"][]; isLocked: boolean } | null = null;
-  if (competition.type === "awards") {
-    const awardsRes = await serverApi.get<UserAwards>("/api/awards", { authenticated: true, next: { revalidate: 30, tags: [AWARDS_CACHE_TAG] } });
-    if (awardsRes.success && awardsRes.data) {
-      awards = { pickedTypes: awardsRes.data.picks.filter((p) => p.player != null).map((p) => p.award_type), isLocked: awardsRes.data.is_locked };
+  // Single-match pick: nothing to show before kickoff (the leaderboard is all zeros and
+  // picks stay hidden), so bounce back to the board. Once locked, seed its match id.
+  let pickMatchId: number | null = null;
+  if (competition.type === "pick") {
+    const pickMatch = resolvePickMatch(competition, matches);
+    if (!pickMatch || !computeMatchUiState(pickMatch).isLocked) {
+      redirect({ href: `/boards/${boardIdNum}?tab=competitions`, locale });
+    } else {
+      pickMatchId = pickMatch.id;
     }
   }
 
+  const pageNum = Math.max(1, Number(page ?? "1") || 1);
+  const query = (q ?? "").trim();
+
   return (
-    <CompetitionDetailView
-      currentUserId={user.id}
-      board={activeBoard}
-      competition={competition}
-      matches={matchesRes.data ?? []}
-      pickem={pickem}
-      awards={awards}
-      initialLeaderboard={initialLeaderboard}
-    />
+    <Suspense fallback={<CompetitionDetailSkeleton type={competition.type} />}>
+      <CompetitionDetailContent
+        currentUserId={user.id}
+        board={activeBoard}
+        competition={competition}
+        matches={matches}
+        pickMatchId={pickMatchId}
+        page={pageNum}
+        query={query}
+      />
+    </Suspense>
   );
 }

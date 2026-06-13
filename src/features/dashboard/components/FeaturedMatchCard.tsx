@@ -104,7 +104,7 @@ export function FeaturedMatchCard({ match, isLoggedIn, delay, className }: Props
 
       <footer className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
         <PickStatus isLoggedIn={isLoggedIn} hasPick={pick != null} t={t} />
-        <FeaturedCta isLoggedIn={isLoggedIn} hasPick={pick != null} isLocked={isLocked} t={t} />
+        <FeaturedCta isLoggedIn={isLoggedIn} hasPick={pick != null} isLocked={isLocked} matchId={match.id} t={t} />
       </footer>
     </CardReveal>
   );
@@ -153,7 +153,7 @@ function PickStatus({ isLoggedIn, hasPick, t }: { isLoggedIn: boolean; hasPick: 
 // `text-white` (not text-background) keeps the label light in dark mode too.
 const CTA_CLASS = "h-12 w-full gap-2 px-6 text-[15px] font-semibold sm:w-auto bg-page-accent text-white hover:bg-page-accent/90";
 
-function FeaturedCta({ isLoggedIn, hasPick, isLocked, t }: { isLoggedIn: boolean; hasPick: boolean; isLocked: boolean; t: SectionT }) {
+function FeaturedCta({ isLoggedIn, hasPick, isLocked, matchId, t }: { isLoggedIn: boolean; hasPick: boolean; isLocked: boolean; matchId: number; t: SectionT }) {
   if (!isLoggedIn) {
     return (
       <Button asChild className={CTA_CLASS}>
@@ -175,7 +175,7 @@ function FeaturedCta({ isLoggedIn, hasPick, isLocked, t }: { isLoggedIn: boolean
 
   return (
     <Button asChild className={CTA_CLASS}>
-      <Link href="/schedule">
+      <Link href={`/schedule?match=${matchId}&edit=1`}>
         {hasPick ? t("cta.edit") : t("cta.make")}
         <ArrowRight className="size-4" aria-hidden />
       </Link>

@@ -1,23 +1,26 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { LEADERBOARD_PAGE_SIZE } from "../api/competitions";
 import { useLeaderboard } from "../hooks/useLeaderboard";
 import { buildColumns, buildMobileCyclableColumns } from "../lib/competitionColumns";
-import type { Competition, LeaderboardPage } from "../types/competitions.types";
+import type { Competition, LeaderboardEntry, LeaderboardPage } from "../types/competitions.types";
 
 import { LeaderboardMobileTable } from "./LeaderboardMobileTable";
 import { LeaderboardPagination } from "./LeaderboardPagination";
 import { LeaderboardTable } from "./LeaderboardTable";
+import { MemberPicksDialog } from "./MemberPicksDialog";
 
 type Props = {
   boardId: number;
   competition: Competition;
   currentUserId: string;
   initialData: LeaderboardPage | null;
+  // Enables the per-row eye action that reveals a member's predictions.
+  revealAvailable?: boolean;
 };
 
 const PAGE_PARAM = "page";
@@ -25,11 +28,20 @@ const Q_PARAM = "q";
 const SORT_PARAM = "sort";
 const DIR_PARAM = "dir";
 
-export function LeaderboardSection({ boardId, competition, currentUserId, initialData }: Props) {
+export function LeaderboardSection({ boardId, competition, currentUserId, initialData, revealAvailable = false }: Props) {
   const t = useTranslations("competitions.leaderboard");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<LeaderboardEntry | null>(null);
+  const onViewMember = revealAvailable
+    ? (entry: LeaderboardEntry) => {
+        setSelected(entry);
+        setOpen(true);
+      }
+    : undefined;
 
   const page = Math.max(1, Number(searchParams.get(PAGE_PARAM) ?? "1") || 1);
   const query_ = searchParams.get(Q_PARAM)?.trim() ?? "";
@@ -96,6 +108,7 @@ export function LeaderboardSection({ boardId, competition, currentUserId, initia
           sort={sort}
           dir={dir}
           onSort={onSort}
+          onViewMember={onViewMember}
         />
       </div>
       <div className="p-4 md:hidden">
@@ -110,6 +123,7 @@ export function LeaderboardSection({ boardId, competition, currentUserId, initia
           sort={sort}
           dir={dir}
           onSort={onSort}
+          onViewMember={onViewMember}
         />
       </div>
 
@@ -125,6 +139,18 @@ export function LeaderboardSection({ boardId, competition, currentUserId, initia
             isFetching={query.isFetching}
           />
         </div>
+      ) : null}
+
+      {revealAvailable ? (
+        <MemberPicksDialog
+          open={open}
+          onOpenChange={setOpen}
+          boardId={boardId}
+          competitionId={competition.id}
+          member={selected?.member ?? null}
+          rank={selected?.rank ?? 0}
+          points={selected?.score.total ?? 0}
+        />
       ) : null}
     </div>
   );

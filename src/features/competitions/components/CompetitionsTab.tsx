@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
+import { useGSAP } from "@gsap/react";
 import { Flame, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -11,6 +12,7 @@ import type { Match } from "@/features/schedule/types/schedule.types";
 import { DismissibleNotice } from "@/shared/components/DismissibleNotice";
 import type { Team } from "@/shared/types/wcp.types";
 
+import { staggerReveal } from "../animations/reveal.animations";
 import { useCompetitionName } from "../hooks/useCompetitionName";
 import { competitionNeedsPick, getCompetitionPickState } from "../lib/competitionPickStatus";
 import type { Competition, LeaderboardEntry } from "../types/competitions.types";
@@ -53,6 +55,16 @@ export function CompetitionsTab({
   const competitionName = useCompetitionName();
   const now = useNow();
 
+  const gridRef = useRef<HTMLDivElement>(null);
+  // Quick cascade of the cards on first mount, mirroring the dashboard reveal.
+  useGSAP(
+    () => {
+      if (!gridRef.current) return;
+      return staggerReveal({ items: Array.from(gridRef.current.children) as HTMLElement[], step: 0.05 });
+    },
+    { scope: gridRef }
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return competitions;
@@ -78,7 +90,7 @@ export function CompetitionsTab({
   return (
     <div className="flex flex-col gap-3.5">
       {pendingCount > 0 ? <PendingHint count={pendingCount} /> : null}
-      <div className="grid auto-rows-fr grid-cols-1 gap-3.5 md:grid-cols-2 xl:grid-cols-3">
+      <div ref={gridRef} className="grid auto-rows-fr grid-cols-1 gap-3.5 md:grid-cols-2 xl:grid-cols-3">
         {filtered.map((competition) => (
           <CompetitionCard
             key={competition.id}
