@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { MapPin, MoveRight } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
+import { translateApiError } from "@/shared/lib/api/errors";
 import { formatKickoffTime } from "@/shared/lib/dates";
 import { getTeamName } from "@/shared/lib/getTeamName";
 import { cn } from "@/shared/lib/utils";
@@ -33,6 +35,7 @@ const SCORE_AREA_MIN_H = "min-h-[5rem]";
 export function MatchCard({ match, isAuthed, autoEdit = false }: Props) {
   const t = useTranslations("schedule.card");
   const stageT = useTranslations("schedule.filters.stage");
+  const tApiErrors = useTranslations("apiErrors");
   const locale = useLocale();
   const uiState = computeMatchUiState(match);
 
@@ -58,7 +61,14 @@ export function MatchCard({ match, isAuthed, autoEdit = false }: Props) {
   };
 
   const cancelEdit = () => setEditing(false);
-  const save = () => updatePick.mutate({ matchId: match.id, pick: draft }, { onSuccess: () => setEditing(false) });
+  const save = () =>
+    updatePick.mutate(
+      { matchId: match.id, pick: draft },
+      {
+        onSuccess: () => setEditing(false),
+        onError: (error) => toast.error(translateApiError(error, tApiErrors)),
+      }
+    );
 
   return (
     <Card data-match-id={match.id} className={cn("relative scroll-mt-(--schedule-scroll-offset) gap-3 px-4 py-4", editing && "ring-2 ring-page-accent")} size="sm">

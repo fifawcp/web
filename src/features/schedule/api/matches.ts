@@ -1,4 +1,5 @@
 import { api } from "@/shared/lib/api/client";
+import { ApiClientError } from "@/shared/lib/api/errors";
 import { ApiResponse } from "@/shared/lib/api/types";
 
 import type { Match, UserScorePick } from "../types/schedule.types";
@@ -23,6 +24,6 @@ export type SavePickInput = {
 export async function savePick({ matchId, pick }: SavePickInput): Promise<void> {
   const res: ApiResponse<void> = await api.put(`/api/matches/${matchId}/pick`, pick, { authenticated: true });
   if (!res.success) {
-    throw new Error(res.error?.message ?? "Failed to save pick");
+    throw new ApiClientError(res.error?.code ?? "UNKNOWN_ERROR", res.error?.message ?? "Failed to save pick");
   }
 }

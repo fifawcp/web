@@ -27,5 +27,12 @@
   "COMPETITION_AWARDS_ALREADY_EXISTS": "An Awards competition already exists in this board.",
   "COMPETITION_NAME_ALREADY_EXISTS": "A competition with that name already exists in this board.",
   "COMPETITION_FORBIDDEN": "You no longer have permission to manage competitions in this board.",
+  "MATCH_NOT_FOUND": "We couldn't find that match.",
+  "MATCH_PICK_LOCKED": "This match has already started, so picks are locked.",
+  "MATCH_TEAMS_NOT_ASSIGNED": "Both teams need to be confirmed before you can pick this match.",
+  "AWARDS_LOCKED": "Awards are locked — the tournament has already started.",
+  "INVALID_AWARD_TYPE": "That award type isn't valid.",
+  "AWARD_PLAYER_INELIGIBLE": "That player isn't eligible for this award.",
+  "PLAYER_NOT_FOUND": "We couldn't find that player.",
   "UNKNOWN_ERROR": "An error occurred. Please try again."
 }
