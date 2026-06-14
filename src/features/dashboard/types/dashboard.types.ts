@@ -84,7 +84,7 @@ export type DashboardRecap = {
 };
 
 // Full consolidated response
-// `title_favorites` and `recap` are optional until the API ships them (see docs/api-requirements-dashboard.md).
+// `title_favorites` and `recap` are optional until the API ships them.
 export type DashboardData = {
   picked_champion: Team | null;
   stats: DashboardStats;
