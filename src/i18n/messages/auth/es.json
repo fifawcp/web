@@ -54,20 +54,20 @@
   "panel": {
     "brand": "FIFA World Cup Pick'ems",
     "headlineLine1": "Haz tus picks.",
-    "headlineLine2": "Escala en tu board.",
-    "subtitle": "Predice cada partido, sigue el bracket y compite con tus amigos durante el Mundial de la FIFA 2026.",
+    "headlineLine2": "Escala en tu tablero.",
+    "subtitle": "Predice cada partido, sigue la llave y compite con tus amigos durante el Mundial de la FIFA 2026.",
     "explore": "Explora cómo funciona",
     "features": {
       "knockout": {
         "title": "Predice las eliminatorias",
-        "description": "Arma tu bracket del campeonato antes de que arranque el torneo."
+        "description": "Arma tu llave del campeonato antes de que arranque el torneo."
       },
       "scores": {
         "title": "Predice cada marcador",
         "description": "Apuesta marcadores exactos en fase de grupos y eliminatorias."
       },
       "compete": {
-        "title": "Compite en tu board",
+        "title": "Compite en tu tablero",
         "description": "Suma puntos y escala en cada tabla a la que te unas."
       }
     }

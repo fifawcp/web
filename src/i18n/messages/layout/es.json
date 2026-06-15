@@ -19,7 +19,7 @@
     "signOut": "Cerrar sesión",
     "signingOut": "Cerrando sesión…",
     "guestCard": {
-      "subtitle": "Únete para guardar tus predicciones, competir y subir en los tableros.",
+      "subtitle": "Únete para guardar tus pronósticos, competir y subir en los tableros.",
       "cta": "Iniciar sesión",
       "noAccount": "¿No tienes cuenta?",
       "signupCta": "Crear cuenta"
@@ -43,9 +43,9 @@
     "legal": "Legal",
     "developedBy": "Diseñado y desarrollado por",
     "communityLinks": {
-      "globalBoard": "Board global",
-      "createBoard": "Crear un board",
-      "joinBoard": "Unirse a un board"
+      "globalBoard": "Tablero global",
+      "createBoard": "Crear un tablero",
+      "joinBoard": "Unirse a un tablero"
     },
     "aboutShort": {
       "howItWorks": "Cómo funciona",
@@ -210,11 +210,11 @@
       "items": {
         "whatIs": {
           "question": "¿Qué es Pick'ems?",
-          "answer": "Pick'ems es un juego gratuito de pronósticos del Mundial FIFA 2026 (en México quiniela, en Argentina prode, en Colombia, Chile, Perú y Venezuela polla, en España porra). Predices marcadores, posiciones de grupos y el cuadro de eliminatorias, y compites con amigos en clasificaciones. Más información en <howItWorksLink>Cómo funciona</howItWorksLink>."
+          "answer": "Pick'ems es un juego gratuito de pronósticos del Mundial FIFA 2026 (en México quiniela, en Argentina prode, en Colombia, Chile, Perú y Venezuela polla, en España porra). Pronosticas marcadores, posiciones de grupos y el cuadro de eliminatorias, y compites con amigos en clasificaciones. Más información en <howItWorksLink>Cómo funciona</howItWorksLink>."
         },
         "howToPlay": {
           "question": "¿Cómo juego?",
-          "answer": "Crea una cuenta, haz tus pronósticos de grupos y eliminatorias antes de que empiece el torneo, y predice cada marcador antes del pitido inicial. Los puntos se otorgan según tu precisión. Consulta la guía completa en <howItWorksLink>Cómo funciona</howItWorksLink>."
+          "answer": "Crea una cuenta, haz tus pronósticos de grupos y eliminatorias antes de que empiece el torneo, y pronostica cada marcador antes del pitido inicial. Los puntos se otorgan según tu precisión. Consulta la guía completa en <howItWorksLink>Cómo funciona</howItWorksLink>."
         },
         "whenLock": {
           "question": "¿Cuándo se cierran los pronósticos?",
@@ -222,7 +222,7 @@
         },
         "editPicks": {
           "question": "¿Puedo editar mis pronósticos?",
-          "answer": "¡Sí! Puedes editar cualquier pronóstico tantas veces como quieras hasta que se cierre. Solo cuenta tu última predicción antes del cierre."
+          "answer": "¡Sí! Puedes editar cualquier pronóstico tantas veces como quieras hasta que se cierre. Solo cuenta tu último pronóstico antes del cierre."
         },
         "scoring": {
           "question": "¿Cómo funciona la puntuación?",
