@@ -25,7 +25,7 @@
     },
     "waysToPlay": {
       "title": "Tres formas de jugar",
-      "subtitle": "Suma puntos en todo el torneo — pronostica partidos ahora; tu bracket y premios se definían antes del inicio.",
+      "subtitle": "Suma puntos en todo el torneo — pronostica partidos ahora; tu llave y premios se definían antes del inicio.",
       "match": {
         "title": "Picks de Partidos",
         "desc": "Pronostica el marcador exacto de cada partido.",
@@ -35,7 +35,7 @@
       },
       "bracket": {
         "title": "Bracket Pick'em",
-        "desc": "Predice quién lidera cada grupo y avanza hasta la final.",
+        "desc": "Pronostica quién lidera cada grupo y avanza hasta la final.",
         "scoring": "Hasta 320 pts",
         "note": "Antes del inicio"
       },
@@ -65,7 +65,7 @@
     }
   },
   "stats": {
-    "predictedChampion": "Campeón predicho",
+    "predictedChampion": "Campeón pronosticado",
     "noChampion": "Sin elegir",
     "pickemRank": "Ranking pick'em",
     "matchRank": "Ranking picks de partidos"
@@ -94,7 +94,7 @@
     "group": "La fase de grupos está en marcha — se abren nuevos partidos para pronosticar antes de cada inicio.",
     "groupCta": "Ver calendario",
     "knockout": "Llegaron las eliminatorias — cada partido es a todo o nada.",
-    "knockoutCta": "Ver bracket",
+    "knockoutCta": "Ver llave",
     "guest": "El Mundial está en vivo — crea tu cuenta y empieza a pronosticar.",
     "guestCta": "Regístrate"
   },
@@ -105,7 +105,7 @@
     "guestSubtitle": "Predice partidos y suma puntos en tres categorías.",
     "bracket": {
       "title": "Bracket Pick'em",
-      "blurb": "Grupos, mejores terceros y el bracket completo.",
+      "blurb": "Grupos, mejores terceros y la llave completa.",
       "count": "{completed} de {total} pasos"
     },
     "matchPicks": {
@@ -162,7 +162,7 @@
     "subtitle": "Entre todos los jugadores"
   },
   "leaderboard": {
-    "title": "Ranking del board",
+    "title": "Ranking del tablero",
     "subtitle": "Así van los mejores participantes.",
     "tabs": {
       "pickem": "Pick'em",

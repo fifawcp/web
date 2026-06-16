@@ -1,6 +1,6 @@
 {
   "title": "Pick'em",
-  "locked": "Las predicciones están bloqueadas. El torneo ya comenzó",
+  "locked": "Tus picks están bloqueados. El torneo ya comenzó",
   "lockedDescription": "Puedes ver tus picks, pero no podrás hacer más cambios.",
   "stepper": {
     "1": "Fase de grupos",

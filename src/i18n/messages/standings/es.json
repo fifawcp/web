@@ -15,7 +15,7 @@
   "comparisonLegend": {
     "title": "Cómo leerlo · Grupos",
     "youColumn": "Columna TÚ",
-    "youColumnHelp": "Tu posición predicha",
+    "youColumnHelp": "Tu posición pronosticada",
     "exact3pts": "Posición exacta (+3 pts)",
     "top21pt": "Top 2, orden incorrecto (+1 pt)",
     "wrong0pts": "Incorrecto (0 pts)",
@@ -51,7 +51,7 @@
     "goalsForAgainst": "Goles a favor / en contra",
     "goalDifference": "Diferencia de goles",
     "points": "Puntos",
-    "you": "Tu posición predicha"
+    "you": "Tu posición pronosticada"
   },
   "legend": {
     "advancesToR32": "Avanza a Dieciseisavos",
