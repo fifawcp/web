@@ -77,7 +77,7 @@
       "groupExact": "G.Exact",
       "groupQualifiers": "Class.",
       "bestThirds": "3eros",
-      "bracket": "Bracket",
+      "bracket": "Llaves",
       "exactHits": "Exactos",
       "outcomes": "Ganador",
       "golden_boot": "Bota",
@@ -90,7 +90,7 @@
       "groupExact": "Grupos exactos",
       "groupQualifiers": "Clasificados",
       "bestThirds": "Mejores terceros",
-      "bracket": "Bracket",
+      "bracket": "Llaves",
       "exactHits": "Marcadores exactos",
       "outcomes": "Ganador",
       "golden_boot": "Bota de Oro",
@@ -196,7 +196,7 @@
   },
   "emptyCompetitions": {
     "title": "Aún no hay competencias",
-    "descriptionAdmin": "Crea la primera competencia personalizada o polla de este board.",
+    "descriptionAdmin": "Crea la primera competencia personalizada o polla de este tablero.",
     "descriptionMember": "Espera a que un admin cree una competencia.",
     "cta": "Nueva competencia"
   },
@@ -213,7 +213,7 @@
       "label": "Tipo",
       "customDescription": "Puntúa una parte del torneo con fases y equipos a tu medida.",
       "pickDescription": "Un solo partido: todos pronostican el marcador exacto.",
-      "pickemDescription": "El bracket completo del torneo: grupos, terceros y eliminatorias.",
+      "pickemDescription": "La llave completa del torneo: grupos, terceros y eliminatorias.",
       "awardsDescription": "Los premios individuales: bota, balón, guante de oro y joven."
     },
     "match": {
@@ -227,7 +227,7 @@
       "helper": "Hasta 20 caracteres",
       "pickPlaceholder": "Se define con el partido",
       "pickHelper": "Se nombra automáticamente según el partido que elijas.",
-      "fixedHelper": "Se nombra automáticamente: una por board."
+      "fixedHelper": "Se nombra automáticamente: una por tablero."
     },
     "scope": {
       "stages": "Fases",

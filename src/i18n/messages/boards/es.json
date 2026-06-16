@@ -1,7 +1,7 @@
 {
-  "title": "Boards",
-  "label": "Board",
-  "notFound": "No encontramos ese board",
+  "title": "Tableros",
+  "label": "Tablero",
+  "notFound": "No encontramos ese tablero",
   "members": "{count, plural, one {# miembro} other {# miembros}}",
   "tabs": {
     "competitions": "Competencias",
@@ -10,10 +10,10 @@
   },
   "header": {
     "menu": {
-      "label": "Acciones del board",
-      "settings": "Configuración del board",
-      "leave": "Salir del board",
-      "delete": "Eliminar board"
+      "label": "Acciones del tablero",
+      "settings": "Configuración del tablero",
+      "leave": "Salir del tablero",
+      "delete": "Eliminar tablero"
     }
   },
   "privacy": {
@@ -27,15 +27,15 @@
     "member": "Miembro"
   },
   "switcher": {
-    "trigger": "Cambiar de board",
-    "search": "Busca un board…",
+    "trigger": "Cambiar de tablero",
+    "search": "Busca un tablero…",
     "noResults": "Sin coincidencias",
     "sections": {
-      "yourBoards": "Tus boards",
-      "global": "Board global",
-      "more": "Agregar un board"
+      "yourBoards": "Tus tableros",
+      "global": "Tablero global",
+      "more": "Agregar un tablero"
     },
-    "create": "Crear board",
+    "create": "Crear tablero",
     "join": "Unirme con código",
     "createSubtitle": "Arma uno nuevo",
     "joinSubtitle": "Introduce un código",
@@ -47,41 +47,41 @@
     "copiedToast": "Código copiado",
     "title": "Invitar a {name}",
     "link": "Enlace de invitación",
-    "linkSubtitle": "Cualquiera con este enlace puede unirse al board.",
+    "linkSubtitle": "Cualquiera con este enlace puede unirse al tablero.",
     "copyLink": "Copiar enlace",
     "copiedLinkToast": "Enlace copiado",
     "shareInvite": "Compartir invitación",
-    "shareText": "Únete a mi board en World Cup Pick'em: {name}",
+    "shareText": "Únete a mi tablero en World Cup Pick'em: {name}",
     "you": "Tú",
     "alreadyPlaying": "{name} y {count, plural, one {# persona más} other {# personas más}} ya están jugando",
     "beFirst": "Sé el primero en invitar a tus amigos"
   },
   "inviteLanding": {
     "invitedYou": "Te invitaron a unirte",
-    "players": "{count, plural, one {# jugador ya está compitiendo en este board} other {# jugadores ya están compitiendo en este board}}",
-    "join": "Unirme al board",
+    "players": "{count, plural, one {# jugador ya está compitiendo en este tablero} other {# jugadores ya están compitiendo en este tablero}}",
+    "join": "Unirme al tablero",
     "cancel": "Ahora no",
-    "success": "Te uniste al board",
-    "alreadyMember": "Ya eres miembro de este board",
+    "success": "Te uniste al tablero",
+    "alreadyMember": "Ya eres miembro de este tablero",
     "codeFooter": "Te unes con el código",
     "invalidTitle": "Invitación no encontrada",
     "invalidDescription": "Este enlace de invitación no es válido o expiró. Pide uno nuevo.",
-    "invalidCta": "Ir a boards"
+    "invalidCta": "Ir a tableros"
   },
   "empty": {
-    "title": "Aún no estás en ningún board",
+    "title": "Aún no estás en ningún tablero",
     "description": "Arma uno con tus amigos o únete con un código.",
-    "create": "Crear board",
+    "create": "Crear tablero",
     "join": "Unirme con código"
   },
   "create": {
-    "title": "Crear board",
-    "description": "Los boards son privados. Comparte el código para invitar amigos.",
+    "title": "Crear tablero",
+    "description": "Los tableros son privados. Comparte el código para invitar amigos.",
     "name": "Nombre",
     "namePlaceholder": "p. ej. Mongs FC",
     "cancel": "Cancelar",
     "submit": "Crear",
-    "success": "Board creado"
+    "success": "Tablero creado"
   },
   "join": {
     "title": "Unirme con código",
@@ -89,8 +89,8 @@
     "code": "Código",
     "cancel": "Cancelar",
     "submit": "Unirme",
-    "success": "Te uniste al board",
-    "alreadyMember": "Ya eres miembro de este board",
+    "success": "Te uniste al tablero",
+    "alreadyMember": "Ya eres miembro de este tablero",
     "invalid": "Ese código no funcionó"
   },
   "manage": {
@@ -99,14 +99,14 @@
       "general": "General",
       "members": "Miembros"
     },
-    "forbidden": "Ya no tienes permisos para gestionar este board",
+    "forbidden": "Ya no tienes permisos para gestionar este tablero",
     "general": {
-      "name": "Nombre del board",
-      "nameSubtitle": "Cambia el nombre de tu board.",
+      "name": "Nombre del tablero",
+      "nameSubtitle": "Cambia el nombre de tu tablero.",
       "characters": "caracteres",
       "save": "Guardar cambios",
       "cancel": "Cancelar",
-      "renameSuccess": "Board renombrado",
+      "renameSuccess": "Tablero renombrado",
       "joinCode": "Código de invitación",
       "joinCodeSubtitle": "Comparte este código para que otros se unan.",
       "regenerate": "Regenerar código",
@@ -115,12 +115,12 @@
       "regenerateSuccess": "Nuevo código generado",
       "dangerZone": "Zona peligrosa",
       "delete": {
-        "description": "Al eliminar el board se borrarán sus miembros, competencias y resultados. Esta acción no se puede deshacer.",
-        "cta": "Eliminar board",
+        "description": "Al eliminar el tablero se borrarán sus miembros, competencias y resultados. Esta acción no se puede deshacer.",
+        "cta": "Eliminar tablero",
         "confirm": "¿Eliminar {name}?",
         "typeToConfirm": "Escribe <b>{name}</b> para confirmar",
         "cancel": "Cancelar",
-        "success": "Board eliminado"
+        "success": "Tablero eliminado"
       }
     },
     "members": {
@@ -132,20 +132,20 @@
       "demote": "Hacer miembro",
       "demoteSubtitle": "Le quita el acceso de admin",
       "remove": "Expulsar",
-      "removeSubtitle": "Le quita el acceso a este board",
+      "removeSubtitle": "Le quita el acceso a este tablero",
       "removed": "Miembro expulsado",
       "promoted": "Ahora es admin",
       "demoted": "Ahora es miembro",
       "removeConfirm": {
         "title": "¿Expulsar a {name}?",
-        "description": "Perderá el acceso a las competencias de este board. Podrá volver con el código.",
+        "description": "Perderá el acceso a las competencias de este tablero. Podrá volver con el código.",
         "cancel": "Cancelar",
         "submit": "Expulsar"
       },
       "transfer": "Transferir propiedad",
-      "transferSubtitle": "Cede el board; quedarás como admin",
+      "transferSubtitle": "Cede el tablero; quedarás como admin",
       "transferConfirm": {
-        "title": "¿Transferir el board a {name}?",
+        "title": "¿Transferir el tablero a {name}?",
         "description": "Escribe {username} para confirmar. Pasarás a ser admin.",
         "placeholder": "Escribe el usuario",
         "cancel": "Cancelar",
@@ -162,11 +162,11 @@
     "danger": {
       "cancel": "Cancelar",
       "leave": {
-        "title": "Salir del board",
+        "title": "Salir del tablero",
         "description": "Dejarás de ver sus competencias. Podrás volver con el código.",
         "cta": "Salir",
-        "confirm": "¿Salir del board?",
-        "success": "Saliste del board"
+        "confirm": "¿Salir del tablero?",
+        "success": "Saliste del tablero"
       }
     }
   },
