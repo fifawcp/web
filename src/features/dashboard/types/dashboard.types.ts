@@ -83,12 +83,19 @@ export type DashboardRecap = {
   awards: CategoryRecap;
 };
 
+// The raw `next_match` the API may send: a single match (original shape), an array
+// of simultaneous matches (post-change shape), or null. Normalized to Match[] at the
+// fetch boundary via `normalizeNextMatches`, so consumers only ever see the array.
+export type NextMatchPayload = Match | Match[] | null;
+
 // Full consolidated response
 // `title_favorites` and `recap` are optional until the API ships them.
 export type DashboardData = {
   picked_champion: Team | null;
   stats: DashboardStats;
-  next_match: Match | null;
+  // The upcoming match(es) sharing the earliest kickoff — usually one, but two (or
+  // rarely more) matches can kick off simultaneously. Empty when nothing is upcoming.
+  next_match: Match[];
   progress: DashboardProgress;
   leaderboard: DashboardLeaderboard;
   title_favorites?: TitleFavorite[];

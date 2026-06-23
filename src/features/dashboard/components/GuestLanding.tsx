@@ -22,7 +22,8 @@ type Props = {
 export async function GuestLanding({ data }: Props) {
   const [t, tDemo] = await Promise.all([getTranslations("dashboard.landing"), getTranslations("dashboard.landing.demo")]);
   const favorites = data?.title_favorites ?? [];
-  const nextMatch = data?.next_match ?? null;
+  // The marketing hero showcases a single match even when two kick off together.
+  const nextMatch = data?.next_match?.[0] ?? null;
 
   return (
     <div className="container flex flex-col gap-10 py-6 lg:gap-12 lg:py-8">
