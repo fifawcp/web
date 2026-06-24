@@ -27,7 +27,9 @@ export function groupMatchesByLocalDate(matches: Match[]): MatchDateGroup[] {
   return Array.from(groups.values());
 }
 
-function localDateKey(d: Date): string {
+// YYYY-MM-DD in the user's local timezone — the bucket key used for grouping and for
+// matching "today".
+export function localDateKey(d: Date): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");

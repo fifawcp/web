@@ -1,5 +1,6 @@
 {
   "title": "Calendario",
+  "goToToday": "Ir a hoy",
   "filters": {
     "openButton": "Filtros",
     "title": "Filtros",
@@ -41,7 +42,13 @@
     "tapToPick": "Haz tu pick",
     "closesIn": "Cierra en {time}",
     "save": "Guardar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "extraTimeNote": "Cuenta tras la prórroga ({full} min)"
+  },
+  "scoringInfo": {
+    "title": "En eliminatorias cuenta la prórroga",
+    "body": "Si un partido de eliminatorias va a prórroga, tu pick se evalúa con el resultado a los {full} minutos, no a los {regular} como en la mayoría de casas de apuestas. Las tandas de penales no afectan tu pick; solo definen quién avanza.",
+    "cta": "Entendido"
   },
   "matchCount": "{count, plural, one {# partido} other {# partidos}}",
   "badge": {

@@ -47,14 +47,16 @@ export function GroupStandingsCard({ rows, preferredGroup, delay }: Props) {
   const safeIndex = ((index % groups.length) + groups.length) % groups.length;
   const group = groups[safeIndex];
   const cycle = (step: number) => setIndex((i) => i + step);
+  // Header leads the card into view by one stagger step.
+  const baseDelay = delay ?? 0;
 
   return (
     <section className="flex flex-1 flex-col gap-3">
-      <div className="flex flex-col gap-0.5">
+      <CardReveal bare delay={baseDelay} className="opacity-0 flex flex-col gap-0.5">
         <h2 className="text-base font-semibold">{tDash("heading")}</h2>
         <p className="text-xs text-muted-foreground">{tDash("subtitle")}</p>
-      </div>
-      <CardReveal bare delay={delay} className="opacity-0 flex flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-xs">
+      </CardReveal>
+      <CardReveal bare delay={baseDelay + 0.06} className="opacity-0 flex flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-xs">
         <div style={GREEN_ACCENT} className="flex flex-1 flex-col">
           <header className="flex items-center justify-between gap-3 px-4 pt-3 pb-2">
             <div className="flex items-center gap-2">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { MapPin, MoveRight } from "lucide-react";
+import { MapPin, MoveRight, Timer } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -15,6 +15,7 @@ import { cn } from "@/shared/lib/utils";
 
 import { useUpdatePick } from "../hooks/useUpdatePick";
 import { computeMatchUiState, type MatchUiState } from "../lib/computeMatchUiState";
+import { useScoringInfoStore } from "../store/scoringInfo.store";
 import type { Match, Team, UserScorePick } from "../types/schedule.types";
 
 import { KickoffCountdown } from "./KickoffCountdown";
@@ -41,24 +42,32 @@ export function MatchCard({ match, isAuthed, autoEdit = false }: Props) {
 
   const hasTeams = match.teams.home != null && match.teams.away != null;
   const canEdit = isAuthed && !uiState.isLocked && hasTeams;
+  // Only knockout matches (R32 onward) can go to extra time, so the 120' scoring
+  // disclaimer + first-pick modal apply there — group-stage matches always end at 90'.
+  const usesExtraTime = match.stage_code !== "group_stage";
 
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<UserScorePick>(() => match.user_score_pick ?? { home_score: 0, away_score: 0 });
   const updatePick = useUpdatePick();
+  const requestPick = useScoringInfoStore((s) => s.requestPick);
+
+  // Open the picker (first time, gated behind the one-time scoring disclaimer).
+  const openPicker = () => {
+    setDraft(match.user_score_pick ?? { home_score: 0, away_score: 0 });
+    setEditing(true);
+  };
+  // Knockout matches show the one-time scoring modal first; group-stage picks open straight away.
+  const startEdit = () => (usesExtraTime ? requestPick(openPicker) : openPicker());
 
   // Open the picker once when deep-linked to this match and it's still pickable.
   const autoOpened = useRef(false);
   useEffect(() => {
     if (autoEdit && canEdit && !autoOpened.current) {
       autoOpened.current = true;
-      setEditing(true);
+      startEdit();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoEdit, canEdit]);
-
-  const startEdit = () => {
-    setDraft(match.user_score_pick ?? { home_score: 0, away_score: 0 });
-    setEditing(true);
-  };
 
   const cancelEdit = () => setEditing(false);
   const save = () =>
@@ -91,6 +100,15 @@ export function MatchCard({ match, isAuthed, autoEdit = false }: Props) {
         />
         <TeamColumn team={match.teams.away} side="away" locale={locale} dim={editing} />
       </div>
+
+      {/* Knockout only (extra time can't happen in the group stage). Rendered in both
+          view and edit modes so the card height stays identical when the picker opens. */}
+      {usesExtraTime && (
+        <p className="-mt-1 flex items-center justify-center gap-1.5 text-2xs text-muted-foreground">
+          <Timer className="size-3 shrink-0" aria-hidden />
+          {t("extraTimeNote", { full: 120 })}
+        </p>
+      )}
 
       <footer className="relative -mx-4 pt-4 flex min-h-9 items-center justify-between gap-3 border-t border-border px-4 text-xs text-muted-foreground">
         <span className="inline-flex min-w-0 max-w-[55%] items-center gap-1.5 sm:max-w-none">

@@ -21,10 +21,13 @@ type Props = {
   isLoggedIn: boolean;
   delay?: number;
   className?: string;
+  // Set when two cards sit side by side (simultaneous matches): the card is ~half
+  // width, so the team names stay capped instead of scaling up to the full-width size.
+  compact?: boolean;
 };
 
 // Primary "what to do next" card: the next upcoming match with the user's pick state.
-export function FeaturedMatchCard({ match, isLoggedIn, delay, className }: Props) {
+export function FeaturedMatchCard({ match, isLoggedIn, delay, className, compact = false }: Props) {
   const t = useTranslations("dashboard.featured");
   const stageT = useTranslations("schedule.filters.stage");
   const locale = useLocale();
@@ -57,7 +60,7 @@ export function FeaturedMatchCard({ match, isLoggedIn, delay, className }: Props
 
       {/* Teams row — center holds only the score/VS so names get the full column width */}
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
-        <TeamColumn team={match.teams.home} locale={locale} align="start" />
+        <TeamColumn team={match.teams.home} locale={locale} align="start" compact={compact} />
 
         <div data-depth="12" className="flex shrink-0 flex-col items-center justify-center gap-1 px-1">
           {pick ? (
@@ -74,7 +77,7 @@ export function FeaturedMatchCard({ match, isLoggedIn, delay, className }: Props
           )}
         </div>
 
-        <TeamColumn team={match.teams.away} locale={locale} align="end" />
+        <TeamColumn team={match.teams.away} locale={locale} align="end" compact={compact} />
       </div>
 
       {/* Meta row — countdown + venue, full width below the teams */}
@@ -110,8 +113,11 @@ export function FeaturedMatchCard({ match, isLoggedIn, delay, className }: Props
   );
 }
 
-function TeamColumn({ team, locale, align }: { team: Team | null; locale: string; align: "start" | "end" }) {
+function TeamColumn({ team, locale, align, compact }: { team: Team | null; locale: string; align: "start" | "end"; compact: boolean }) {
   const alignClass = align === "start" ? "items-start text-left" : "items-end text-right";
+  // Full-width cards let names grow to text-2xl; a side-by-side (compact) card is too
+  // narrow for that, so cap names at text-lg to keep them clear of the centered score.
+  const nameClass = compact ? "text-base sm:text-lg" : "text-base sm:text-lg lg:text-xl xl:text-2xl";
   return (
     <div className={cn("flex min-w-0 flex-col gap-2.5", alignClass)}>
       {team ? (
@@ -119,7 +125,7 @@ function TeamColumn({ team, locale, align }: { team: Team | null; locale: string
       ) : (
         <div className="h-9 w-13 rounded-xs bg-muted sm:h-10 sm:w-14" />
       )}
-      <span className="max-w-full truncate text-base font-bold tracking-tight sm:text-lg lg:text-xl xl:text-2xl">{team ? getTeamName(team, locale) : "TBD"}</span>
+      <span className={cn("max-w-full truncate font-bold tracking-tight", nameClass)}>{team ? getTeamName(team, locale) : "TBD"}</span>
     </div>
   );
 }

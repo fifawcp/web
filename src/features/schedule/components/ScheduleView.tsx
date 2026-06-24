@@ -8,6 +8,7 @@ import { useScheduleFilters } from "../hooks/useScheduleFilters";
 import { collectTeams } from "../lib/collectTeams";
 import { computePickStats } from "../lib/computePickStats";
 import { filterMatches } from "../lib/filterMatches";
+import { findTodayMatchId } from "../lib/findTodayMatchId";
 import { groupMatchesByLocalDate } from "../lib/groupByDate";
 import { scrollMatchIntoView } from "../lib/scrollMatchIntoView";
 import { DEFAULT_FILTERS, type Match, type PickFilter } from "../types/schedule.types";
@@ -17,6 +18,7 @@ import { PendingPicksCta } from "./PendingPicksCta";
 import { PickProgressPanel } from "./PickProgressPanel";
 import { PickStatusTabs } from "./PickStatusTabs";
 import { ScheduleFilters } from "./ScheduleFilters";
+import { ScoringInfoDialog } from "./ScoringInfoDialog";
 import { SignedOutCta } from "./SignedOutCta";
 import { UpToDateCta } from "./UpToDateCta";
 
@@ -71,6 +73,9 @@ export function ScheduleView({ initialMatches, anchorMatchId, isAuthed, deepLink
   const tabStats = useMemo(() => computePickStats(filteredByChips), [filteredByChips]);
   const counts = { all: filteredByChips.length, pending: tabStats.pendingAll, picked: tabStats.picked };
 
+  // First match of the user's local "today" — null on rest days, which hides the button.
+  const todayMatchId = useMemo(() => findTodayMatchId(matches), [matches]);
+
   const onPickChange = (next: PickFilter) => setFilters({ ...filters, pick: next });
 
   const showPendingCta = isAuthed && overallStats.pendingAll > 0 && anchorMatchId !== null;
@@ -89,6 +94,7 @@ export function ScheduleView({ initialMatches, anchorMatchId, isAuthed, deepLink
         onChange={setFilters}
         teams={visibleTeams}
         tabs={isAuthed ? <PickStatusTabs value={filters.pick} onChange={onPickChange} counts={counts} /> : undefined}
+        onGoToToday={todayMatchId != null ? () => scrollMatchIntoView(todayMatchId) : undefined}
       />
 
       <div className="container flex flex-col gap-6 py-6">
@@ -98,6 +104,8 @@ export function ScheduleView({ initialMatches, anchorMatchId, isAuthed, deepLink
           groups.map((g) => <MatchDateGroup key={g.key} group={g} isAuthed={isAuthed} autoEditMatchId={autoEditMatchId} />)
         )}
       </div>
+
+      {isAuthed && <ScoringInfoDialog />}
     </div>
   );
 }

@@ -88,7 +88,11 @@ export type DashboardRecap = {
 export type DashboardData = {
   picked_champion: Team | null;
   stats: DashboardStats;
-  next_match: Match | null;
+  // The upcoming match(es) sharing the earliest kickoff — usually one, but two (or
+  // rarely more) can kick off simultaneously. Resolved at the fetch boundary from the
+  // API's `next_matches` array (primary) or `next_match` object (fallback); empty when
+  // nothing is upcoming.
+  next_matches: Match[];
   progress: DashboardProgress;
   leaderboard: DashboardLeaderboard;
   title_favorites?: TitleFavorite[];
