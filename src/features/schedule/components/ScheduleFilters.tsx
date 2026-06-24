@@ -12,15 +12,18 @@ import { activeFilterCount } from "../lib/filterMatches";
 import { DEFAULT_FILTERS, type ScheduleFilters as Filters, type Team } from "../types/schedule.types";
 
 import { FilterControls } from "./FilterControls";
+import { GoToTodayButton } from "./GoToTodayButton";
 
 type Props = {
   filters: Filters;
   onChange: (next: Filters) => void;
   teams: Team[];
   tabs?: ReactNode;
+  // Scroll to today's matches; omitted when there are none today (button hidden).
+  onGoToToday?: () => void;
 };
 
-export function ScheduleFilters({ filters, onChange, teams, tabs }: Props) {
+export function ScheduleFilters({ filters, onChange, teams, tabs, onGoToToday }: Props) {
   const t = useTranslations("schedule.filters");
   const locale = useLocale();
   const count = activeFilterCount(filters);
@@ -30,6 +33,9 @@ export function ScheduleFilters({ filters, onChange, teams, tabs }: Props) {
     <div className="sticky top-16 z-20 bg-background">
       <div className="container">
         <div className="border-b border-border py-2">
+          {/* Mobile: "go to today" sits above the filter trigger row. */}
+          {onGoToToday && <GoToTodayButton onPress={onGoToToday} className="mb-2 w-full justify-center lg:hidden" />}
+
           <div className="hidden min-w-0 flex-wrap items-center gap-2 lg:flex">
             <FilterControls filters={filters} onChange={onChange} teams={teams} locale={locale} variant="chip" className="flex flex-wrap items-center gap-2" />
             {count > 0 && (
@@ -38,6 +44,8 @@ export function ScheduleFilters({ filters, onChange, teams, tabs }: Props) {
                 {t("reset")}
               </Button>
             )}
+            {/* Desktop: aligned to the right edge of the filter bar. */}
+            {onGoToToday && <GoToTodayButton onPress={onGoToToday} className="ml-auto" />}
           </div>
 
           <MobileFilters filters={filters} onChange={onChange} teams={teams} locale={locale} count={count} />

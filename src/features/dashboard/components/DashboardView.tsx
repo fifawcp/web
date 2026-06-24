@@ -27,7 +27,7 @@ export function DashboardView({ isLoggedIn, data, currentUserId, lastBoard, admi
   // Guests get the dedicated marketing landing; members get the dashboard.
   if (!isLoggedIn) return <GuestLanding data={data} />;
 
-  const nextMatches = data?.next_match ?? [];
+  const nextMatches = data?.next_matches ?? [];
   // Cards that key off a single match (stage hint, group standings) follow the first.
   const primaryMatch = nextMatches[0] ?? null;
 

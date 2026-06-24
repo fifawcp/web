@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { computeProgressCardStates } from "../lib/progressCardState";
 import type { DashboardProgress, DashboardRecap } from "../types/dashboard.types";
 
+import { CardReveal } from "./CardReveal";
 import { ProgressCard } from "./ProgressCard";
 
 type Props = {
@@ -29,13 +30,13 @@ export async function ProgressCardsSection({ progress, recap, isLoggedIn, delay 
 
   return (
     <section className="flex flex-col gap-3">
-      <div className="flex flex-col gap-0.5">
+      <CardReveal bare delay={delay} className="opacity-0 flex flex-col gap-0.5">
         <h2 className="text-base font-semibold">{isLoggedIn ? t("title") : t("guestTitle")}</h2>
         <p className="text-xs text-muted-foreground">{isLoggedIn ? t("subtitle") : t("guestSubtitle")}</p>
-      </div>
+      </CardReveal>
       <div className="grid gap-3 sm:grid-cols-3">
         {states.map((state, index) => (
-          <ProgressCard key={state.id} state={state} isLoggedIn={isLoggedIn} delay={delay + index * 0.06} />
+          <ProgressCard key={state.id} state={state} isLoggedIn={isLoggedIn} delay={delay + 0.06 + index * 0.06} />
         ))}
       </div>
     </section>

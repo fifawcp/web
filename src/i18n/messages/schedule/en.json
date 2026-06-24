@@ -1,5 +1,6 @@
 {
   "title": "Schedule",
+  "goToToday": "Go to today",
   "filters": {
     "openButton": "Filters",
     "title": "Filters",
@@ -41,7 +42,13 @@
     "tapToPick": "Tap to pick",
     "closesIn": "Closes in {time}",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "extraTimeNote": "Scored after extra time ({full} min)"
+  },
+  "scoringInfo": {
+    "title": "Knockout picks count extra time",
+    "body": "If a knockout match goes to extra time, your pick is judged on the {full}-minute result — not {regular} like most betting sites. Penalty shootouts don’t affect your pick; they only decide who advances.",
+    "cta": "Got it"
   },
   "matchCount": "{count, plural, one {# match} other {# matches}}",
   "badge": {
