@@ -4,7 +4,7 @@ import type { StandingRow } from "@/features/standings/types/standings.types";
 import type { DashboardData } from "../types/dashboard.types";
 
 import { CardReveal } from "./CardReveal";
-import { FeaturedMatchCard } from "./FeaturedMatchCard";
+import { FeaturedMatchesSection } from "./FeaturedMatchesSection";
 import { GroupStandingsCard } from "./GroupStandingsCard";
 import { GuestLanding } from "./GuestLanding";
 import { LeaderboardCard } from "./LeaderboardCard";
@@ -27,7 +27,9 @@ export function DashboardView({ isLoggedIn, data, currentUserId, lastBoard, admi
   // Guests get the dedicated marketing landing; members get the dashboard.
   if (!isLoggedIn) return <GuestLanding data={data} />;
 
-  const nextMatch = data?.next_match ?? null;
+  const nextMatches = data?.next_matches ?? [];
+  // Cards that key off a single match (stage hint, group standings) follow the first.
+  const primaryMatch = nextMatches[0] ?? null;
 
   return (
     <div className="relative flex flex-col">
@@ -38,13 +40,13 @@ export function DashboardView({ isLoggedIn, data, currentUserId, lastBoard, admi
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.72fr)_minmax(300px,1fr)] lg:gap-7 lg:items-stretch">
           {/* Main column — what to do next */}
           <div className="contents lg:flex lg:min-w-0 lg:flex-col lg:gap-4">
-            {nextMatch && <FeaturedMatchCard match={nextMatch} isLoggedIn delay={0} className="order-first lg:order-none" />}
+            <FeaturedMatchesSection matches={nextMatches} isLoggedIn className="order-first lg:order-none" />
             {data?.stats && <StatsStrip pickedChampion={data.picked_champion} stats={data.stats} delay={0.08} />}
             <CardReveal bare delay={0.12} className="opacity-0">
-              <SlimBanner stageCode={nextMatch?.stage_code ?? null} isLoggedIn />
+              <SlimBanner stageCode={primaryMatch?.stage_code ?? null} isLoggedIn />
             </CardReveal>
             <ProgressCardsSection progress={data?.progress ?? null} recap={data?.recap ?? null} isLoggedIn delay={0.16} />
-            <GroupStandingsCard rows={standings} preferredGroup={nextMatch?.group_code ?? data?.picked_champion?.group_code ?? null} delay={0.24} />
+            <GroupStandingsCard rows={standings} preferredGroup={primaryMatch?.group_code ?? data?.picked_champion?.group_code ?? null} delay={0.24} />
           </div>
 
           {/* Rail — context and standing (slides in from the right) */}
