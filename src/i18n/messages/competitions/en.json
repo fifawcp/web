@@ -194,6 +194,48 @@
       "points": "points"
     }
   },
+  "memberPickem": {
+    "back": "Back to competition",
+    "score": {
+      "total": "Total points"
+    },
+    "tabs": {
+      "groups": "Group stage",
+      "knockout": "Knockout"
+    },
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "groupBadge": "{correct}/{total} · {points} pts",
+    "groupsLegend": {
+      "title": "How to read · Groups",
+      "help": "The position they picked, scored against the real table",
+      "exact": "Exact position (+3 pts)",
+      "top2": "Top 2, wrong order (+1 pt)",
+      "wrong": "Wrong (0 pts)",
+      "notPicked": "Not picked",
+      "pointsLabel": "pts",
+      "earnedPossible": "Earned / possible"
+    },
+    "thirdsLegend": {
+      "title": "How to read · Best thirds",
+      "help": "Did their pick make the top 8?",
+      "correct": "Picked and advanced (+2 pts)",
+      "wrong": "Picked but missed the cut (0 pts)",
+      "notPicked": "Not picked",
+      "pointsLabel": "pts",
+      "earnedPossible": "Earned / possible"
+    },
+    "sections": {
+      "groups": "Group stage",
+      "thirds": "Best thirds",
+      "bracket": "Knockout bracket"
+    },
+    "thirdsEmpty": "No best-third picks",
+    "locked": {
+      "title": "Predictions aren't revealed yet",
+      "description": "They unlock once the tournament kicks off."
+    }
+  },
   "emptyCompetitions": {
     "title": "No competitions yet",
     "descriptionAdmin": "Create the first custom competition or pick for this board.",

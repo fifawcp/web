@@ -45,6 +45,10 @@ export function CompetitionDetailView({ currentUserId, board, competition, match
   const revealable = useMemo(() => (competition.type === "match" ? revealableMatches(competition, matches, now) : []), [competition, matches, now]);
   const revealAvailable = revealable.length > 0;
 
+  // The per-row eye reveals a member's predictions — match competitions open the
+  // per-match dialog in place; a locked pick'em links to the member's full pick'em.
+  const revealMode: "dialog" | "navigate" | undefined = revealAvailable ? "dialog" : competition.type === "pickem" && pickem?.isLocked ? "navigate" : undefined;
+
   // A pick whose match has locked: the breakdown carries the leaderboard, so the
   // ranked table below is dropped to avoid duplicate member lists.
   const pickBreakdown = isPick && breakdownInitial ? breakdownInitial : null;
@@ -97,13 +101,7 @@ export function CompetitionDetailView({ currentUserId, board, competition, match
           </Reveal>
 
           <Reveal from="up" trigger="mount" delay={0.14}>
-            <LeaderboardSection
-              boardId={board.id}
-              competition={competition}
-              currentUserId={currentUserId}
-              initialData={initialLeaderboard}
-              revealAvailable={revealAvailable}
-            />
+            <LeaderboardSection boardId={board.id} competition={competition} currentUserId={currentUserId} initialData={initialLeaderboard} revealMode={revealMode} />
           </Reveal>
         </>
       )}

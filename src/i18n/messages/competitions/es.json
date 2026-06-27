@@ -194,6 +194,48 @@
       "points": "puntos"
     }
   },
+  "memberPickem": {
+    "back": "Volver a la competencia",
+    "score": {
+      "total": "Puntos totales"
+    },
+    "tabs": {
+      "groups": "Fase de grupos",
+      "knockout": "Eliminatorias"
+    },
+    "expandAll": "Expandir todo",
+    "collapseAll": "Contraer todo",
+    "groupBadge": "{correct}/{total} · {points} pts",
+    "groupsLegend": {
+      "title": "Cómo leer · Grupos",
+      "help": "La posición que eligió, comparada con la tabla real",
+      "exact": "Posición exacta (+3 pts)",
+      "top2": "Top 2, orden incorrecto (+1 pt)",
+      "wrong": "Incorrecto (0 pts)",
+      "notPicked": "Sin elegir",
+      "pointsLabel": "pts",
+      "earnedPossible": "Ganados / posibles"
+    },
+    "thirdsLegend": {
+      "title": "Cómo leer · Mejores terceros",
+      "help": "¿Su elegido entró al top 8?",
+      "correct": "Elegido y clasificó (+2 pts)",
+      "wrong": "Elegido pero quedó fuera (0 pts)",
+      "notPicked": "Sin elegir",
+      "pointsLabel": "pts",
+      "earnedPossible": "Ganados / posibles"
+    },
+    "sections": {
+      "groups": "Fase de grupos",
+      "thirds": "Mejores terceros",
+      "bracket": "Llave eliminatoria"
+    },
+    "thirdsEmpty": "Sin terceros elegidos",
+    "locked": {
+      "title": "Los pronósticos aún no se revelan",
+      "description": "Se revelan en cuanto arranca el torneo."
+    }
+  },
   "emptyCompetitions": {
     "title": "Aún no hay competencias",
     "descriptionAdmin": "Crea la primera competencia personalizada o polla de este tablero.",

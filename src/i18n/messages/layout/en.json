@@ -164,10 +164,10 @@
         "heading": "Knockout bracket points",
         "items": {
           "bestThird": { "label": "Best third-place", "description": "Per correct team in the 8 best-thirds list" },
-          "r32": { "label": "Round of 32", "description": "Per correct team that reaches this round" },
-          "r16": { "label": "Round of 16", "description": "Per correct team that reaches this round" },
-          "quarterfinals": { "label": "Quarterfinals", "description": "Per correct team that reaches this round" },
-          "semifinals": { "label": "Semifinals", "description": "Per correct team that reaches this round" },
+          "r32": { "label": "Round of 32", "description": "Per correct team that advances from this round" },
+          "r16": { "label": "Round of 16", "description": "Per correct team that advances from this round" },
+          "quarterfinals": { "label": "Quarterfinals", "description": "Per correct team that advances from this round" },
+          "semifinals": { "label": "Semifinals", "description": "Per correct team that advances from this round" },
           "thirdPlace": { "label": "Third-place match", "description": "Correct third-place winner" },
           "final": { "label": "Final (champion)", "description": "Correct tournament winner" }
         }

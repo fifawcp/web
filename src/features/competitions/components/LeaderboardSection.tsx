@@ -4,9 +4,12 @@ import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+import { useRouter as useIntlRouter } from "@/i18n/navigation";
+
 import { LEADERBOARD_PAGE_SIZE } from "../api/competitions";
 import { useLeaderboard } from "../hooks/useLeaderboard";
 import { buildColumns, buildMobileCyclableColumns } from "../lib/competitionColumns";
+import { memberPickemPath } from "../lib/memberPickemUrl";
 import type { Competition, LeaderboardEntry, LeaderboardPage } from "../types/competitions.types";
 
 import { LeaderboardMobileTable } from "./LeaderboardMobileTable";
@@ -19,8 +22,10 @@ type Props = {
   competition: Competition;
   currentUserId: string;
   initialData: LeaderboardPage | null;
-  // Enables the per-row eye action that reveals a member's predictions.
-  revealAvailable?: boolean;
+  // Enables the per-row eye action that reveals a member's predictions:
+  //   "dialog"   — match competitions: open the per-match picks dialog in place.
+  //   "navigate" — pick'em competitions: go to the member's full pick'em page.
+  revealMode?: "dialog" | "navigate";
 };
 
 const PAGE_PARAM = "page";
@@ -28,16 +33,21 @@ const Q_PARAM = "q";
 const SORT_PARAM = "sort";
 const DIR_PARAM = "dir";
 
-export function LeaderboardSection({ boardId, competition, currentUserId, initialData, revealAvailable = false }: Props) {
+export function LeaderboardSection({ boardId, competition, currentUserId, initialData, revealMode }: Props) {
   const t = useTranslations("competitions.leaderboard");
   const router = useRouter();
+  const intlRouter = useIntlRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<LeaderboardEntry | null>(null);
-  const onViewMember = revealAvailable
+  const onViewMember = revealMode
     ? (entry: LeaderboardEntry) => {
+        if (revealMode === "navigate") {
+          intlRouter.push(memberPickemPath(boardId, competition.id, entry.member));
+          return;
+        }
         setSelected(entry);
         setOpen(true);
       }
@@ -141,7 +151,7 @@ export function LeaderboardSection({ boardId, competition, currentUserId, initia
         </div>
       ) : null}
 
-      {revealAvailable ? (
+      {revealMode === "dialog" ? (
         <MemberPicksDialog
           open={open}
           onOpenChange={setOpen}
