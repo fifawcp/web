@@ -164,10 +164,10 @@
         "heading": "Eliminatorias",
         "items": {
           "bestThird": { "label": "Mejor tercero", "description": "Por cada equipo correcto entre los 8 mejores terceros" },
-          "r32": { "label": "Dieciseisavos", "description": "Por equipo acertado que alcanza esta ronda" },
-          "r16": { "label": "Octavos de final", "description": "Por equipo acertado que alcanza esta ronda" },
-          "quarterfinals": { "label": "Cuartos de final", "description": "Por equipo acertado que alcanza esta ronda" },
-          "semifinals": { "label": "Semifinales", "description": "Por equipo acertado que alcanza esta ronda" },
+          "r32": { "label": "Dieciseisavos", "description": "Por equipo acertado que avanza de esta ronda" },
+          "r16": { "label": "Octavos de final", "description": "Por equipo acertado que avanza de esta ronda" },
+          "quarterfinals": { "label": "Cuartos de final", "description": "Por equipo acertado que avanza de esta ronda" },
+          "semifinals": { "label": "Semifinales", "description": "Por equipo acertado que avanza de esta ronda" },
           "thirdPlace": { "label": "Tercer puesto", "description": "Acertaste al ganador del partido por el tercer puesto" },
           "final": { "label": "Final (campeón)", "description": "Acertaste al campeón del torneo" }
         }

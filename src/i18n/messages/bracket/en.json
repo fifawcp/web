@@ -14,8 +14,8 @@
     "title": "Compare",
     "pointsLabel": "pts",
     "earnedPossible": "Earned / possible",
-    "correct": "Your correct pick",
-    "correctHelp": "a team you predicted to reach that round",
-    "scoringTitle": "Points per round reached"
+    "correct": "Correct pick",
+    "correctHelp": "a team you correctly predicted to reach this round",
+    "scoringTitle": "Points for advancing past a round"
   }
 }
