@@ -221,9 +221,7 @@
       "help": "¿Su elegido entró al top 8?",
       "correct": "Elegido y clasificó (+2 pts)",
       "wrong": "Elegido pero quedó fuera (0 pts)",
-      "notPicked": "Sin elegir",
-      "pointsLabel": "pts",
-      "earnedPossible": "Ganados / posibles"
+      "notPicked": "Sin elegir"
     },
     "sections": {
       "groups": "Fase de grupos",

@@ -136,13 +136,20 @@ describe("bracket reveal at the semifinal stage", () => {
 
   it("scores points only for advancing — R32+R16+QF = 18, the wrong winner earns 0", () => {
     // Decided: 73 (+4), 74 (+4 wrong → 0), 89 (+6), 97 (+8). SF not played.
-    expect(summarizeBracket(actualBracket, memberBracket)).toEqual({ earned: 18, possible: 22 });
+    expect(summarizeBracket(actualBracket, memberBracket)).toMatchObject({ earned: 18, possible: 22 });
+  });
+
+  it("breaks earned / possible down per round for the legend", () => {
+    const { byStage } = summarizeBracket(actualBracket, memberBracket);
+    expect(byStage.get("round_of_32")).toEqual({ earned: 4, possible: 8 }); // 73 right, 74 wrong
+    expect(byStage.get("round_of_16")).toEqual({ earned: 6, possible: 6 });
+    expect(byStage.get("quarterfinals")).toEqual({ earned: 8, possible: 8 });
   });
 
   it("does not bracket-score reaching the R32 (that is the group stage's job)", () => {
     // Only R32 matches exist, none decided → no points possible yet.
     const onlyR32 = actualBracket.filter((s) => s.stage_code === "round_of_32").map((s) => ({ ...s, picked_team: null }));
-    expect(summarizeBracket(onlyR32, memberBracket)).toEqual({ earned: 0, possible: 0 });
+    expect(summarizeBracket(onlyR32, memberBracket)).toMatchObject({ earned: 0, possible: 0 });
   });
 
   it("agrees with /bracket compare on the actual tree (reach-based greens)", () => {

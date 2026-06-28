@@ -68,6 +68,10 @@ export function BracketCompareLegend({ summary }: Props) {
         <ul className="flex flex-wrap gap-1.5">
           {SCORING_ORDER.map((stage) => {
             const next = NEXT_STAGE[stage];
+            // Once a round has decided matches, show the member's earned / attainable
+            // for it; before then show the per-team rule so it reads as a scoring key.
+            const stat = summary.byStage.get(stage);
+            const decided = stat != null && stat.possible > 0;
             return (
               <li key={stage} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-muted/40 px-2 py-1">
                 <span className="inline-flex items-center gap-1 text-xs font-medium text-foreground">
@@ -81,7 +85,15 @@ export function BracketCompareLegend({ summary }: Props) {
                     </>
                   ) : null}
                 </span>
-                <span className="font-mono text-xs font-semibold text-page-accent">+{STAGE_POINTS[stage]}</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-mono text-xs font-semibold text-page-accent">+{STAGE_POINTS[stage]}</span>
+                  {decided && (
+                    <span className="font-mono text-xs font-semibold tabular-nums">
+                      <span className="text-page-accent">{stat.earned}</span>
+                      <span className="text-muted-foreground">/{stat.possible}</span>
+                    </span>
+                  )}
+                </div>
               </li>
             );
           })}

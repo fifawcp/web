@@ -10,23 +10,23 @@ import type { Team } from "@/shared/types/wcp.types";
 import type { ThirdsReveal } from "../../lib/pickemRevealCompare";
 
 type Props = {
-  // The member's best-thirds picks — shown before the group stage finishes.
+  // The member's best-thirds picks — shown only when there's no standings table yet.
   picks: Team[];
-  // The ranked twelve thirds, graded, once the group stage is over.
+  // The ranked twelve thirds, graded against the member's picks.
   reveal?: ThirdsReveal;
 };
 
-// Compact read-only best-thirds card. Once the group stage finishes it mirrors the
-// `/standings` third-place table: the twelve third-placed teams in rank order, the
-// top eight advancing, with the member's pick shown as a ✓ / ✕ / — circle (✓ = an
-// advancing team the member picked, i.e. the one that earned them points).
+// Compact read-only best-thirds card. Mirrors the `/standings` third-place table:
+// the twelve third-placed teams in rank order, the top eight advancing, with the
+// member's pick shown as a ✓ / ✕ / — circle (✓ = an advancing team the member
+// picked, i.e. the one that earned them points).
 export function RevealBestThirds({ picks, reveal }: Props) {
   const locale = useLocale();
   const tReveal = useTranslations("competitions.memberPickem");
 
-  if (reveal?.decided) {
+  if (reveal && reveal.rows.length > 0) {
     return (
-      <div className="overflow-hidden rounded-lg border border-border bg-card sm:max-w-md">
+      <div className="overflow-hidden rounded-lg border border-border bg-card">
         <ul>
           {reveal.rows.map((row) => (
             <li

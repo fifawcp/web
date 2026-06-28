@@ -1,7 +1,7 @@
 import { buildComparisonMap } from "@/features/bracket/lib/bracketCompare";
 import type { SlotComparison } from "@/features/bracket/types/bracket.types";
 import type { BracketMatchSlot, ResolvedGroupPick } from "@/features/pickems/types/pickems.types";
-import { computeGroupComparison, computeRowComparison, computeThirdPlaceAccuracy, computeThirdPlaceComparison } from "@/features/standings/lib/comparison";
+import { computeGroupComparison, computeRowComparison, computeThirdPlaceComparison } from "@/features/standings/lib/comparison";
 import { groupAndEnrichStandings } from "@/features/standings/lib/groupStandings";
 import { buildThirdPlaceStandings } from "@/features/standings/lib/thirdPlace";
 import type { PickAccuracy, ThirdPlaceAccuracy, StandingRow } from "@/features/standings/types/standings.types";
@@ -88,9 +88,7 @@ export type ThirdRevealRow = {
   accuracy: ThirdPlaceAccuracy;
 };
 
-// `earned` / `possible` is the best-thirds points tally (+2 per pick that
-// advances), read the same way as the group and bracket legends.
-export type ThirdsReveal = { decided: boolean; rows: ThirdRevealRow[]; qualifyingSlots: number; earned: number; possible: number };
+export type ThirdsReveal = { decided: boolean; rows: ThirdRevealRow[]; qualifyingSlots: number };
 
 /**
  * Rank the twelve third-placed teams and grade them against the member's
@@ -111,8 +109,7 @@ export function buildThirdsReveal(bestThirds: Team[], standings: StandingRow[], 
     return { team: row.team, rank: row.third_place_rank, advances: row.advances, picked, accuracy };
   });
 
-  const accuracy = computeThirdPlaceAccuracy(third.rows, pickedSet);
-  return { decided, rows, qualifyingSlots: third.qualifying_slots, earned: accuracy.points, possible: accuracy.maxPoints };
+  return { decided, rows, qualifyingSlots: third.qualifying_slots };
 }
 
 /**

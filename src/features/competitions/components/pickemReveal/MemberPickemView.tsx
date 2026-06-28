@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronsDownUp, ChevronsUpDown, Hash, ListOrdered, Lock, Star, Trophy } from "lucide-react";
+import { ChevronLeft, ChevronsUpDown, Hash, ListOrdered, Lock, Star, Trophy } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { UserPickem } from "@/features/pickems/types/pickems.types";
@@ -93,8 +93,8 @@ export function MemberPickemView({ boardId, competitionId, member, rank, score, 
         {groupsDecided ? <GroupsLegend earned={groupTally.earned} possible={groupTally.possible} /> : null}
         {groupPicks.length > 0 ? (
           <div className="flex justify-end">
-            <Button type="button" variant="ghost" size="sm" onClick={toggleAllGroups} className="text-muted-foreground">
-              {allGroupsExpanded ? <ChevronsDownUp className="size-4" aria-hidden /> : <ChevronsUpDown className="size-4" aria-hidden />}
+            <Button type="button" variant="outline" size="sm" onClick={toggleAllGroups} className="min-w-32 cursor-pointer gap-1.5">
+              <ChevronsUpDown className="size-3.5" aria-hidden />
               {allGroupsExpanded ? t("collapseAll") : t("expandAll")}
             </Button>
           </div>
@@ -118,7 +118,7 @@ export function MemberPickemView({ boardId, competitionId, member, rank, score, 
   const thirdsSection = (
     <Reveal from="up" trigger="mount" delay={0.1}>
       <Section icon={Star} title={t("sections.thirds")}>
-        {thirdsReveal?.decided ? <ThirdsLegend earned={thirdsReveal.earned} possible={thirdsReveal.possible} /> : null}
+        {thirdsReveal && thirdsReveal.rows.length > 0 ? <ThirdsLegend /> : null}
         <RevealBestThirds picks={bestThirds} reveal={thirdsReveal ?? undefined} />
       </Section>
     </Reveal>
@@ -196,11 +196,16 @@ function ScoreBreakdown({ score, rank }: { score: PickemScore; rank: number | nu
   const t = useTranslations("competitions.memberPickem");
   const tCols = useTranslations("competitions.leaderboard.columnsLong");
 
-  const metrics: { label: string; value: number }[] = [
-    { label: tCols("groupExact"), value: score.group_exact_positions },
-    { label: tCols("groupQualifiers"), value: score.group_qualifier_hits },
-    { label: tCols("bestThirds"), value: score.best_third_hits },
-    { label: tCols("bracket"), value: score.bracket_hits },
+  // Scoring rules: exact groups +3, qualifiers +1, best thirds +2, bracket varies by round
+  const metrics: { label: string; value: number; points: number }[] = [
+    { label: tCols("groupExact"), value: score.group_exact_positions, points: score.group_exact_positions * 3 },
+    { label: tCols("groupQualifiers"), value: score.group_qualifier_hits, points: score.group_qualifier_hits * 1 },
+    { label: tCols("bestThirds"), value: score.best_third_hits, points: score.best_third_hits * 2 },
+    {
+      label: tCols("bracket"),
+      value: score.bracket_hits,
+      points: score.total - (score.group_exact_positions * 3 + score.group_qualifier_hits * 1 + score.best_third_hits * 2),
+    },
   ];
 
   return (
@@ -225,7 +230,10 @@ function ScoreBreakdown({ score, rank }: { score: PickemScore; rank: number | nu
         {metrics.map((metric) => (
           <div key={metric.label} className="flex flex-col gap-0.5">
             <dt className="truncate text-2xs font-medium uppercase tracking-wider text-muted-foreground">{metric.label}</dt>
-            <dd className="font-heading text-base font-semibold tabular-nums">{metric.value.toLocaleString()}</dd>
+            <dd className="flex items-baseline gap-1.5 font-heading text-base font-semibold tabular-nums">
+              <span>{metric.value.toLocaleString()}</span>
+              <span className="text-xs font-medium text-page-accent">+{metric.points.toLocaleString()}</span>
+            </dd>
           </div>
         ))}
       </dl>
@@ -275,9 +283,9 @@ function GroupsLegend({ earned, possible }: { earned: number; possible: number }
   );
 }
 
-// "How to read" key for the best-thirds circles — mirrors `/standings`, with the
-// earned / possible best-thirds tally read the same way as the other legends.
-function ThirdsLegend({ earned, possible }: { earned: number; possible: number }) {
+// "How to read" key for the best-thirds circles — mirrors `/standings`: ✓ correct,
+// ✕ wrong, — not picked. No points tally, just the key.
+function ThirdsLegend() {
   const t = useTranslations("competitions.memberPickem.thirdsLegend");
   const items: { accuracy: ThirdPlaceAccuracy; content: string; label: string }[] = [
     { accuracy: "correct", content: "✓", label: t("correct") },
@@ -286,22 +294,8 @@ function ThirdsLegend({ earned, possible }: { earned: number; possible: number }
   ];
   return (
     <section aria-label={t("title")} className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex flex-col gap-2">
-          <p className="text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("title")}</p>
-          <p className="text-xs font-semibold text-foreground">{t("help")}</p>
-        </div>
-        {possible > 0 && (
-          <div className="flex shrink-0 flex-col items-end leading-none">
-            <span className="flex items-baseline gap-1">
-              <span className="text-xl font-bold tabular-nums text-page-accent">{earned}</span>
-              <span className="text-sm tabular-nums text-muted-foreground">/ {possible}</span>
-              <span className="ml-0.5 text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("pointsLabel")}</span>
-            </span>
-            <span className="mt-1 text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("earnedPossible")}</span>
-          </div>
-        )}
-      </div>
+      <p className="text-2xs font-medium uppercase tracking-wider text-muted-foreground">{t("title")}</p>
+      <p className="text-xs font-semibold text-foreground">{t("help")}</p>
       <ul className="grid grid-cols-1 gap-2 text-xs text-muted-foreground sm:grid-cols-3">
         {items.map((item) => (
           <li key={item.label} className="flex items-center gap-2">

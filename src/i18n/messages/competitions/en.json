@@ -221,9 +221,7 @@
       "help": "Did their pick make the top 8?",
       "correct": "Picked and advanced (+2 pts)",
       "wrong": "Picked but missed the cut (0 pts)",
-      "notPicked": "Not picked",
-      "pointsLabel": "pts",
-      "earnedPossible": "Earned / possible"
+      "notPicked": "Not picked"
     },
     "sections": {
       "groups": "Group stage",

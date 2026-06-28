@@ -114,6 +114,7 @@ function winnersByStage(slots: BracketMatchSlot[]): Map<BracketStageCode, Set<st
  */
 export function summarizeBracket(actual: BracketMatchSlot[], predicted: BracketMatchSlot[]): BracketCompareSummary {
   const predictedWinners = winnersByStage(predicted);
+  const byStage = new Map<BracketStageCode, { earned: number; possible: number }>();
   let earned = 0;
   let possible = 0;
 
@@ -121,9 +122,15 @@ export function summarizeBracket(actual: BracketMatchSlot[], predicted: BracketM
     const winnerCode = slot.picked_team?.fifa_code;
     if (!winnerCode) continue; // match not decided yet
     const points = STAGE_POINTS[slot.stage_code];
+    const stat = byStage.get(slot.stage_code) ?? { earned: 0, possible: 0 };
+    stat.possible += points;
     possible += points;
-    if (predictedWinners.get(slot.stage_code)?.has(winnerCode)) earned += points;
+    if (predictedWinners.get(slot.stage_code)?.has(winnerCode)) {
+      stat.earned += points;
+      earned += points;
+    }
+    byStage.set(slot.stage_code, stat);
   }
 
-  return { earned, possible };
+  return { earned, possible, byStage };
 }

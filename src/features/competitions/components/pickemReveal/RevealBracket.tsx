@@ -42,11 +42,13 @@ export function RevealBracket({ bracket, matches, participated }: Props) {
   const comparisonById = useMemo(() => buildBracketReveal(predictedSlots, actualSlots, participated), [predictedSlots, actualSlots, participated]);
   const champion = useMemo(() => findChampion(predictedSlots), [predictedSlots]);
 
-  // Earned/possible tally; a non-player earns nothing, so zero it while keeping the
-  // attainable total (the legend hides the tally entirely until results land).
+  // Earned/possible tally; a non-player earns nothing, so zero it (overall and
+  // per round) while keeping the attainable totals.
   const summary = useMemo(() => {
     const raw = summarizeBracket(actualSlots, predictedSlots);
-    return participated ? raw : { earned: 0, possible: raw.possible };
+    if (participated) return raw;
+    const byStage = new Map([...raw.byStage].map(([stage, s]) => [stage, { earned: 0, possible: s.possible }] as const));
+    return { earned: 0, possible: raw.possible, byStage };
   }, [participated, actualSlots, predictedSlots]);
 
   return (
