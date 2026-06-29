@@ -87,7 +87,7 @@ export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) 
         <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{comparing ? t("descriptionCompare") : t("description")}</p>
       </header>
 
-      {comparing && summary && summary.possible > 0 && <BracketCompareLegend summary={summary} />}
+      {comparing && summary && <BracketCompareLegend summary={summary} />}
 
       <BracketTree bracket={actualSlots} champion={champion} disabled comparisonById={comparisonById} />
     </div>

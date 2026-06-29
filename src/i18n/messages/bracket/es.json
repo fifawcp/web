@@ -14,8 +14,8 @@
     "title": "Comparación",
     "pointsLabel": "pts",
     "earnedPossible": "Ganados / posibles",
-    "correct": "Tu acierto",
-    "correctHelp": "equipo que pronosticaste para llegar a esa ronda",
-    "scoringTitle": "Puntos por ronda alcanzada"
+    "correct": "Acierto",
+    "correctHelp": "equipo que pronosticaste correctamente para llegar a esta ronda",
+    "scoringTitle": "Puntos por avanzar de una ronda"
   }
 }
