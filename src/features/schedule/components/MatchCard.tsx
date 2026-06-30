@@ -86,7 +86,7 @@ export function MatchCard({ match, isAuthed, autoEdit = false }: Props) {
         <KickoffTime kickoffAt={match.kickoff_at} />
       </header>
 
-      <div className={cn("grid grid-cols-[1fr_6rem_1fr] items-center gap-3 sm:grid-cols-[1fr_12rem_1fr]", SCORE_AREA_MIN_H)}>
+      <div className={cn("grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:grid-cols-[1fr_12rem_1fr]", SCORE_AREA_MIN_H)}>
         <TeamColumn team={match.teams.home} side="home" locale={locale} dim={editing} />
         <ScoreArea
           match={match}
@@ -216,6 +216,7 @@ function ScoreArea({ match, isAuthed, hasTeams, editing, draft, isSaving, onDraf
 
   const result = match.result;
   const pick = match.user_score_pick;
+  const penalties = result?.penalties ?? null;
   const canTapToPick = Boolean(onStartEdit);
   const showPickHint = isAuthed && hasTeams;
 
@@ -225,12 +226,18 @@ function ScoreArea({ match, isAuthed, hasTeams, editing, draft, isSaving, onDraf
   return (
     <div className="grid h-full grid-rows-[1fr_auto_1fr] justify-items-center self-stretch">
       <div aria-hidden />
-      <div className="flex items-center gap-3 text-2xl font-semibold tabular-nums text-foreground">
+      <div className="flex items-center gap-2 text-2xl font-semibold tabular-nums text-foreground sm:gap-3">
         {result ? (
           <>
-            <span>{result.home_score}</span>
+            <span className="flex items-baseline gap-1">
+              {penalties ? <span className="text-xs font-medium text-muted-foreground">({penalties.home})</span> : null}
+              <span>{result.home_score}</span>
+            </span>
             <span className="text-xl text-muted-foreground">&minus;</span>
-            <span>{result.away_score}</span>
+            <span className="flex items-baseline gap-1">
+              <span>{result.away_score}</span>
+              {penalties ? <span className="text-xs font-medium text-muted-foreground">({penalties.away})</span> : null}
+            </span>
           </>
         ) : (
           <span className="text-lg font-semibold uppercase tracking-wide text-muted-foreground">vs</span>
