@@ -6,38 +6,39 @@ import { cn } from "@/shared/lib/utils";
 
 import type { BracketViewMode } from "../types/bracket.types";
 
-const MODES: readonly BracketViewMode[] = ["results", "compare"];
-
 type Props = {
-  view: BracketViewMode;
+  mode: BracketViewMode;
   onChange: (next: BracketViewMode) => void;
+  /** `compare` is only offered when the user can compare (auth + tournament started). */
+  canCompare: boolean;
 };
 
 /**
- * Segmented control switching the bracket between the user's predicted tree and
- * the predicted-vs-actual comparison. Presentational — the view owns the
- * URL-backed state via `useBracketCompareView`. Mirrors the Standings
- * `CompareToggle`.
+ * Segmented control switching the bracket between Results, Compare (gated), and
+ * the interactive Simulator. Presentational — the page owns the URL-backed state
+ * via `useBracketViewMode`. Mirrors the Standings segmented toggle.
  */
-export function CompareToggle({ view, onChange }: Props) {
+export function BracketModeToggle({ mode, onChange, canCompare }: Props) {
   const t = useTranslations("bracket.compare");
+
+  const modes: BracketViewMode[] = canCompare ? ["results", "compare", "simulate"] : ["results", "simulate"];
 
   return (
     <div role="group" aria-label={t("label")} className="flex rounded-md bg-muted p-0.5">
-      {MODES.map((mode) => {
-        const isActive = mode === view;
+      {modes.map((m) => {
+        const isActive = m === mode;
         return (
           <button
-            key={mode}
+            key={m}
             type="button"
-            onClick={() => onChange(mode)}
+            onClick={() => onChange(m)}
             aria-pressed={isActive}
             className={cn(
               "cursor-pointer rounded px-3 py-1.5 text-xs font-medium transition-colors",
               isActive ? "bg-background text-page-accent shadow-sm font-semibold" : "text-muted-foreground hover:text-foreground"
             )}
           >
-            {t(mode)}
+            {t(m)}
           </button>
         );
       })}

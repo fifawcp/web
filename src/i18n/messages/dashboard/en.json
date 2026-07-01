@@ -37,7 +37,8 @@
         "title": "Bracket Pick'em",
         "desc": "Call who tops each group and advances all the way to the final.",
         "scoring": "Up to 320 pts",
-        "note": "Set before kickoff"
+        "note": "Set before kickoff",
+        "simulateCta": "Try the bracket simulator"
       },
       "awards": {
         "title": "Awards",
@@ -135,6 +136,8 @@
     "newCompetitionSub": "Predict a single upcoming match",
     "joinBoard": "Join a board",
     "joinBoardSub": "Enter a join code from a friend",
+    "simulate": "Bracket simulator",
+    "simulateSub": "Play out the knockouts your way",
     "lastVisitedSub": "Your latest board",
     "dialog": {
       "title": "Where do you want to create it?",

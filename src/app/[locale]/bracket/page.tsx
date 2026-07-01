@@ -72,7 +72,7 @@ export default async function BracketPage({ params }: Props) {
       <JsonLd data={bracketLd} />
       <h1 className="sr-only">{t("title")}</h1>
       <Suspense fallback={<BracketLoading />}>
-        <BracketView initialMatches={matchesRes.data} initialPickem={pickem} isAuthed={Boolean(user)} />
+        <BracketView initialMatches={matchesRes.data} initialPickem={pickem} isAuthed={Boolean(user)} userId={user?.id} />
       </Suspense>
     </>
   );

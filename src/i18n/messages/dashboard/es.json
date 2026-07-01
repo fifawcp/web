@@ -37,7 +37,8 @@
         "title": "Bracket Pick'em",
         "desc": "Pronostica quién lidera cada grupo y avanza hasta la final.",
         "scoring": "Hasta 320 pts",
-        "note": "Antes del inicio"
+        "note": "Antes del inicio",
+        "simulateCta": "Prueba el simulador de cuadro"
       },
       "awards": {
         "title": "Premios",
@@ -141,6 +142,8 @@
     "newCompetitionSub": "Pronostica un partido puntual",
     "joinBoard": "Únete a un tablero",
     "joinBoardSub": "Ingresa el código de un amigo",
+    "simulate": "Simulador de cuadro",
+    "simulateSub": "Arma las eliminatorias a tu manera",
     "lastVisitedSub": "Tu tablero más reciente",
     "dialog": {
       "title": "¿Dónde quieres crearla?",

@@ -1,7 +1,11 @@
 import type { BracketMatchCompare, BracketStageCode } from "@/features/pickems/types/pickems.types";
 
-/** Which bracket view is active. Persisted in the URL (`?view=compare`). */
-export type BracketViewMode = "results" | "compare";
+/**
+ * Which bracket view is active. Persisted in the URL (`?view=compare` /
+ * `?view=simulate`); `results` is the default and carries no param. `compare`
+ * is gated (auth + tournament started); `results` and `simulate` are public.
+ */
+export type BracketViewMode = "results" | "compare" | "simulate";
 
 /** Per-match team-correctness overlay, keyed by match id. Re-exported shape. */
 export type SlotComparison = BracketMatchCompare;

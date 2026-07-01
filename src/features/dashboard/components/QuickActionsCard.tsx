@@ -1,4 +1,4 @@
-import { ChevronRight, UsersRound, type LucideIcon } from "lucide-react";
+import { ChevronRight, GitBranch, UsersRound, type LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import type { BoardListItem } from "@/features/boards/types/boards.types";
@@ -33,6 +33,14 @@ export async function QuickActionsCard({ board, adminBoards, delay, from, classN
           iconClass="bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300"
           label={t("joinBoard")}
           sub={t("joinBoardSub")}
+        />
+
+        <ActionRow
+          href="/bracket?view=simulate"
+          icon={GitBranch}
+          iconClass="bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300"
+          label={t("simulate")}
+          sub={t("simulateSub")}
         />
 
         {board && (

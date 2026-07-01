@@ -1,6 +1,7 @@
 import { ArrowRight, Award, Goal, GitBranch, Hand, Star, Target, Trophy, type LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { Link } from "@/i18n/navigation";
 import { Reveal } from "@/shared/components/Reveal";
 import { cn } from "@/shared/lib/utils";
 
@@ -24,7 +25,14 @@ export async function WaysToPlay() {
           </div>
         </PlayCard>
 
-        <PlayCard icon={GitBranch} title={t("bracket.title")} desc={t("bracket.desc")} scoring={t("bracket.scoring")} note={t("bracket.note")}>
+        <PlayCard
+          icon={GitBranch}
+          title={t("bracket.title")}
+          desc={t("bracket.desc")}
+          scoring={t("bracket.scoring")}
+          note={t("bracket.note")}
+          cta={{ href: "/bracket?view=simulate", label: t("bracket.simulateCta") }}
+        >
           <div className="flex items-center gap-1.5 text-xs">
             <Chip>1st</Chip>
             <ArrowRight className="size-3.5 shrink-0 text-muted-foreground" aria-hidden />
@@ -57,10 +65,12 @@ type PlayCardProps = {
   scoring: string;
   note: string;
   live?: boolean;
+  /** Optional footer link — e.g. the bracket card's shortcut into the simulator. */
+  cta?: { href: string; label: string };
   children: React.ReactNode;
 };
 
-function PlayCard({ icon: Icon, title, desc, scoring, note, live, children }: PlayCardProps) {
+function PlayCard({ icon: Icon, title, desc, scoring, note, live, cta, children }: PlayCardProps) {
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:p-5">
       <div className="flex items-center justify-between">
@@ -85,7 +95,15 @@ function PlayCard({ icon: Icon, title, desc, scoring, note, live, children }: Pl
 
       <div className="min-h-7">{children}</div>
 
-      <div className="border-t border-border pt-3 text-xs font-medium text-page-accent-strong">{scoring}</div>
+      <div className="flex items-center justify-between gap-3 border-t border-border pt-3 text-xs font-medium text-page-accent-strong">
+        <span>{scoring}</span>
+        {cta && (
+          <Link href={cta.href} className="group inline-flex items-center gap-1 transition-colors hover:text-page-accent hover:underline">
+            {cta.label}
+            <ArrowRight className="size-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
+          </Link>
+        )}
+      </div>
     </div>
   );
 }
