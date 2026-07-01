@@ -4,11 +4,13 @@
   "stageHeadingLive": "Knockout bracket · Live",
   "description": "The World Cup knockout bracket, from the Round of 32 to the Final. It fills in as each match is decided.",
   "descriptionCompare": "The real bracket so far, with the teams you correctly predicted to reach each round checked in green.",
+  "descriptionSimulate": "Play out the knockouts your way. Re-pick any winner from the Round of 32 on and the rest of the bracket updates instantly. It's just for fun — your Pick'em stays untouched.",
   "seeMyPicks": "See my bracket",
   "compare": {
     "label": "Bracket view",
     "results": "Results",
-    "compare": "Compare"
+    "compare": "Compare",
+    "simulate": "Simulate"
   },
   "legend": {
     "title": "Compare",
@@ -17,5 +19,25 @@
     "correct": "Correct pick",
     "correctHelp": "a team you correctly predicted to reach this round",
     "scoringTitle": "Points for advancing past a round"
+  },
+  "simulator": {
+    "disclaimer": "What-if mode — tap a team to send it through. Your Pick'em isn't affected.",
+    "reset": "Reset",
+    "resetWithCount": "Reset ({n})",
+    "share": {
+      "button": "Share",
+      "sharing": "Sharing…",
+      "generating": "Building your bracket image…",
+      "eyebrow": "Bracket Simulator",
+      "imageTitle": "My World Cup 2026 bracket",
+      "championLabel": "Champion",
+      "thirdPlaceLabel": "Third place",
+      "shareTitle": "My World Cup 2026 bracket",
+      "shareText": "Here's how I see the World Cup 2026 knockouts playing out.",
+      "makeYours": "Make yours on:",
+      "shared": "Bracket ready to share",
+      "downloaded": "Bracket image saved",
+      "error": "Couldn't generate the image. Try again."
+    }
   }
 }

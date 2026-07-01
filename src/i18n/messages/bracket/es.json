@@ -4,11 +4,13 @@
   "stageHeadingLive": "Cuadro de eliminatorias · En vivo",
   "description": "El cuadro de eliminatorias del Mundial, desde los Dieciseisavos hasta la Final. Se completa a medida que se definen los partidos.",
   "descriptionCompare": "El cuadro real hasta ahora, con los equipos que pronosticaste correctamente en cada ronda marcados en verde.",
+  "descriptionSimulate": "Arma las eliminatorias a tu manera. Cambia cualquier ganador desde los Dieciseisavos y el resto del cuadro se actualiza al instante. Es solo por diversión: tu Pick'em no se modifica.",
   "seeMyPicks": "Ver mi cuadro",
   "compare": {
     "label": "Vista del cuadro",
     "results": "Resultados",
-    "compare": "Comparar"
+    "compare": "Comparar",
+    "simulate": "Simular"
   },
   "legend": {
     "title": "Comparación",
@@ -17,5 +19,25 @@
     "correct": "Acierto",
     "correctHelp": "equipo que pronosticaste correctamente para llegar a esta ronda",
     "scoringTitle": "Puntos por avanzar de una ronda"
+  },
+  "simulator": {
+    "disclaimer": "Modo hipotético: toca un equipo para hacerlo avanzar. Tu Pick'em no se ve afectado.",
+    "reset": "Reiniciar",
+    "resetWithCount": "Reiniciar ({n})",
+    "share": {
+      "button": "Compartir",
+      "sharing": "Compartiendo…",
+      "generating": "Creando la imagen de tu cuadro…",
+      "eyebrow": "Simulador de cuadro",
+      "imageTitle": "Mi cuadro del Mundial 2026",
+      "championLabel": "Campeón",
+      "thirdPlaceLabel": "Tercer puesto",
+      "shareTitle": "Mi cuadro del Mundial 2026",
+      "shareText": "Así veo las eliminatorias del Mundial 2026.",
+      "makeYours": "Haz el tuyo en:",
+      "shared": "Cuadro listo para compartir",
+      "downloaded": "Imagen del cuadro guardada",
+      "error": "No se pudo generar la imagen. Inténtalo de nuevo."
+    }
   }
 }

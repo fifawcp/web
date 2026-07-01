@@ -12,18 +12,21 @@ import type { Match } from "@/features/schedule/types/schedule.types";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/shared/components/ui/button";
 
-import { useBracketCompareView } from "../hooks/useBracketCompareView";
+import { useBracketViewMode } from "../hooks/useBracketViewMode";
 import { buildComparisonMap, summarizeBracket } from "../lib/bracketCompare";
 import { buildActualBracket } from "../lib/buildActualBracket";
 
 import { BracketCompareLegend } from "./BracketCompareLegend";
-import { CompareToggle } from "./CompareToggle";
+import { BracketModeToggle } from "./BracketModeToggle";
+import { BracketSimulator } from "./BracketSimulator";
 
 type Props = {
   initialMatches: Match[];
   /** The user's pickem, or null for guests. Source of the compare predictions. */
   initialPickem: UserPickem | null;
   isAuthed: boolean;
+  /** Namespaces the simulator's sessionStorage draft; `undefined` for guests. */
+  userId: string | undefined;
 };
 
 // Stable empty draft — the committed picks already live on each slot's
@@ -31,14 +34,16 @@ type Props = {
 const NO_DRAFT = {};
 
 /**
- * Guest-accessible bracket page.
+ * Guest-accessible bracket page with three modes (URL-backed via `?view=`):
  *   - "Results" (default, everyone): the real knockout tree from `/matches`,
  *     filling in as matches finish.
  *   - "Compare" (signed-in with a pickem): the real bracket with the teams the
  *     user correctly predicted to reach each round highlighted green, plus an
  *     earned / possible points tally.
+ *   - "Simulate" (everyone): an interactive what-if seeded from the real bracket
+ *     where the user re-picks winners and shares the result.
  */
-export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) {
+export function BracketView({ initialMatches, initialPickem, isAuthed, userId }: Props) {
   const t = useTranslations("bracket");
   const { data: matches = initialMatches } = useMatches(initialMatches);
 
@@ -48,11 +53,12 @@ export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) 
   const predictedSlots = useMemo(() => (initialPickem ? projectBracket(initialPickem.bracket, NO_DRAFT) : null), [initialPickem]);
 
   const canCompare = isAuthed && predictedSlots !== null;
-  const [view, setView] = useBracketCompareView(canCompare);
-  const comparing = view === "compare" && predictedSlots !== null;
+  const [mode, setMode] = useBracketViewMode(canCompare);
+  const comparing = mode === "compare" && predictedSlots !== null;
+  const simulating = mode === "simulate";
 
-  // Both views render the real bracket; compare just overlays green checks on
-  // the teams the user predicted correctly + the earned/possible tally.
+  // Both non-simulator views render the real bracket; compare overlays green
+  // checks on the teams the user predicted correctly + the earned/possible tally.
   const champion = useMemo(() => findChampion(actualSlots), [actualSlots]);
   const comparisonById = useMemo(
     () => (comparing && predictedSlots ? buildComparisonMap(actualSlots, predictedSlots) : undefined),
@@ -63,6 +69,8 @@ export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) 
   // Any settled knockout match flips the eyebrow to its "live" wording.
   const hasResults = useMemo(() => actualSlots.some((s) => s.picked_team !== null), [actualSlots]);
 
+  const description = simulating ? t("descriptionSimulate") : comparing ? t("descriptionCompare") : t("description");
+
   return (
     <div className="container mx-auto flex w-full flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <header className="flex flex-col gap-3">
@@ -71,11 +79,11 @@ export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) 
             <span aria-hidden className="size-1.5 rounded-full bg-page-accent" />
             {hasResults ? t("stageHeadingLive") : t("stageHeading")}
           </span>
-          {canCompare && <CompareToggle view={view} onChange={setView} />}
+          <BracketModeToggle mode={mode} onChange={setMode} canCompare={canCompare} />
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-3xl font-bold tracking-tight sm:text-4xl">{t("title")}</p>
-          {isAuthed && (
+          {isAuthed && !simulating && (
             <Button asChild variant="outline" size="sm" className="shrink-0 self-start sm:self-auto">
               <Link href="/pickems?step=bracket">
                 <SquarePen className="size-4" />
@@ -84,12 +92,17 @@ export function BracketView({ initialMatches, initialPickem, isAuthed }: Props) 
             </Button>
           )}
         </div>
-        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{comparing ? t("descriptionCompare") : t("description")}</p>
+        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{description}</p>
       </header>
 
-      {comparing && summary && <BracketCompareLegend summary={summary} />}
-
-      <BracketTree bracket={actualSlots} champion={champion} disabled comparisonById={comparisonById} />
+      {simulating ? (
+        <BracketSimulator initialMatches={matches} userId={userId} />
+      ) : (
+        <>
+          {comparing && summary && <BracketCompareLegend summary={summary} />}
+          <BracketTree bracket={actualSlots} champion={champion} disabled comparisonById={comparisonById} />
+        </>
+      )}
     </div>
   );
 }
